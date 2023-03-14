@@ -1,0 +1,96 @@
+@font-face {
+  font-family: south_park_font;
+  src: url(fonts/south\ park.ttf)
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+    /* A CORRIGER POUR LE RESPONSIVE */
+/* @media only screen and (max-width: 768px) {
+  body {
+    background-size: contain;
+  }
+} */
+
+#menu {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+#menu-background-pattern {
+  height: 100%;
+  width: 100%;
+
+  background: url("img/south_park_town.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-color:#89cede;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+
+  transition: opacity 800ms ease, background-size 800ms ease;
+}
+
+/* #menu-items:hover ~ #menu-background-pattern {
+	background-image: url("img/hell.jpg");
+  opacity: 0.8;
+} */
+
+#menu-items {
+  margin-right: 7%;
+  position: absolute;
+  right: 30px;
+  z-index: 2;
+}
+
+#menu-items:hover > .menu-item {
+  opacity: 0.5;
+}
+
+#menu-items:hover > .menu-item:hover {
+  opacity: 1;
+  background-color: goldenrod;
+}
+
+.menu-item {
+  color: black;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-family: south_park_font;
+  text-align: right;
+
+  display: block;
+  text-decoration: none;
+  padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
+
+  transition: opacity 400ms ease;
+}
+
+#menu-items > .item1:hover ~ #menu-background-pattern {
+  background: url("img/hell.jpg");
+}
+
+#menu-items .item2:hover ~ #menu-background-pattern {
+  background-image: url("img/image2.jpg");
+}
+
+#menu-items .item3:hover ~ #menu-background-pattern {
+  background-image: url("img/image3.jpg");
+}
+
+#menu-items .item4:hover ~ #menu-background-pattern {
+  background-image: url("img/image4.jpg");
+}
+
+.prout{
+  z-index:100;
+  position: absolute;
+}
