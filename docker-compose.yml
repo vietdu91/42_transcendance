@@ -32,36 +32,36 @@ services:
       - postgres
     restart: always
 
-  backend:
-    container_name: nestjs-app
-    image: nestjs-app
-    build:
-      context: ./Back
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    networks:
-      - net-db
-      - net-app
-    depends_on:
-      - postgres
-    volumes:
-      - ./Back:/usr/src/app
-      - /usr/src/app/node_modules
-    restart: unless-stopped
-
-  # frontend:
-  #   container_name: frontend
+  # backend:
+  #   container_name: nestjs-app
+  #   image: nestjs-app
   #   build:
-  #     context: ./Front
+  #     context: ./Back
   #     dockerfile: Dockerfile
   #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - ./Front:/usr/src/app
-  #     - /usr/src/app/node_modules
+  #     - 3000:3000
   #   networks:
-  #      - net-app
-  #   restart: unless-stopped
+  #     - net-db
+  #     - net-app
   #   depends_on:
-  #     - backend
+  #     - postgres
+  #   volumes:
+  #     - ./Back:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   restart: unless-stopped
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./Front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Front:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+       - net-app
+    restart: unless-stopped
+    # depends_on:
+    #   - backend
