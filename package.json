@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@nestjs/passport": "^9.0.3",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/express-session": "^1.17.7",
+    "@types/passport-local": "^1.0.35"
+  }
+}

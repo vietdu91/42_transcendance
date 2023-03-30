@@ -13,6 +13,8 @@ COPY ./package*.json ./
 # Installez les dépendances
 RUN npm install
 
+RUN npm install --save @nestjs/passport passport passport-local && npm install --save-dev @types/passport-local
+
 # Copiez tous les autres fichiers
 COPY ./src ./
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Score</title>
+		<meta charset="UTF-8">
+		<link href="./score.css" rel="stylesheet">
+		<link rel="icon" href="img/favicon.ico">
+		<script type="text/javascript" src="./score.js"></script>
+	</head>
+	<body>
+		<div id="bouton">
+			<button>Click me Baby</button>
+		</div>
+		<svg class="svgFilter" xmlns="http://www.w3.org/2000/svg">
+			<filter id="blurMe">
+				<feGaussianBlur id="blurFilterItem" in="SourceGraphic" stdDeviation="13"/>
+			</filter>
+			<circle id="greencircle" cx="30" cy="30" r="30" fill="green" filter="url(#blurMe)"/>
+		</svg>
+		<div class="container">
+			<div class="number" id="number">
+				<div class="left" id="left"></div>
+				<div class="separator" id="separator">,</div>
+				<div class="right" id="right">0</div>
+			  </div>
+			</div>
+		</div>
+	</body>
+</html>
