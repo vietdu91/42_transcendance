@@ -1,38 +1,70 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: south_park_font;
+  src: url(fonts/south\ park.ttf)
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    /* A CORRIGER POUR LE RESPONSIVE */
+/* @media only screen and (max-width: 768px) {
+  body {
+    background-size: contain;
   }
-}
+} */
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#menu {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#menu-background-pattern {
+  height: 100%;
+  width: 100%;
+
+  background: url("img/south_park_town.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-color:#89cede;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+
+  transition: opacity 800ms ease, background-size 800ms ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+nav {
+  margin-right: 7%;
+  position: absolute;
+  right: 30px;
+  z-index: 2;
+}
+
+#nav:hover > .menu-item {
+  opacity: 0.5;
+}
+
+#nav:hover > .menu-item:hover {
+  opacity: 1;
+  background-color: goldenrod;
+}
+
+.menu-item {
+  color: black;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-family: south_park_font;
+  text-align: right;
+
+  display: block;
+  text-decoration: none;
+  padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
+
+  transition: opacity 400ms ease;
 }

@@ -74,22 +74,6 @@ body {
   transition: opacity 400ms ease;
 }
 
-#menu-items > .item1:hover ~ #menu-background-pattern {
-  background: url("img/hell.jpg");
-}
-
-#menu-items .item2:hover ~ #menu-background-pattern {
-  background-image: url("img/image2.jpg");
-}
-
-#menu-items .item3:hover ~ #menu-background-pattern {
-  background-image: url("img/image3.jpg");
-}
-
-#menu-items .item4:hover ~ #menu-background-pattern {
-  background-image: url("img/image4.jpg");
-}
-
 .prout{
   z-index:100;
   position: absolute;
