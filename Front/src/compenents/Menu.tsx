@@ -1,30 +1,43 @@
-import React from 'react'
+import React, { MouseEvent, useRef, useEffect } from 'react'
 
 // CSS
 import './Menu.css';
 
 // PACKAGES
 import { useNavigate } from "react-router-dom";
+// import useSound from 'use-sound';
 
 // COMPONENTS
-// import Score from "./Score"
+import Music from "./Music";
+
+// IMG
+import Hell from "../img/hell.jpg"
+import Town from "../img/south_park_town.jpg"
 
 export default function App() {
 
   const navigate = useNavigate();
 
-  return (
+  function changeBackground(e) {
+    // e.target.style.background = 'red';
+    document.body.style.backgroundImage = 'url(../img/hell.jpg)'
+  }
 
+  function changeToNone(e) {
+    // e.target.style.background = 'none';
+  }
+
+  return (
 		<div id="menu">
-			<div id="menu-items">
-        {/* <Link className="menu-item" to="/">Jeu</Link>
-        <Link className="menu-item" to="/">Profil</Link>
-        <Link className="menu-item" to="/">Chat</Link>
-        <Link className="menu-item" to="/">On est qui</Link> */}
-        {/* <Link className="menu-item" to="/score">Test Score</Link> */}
+      <Music />
+  		<div id="menu-items">
+        {/* <div className="menu-item" onMouseEnter={changeBackground} onMouseLeave={changeToNone} onClick={() => navigate("/")}>Jeu</div> */}
+        <div className="menu-item" onClick={() => navigate("/")}>Jeu</div>
+        <div className="menu-item" onClick={() => navigate("/")}>Profil</div>
+        <div className="menu-item" onClick={() => navigate("/")}>Chat</div>
+        <div className="menu-item" onClick={() => navigate("/")}>On est qui</div>
         <div className="menu-item" onClick={() => navigate("/score")}>Text Score</div>
       </div>
-			<div id="menu-background-pattern"></div>
 		</div>
   )
 }

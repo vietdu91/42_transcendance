@@ -8,6 +8,7 @@ COPY package*.json ./
 RUN npm install
 RUN npm install react-router-dom
 RUN npm install awesome-typescript-loader source-map-loader
+RUN npm install use-sound
 
 COPY public ./public
 COPY src ./src
