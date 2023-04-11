@@ -1,7 +1,7 @@
 
 @font-face {
 	font-family: south_park_font;
-	src: url(../fonts/south\ park.ttf)
+	src: url(../../fonts/south\ park.ttf)
   }
 
   body {
@@ -22,7 +22,7 @@
 	height: 100%;
 	width: 100%;
 
-	background-image: url("../img/south_park_town.jpg");
+	background-image: url("../../img/south_park_town.jpg");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;

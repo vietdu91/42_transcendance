@@ -1,6 +1,6 @@
 @font-face {
     font-family: south_park_font;
-    src: url(../fonts/south\ park.ttf)
+    src: url(../../fonts/south\ park.ttf)
   }
 
   body {
@@ -14,20 +14,19 @@
       background-size: contain;
     }
   } */
+
   #menu {
-	height: 100vh;
-	display: flex;
-	align-items: center;
+	  height: 100vh;
+	  display: flex;
+	  align-items: center;
   }
 
   #bg-menu {
-    /* height: 100%;
-    width: 100%; */
-	  width: 100%;
-	  height: auto;
-    /* background-image: url("../img/south_park_town.jpg"); */
-    /* background-size: cover;
-    background-repeat: no-repeat;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+        /*background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed; */
     background-color:#89cede;

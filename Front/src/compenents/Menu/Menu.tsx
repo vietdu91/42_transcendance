@@ -1,21 +1,20 @@
-import React, { MouseEvent, useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 // CSS
 import './Menu.css';
 
 // PACKAGES
 import { useNavigate } from "react-router-dom";
-// import useSound from 'use-sound';
 
 // COMPONENTS
-import southparkSound from '../sounds/theme_song.mp3';
+import southparkSound from '../../sounds/theme_song.mp3';
 
 // IMG
-import Hell from "../img/hell.jpg"
-import Town from "../img/south_park_town.jpg"
-import NoFriend from "../img/no_friend.jpg"
-import Metrosexual from "../img/metrosexual.png"
-import KennyHouse from "../img/kennyhouse.png"
+import Hell from "../../img/hell.jpg"
+import Town from "../../img/south_park_town.jpg"
+import NoFriend from "../../img/no_friend.jpg"
+import Metrosexual from "../../img/metrosexual.png"
+import KennyHouse from "../../img/kennyhouse.png"
 
 export default function App() {
   const [hover, setHover] = React.useState(Town);
@@ -38,8 +37,6 @@ export default function App() {
         onMouseLeave={() => {setHover(Town);}}>Chat</div>
         <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(Metrosexual);}}
         onMouseLeave={() => {setHover(Town);}}>On est qui</div>
-        <div className="menu-item" onClick={() => navigate("/score")} onMouseEnter={() => {setHover(Hell);}}
-        onMouseLeave={() => {setHover(Town);}}>Text Score</div>
       </div>
 		</div>
   )
