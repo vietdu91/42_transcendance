@@ -28,75 +28,70 @@ body {
     z-index: 1;
 }
 
-.boutons {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    justify-content: space-evenly;
+#boutons {
+    width: 80vw;
+    height: 80vh;
+    margin: 30px auto;
+    position: relative;
+    z-index: 2;
 }
 
 .round-button1 {
     width: 200px;
     height: 200px;
-    border: none;
     outline: none;
     background-image: url('../../img/tuong_lu_kim.png');
     background-size: cover;
     background-position: center;
     border-radius: 50%;
+    border: solid 5px #fff;
     cursor: pointer;
-    z-index: 2;
 }
 
 .round-button2 {
     width: 200px;
     height: 200px;
-    border: none;
+    border: solid 5px #fff;
     outline: none;
     background-image: url('../../img/butters_emo.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 2;
 }
 
 .round-button3 {
     width: 200px;
     height: 200px;
-    border: none;
+    border: solid 5px #fff;
     outline: none;
     background-image: url('../../img/father_maxi.png');
     background-size: cover;
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 2;
 }
 
 .round-button4 {
     width: 200px;
     height: 200px;
-    border: none;
+    border: solid 5px #fff;
     outline: none;
     background-image: url('../../img/pascal_la_dalle.png');
     background-size: cover;
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 2;
 }
 
 .round-button5 {
     width: 200px;
     height: 200px;
-    border: none;
+    border: solid 5px #fff;
     outline: none;
     background-image: url('../../img/joozians.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 2;
 }
