@@ -1,0 +1,102 @@
+@font-face {
+    font-family: south_park_font;
+    src: url(../../fonts/south\ park.ttf)
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+#page_credits {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+#bg {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    background-color:#89cede;
+    opacity: 0.4;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.boutons {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.round-button1 {
+    width: 200px;
+    height: 200px;
+    border: none;
+    outline: none;
+    background-image: url('../../img/tuong_lu_kim.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.round-button2 {
+    width: 200px;
+    height: 200px;
+    border: none;
+    outline: none;
+    background-image: url('../../img/butters_emo.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.round-button3 {
+    width: 200px;
+    height: 200px;
+    border: none;
+    outline: none;
+    background-image: url('../../img/father_maxi.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.round-button4 {
+    width: 200px;
+    height: 200px;
+    border: none;
+    outline: none;
+    background-image: url('../../img/pascal_la_dalle.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.round-button5 {
+    width: 200px;
+    height: 200px;
+    border: none;
+    outline: none;
+    background-image: url('../../img/joozians.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+}

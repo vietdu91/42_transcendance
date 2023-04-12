@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 // CSS
 import './Menu.css';
@@ -7,7 +7,6 @@ import './Menu.css';
 import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
-import southparkSound from '../../sounds/theme_song.mp3';
 
 // IMG
 import Hell from "../../img/hell.jpg"
@@ -20,11 +19,6 @@ export default function App() {
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const audio = new Audio(southparkSound);
-    audio.autoplay = true
-  }, [])
-
   return (
 		<div id="menu">
       <img id="bg-menu" src={hover} alt={'Hell'}></img>
@@ -35,7 +29,7 @@ export default function App() {
         onMouseLeave={() => {setHover(Town);}}>Profil</div>
         <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(NoFriend);}}
         onMouseLeave={() => {setHover(Town);}}>Chat</div>
-        <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(Metrosexual);}}
+        <div className="menu-item" onClick={() => navigate("/credits")} onMouseEnter={() => {setHover(Metrosexual);}}
         onMouseLeave={() => {setHover(Town);}}>On est qui</div>
       </div>
 		</div>
