@@ -1,0 +1,12 @@
+.warning-box {
+
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	padding: 10px;
+	background-color: #ffc107;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	font-size: 14px;
+	z-index: 15;
+}

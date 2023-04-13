@@ -16,23 +16,52 @@
 	}
   } */
 
-  #body {
+  #menu {
+	height: 100vh;
 	display: flex;
 	align-items: center;
-	height: 100%;
-	width: 100%;
+}
 
-	background-image: url("../../img/south_park_town.jpg");
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-attachment: fixed;
-	background-color:#89cede;
+#bg-menu {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  background-color:#89cede;
 
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
 
-	transition: opacity 800ms ease, background-size 800ms ease;
-  }
+  transition: opacity 800ms ease, background-size 800ms ease;
+}
+
+#menu-items {
+  margin-right: 7%;
+  position: absolute;
+  right: 30px;
+  z-index: 2;
+}
+
+#menu-items:hover > .menu-item {
+  opacity: 0.5;
+}
+
+#menu-items:hover > .menu-item:hover {
+  opacity: 1;
+  background-color: goldenrod;
+}
+
+.menu-item {
+  color: black;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-family: south_park_font;
+  text-align: right;
+
+  display: block;
+  text-decoration: none;
+  padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
+
+  transition: opacity 400ms ease;
+}

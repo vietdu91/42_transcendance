@@ -15,13 +15,15 @@ import NoFriend from "../../img/no_friend.jpg"
 import Metrosexual from "../../img/metrosexual.png"
 import KennyHouse from "../../img/kennyhouse.png"
 
+
+
 export default function App() {
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
 
   return (
 		<div id="menu">
-      <img id="bg-menu" src={hover} alt={'Hell'}></img>
+      <img id="bg-menu" src={hover} alt={'bg'}></img>
   		<div id="menu-items">
         <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(Hell);}}
         onMouseLeave={() => {setHover(Town);}}>Jeu</div>

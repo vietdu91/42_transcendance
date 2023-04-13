@@ -12,11 +12,18 @@ import Connexion from "./compenents/Connexion/Connexion"
 import Credits from "./compenents/Credits/Credits"
 import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 
-import MusicPlayer from './compenents/MusicPlayer/MusicPlayer';
+import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 
 // SOUNDS
 import queer_eye from './sounds/queer_eye.mp3'
 import southparkSound from './sounds/theme_song.mp3';
+
+const ConnexionWithMusic = () => (
+  <>
+    <MusicPlayer audioSrc={southparkSound} />
+    <Connexion />
+  </>
+);
 
 const MenuWithMusic = () => (
   <>
@@ -39,7 +46,7 @@ export default function App() {
 		<div className="App">
       <Routes>
         <Route path="/" element={<MenuWithMusic />}/>
-        <Route path="/connect" element={<Connexion />}/>
+        <Route path="/connect" element={<ConnexionWithMusic />}/>
         <Route path="/credits" element={<CreditsWithMusic />}/>
         <Route path="/404" element={<PageNotFound />}/>
         <Route path="*" element={<Navigate to="/404" />}/>
