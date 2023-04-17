@@ -21,7 +21,7 @@ export default function Connexion() {
 
 	return (
 		<div id="menu">
-			<WarningBox />
+			{WarningBox() || null}
 			<img id="bg-menu" src={hover} alt={'Hell'}></img>
 			<div id="menu-items">
 		  		<div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(Lotion);}}
