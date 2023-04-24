@@ -1,32 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 // CSS
 import './Connexion.css';
 
 // PACKAGES
-import { useNavigate } from "react-router-dom";
 
 // COMPENENTS
-import WarningBox from "../utils/WarningBox/WarningBox";
+import MenuConnexion from './MenuConnexion';
 
 // IMG
-import Town from "../../img/south_park_town.jpg"
-import Lotion from "../../img/lotion.jpg"
+import Dislaimer from "../../img/dislaimer.png"
 
 
 export default function Connexion() {
 
-	const [hover, setHover] = React.useState(Town);
-	const navigate = useNavigate();
+	const [showImage, setShowImage] = useState(true);
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+		  setShowImage(false);
+		}, 5000);
+		return () => clearTimeout(timer);
+	}, []);
+
+	if (showImage) {
+		return (
+		  <div id="dislaimer">
+			<img className="dislaimer_img" src={Dislaimer} alt="Fullscreen"/>
+		  </div>
+		);
+	}
 
 	return (
-		<div id="menu">
-			{WarningBox() || null}
-			<img id="bg-menu" src={hover} alt={'Hell'}></img>
-			<div id="menu-items">
-		  		<div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(Lotion);}}
-		  		onMouseLeave={() => {setHover(Town);}}>Se connecter</div>
-			</div>
-		</div>
+		<MenuConnexion />
 	)
 }

@@ -4,10 +4,10 @@
 	src: url(../../fonts/south\ park.ttf)
   }
 
-  body {
+body {
 	padding: 0;
 	margin: 0;
-  }
+}
 
 	  /* A CORRIGER POUR LE RESPONSIVE */
   /* @media only screen and (max-width: 768px) {
@@ -16,7 +16,7 @@
 	}
   } */
 
-  #menu {
+#menu {
 	height: 100vh;
 	display: flex;
 	align-items: center;
@@ -64,4 +64,18 @@
   padding: clamp(0.25rem, 0.5vw, 1rem) 0rem;
 
   transition: opacity 400ms ease;
+}
+
+#dislaimer {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+.dislaimer_img {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 999;
 }

@@ -30,7 +30,7 @@
 #rock {
 	max-width: 100%;
 	height: auto;
-	max-height: 600px;
+	max-height: 40%;
 	display: block;
 	margin: 0 auto;
 }
@@ -54,6 +54,7 @@
 	position: fixed;
 	bottom: 6%;
 	right: 15%;
+	z-index: 50;
 
     background-color: rgba(0, 0, 255, 0);
     border: 1px solid rgba(0, 0, 255, 0);
@@ -64,16 +65,23 @@
 	transition: all 0.25s ease-in-out;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1400px) {
 	#move_on {
 		width: 80px;
 		height: 80px;
 	}
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
 	#attention {
 		font-size: 50px;
+	}
+}
+
+@media (max-width: 850px) {
+	#message {
+		font-size: 20px;
+		line-height: 30px;
 	}
 }
 
