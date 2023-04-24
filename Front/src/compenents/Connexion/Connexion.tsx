@@ -19,7 +19,7 @@ export default function Connexion() {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 		  setShowImage(false);
-		}, 5000);
+		}, 100000);
 		return () => clearTimeout(timer);
 	}, []);
 
@@ -27,6 +27,7 @@ export default function Connexion() {
 		return (
 		  <div id="dislaimer">
 			<img className="dislaimer_img" src={Dislaimer} alt="Fullscreen"/>
+		  	<div id="clignote"></div>
 		  </div>
 		);
 	}
