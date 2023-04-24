@@ -20,7 +20,7 @@ import southparkSound from './sounds/theme_song.mp3';
 
 const ConnexionWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={southparkSound} />
+    <MusicPlayer audioSrc={southparkSound} delay={5000}/>
     <Connexion />
   </>
 );

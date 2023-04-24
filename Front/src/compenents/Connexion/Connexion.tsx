@@ -17,11 +17,23 @@ export default function Connexion() {
 	const [showImage, setShowImage] = useState(true);
 
 	useEffect(() => {
+		const intervalId = setInterval(() => {
+		  const clignoteDiv = document.getElementById('clignote');
+		  if(!clignoteDiv) return
+		  if (clignoteDiv.style.opacity === '1') {
+			clignoteDiv.style.opacity = '0';
+		  } else {
+			clignoteDiv.style.opacity = '1';
+		  }
+		}, 500);
 		const timer = setTimeout(() => {
 		  setShowImage(false);
-		}, 100000);
-		return () => clearTimeout(timer);
-	}, []);
+		}, 5000);
+		return () => {
+		  clearInterval(intervalId);
+		  clearTimeout(timer);
+		};
+	  }, []);
 
 	if (showImage) {
 		return (
