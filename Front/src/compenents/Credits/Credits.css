@@ -66,8 +66,10 @@ body {
         rgb(21, 255, 0) 100%);
 }
 
-p {
-    margin-left: 50px;;
+a {
+    margin-left: 50px;
+    text-decoration : none;
+    color: black;
 }
 
 #creator{

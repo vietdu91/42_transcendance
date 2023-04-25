@@ -1,0 +1,30 @@
+@font-face {
+    font-family: south_park_font;
+    src: url(../../fonts/south\ park.ttf)
+}
+
+body {
+	padding: 0;
+	margin: 0;
+    overflow: hidden;
+	background-color: black;
+}
+
+.credits {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.white_title {
+	font-family: south_park_font;
+	font-size: 50%;
+	color: white;
+}
+
+.purple_author {
+	font-family: south_park_font;
+	color: mediumslateblue;
+}
+
+

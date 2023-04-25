@@ -11,6 +11,7 @@ import Menu from "./compenents/Menu/Menu"
 import Connexion from "./compenents/Connexion/Connexion"
 import Credits from "./compenents/Credits/Credits"
 import PageNotFound from "./compenents/PageNotFound/PageNotFound"
+import Thanks from "./compenents/Thanks/Thanks"
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/" element={<MenuWithMusic />}/>
         <Route path="/connect" element={<ConnexionWithMusic />}/>
         <Route path="/credits" element={<CreditsWithMusic />}/>
+        <Route path="/thanks" element={<Thanks />}/>
         <Route path="/404" element={<PageNotFound />}/>
         <Route path="*" element={<Navigate to="/404" />}/>
       </Routes>

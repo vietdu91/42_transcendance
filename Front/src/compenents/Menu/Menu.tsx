@@ -35,7 +35,10 @@ export default function App() {
         <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
         onMouseLeave={() => {setHover(Town);}}>Log Out</div>
       </div>
-      <button id="msn"></button>
+      <div id="navbar">
+        <button className="thanks" onClick={() => navigate("/thanks")}></button>
+        <button className="msn"></button>
+      </div>
 		</div>
   )
 }

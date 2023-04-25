@@ -9,30 +9,34 @@ import Metrosexual from "../../img/video/kyle_gets_a_queer_eye_makeover.mp4"
 
 function Cercle() {
 
+	let benmoham="https://github.com/Mbenda75";
+	let dyoula="https://github.com/QnYosa";
+	let emtran="https://github.com/vietdu91";
+	let jkaruk="https://github.com/Nixs0";
+	let qujacob="https://github.com/qujacob";
+
 	return (
 		<div id="boutons">
 				<div className="Container">
 					<div id="creator">
-						<div className="round round-button1">
-							<div className="inner"></div>
-						</div>
-						<p>emtran</p>
+						<div className="round round-button1"></div>
+						<a href={emtran} target="_blank" rel="noopener noreferrer">emtran</a>
 					</div>
 					<div id="creator">
 						<div className="round round-button2"></div>
-						<p>qujacob</p>
+						<a href={qujacob} target="_blank" rel="noopener noreferrer">qujacob</a>
 					</div>
 					<div id="creator">
 						<div className="round round-button3"></div>
-						<p>jkaruk</p>
+						<a href={jkaruk} target="_blank" rel="noopener noreferrer">jkaruk</a>
 					</div>
 					<div id="creator">
 						<div className="round round-button4"></div>
-						<p>dyoula</p>
+						<a href={dyoula} target="_blank" rel="noopener noreferrer">dyoula</a>
 					</div>
 					<div id="creator">
 						<div className="round round-button5"></div>
-						<p>benmoham</p>
+						<a href={benmoham} target="_blank" rel="noopener noreferrer">benmoham</a>
 					</div>
 				</div>
 			</div>
