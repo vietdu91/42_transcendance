@@ -68,23 +68,24 @@ body {
 #dislaimer {
 	height: 100vh;
 	display: flex;
+  flex-direction: column;
+  justify-content: center;
 	align-items: center;
   background-color: black;
 }
 
 .dislaimer_img {
-  object-fit: cover;
+  position: relative;
   z-index: 3;
   width: 100%;
-  height: auto;
 }
 
 #clignote {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  bottom: 28.3vh;
-  right: 14.9vw;
+  width: 1%;
+  height: 2%;
+  bottom: 17%;
+  right: 14.5%;
   z-index: 999;
   background-color: white;
 }
