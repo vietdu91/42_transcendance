@@ -48,7 +48,7 @@ export default function Credits() {
 	const navigate = useNavigate();
 
 	return (
-		<div>
+		<>
 			<div id="page_credits">
 				<video autoPlay muted loop id="bg" src={Metrosexual}></video>
 				<Cercle />
@@ -57,6 +57,6 @@ export default function Credits() {
 				<FontAwesomeIcon icon={faChevronCircleLeft}
 				style={{color: "#ff30ff"}} onClick={() => navigate("/")}/>
 			</div>
-		</div>
+		</>
 	)
 }

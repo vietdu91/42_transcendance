@@ -21,8 +21,7 @@ body {
     height: 100vh;
     object-fit: cover;
     background-color:#89cede;
-    opacity: 0.4;
-
+    opacity: 0.5;
     position: absolute;
     left: 0;
     top: 0;
@@ -69,7 +68,7 @@ body {
 a {
     margin-left: 50px;
     text-decoration : none;
-    color: black;
+    color: white;
 }
 
 #creator{

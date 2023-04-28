@@ -76,9 +76,6 @@
 	#attention {
 		font-size: 50px;
 	}
-}
-
-@media (max-width: 850px) {
 	#message {
 		font-size: 20px;
 		line-height: 30px;
