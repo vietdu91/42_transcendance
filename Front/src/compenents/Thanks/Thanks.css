@@ -22,21 +22,40 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	line-height: 75px;
+	line-height: 90px;
 }
 
-.white_title {
-	font-family: south_park_font;
-	font-size: 450%;
-	color: white;
-	text-align: center;
-}
-
-.purple_author {
+.title {
 	font-family: south_park_font;
 	font-size: 500%;
-	color: mediumslateblue;
 	text-align: center;
 }
 
+.subtitle {
+	font-family: south_park_font;
+	font-size: 480%;
+	text-align: center;
+}
 
+.big_thanks {
+	text-align: center;
+}
+
+p {
+	font-family: south_park_font;
+	font-size: 100%;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
+
+.white { color: white; }
+.purple { color: mediumslateblue; }
+.blue { color: blue; }
+.cyan { color: cyan; }
+.green { color: green; }
+.greenyellow { color: greenyellow; }
+.red { color: red; }
+.yellow { color: yellow; }
+.magenta { color: magenta; }
+.orange { color: orange}

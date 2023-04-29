@@ -80,6 +80,21 @@
     border: 1px solid rgba(0, 0, 255, 0);
   }
 
+  .butters {
+    background-image: url("../../img/buttons/lets_dance.png");
+    background-size: cover;
+    width: 75px;
+    height: 75px;
+    font-size: 2rem;
+    position: fixed;
+    bottom: 3vh;
+    right: 9vw;
+    z-index: 50;
+
+    background-color: rgba(0, 0, 255, 0);
+    border: 1px solid rgba(0, 0, 255, 0);
+  }
+
   .thanks {
     background-image: url("../../img/buttons/chef.gif");
     background-size: cover;

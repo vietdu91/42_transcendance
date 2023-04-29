@@ -4,55 +4,95 @@ import { useNavigate } from 'react-router-dom';
 
 import './Thanks.css'
 
+import BigThanks from '../../img/thank_you.jpg';
+
 enum User{
-	STAFF,
-	MO,
+	STAFF_1,
+	STAFF_2,
+	MERCI,
+	FRONT,
+	BACK,
+	FREROTS,
 	ROOT,
 }
 
 function CreatedBy(){
-	const [test, setTest] = useState<User>(User.STAFF)
+	const [test, setTest] = useState<User>(User.STAFF_1)
 	const navigate = useNavigate();
 
 	useEffect(() =>{
+		const intervalTime = test === User.ROOT ? 10000 : 1500;
 		const interval = setInterval(() => {
 			if (test === User.ROOT)
-			navigate("/");
+				navigate("/");
 			else
 			setTest(test + 1);
-		}, 1300);
+		}, intervalTime);
 		return (() => {
 			clearInterval(interval);
 		})
 	// eslint-disable-next-line
 	}, [test]);
 
-	if (test === User.STAFF){
+	if (test === User.STAFF_1){
 		return (
 			<div className="credits">
-				<div className="white_title">Created By</div>
-				<div className="purple_author">benmoham</div>
-				<div className="purple_author">dyoula</div>
-				<div className="purple_author">emtran</div>
-				<div className="purple_author">jkaruk</div>
-				<div className="purple_author">qujacob</div>
+				<div className="title white">Created By</div>
+				<div className="subtitle purple">benmoham</div>
+				<div className="subtitle orange">dyoula</div>
 			</div>
 		)
 	}
-	else if (test === User.MO){
+	else if (test === User.STAFF_2){
 		return (
 			<div className="credits">
-				<div className="white_title">Forked By</div>
-				<div className="purple_author">achane-l</div>
+				<div className="title white">Created By</div>
+				<div className="subtitle green">emtran</div>
+				<div className="subtitle cyan">jkaruk</div>
+				<div className="subtitle yellow">qujacob</div>
+			</div>
+		)
+	}
+	else if (test === User.MERCI){
+		return (
+			<div className="credits">
+				<div className="white title">Gros Merci pour leur Aide</div>
+			</div>
+		)
+	}
+	else if (test === User.FRONT){
+		return (
+			<div className="credits">
+				<div className="white title">Les Masters en Front</div>
+				<div className="purple subtitle">achane-l</div>
+			</div>
+		)
+	}
+	else if (test === User.BACK){
+		return (
+			<div className="credits">
+				<div className="white title">Les Genies du Back</div>
+				<div className="yellow subtitle">esafar</div>
+			</div>
+		)
+	}
+	else if (test === User.FREROTS){
+		return (
+			<div className="credits">
+				<div className="white title">Les Frerots</div>
+				<div className="orange subtitle">J'sais pas qui</div>
 			</div>
 		)
 	}
 	else if (test === User.ROOT){
 		return (
-			<div className="credits">
-				<div className="white_title">Level By</div>
-				<div className="purple_author">emtran</div>
-			</div>
+			<>
+				<div className="credits">
+					<img className="big_thanks" alt="big_thanks" src={BigThanks}></img>
+					<div className="white subtitle">Merci a vous de tester notre site</div>
+					<p className="white">© Comedy Central</p>
+				</div>
+			</>
 		)
 	}
 	else {

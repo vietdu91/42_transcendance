@@ -19,6 +19,7 @@ import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 // SOUNDS
 import queer_eye from './sounds/queer_eye.mp3'
 import southparkSound from './sounds/theme_song.mp3';
+import end_credit from './sounds/end_credit.mp3'
 
 const ConnexionWithMusic = () => (
   <>
@@ -41,6 +42,13 @@ const CreditsWithMusic = () => (
   </>
 );
 
+const ThanksWithMusic = () => (
+  <>
+    <MusicPlayer audioSrc={end_credit} />
+    <Thanks />
+  </>
+);
+
 export default function App() {
 
   return (
@@ -50,7 +58,7 @@ export default function App() {
         <Route path="/" element={<MenuWithMusic />}/>
         <Route path="/connect" element={<ConnexionWithMusic />}/>
         <Route path="/credits" element={<CreditsWithMusic />}/>
-        <Route path="/thanks" element={<Thanks />}/>
+        <Route path="/thanks" element={<ThanksWithMusic />}/>
         <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
         <Route path="/404" element={<PageNotFound />}/>
         <Route path="*" element={<Navigate to="/404" />}/>

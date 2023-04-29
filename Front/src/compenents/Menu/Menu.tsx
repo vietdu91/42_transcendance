@@ -38,6 +38,7 @@ export default function App() {
       <div id="navbar">
         <button className="thanks" onClick={() => navigate("/thanks")}></button>
         <button className="msn"></button>
+        <button className="butters" onClick={() => navigate("/quoi")}></button>
       </div>
 		</div>
   )
