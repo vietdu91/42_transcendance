@@ -15,30 +15,54 @@ import NoFriend from "../../img/no_friend.jpg"
 import Metrosexual from "../../img/metrosexual.png"
 import KennyHouse from "../../img/kennyhouse.png"
 import ButtersBlood from "../../img/butters_blood.jpg"
+import ChefAid from "../../img/chef_aid.png"
 
 export default function App() {
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
+  const [show, setShow] = React.useState(true);
+
+  const handleClickCredits = (path, image) => {
+    setHover(image);
+    document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
+    setTimeout(() => {
+      navigate(path);
+      document.getElementById("bg-menu")?.classList.remove("zoom-transition-bottom");
+    }, 500);
+  };
+
+  const handleClick = (path, image) => {
+    setHover(image);
+    document.getElementById("bg-menu")?.classList.add("zoom-transition");
+    setTimeout(() => {
+      navigate(path);
+      document.getElementById("bg-menu")?.classList.remove("zoom-transition");
+    }, 500);
+  };
+
+  function toggleThanks() {
+    setShow(!show);
+  }
 
   return (
 		<div id="menu">
       <img id="bg-menu" src={hover} alt={'bg'}></img>
   		<div id="menu-items">
-        <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(ButtersBlood);}}
-        onMouseLeave={() => {setHover(Town);}}>Jeu</div>
-        <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(KennyHouse);}}
-        onMouseLeave={() => {setHover(Town);}}>Profil</div>
-        <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(NoFriend);}}
-        onMouseLeave={() => {setHover(Town);}}>Chat</div>
-        <div className="menu-item" onClick={() => navigate("/credits")} onMouseEnter={() => {setHover(Metrosexual);}}
-        onMouseLeave={() => {setHover(Town);}}>On est qui</div>
-        <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
-        onMouseLeave={() => {setHover(Town);}}>Log Out</div>
+        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(ButtersBlood);}}
+        onMouseLeave={() => {setHover(Town);}}>Jeu</div>}
+        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(KennyHouse);}}
+        onMouseLeave={() => {setHover(Town);}}>Profil</div>}
+        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(NoFriend);}}
+        onMouseLeave={() => {setHover(Town);}}>Chat</div>}
+        {show && <div className="menu-item" onClick={() => {handleClickCredits("/credits", Metrosexual); toggleThanks();}} onMouseEnter={() => {setHover(Metrosexual);}}
+        onMouseLeave={() => {setHover(Town);}}>On est qui</div>}
+        {show && <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
+        onMouseLeave={() => {setHover(Town);}}>Log Out</div>}
       </div>
       <div id="navbar">
-        <button className="thanks" onClick={() => navigate("/thanks")}></button>
-        <button className="msn"></button>
-        <button className="butters" onClick={() => navigate("/quoi")}></button>
+        {show && <button className="thanks" onClick={() => {handleClick("/thanks", ChefAid); toggleThanks();}}></button>}
+        {show && <button className="msn"></button>}
+        {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
 		</div>
   )

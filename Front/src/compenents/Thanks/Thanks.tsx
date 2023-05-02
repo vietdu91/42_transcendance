@@ -36,7 +36,7 @@ function CreatedBy(){
 
 	if (test === User.STAFF_1){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="title white">Created By</div>
 				<div className="subtitle purple">benmoham</div>
 				<div className="subtitle orange">dyoula</div>
@@ -45,7 +45,7 @@ function CreatedBy(){
 	}
 	else if (test === User.STAFF_2){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="title white">Created By</div>
 				<div className="subtitle green">emtran</div>
 				<div className="subtitle cyan">jkaruk</div>
@@ -55,14 +55,14 @@ function CreatedBy(){
 	}
 	else if (test === User.MERCI){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Gros Merci pour leur Aide</div>
 			</div>
 		)
 	}
 	else if (test === User.FRONT){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Masters en Front</div>
 				<div className="purple subtitle">achane-l</div>
 			</div>
@@ -70,7 +70,7 @@ function CreatedBy(){
 	}
 	else if (test === User.BACK){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Genies du Back</div>
 				<div className="yellow subtitle">esafar</div>
 			</div>
@@ -78,7 +78,7 @@ function CreatedBy(){
 	}
 	else if (test === User.FREROTS){
 		return (
-			<div className="credits">
+			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Frerots</div>
 				<div className="orange subtitle">J'sais pas qui</div>
 			</div>
@@ -87,9 +87,9 @@ function CreatedBy(){
 	else if (test === User.ROOT){
 		return (
 			<>
-				<div className="credits">
+				<div className="credits" onClick={() => navigate("/")}>
 					<img className="big_thanks" alt="big_thanks" src={BigThanks}></img>
-					<div className="white subtitle">Merci a vous de tester notre site</div>
+					<div className="white subtitle">Merci a toi d'avoir teste notre site</div>
 					<p className="white">© Comedy Central</p>
 				</div>
 			</>

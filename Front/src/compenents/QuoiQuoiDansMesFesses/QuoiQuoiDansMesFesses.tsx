@@ -5,7 +5,7 @@ import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons'
 
 import './QuoiQuoiDansMesFesses.css'
 
-import Butters from "../../img/video/kyle_gets_a_queer_eye_makeover.mp4"
+import Butters from "../../img/video/QUOI_QUOI.mp4"
 
 export default function QuoiQuoiDansMesFesses() {
 
