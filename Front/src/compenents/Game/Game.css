@@ -1,0 +1,25 @@
+@font-face {
+    font-family: south_park_font;
+    src: url(../../fonts/south\ park.ttf)
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background: url("../../img/south_park_town.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#game {
+    position: absolute;
+    left: 15vw;
+    top: 20vh;
+    width: 70vw;
+    height: 60vh;
+    border: solid 4px #696969;
+    background-color: black;
+    color: white;
+}
