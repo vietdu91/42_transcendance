@@ -82,23 +82,23 @@ a {
 }
 
 .round-button1 {
-    background-image: url('../../img/tuong_lu_kim.png');
+    background-image: url('../../img/icons/tuong_lu_kim.png');
 }
 
 .round-button2 {
-    background-image: url('../../img/butters_emo.jpg');
+    background-image: url('../../img/icons/butters_emo.jpg');
 }
 
 .round-button3 {
-    background-image: url('../../img/father_maxi.png');
+    background-image: url('../../img/icons/father_maxi.png');
 }
 
 .round-button4 {
-    background-image: url('../../img/pascal_la_dalle.png');
+    background-image: url('../../img/icons/pascal_la_dalle.png');
 }
 
 .round-button5 {
-    background-image: url('../../img/joozians.jpg');
+    background-image: url('../../img/icons/joozians.jpg');
 }
 
 #return {

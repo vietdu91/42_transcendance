@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 import WarningBox from "../utils/WarningBox/WarningBox";
 
 // IMG
-import Town from "../../img/south_park_town.jpg"
-import Lotion from "../../img/lotion.jpg"
+import Town from "../../img/backgrounds/south_park_town.jpg"
+import Lotion from "../../img/backgrounds/lotion.jpg"
 
 
 export default function MenuConnexion() {

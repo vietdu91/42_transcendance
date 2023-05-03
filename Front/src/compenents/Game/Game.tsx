@@ -7,12 +7,49 @@ import Bar from "./Bar"
 import './Game.css'
 
 // COMPONENTS
+import '../utils/ReturnButtom/ReturnButtom'
+import ReturnButtom from '../utils/ReturnButtom/ReturnButtom'
 
 // IMG
+import Chaos from '../../img/backgrounds/backgrounds-game/chaos.jpg'
+import CityWok from '../../img/backgrounds/backgrounds-game/city_wok.jpg'
+import WallMart from '../../img/backgrounds/backgrounds-game/wallmart.jpg'
+import TimmyVSJimmy from '../../img/video/Timmy_Fights_Jimmy.mp4'
 
 export default function Game(): JSX.Element {
 
+    const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
     const sketchRef = useRef<HTMLDivElement>(null);
+    const randomImage = getRandomImage(images);
+
+    function getRandomImage(images: string[]): string {
+        const index = Math.floor(Math.random() * images.length);
+        return images[index];
+    }
+
+    function GetBg({randomImage}) {
+
+        if (randomImage === TimmyVSJimmy)
+            return (
+                <video autoPlay muted loop className="bg opacity" src={randomImage}></video>
+            )
+        else
+            return (
+                <img className="bg" src={randomImage} alt={'bg'}></img>
+            )
+    }
+
+    function WhatReturnButtom({randomImage}) {
+
+        if (randomImage === CityWok || randomImage === Chaos)
+            return (
+                <ReturnButtom colorHexa='#FFFFFF' path='/'/>
+            )
+        else
+            return (
+                <ReturnButtom colorHexa='#000000' path='/'/>
+            )
+    }
 
     useEffect(() => {
         let ball, p1, p2;
@@ -39,13 +76,16 @@ export default function Game(): JSX.Element {
             p.draw = () => {
                 p.background(52);
                 p1.moveBar("w", "s");
+
+                // jouer contre joueur humain
                 // p2.moveBar("up", "down");
 
+                ////////////////////////
                 // jouer contre l'IA (impossible) / commenter ligne du dessus
 
                 p2.pos.y = ball.pos.y - p2.h / 2;
                 p2.pos.y = p2.p5.constrain(p2.pos.y, p2.cDiv.clientHeight / 150, p2.cDiv.clientHeight - (p2.cDiv.clientHeight / 150) - p2.h);
-
+                ////////////////////////
                 if (ball.out(p1, p2)) {
                     p1.reset(cDiv.clientWidth / 75, cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
                     p2.reset(cDiv.clientWidth - (cDiv.clientWidth / 75 * 2), cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
@@ -94,6 +134,12 @@ export default function Game(): JSX.Element {
     }, []);
 
     return (
+        <>
+            <GetBg randomImage={randomImage}/>
             <div id="game" ref={sketchRef}></div>
+            <div id="return">
+                <WhatReturnButtom randomImage={randomImage}/>
+            </div>
+        </>
     );
 }

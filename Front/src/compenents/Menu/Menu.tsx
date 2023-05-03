@@ -9,12 +9,12 @@ import { useNavigate } from "react-router-dom";
 // COMPONENTS
 
 // IMG
-import Hell from "../../img/hell.jpg"
-import Town from "../../img/south_park_town.jpg"
-import NoFriend from "../../img/no_friend.jpg"
-import Metrosexual from "../../img/metrosexual.png"
-import KennyHouse from "../../img/kennyhouse.png"
-import ButtersBlood from "../../img/butters_blood.jpg"
+import Hell from "../../img/backgrounds/hell.jpg"
+import Town from "../../img/backgrounds/south_park_town.jpg"
+import NoFriend from "../../img/backgrounds/no_friend.jpg"
+import Metrosexual from "../../img/backgrounds/metrosexual.png"
+import KennyHouse from "../../img/backgrounds/kennyhouse.png"
+import ButtersBlood from "../../img/backgrounds/butters_blood.jpg"
 import ChefAid from "../../img/chef_aid.png"
 
 export default function App() {

@@ -1,13 +1,29 @@
 import React from 'react'
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from 'prop-types';
 
 import './Credits.css'
 
 import Metrosexual from "../../img/video/kyle_gets_a_queer_eye_makeover.mp4"
 
+import ReturnButtom from '../utils/ReturnButtom/ReturnButtom'
+
 function Cercle() {
+
+	const Creator = ({pathGitHub, classes, frerot}) => {
+
+		return (
+			<div id="creator">
+				<div className={classes}></div>
+				<a href={pathGitHub} target="_blank" rel="noopener noreferrer">{frerot}</a>
+			</div>
+		);
+	};
+
+	Creator.propTypes = {
+		pathGitHub: PropTypes.string.isRequired,
+		classes: PropTypes.string.isRequired,
+		frerot: PropTypes.string.isRequired,
+	};
 
 	let benmoham="https://github.com/Mbenda75";
 	let dyoula="https://github.com/QnYosa";
@@ -18,34 +34,17 @@ function Cercle() {
 	return (
 		<div id="boutons">
 				<div className="Container">
-					<div id="creator">
-						<div className="round round-button1"></div>
-						<a href={emtran} target="_blank" rel="noopener noreferrer">emtran</a>
-					</div>
-					<div id="creator">
-						<div className="round round-button2"></div>
-						<a href={qujacob} target="_blank" rel="noopener noreferrer">qujacob</a>
-					</div>
-					<div id="creator">
-						<div className="round round-button3"></div>
-						<a href={jkaruk} target="_blank" rel="noopener noreferrer">jkaruk</a>
-					</div>
-					<div id="creator">
-						<div className="round round-button4"></div>
-						<a href={dyoula} target="_blank" rel="noopener noreferrer">dyoula</a>
-					</div>
-					<div id="creator">
-						<div className="round round-button5"></div>
-						<a href={benmoham} target="_blank" rel="noopener noreferrer">benmoham</a>
-					</div>
+					<Creator pathGitHub={benmoham} classes='round round-button5' frerot='benmoham'/>
+					<Creator pathGitHub={dyoula} classes='round round-button4' frerot='dyoula'/>
+					<Creator pathGitHub={emtran} classes='round round-button1' frerot='emtran'/>
+					<Creator pathGitHub={jkaruk} classes='round round-button3' frerot='jkaruk'/>
+					<Creator pathGitHub={qujacob} classes='round round-button2' frerot='qujacob'/>
 				</div>
 			</div>
 	)
 }
 
 export default function Credits() {
-
-	const navigate = useNavigate();
 
 	return (
 		<>
@@ -54,8 +53,7 @@ export default function Credits() {
 				<Cercle />
 			</div>
 			<div id="return">
-				<FontAwesomeIcon icon={faChevronCircleLeft}
-				style={{color: "#ff30ff"}} onClick={() => navigate("/")}/>
+				<ReturnButtom colorHexa='#ff30ff' path='/' />
 			</div>
 		</>
 	)
