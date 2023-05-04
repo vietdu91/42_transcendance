@@ -30,7 +30,7 @@ RUN npm install @prisma/client --save
 COPY ./src ./
 
 # Exposez le port 300
-EXPOSE 3000
+EXPOSE 3001
 
 # Démarrez l'application
 CMD [ "npm", "run", "start:dev" ]

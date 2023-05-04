@@ -11,11 +11,12 @@ export class AuthController {
               private readonly jwtService: JwtService ) {}
 
   @Get('conexion')
-  async connexion(@Request() req, @Res() response): Promise<any> {
+  async connexion(@Request() req, @Res({passthrough:true}) response): Promise<any> {
       console.log("Connexion route")
       const code = req.query.code;
-      const user = await this.AuthService.apiConnexion(code);
-      return "ROUTE CONNEXION OK" + code + user;
+      const user = await this.AuthService.apiConnexion(code, response);
+      return response.redirect('http://localhost:3000');
       //return  response.redirect('http://localhost:3000/login/log?userId=' + user.id);
       }
+
 }

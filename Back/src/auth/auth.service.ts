@@ -1,14 +1,15 @@
 import { Injectable, Request, Query , HttpException, HttpStatus} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { TwofaService } from 'src/twofa/twofa.service';
+import { Response} from 'express';
 import { authenticator } from 'otplib';
 import { Prisma, User} from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
 
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = "u-s4t2ud-0cce972308f0f6be06570a9ddeaacaf86d8d76148d7c2514184539f693b54491"; // Remplacer par le client_id de votre application
-const clientSecret = "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";
+const client_id = "u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467"; // Remplacer par le client_id de votre application
+const clientSecret = "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";
 
 @Injectable()
 export class AuthService {
@@ -16,20 +17,28 @@ export class AuthService {
                 private twofaService: TwofaService,
                 private jwtService: JwtService,) {}
 
-    async apiConnexion(code: string): Promise<User> {
+    async apiConnexion(code: string, res: Response): Promise<any> {
         const accessToken = await this.getAccessToken(code);
         const userData = await this.getUserData(accessToken);
-        const createdUser = await this.createUser(userData);
-        const payload = { username: createdUser.name, sub: createdUser.id };
+        var user = await this.prisma.user.findUnique({
+            where: { email: userData.email },
+        });
+        if (!user ) {
+            user = await this.createUser(userData);
+
+        }
+        
+        const payload = { username: user.name, sub: user.id };
         console.log("paylod = " + payload);
         const newToken = this.jwtService.sign(payload);
-            // JWT token use to get user data and validate user
+        // JWT token use to get user data and validate user
         console.log("new token ==  " + newToken);
         await this.prisma.user.update({
-            where: { id: createdUser.id },
+            where: { id: user.id },
             data: { accessToken: newToken },
           });
-        return createdUser;
+          res.cookie('token', user.accessToken);
+          res.redirect('http://localhost:3000');
     }
 
     async getAccessToken(code: string): Promise<any> {
@@ -39,7 +48,7 @@ export class AuthService {
                 client_secret: clientSecret,
                 grant_type: "authorization_code",
                 code: code,
-                redirect_uri: "http://localhost:3000/Auth/conexion" 
+                redirect_uri: "http://localhost:3001/Auth/conexion" 
             });
             const accessToken = response.data.access_token;
             return accessToken;
@@ -86,24 +95,32 @@ export class AuthService {
             console.error(error);
             throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    } 
-
-    async validateUser(username: string, pass: string): Promise<any> {
-        return null;
     }
 
-    async login(user: User) {
-        console.log("login service");
-        console.log(user);
+    async deleteUser(id: number): Promise<User> {
+        try {
+            const user = await this.prisma.user.delete({
+                where: { id: id }
+            });
+            console.log('User deleted');
+            return user;
+        } catch (error) {
+            console.error(error);
+            throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        const payload = { username: user.name, sub: user.id };
-
-        console.log(payload)
-        console.log(this.jwtService.sign(payload))
-        return {
-            access_token: this.jwtService.sign(payload),
-            // JWT token use to get user data and validate user
-        };
+    async logOut(@Request() req, @Query() query): Promise<any> {
+        const user = await this.prisma.user.findUnique({
+            where: { id: req.user.id },
+        });
+        if (user) {
+            await this.prisma.user.update({
+                where: { id: req.user.id },
+                data: { accessToken: null },
+              });
+        }
+        return { message: 'User logged out' };
     }
 }
     

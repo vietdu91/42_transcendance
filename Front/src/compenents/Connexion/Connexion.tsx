@@ -35,7 +35,7 @@ export default function Connexion() {
 		};
 	  }, []);
 
-	if (showImage) {
+	if (!showImage) {
 		return (
 		  <div id="dislaimer">
 			<div className="dislaimer_img">

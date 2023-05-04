@@ -14,6 +14,7 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import Game from "./compenents/Game/Game"
+import MenuConnexion from './compenents/Connexion/MenuConnexion';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 
@@ -63,9 +64,9 @@ export default function App() {
         <Route path="/thanks" element={<ThanksWithMusic />}/>
         <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
         <Route path="/404" element={<PageNotFound />}/>
-        <Route path="*" element={<Navigate to="/404" />}/>
       </Routes>
 		</div>
   )
 }
+//<Route path="*" element={<Navigate to="/404" />}/>
 
