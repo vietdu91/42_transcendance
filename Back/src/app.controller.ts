@@ -10,7 +10,7 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 
-@Controller('connect')
+@Controller('Southtrans')
 export class AppController {
   constructor(
     private readonly authService: AuthService,
@@ -18,34 +18,34 @@ export class AppController {
     private readonly prisma: PrismaService,
   ) {}
 
-  // @Post('log')
-  // async login(@Body() body: { userId: string }): Promise<any> {
-  //   console.log('Post login');
-  //   const userId = parseInt(body.userId);
-  //   console.log(userId);
-  //   const user = await this.prisma.user.findUnique({
-  //     where: {
-  //       id: userId,
-  //     },
-  //   });
-    
-  //   if (!user) {
-  //     throw new BadRequestException('Invalid credentials');
-  //   }
-
-  //   const jwt = await this.authService.login(user);
-  //   console.log(jwt);
-  //   return jwt;
-  // }
-   
-
   @Get('42') 
   @Redirect("")
   getConnected(@Request() req) {
     console.log("42 route");
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
+
+  @Get('logout')
+  async logout(@Req() request: Request, @Res() response: Response) {
+    console.log("logout");
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { accessToken: null },
+    });
+    response.clearCookie('token');
+    response.clearCookie('id');
+    response.redirect('http://localhost:3000/connect');
+  }
 }
+
 
 @Controller('2fa')
 export class TwoFactorAuthenticationController {

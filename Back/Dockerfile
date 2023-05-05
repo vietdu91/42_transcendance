@@ -25,6 +25,8 @@ RUN npm install prisma --save-dev
 RUN npm install express --save
 RUN npm install @nestjs/common --save
 RUN npm install @prisma/client --save
+RUN npm i cookie-parser --save
+RUN npm i -D @types/cookie-parser --save
 
 # Copiez tous les autres fichiers
 COPY ./src ./

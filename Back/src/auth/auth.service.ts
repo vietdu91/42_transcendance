@@ -27,7 +27,6 @@ export class AuthService {
             user = await this.createUser(userData);
 
         }
-        
         const payload = { username: user.name, sub: user.id };
         console.log("paylod = " + payload);
         const newToken = this.jwtService.sign(payload);
@@ -37,7 +36,8 @@ export class AuthService {
             where: { id: user.id },
             data: { accessToken: newToken },
           });
-          res.cookie('token', user.accessToken);
+          res.cookie('token', newToken);
+          res.cookie('id', user.id);
           res.redirect('http://localhost:3000');
     }
 
@@ -71,7 +71,6 @@ export class AuthService {
                 name: userResponse.data.login,
                 email: userResponse.data.email,
                 code: userResponse.data.code,
-                accessToken: null,
             };
         } catch (error) {
             console.error(error);
@@ -110,17 +109,5 @@ export class AuthService {
         }
     }
 
-    async logOut(@Request() req, @Query() query): Promise<any> {
-        const user = await this.prisma.user.findUnique({
-            where: { id: req.user.id },
-        });
-        if (user) {
-            await this.prisma.user.update({
-                where: { id: req.user.id },
-                data: { accessToken: null },
-              });
-        }
-        return { message: 'User logged out' };
-    }
 }
     

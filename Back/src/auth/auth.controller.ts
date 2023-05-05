@@ -15,8 +15,5 @@ export class AuthController {
       console.log("Connexion route")
       const code = req.query.code;
       const user = await this.AuthService.apiConnexion(code, response);
-      return response.redirect('http://localhost:3000');
-      //return  response.redirect('http://localhost:3000/login/log?userId=' + user.id);
       }
-
 }

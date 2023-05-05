@@ -4,7 +4,7 @@ import React from 'react'
 import './App.css';
 
 // PACKAGES
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
@@ -14,7 +14,6 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import Game from "./compenents/Game/Game"
-import MenuConnexion from './compenents/Connexion/MenuConnexion';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 

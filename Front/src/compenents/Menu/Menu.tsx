@@ -40,6 +40,10 @@ export default function App() {
     }, 500);
   };
 
+  function logout() {
+    window.location.href = 'http://localhost:3001/Southtrans/logout';
+  }
+  
   function toggleThanks() {
     setShow(!show);
   }
@@ -50,14 +54,23 @@ export default function App() {
   		<div id="menu-items">
         {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => {setHover(ButtersBlood);}}
         onMouseLeave={() => {setHover(Town);}}>Jeu</div>}
+
         {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(KennyHouse);}}
         onMouseLeave={() => {setHover(Town);}}>Profil</div>}
+
         {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(NoFriend);}}
         onMouseLeave={() => {setHover(Town);}}>Chat</div>}
+
         {show && <div className="menu-item" onClick={() => {handleClickCredits("/credits", Metrosexual); toggleThanks();}} onMouseEnter={() => {setHover(Metrosexual);}}
         onMouseLeave={() => {setHover(Town);}}>On est qui</div>}
-        {show && <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
+
+        {/* {show && <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
+        onMouseLeave={() => {setHover(Town);}}>Log Out</div>} */}
+        
+        {show && <div className="menu-item" onClick={logout} onMouseEnter={() => {setHover(Hell);}}
         onMouseLeave={() => {setHover(Town);}}>Log Out</div>}
+
+
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => {handleClick("/thanks", ChefAid); toggleThanks();}}></button>}
