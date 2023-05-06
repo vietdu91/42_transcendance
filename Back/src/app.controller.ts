@@ -9,6 +9,7 @@ import JwtAuthenticationGuard from './jwt-guard/jwt-guard.guard';
 import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 @Controller('Southtrans')
 export class AppController {
@@ -25,25 +26,25 @@ export class AppController {
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
 
-  @Get('logout')
-  async logout(@Req() request: Request, @Res() response: Response) {
-    console.log("logout");
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { accessToken: null },
-    });
-    response.clearCookie('token');
-    response.clearCookie('id');
-    response.redirect('http://localhost:3000/connect');
-  }
+  // @Get('logout')
+  // async logout(@Req() request: Request, @Res() response: Response) {
+  //   console.log("logout");
+  //   const userId = request.cookies.id;
+  //   if (!userId) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   const user = await this.userService.getUserById(userId);
+  //   if (!user) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   await this.prisma.user.update({
+  //     where: { id: user.id },
+  //     data: { accessToken: null },
+  //   });
+  //   response.clearCookie('token');
+  //   response.clearCookie('id');
+  //   response.redirect('http://localhost:3000/connect');
+  //}
 }
 
 
