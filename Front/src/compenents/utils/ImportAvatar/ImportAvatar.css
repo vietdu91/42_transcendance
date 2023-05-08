@@ -1,0 +1,65 @@
+.import {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 7vw;
+	height: 10vh;
+	background-color: transparent;
+  }
+
+  .upload-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+  }
+
+  #new-img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	object-fit: cover;
+  }
+
+  .circle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	border: 5px dashed rgb(71, 37, 5);
+	cursor: pointer;
+  }
+
+  #appareil {
+	display: flex;
+	position: absolute;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	margin-top: 65%;
+	margin-left: 90%;
+	border-radius: 50%;
+	border: 3px solid rgb(71, 37, 5);
+	background-color: white;
+  }
+
+  @media (max-width: 850px) {
+	#new-img {
+		width: 100px;
+		height: 100px;
+	}
+
+	.circle {
+		width: 100px;
+		height: 100px;
+	}
+
+	#appareil {
+		width: 30px;
+		height: 30px;
+	}
+}

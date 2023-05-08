@@ -1,0 +1,60 @@
+@font-face {
+	font-family: south_park_font;
+	src: url(../../../fonts/south\ park.ttf)
+}
+
+form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 10%;
+}
+
+.hello{
+	position: absolute;
+	left: 28%;
+	font-size: 25px;
+	font-weight: 200;
+	color: #cecece;
+	font-family: south_park_font;
+	transition: all 0.5s ease;
+	pointer-events: none;
+  }
+
+  input[type=text]:focus~.hello {
+	display: block;
+	color: black;
+	margin-top: -85px;
+	margin-left: -3%;
+	font-size: 16px;
+  }
+
+  input[type=text]:focus~.enter {
+	background-color: rgb(71, 37, 5);
+	position: absolute;
+	content: ' ';
+	height: 1px;
+	right: 45%;
+	margin-top: 52px;
+	transform: scaleX(5)
+  }
+
+  .enter{
+	transition: all ease 0.5s;
+	width: 9.9%;
+	transform: scaleX(1)
+
+  }
+
+  textarea, input {
+	position: absolute;
+	outline: none;
+	border: 0;
+	border-bottom: 1px solid #cecece;
+	height: 50px;
+	width: 50%;
+  }
+
+  input:focus{
+	content: 'prout';
+  }

@@ -1,0 +1,27 @@
+#range {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 10%;
+}
+
+#emoji {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 10%;
+}
+
+#age {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 10%;
+}
+.less {
+	accent-color: green;
+}
+
+.heigh {
+	accent-color: rgb(149, 35, 170);
+}
