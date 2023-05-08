@@ -20,6 +20,8 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { JwtMiddleware } from './middleware/auth.middleware';
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
@@ -36,4 +38,10 @@ import { JwtStrategy } from './strategy/jwt.strategy';
   providers: [
     PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy],
 })
-export class AppModule { }
+export class AppModule {}
+
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer.apply(JwtMiddleware).forRoutes('*');
+//   }
+// }

@@ -32,6 +32,7 @@ export class AppController {
   @Get('logout')
   async logout(@Req() request: Request, @Res() response: Response) {
     console.log("logout");
+    console.log("id == " + request.cookies.id);
     const userId = request.cookies.id;
     if (!userId) {
       throw new UnauthorizedException();
@@ -44,21 +45,20 @@ export class AppController {
       where: { id: user.id },
       data: { accessToken: null },
     });
-    response.clearCookie('token');
+    response.clearCookie('accessToken');
     response.clearCookie('id');
     response.redirect('http://localhost:3000/connect');
   }
 
   
   @Get('2fa/generate')
-  async generateTwoFactorAuthentication(@Req() request: Request,
-                                        @Res() response: Response) {
-    console.log("id == " + request.cookies.id)                            
+  async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {
+    console.log("id == " + request.cookies.id);                      
     const user = await this.userService.getUserById(request.cookies.id);
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
- 
     return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
   }
+
 
     @Post('2fa/turn-on')
     @HttpCode(200)

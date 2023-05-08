@@ -28,7 +28,7 @@ export class AuthService {
 
         }
         const payload = { username: user.name, sub: user.id };
-        console.log("paylod = " + payload);
+        console.log("paylod = " + payload.sub + " " + payload.username);
         const newToken = this.jwtService.sign(payload);
         // JWT token use to get user data and validate user
         console.log("new token ==  " + newToken);
@@ -36,7 +36,7 @@ export class AuthService {
             where: { id: user.id },
             data: { accessToken: newToken },
           });
-          res.cookie('token', newToken);
+          res.cookie('accessToken', newToken);
           res.cookie('id', user.id);
           res.redirect('http://localhost:3000');
     }

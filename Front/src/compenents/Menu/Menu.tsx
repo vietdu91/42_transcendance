@@ -16,6 +16,7 @@ import Metrosexual from "../../img/backgrounds/metrosexual.png"
 import KennyHouse from "../../img/backgrounds/kennyhouse.png"
 import ButtersBlood from "../../img/backgrounds/butters_blood.jpg"
 import ChefAid from "../../img/chef_aid.png"
+import axios from 'axios';
 
 export default function App() {
   const [hover, setHover] = React.useState(Town);
@@ -44,11 +45,49 @@ export default function App() {
     window.location.href = 'http://localhost:3001/Southtrans/logout';
   }
 
-
   function twoFa() {
-    window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
+    console.log("2FA");
+    console.log(document.cookie);
+    const cookies = document.cookie.split('; ');
+    let accessToken;
+    let id;
+  
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === 'accessToken') {
+        accessToken = value;
+      }
+      if (name === 'id') {  
+        id = value;
+      }
+    }
+    console.log("if id == " + id + " FIN");
+    
+    console.log("if access == " + accessToken + " FIN");
+    if (accessToken) {
+  
+     axios.get('http://localhost:3001/Southtrans/2fa/generate', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }).then(response => {
+        // Do something with the response
+        console.log("then acess == " + accessToken);
+        console.log("then redirect");
+        window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
+      }).catch(error => {
+        // Handle the error
+        console.error('catch Access token not found in cookies.');
+      });
+    } else {
+      console.error('Access token not found in cookies.');
+    }
   }
 
+
+  function twoff(){
+    window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
+  }
 
   function toggleThanks() {
     setShow(!show);
