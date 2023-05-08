@@ -43,40 +43,46 @@ export default function App() {
   function logout() {
     window.location.href = 'http://localhost:3001/Southtrans/logout';
   }
-  
+
+
+  function twoFa() {
+    window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
+  }
+
+
   function toggleThanks() {
     setShow(!show);
   }
 
   return (
-		<div id="menu">
+    <div id="menu">
       <img id="bg-menu" src={hover} alt={'bg'}></img>
-  		<div id="menu-items">
-        {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => {setHover(ButtersBlood);}}
-        onMouseLeave={() => {setHover(Town);}}>Jeu</div>}
+      <div id="menu-items">
+        {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
+          onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(KennyHouse);}}
-        onMouseLeave={() => {setHover(Town);}}>Profil</div>}
+        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(KennyHouse); }}
+          onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => {setHover(NoFriend);}}
-        onMouseLeave={() => {setHover(Town);}}>Chat</div>}
+        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(NoFriend); }}
+          onMouseLeave={() => { setHover(Town); }}>Chat</div>}
 
-        {show && <div className="menu-item" onClick={() => {handleClickCredits("/credits", Metrosexual); toggleThanks();}} onMouseEnter={() => {setHover(Metrosexual);}}
-        onMouseLeave={() => {setHover(Town);}}>On est qui</div>}
+        {show && <div className="menu-item" onClick={() => { handleClickCredits("/credits", Metrosexual); toggleThanks(); }} onMouseEnter={() => { setHover(Metrosexual); }}
+          onMouseLeave={() => { setHover(Town); }}>On est qui</div>}
 
-        {/* {show && <div className="menu-item" onClick={() => navigate("/connect")} onMouseEnter={() => {setHover(Hell);}}
-        onMouseLeave={() => {setHover(Town);}}>Log Out</div>} */}
-        
-        {show && <div className="menu-item" onClick={logout} onMouseEnter={() => {setHover(Hell);}}
-        onMouseLeave={() => {setHover(Town);}}>Log Out</div>}
+        {show && <div className="menu-item" onClick={logout} onMouseEnter={() => { setHover(Hell); }}
+          onMouseLeave={() => { setHover(Town); }}>Log Out</div>}
+
+        {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
+          onMouseLeave={() => { setHover(Town); }}>2FA</div>}
 
 
       </div>
       <div id="navbar">
-        {show && <button className="thanks" onClick={() => {handleClick("/thanks", ChefAid); toggleThanks();}}></button>}
+        {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
         {show && <button className="msn"></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
-		</div>
+    </div>
   )
 }

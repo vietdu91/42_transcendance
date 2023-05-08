@@ -41,6 +41,14 @@ export class AuthService {
           res.redirect('http://localhost:3000');
     }
 
+    async getUserToken(id: number): Promise<any> {
+        const user = await this.prisma.user.findUnique({
+            where: { id: parseInt(id.toString()) },
+        });
+        return user.accessToken;
+    }
+
+
     async getAccessToken(code: string): Promise<any> {
         try {
             const response = await axios.post('https://api.intra.42.fr/oauth/token', { 

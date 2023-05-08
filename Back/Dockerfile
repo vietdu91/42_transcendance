@@ -5,28 +5,30 @@ FROM node:lts-alpine
 WORKDIR /usr/src/app
 
 # Installation de NestJS CLI globalement
-RUN npm install -g @nestjs/cli
+#clRUN npm install -g @nestjs/cli
 
 # Copiez les fichiers package.json et package-lock.json
 COPY ./package*.json ./
 
 # Installez les dépendances
+RUN npm install -g npm@latest
 RUN npm install
-
-RUN npm install --save @nestjs/passport passport passport-local && npm install --save-dev @types/passport-local
-
-RUN npm install passport-google-oauth20 --save
-RUN npm install otplib --save
-RUN npm install @nestjs/jwt passport-jwt --save
-RUN npm install @nestjs/config --save
-RUN npm install @nestjs/common --save
-RUN npm install qrcode --save
 RUN npm install prisma --save-dev
-RUN npm install express --save
-RUN npm install @nestjs/common --save
-RUN npm install @prisma/client --save
-RUN npm i cookie-parser --save
-RUN npm i -D @types/cookie-parser --save
+RUN npm i -g @nestjs/cli
+
+#RUN npm install --save @nestjs/passport passport passport-local && npm install --save-dev @types/passport-local
+
+#RUN npm install passport-google-oauth20 --save
+#RUN npm install otplib --save
+#RUN npm install @nestjs/jwt passport-jwt --save
+#RUN npm install @nestjs/config --save
+#RUN npm install @nestjs/common --save
+#RUN npm install qrcode --save
+#RUN npm install prisma --save-dev
+#RUN npm install express --save
+#RUN npm install @prisma/client --save
+#RUN npm i cookie-parser --save
+#RUN npm i -D @types/cookie-parser --save
 
 # Copiez tous les autres fichiers
 COPY ./src ./

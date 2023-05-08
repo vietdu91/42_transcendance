@@ -25,7 +25,7 @@ export default function MenuConnexion() {
             <div id="menu-items">
                   <div className="menu-item" onClick={() => {
                       window.location.href = "http://localhost:3001/southtrans/42"
-                  }} 
+                  }}
                 onMouseEnter={() => {setHover(Lotion);}}
                   onMouseLeave={() => {setHover(Town);}}>Se connecter</div>
             </div>
