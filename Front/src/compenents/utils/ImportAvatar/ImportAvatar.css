@@ -2,7 +2,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: 7vw;
+	margin-top: 2vh;
+	margin-bottom: 5vh;
 	height: 10vh;
 	background-color: transparent;
   }
@@ -61,5 +62,9 @@
 	#appareil {
 		width: 30px;
 		height: 30px;
+	}
+
+	.import {
+		margin-bottom: 3vh;
 	}
 }

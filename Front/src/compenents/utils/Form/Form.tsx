@@ -5,7 +5,7 @@ export default function Form() {
 
 	return (
 		<form>
-			<input type="text" className="write"></input>
+			<input id="barre" type="text" className="write"></input>
 			  <label className="hello">Ton petit surnom 👶</label>
 			<span className="enter"></span>
 	  	</form>

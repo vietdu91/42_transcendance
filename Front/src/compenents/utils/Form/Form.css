@@ -7,7 +7,6 @@ form {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: 10%;
 }
 
 .hello{
@@ -21,7 +20,7 @@ form {
 	pointer-events: none;
   }
 
-  input[type=text]:focus~.hello {
+  #barre[type=text]:focus~.hello {
 	display: block;
 	color: black;
 	margin-top: -85px;
@@ -29,7 +28,7 @@ form {
 	font-size: 16px;
   }
 
-  input[type=text]:focus~.enter {
+  #barre[type=text]:focus~.enter {
 	background-color: rgb(71, 37, 5);
 	position: absolute;
 	content: ' ';
@@ -46,15 +45,28 @@ form {
 
   }
 
-  textarea, input {
+  textarea, #barre {
 	position: absolute;
 	outline: none;
 	border: 0;
 	border-bottom: 1px solid #cecece;
 	height: 50px;
 	width: 50%;
+	/* max-width: 500px; */
   }
 
-  input:focus{
+  #barre:focus{
 	content: 'prout';
+	font-family: south_park_font;
+	font-size: 200%;
   }
+
+@media (max-width: 850px) {
+	.hello {
+		font-size: 15px;
+	}
+
+	#barre[type=text]:focus~.hello {
+		font-size: 10px;
+	}
+}

@@ -27,7 +27,7 @@ body {
   object-fit: cover;
   background-color:#89cede;
 
-  position: absolute;
+  /* position: absolute; */
   left: 0;
   top: 0;
   z-index: 1;
@@ -46,15 +46,18 @@ body {
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
 	z-index: 15;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5%;
 }
 
 #welcome {
 	font-size: 100px;
 	margin-top: 30px;
-	margin-bottom: 75px;
 	font-family: south_park_font;
 	text-align: center;
-	position: relative;
+	/* position: relative; */
 }
 
 #skeeter {
