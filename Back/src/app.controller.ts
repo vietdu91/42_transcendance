@@ -4,6 +4,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
 import { Response,} from 'express';
 import { Request } from 'express';
+import * as qrcode from 'qrcode';
 import { TwofaService } from './twofa/twofa.service';
 import RequestWithUser from './interface/requestWithUser.interface';
 import JwtAuthenticationGuard from './jwt-guard/jwt-guard.guard';
@@ -52,11 +53,18 @@ export class AppController {
 
   
   @Get('2fa/generate')
-  async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {
-    console.log("id == " + request.cookies.id);                      
-    const user = await this.userService.getUserById(request.cookies.id);
+  @UseGuards(JwtAuthenticationGuard)
+  async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {           
+   const accessToken = request.headers.authorization?.split(' ')[1];
+    console.log("Access token: " + accessToken);  
+    const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
+    console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
+    //const expires = decodedJwtAccessToken.exp;
+    const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
-    return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
+    //return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
+    const code = await qrcode.toDataURL(otpauthUrl);
+    response.json({code: code});
   }
 
 

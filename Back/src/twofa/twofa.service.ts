@@ -37,6 +37,7 @@ export class TwofaService {
   }
 
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
+    console.log('pipeQrCodeStream = ' + otpauthUrl);
     return toFileStream(stream, otpauthUrl);
   }
 }

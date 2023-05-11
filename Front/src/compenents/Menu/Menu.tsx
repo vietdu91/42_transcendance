@@ -1,4 +1,5 @@
 import React from 'react'
+import QRCode from 'react-qr-code';
 
 // CSS
 import './Menu.css';
@@ -22,6 +23,9 @@ export default function App() {
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
   const [show, setShow] = React.useState(true);
+  const [show2, setShow2] = React.useState(false);
+  const [code, setCode] = React.useState("");
+  
 
   const handleClickCredits = (path, image) => {
     setHover(image);
@@ -72,9 +76,14 @@ export default function App() {
         }
       }).then(response => {
         // Do something with the response
-        console.log("then acess == " + accessToken);
         console.log("then redirect");
-        window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
+        console.log(response);
+        setCode(response.data.code)
+        setShow2(true);
+
+
+        //window.location.href = `http://localhost:3001/Southtrans/2fa/generate?accessToken=${accessToken}`;
+        //window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
       }).catch(error => {
         // Handle the error
         console.error('catch Access token not found in cookies.');
@@ -114,8 +123,13 @@ export default function App() {
 
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
-
-
+{/* 
+        {show2 && 
+        <>
+        <img src={code}></img>
+        <input placeholder='code'></input>
+        </>
+        } */}
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
