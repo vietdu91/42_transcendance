@@ -38,7 +38,7 @@ export default function CharacterSelection() {
 
 	return (
 		<div className="menu">
-			<img id="bg-menu" src={BusStop} alt={'BusStop'}></img>
+			<img id="bg--menu" src={BusStop} alt={'BusStop'}></img>
 			<div className="grid">
 				<img className="card" src={cartman} alt={'Cartman'}
 				onMouseEnter={() => {setCartman(CartmanSuper);}}
