@@ -16,11 +16,12 @@ import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { TwofaModule } from './twofa/twofa.module';
 import { TwofaService } from './twofa/twofa.service';
-import { TwoFactorAuthenticationController } from './app.controller';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { JwtMiddleware } from './middleware/auth.middleware';
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
@@ -33,8 +34,14 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AppController, UserController, AuthController, TwoFactorAuthenticationController],
+  controllers: [AppController, UserController, AuthController],
   providers: [
     PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy],
 })
-export class AppModule { }
+export class AppModule {}
+
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer.apply(JwtMiddleware).forRoutes('*');
+//   }
+// }

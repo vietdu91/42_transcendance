@@ -4,7 +4,7 @@ import React from 'react'
 import './App.css';
 
 // PACKAGES
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
@@ -78,9 +78,9 @@ export default function App() {
         <Route path="/thanks" element={<ThanksWithMusic />}/>
         <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
         <Route path="/404" element={<PageNotFound />}/>
-        <Route path="*" element={<Navigate to="/404" />}/>
       </Routes>
 		</div>
   )
 }
+//<Route path="*" element={<Navigate to="/404" />}/>
 
