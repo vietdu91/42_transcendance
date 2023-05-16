@@ -4,6 +4,13 @@
 	align-items: center;
 }
 
+#choose_your_fighter {
+  z-index: 1;
+  position: absolute;
+  top: 3%;
+  text-align: center;
+}
+
 #bg--menu {
   display: block;
   width: 100vw;
@@ -63,6 +70,7 @@
 	grid-template-rows: repeat(2, 300px);
 	align-content: center;
 	justify-content: center;
+  z-index: 2;
 }
 
 @media (max-width: 1000px) {

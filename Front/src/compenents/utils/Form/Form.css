@@ -20,13 +20,14 @@ form {
 	pointer-events: none;
   }
 
+
   #barre[type=text]:focus~.hello {
-	display: block;
-	color: black;
-	margin-top: -85px;
-	margin-left: -3%;
-	font-size: 16px;
-  }
+	  display: block;
+	  color: black;
+	  margin-top: -85px;
+	  margin-left: -3%;
+	  font-size: 16px;
+	}
 
   #barre[type=text]:focus~.enter {
 	background-color: rgb(71, 37, 5);
@@ -52,6 +53,7 @@ form {
 	border-bottom: 1px solid #cecece;
 	height: 50px;
 	width: 50%;
+	font-family: south_park_font;
 	/* max-width: 500px; */
   }
 
