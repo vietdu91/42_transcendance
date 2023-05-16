@@ -68,8 +68,30 @@ body {
 	margin: 0 auto;
 }
 
+#move_on {
+	background-image: url("../../img/buttons/move_on.png");
+	background-size: cover;
+	width: 150px;
+	height: 150px;
+	font-size: 2rem;
+	position: fixed;
+	bottom: 6%;
+	right: 15%;
+	z-index: 50;
+
+    background-color: rgba(0, 0, 255, 0);
+    border: 1px solid rgba(0, 0, 255, 0);
+}
+
 @media (max-width: 850px) {
 	#welcome {
 		font-size: 50px;
+	}
+}
+
+@media (max-width: 1400px) {
+	#move_on {
+		width: 80px;
+		height: 80px;
 	}
 }

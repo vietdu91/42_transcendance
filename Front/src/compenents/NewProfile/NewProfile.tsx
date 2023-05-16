@@ -1,4 +1,5 @@
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 import './NewProfile.css'
 
@@ -11,6 +12,8 @@ import Range from "../../compenents/utils/Range/Range"
 
 export default function NewProfile() {
 
+	const navigate = useNavigate();
+
 	return (
 		<div id="menu">
 			<img id="bg-menu" src={Bar} alt={'Bar'}></img>
@@ -20,6 +23,7 @@ export default function NewProfile() {
 				<Import />
 				<Form />
 				<Range />
+				<button id="move_on" onClick={() => navigate("/")}></button>
 			</div>
 		</div>
 	)
