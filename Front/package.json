@@ -24,6 +24,7 @@
     "react-qr-code": "^2.0.11",
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
+    "typekit": "^0.1.1",
     "typescript": "^5.0.4",
     "use-sound": "^4.0.1",
     "web-vitals": "^3.3.1"

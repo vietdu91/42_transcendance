@@ -109,7 +109,7 @@ export default function App() {
         {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(KennyHouse); }}
+        {show && <div className="menu-item" onClick={() => navigate("/newprofile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(NoFriend); }}
@@ -123,13 +123,13 @@ export default function App() {
 
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
-{/* 
+
         {show2 && 
         <>
         <img src={code}></img>
         <input placeholder='code'></input>
         </>
-        } */}
+        } 
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}

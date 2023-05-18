@@ -1,6 +1,5 @@
 version: '3.3'
 
-
 networks:
   net-db:
     driver: bridge
@@ -41,20 +40,6 @@ services:
       - ./Back:/usr/src/app
       - /usr/src/app/node_modules
     restart: unless-stopped
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=zboub@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=0000
-    ports:
-      - "5050:80"
-    networks:
-      - net-db
-    container_name: pgadmin
-    depends_on:
-      - postgres
-    restart: always
 
   frontend:
     container_name: frontend
