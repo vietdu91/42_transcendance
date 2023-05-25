@@ -14,6 +14,7 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import Game from "./compenents/Game/Game"
+import Profile from "./compenents/Profile/Profile"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Test from "./compenents/Test"
 import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
@@ -72,6 +73,7 @@ export default function App() {
         <Route path="/" element={<MenuWithMusic />}/>
         <Route path="/select" element={<CharacterSelectionWithMusic />}/>
         <Route path="/game" element={<Game />}/>
+        <Route path="/profile" element={<Profile />}/>
         <Route path="/connect" element={<ConnexionWithMusic />}/>
         <Route path="/newprofile" element={<NewProfile />}/>
         <Route path="/credits" element={<CreditsWithMusic />}/>

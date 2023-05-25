@@ -4,7 +4,7 @@ generator client {
 }
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://benda:0000@postgres:5432/Trans"
 }
 
 model User {
@@ -15,4 +15,5 @@ model User {
   accessToken     String?  @unique
   twoFactorEnabled Boolean @default(false)
 }
+
 

@@ -38,10 +38,10 @@ export default function App() {
 
   const handleClick = (path, image) => {
     setHover(image);
-    document.getElementById("bg-menu")?.classList.add("zoom-transition");
+    // document.getElementById("bg-menu")?.classList.add("zoom-transition");
     setTimeout(() => {
       navigate(path);
-      document.getElementById("bg-menu")?.classList.remove("zoom-transition");
+      // document.getElementById("bg-menu")?.classList.remove("zoom-transition");
     }, 500);
   };
 
@@ -109,7 +109,7 @@ export default function App() {
         {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(KennyHouse); }}
+        {show && <div className="menu-item" onClick={() => navigate("/profile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(NoFriend); }}

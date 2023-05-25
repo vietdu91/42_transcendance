@@ -7,7 +7,6 @@ export default function Form() {
 		<form>
 			<input id="barre" type="text" className="write"></input>
 			  <label className="hello">Ton petit surnom 👶</label>
-			<span className="enter"></span>
 	  	</form>
 	);
 }

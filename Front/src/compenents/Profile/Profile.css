@@ -1,0 +1,97 @@
+@font-face {
+	font-family: south_park_font;
+	src: url(../../fonts/south\ park.ttf)
+  }
+
+
+@font-face {
+	font-family: texas_font;
+	src: url(../../fonts/TEXAT_BOLD.otf)
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+#menu {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+#bg-menu {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  background-color:#89cede;
+
+  /* position: absolute; */
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.box {
+	position: fixed;
+	top: 5%;
+	left: 10%;
+	right: 10%;
+	bottom: 5%;
+	padding: 10px;
+
+	background-color: #ffc107;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+	z-index: 15;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5%;
+}
+
+#welcome {
+	font-size: 100px;
+	margin-top: 30px;
+	font-family: south_park_font;
+	text-align: center;
+	/* position: relative; */
+}
+
+#skeeter {
+	max-width: 100%;
+	height: auto;
+	max-height: 40%;
+	display: block;
+	margin: 0 auto;
+}
+
+#move_on {
+	background-image: url("../../img/buttons/move_on.png");
+	background-size: cover;
+	width: 150px;
+	height: 150px;
+	font-size: 2rem;
+	position: fixed;
+	bottom: 6%;
+	right: 15%;
+	z-index: 50;
+
+    background-color: rgba(0, 0, 255, 0);
+    border: 1px solid rgba(0, 0, 255, 0);
+}
+
+@media (max-width: 850px) {
+	#welcome {
+		font-size: 50px;
+	}
+}
+
+@media (max-width: 1400px) {
+	#move_on {
+		width: 80px;
+		height: 80px;
+	}
+}

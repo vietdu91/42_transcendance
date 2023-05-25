@@ -32,7 +32,7 @@ body {
     width: 70vw;
     height: 60vh;
     border: solid 4px #696969;
-    background-color: black;
+    /* background-color: black; */
     color: white;
     z-index: 1;
 }

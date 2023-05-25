@@ -21,4 +21,14 @@ COPY ./src ./
 EXPOSE 3001
 
 # Démarrez l'application
-CMD [ "npm", "run", "start:dev" ]
+
+COPY ./utils/script.sh /
+
+RUN chmod 755 /script.sh
+
+# A LANCER POUR LES TESTS
+# # Lancer le script dans le terminal du docker via [/script.sh]
+ENTRYPOINT [ "tail", "-f" ]
+
+# A LANCER POUR LE RENDU FINAL (ne permet pas de modification directe du code)
+# CMD [ "/script.sh" ]
