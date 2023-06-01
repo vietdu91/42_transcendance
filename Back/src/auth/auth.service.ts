@@ -26,19 +26,34 @@ export class AuthService {
         if (!user ) {
             user = await this.createUser(userData);
 
-        }
-        const payload = { username: user.name, sub: user.id };
-        console.log("paylod = " + payload.sub + " " + payload.username);
-        const newToken = this.jwtService.sign(payload);
-        // JWT token use to get user data and validate user
-        console.log("new token ==  " + newToken);
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { accessToken: newToken },
+            const payload = { username: user.name, sub: user.id };
+            console.log("paylod = " + payload.sub + " " + payload.username);
+            const newToken = this.jwtService.sign(payload);
+            // JWT token use to get user data and validate user
+            console.log("new token ==  " + newToken);
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { accessToken: newToken },
           });
           res.cookie('accessToken', newToken);
           res.cookie('id', user.id);
-          res.redirect('http://localhost:3000');
+          res.redirect('http://localhost:3000/newprofile');
+        }
+        else {
+
+            const payload = { username: user.name, sub: user.id };
+            console.log("paylod = " + payload.sub + " " + payload.username);
+            const newToken = this.jwtService.sign(payload);
+            // JWT token use to get user data and validate user
+            console.log("new token ==  " + newToken);
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { accessToken: newToken },
+              });
+            res.cookie('accessToken', newToken);
+            res.cookie('id', user.id);
+            res.redirect('http://localhost:3000');
+        }
     }
 
     async getUserToken(id: number): Promise<any> {
@@ -59,6 +74,7 @@ export class AuthService {
                 redirect_uri: "http://localhost:3001/Auth/conexion" 
             });
             const accessToken = response.data.access_token;
+            console.log(accessToken + " == accessToken");
             return accessToken;
         } catch (error) {
             console.error(error);

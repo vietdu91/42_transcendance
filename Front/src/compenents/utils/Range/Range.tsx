@@ -41,8 +41,11 @@ export default function Range() {
 		<div className="range">
 			<img src={emoji} id="emoji" alt="Character"></img>
 			<div className="range-slider-wrapper">
-				<input type="range" className={data > 50?'heigh':'less'}
-				min='0' max='100' step="1" value={data}
+				<input type="range" 
+				className={data > 50?'heigh':'less'}
+				min='0' max='100' 
+				step="1" 
+				value={data}
 				onChange={handleChange}/>
 			</div>
 			<h1>J'ai {data} {data <= 1 ? 'an' : 'ans'}</h1>

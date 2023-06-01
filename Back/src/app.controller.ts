@@ -30,6 +30,7 @@ export class AppController {
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
 
+
   @Get('logout')
   async logout(@Req() request: Request, @Res() response: Response) {
     console.log("logout");

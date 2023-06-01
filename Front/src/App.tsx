@@ -17,6 +17,7 @@ import Game from "./compenents/Game/Game"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Test from "./compenents/Test"
 import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
+import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 
@@ -74,6 +75,7 @@ export default function App() {
         <Route path="/game" element={<Game />}/>
         <Route path="/connect" element={<ConnexionWithMusic />}/>
         <Route path="/newprofile" element={<NewProfile />}/>
+        <Route path="/chat" element={<Chat />}/>
         <Route path="/credits" element={<CreditsWithMusic />}/>
         <Route path="/thanks" element={<ThanksWithMusic />}/>
         <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>

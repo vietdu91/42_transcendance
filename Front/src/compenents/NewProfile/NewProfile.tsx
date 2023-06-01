@@ -20,7 +20,7 @@ export default function NewProfile() {
 			<div className="box">
 				<div id="welcome">WELCOME</div>
 				<img id="skeeter" alt="skeeter" src={Skeeter}></img>
-				<Import />
+				<Import/>
 				<Form />
 				<Range />
 				<button id="move_on" onClick={() => navigate("/")}></button>
