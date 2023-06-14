@@ -31,9 +31,16 @@ export class AppController {
   }
   
   @Post('newprofile')
-  enregistrerSurnom(@Body() body: { nickname: string }) {
+  async enregistrerSurnom( @Body() body: { nickname: string }) {
     const { nickname } = body;
+     const userUpdate = await this.prisma.user.update({
+       where: { id: 1 },
+       data: { nickname: nickname },
+    });
 
+    // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
     // Effectuer les opérations d'enregistrement du surnom dans la base de données
     // ... Vos opérations d'enregistrement ici ...
     console.log("nickname == " + nickname);
