@@ -1,5 +1,6 @@
 import React from 'react'
 import QRCode from 'react-qr-code';
+import axios from 'axios';
 
 // CSS
 import './Menu.css';
@@ -17,7 +18,6 @@ import Metrosexual from "../../img/backgrounds/metrosexual.png"
 import KennyHouse from "../../img/backgrounds/kennyhouse.png"
 import ButtersBlood from "../../img/backgrounds/butters_blood.jpg"
 import ChefAid from "../../img/chef_aid.png"
-import axios from 'axios';
 
 export default function App() {
   const [hover, setHover] = React.useState(Town);
