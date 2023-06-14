@@ -27,9 +27,18 @@ export class AppController {
   @Redirect("")
   getConnected() {
     console.log("42 route");
-    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
+    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
+  
+  @Post('newprofile')
+  enregistrerSurnom(@Body() body: { nickname: string }) {
+    const { nickname } = body;
 
+    // Effectuer les opérations d'enregistrement du surnom dans la base de données
+    // ... Vos opérations d'enregistrement ici ...
+    console.log("nickname == " + nickname);
+    return { message: 'Surnom enregistré avec succès' };
+  }
 
   @Get('logout')
   async logout(@Req() request: Request, @Res() response: Response) {

@@ -1,5 +1,4 @@
 import React from 'react'
-import QRCode from 'react-qr-code';
 
 // CSS
 import './Menu.css';
@@ -94,9 +93,6 @@ export default function App() {
   }
 
 
-  function twoff(){
-    window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
-  }
 
   function toggleThanks() {
     setShow(!show);

@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 
 
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = "u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467"; // Remplacer par le client_id de votre application
-const clientSecret = "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";
+const client_id = "u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4"; // Remplacer par le client_id de votre application
+const clientSecret = "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";
 
 @Injectable()
 export class AuthService {
