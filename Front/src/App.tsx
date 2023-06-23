@@ -15,6 +15,7 @@ import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import Game from "./compenents/Game/Game"
 import NewProfile from "./compenents/NewProfile/NewProfile"
+import Profile from "./compenents/Profile/Profile"
 import Test from "./compenents/Test"
 import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
 import Chat from './compenents/Chat/socketChat';
@@ -63,25 +64,53 @@ const CharacterSelectionWithMusic = () => (
 
 );
 
+class User {
+  id:number;
+  email:string;
+  name:string;
+  twoFactorSecret:string;
+  accessToken:string;
+  twoFactorEnabled:boolean;
+  nickname:string;
+  age:number;
+
+  constructor() {
+    this.id = -1;
+    this.email = '';
+    this.name = '';
+    this.twoFactorSecret = '';
+    this.accessToken = '';
+    this.twoFactorEnabled = false;
+    this.nickname = '';
+    this.age = -1;
+  }
+}
+
+const UserContext = React.createContext(new User());
+
 export default function App() {
+  let user:User = new User();
 
   return (
 
-		<div className="App">
-      <Routes>
-        <Route path="/test" element={<Test />}/>
-        <Route path="/" element={<MenuWithMusic />}/>
-        <Route path="/select" element={<CharacterSelectionWithMusic />}/>
-        <Route path="/game" element={<Game />}/>
-        <Route path="/connect" element={<ConnexionWithMusic />}/>
-        <Route path="/newprofile" element={<NewProfile />}/>
-        <Route path="/chat" element={<Chat />}/>
-        <Route path="/credits" element={<CreditsWithMusic />}/>
-        <Route path="/thanks" element={<ThanksWithMusic />}/>
-        <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
-        <Route path="/404" element={<PageNotFound />}/>
-      </Routes>
-		</div>
+    <UserContext.Provider value={user}>
+      <div className="App">
+        <Routes>
+          <Route path="/test" element={<Test />}/>
+          <Route path="/" element={<MenuWithMusic />}/>
+          <Route path="/select" element={<CharacterSelectionWithMusic />}/>
+          <Route path="/game" element={<Game />}/>
+          <Route path="/connect" element={<ConnexionWithMusic />}/>
+          <Route path="/newprofile" element={<NewProfile />}/>
+          <Route path="/profile" element={<Profile />}/>
+          <Route path="/chat" element={<Chat />}/>
+          <Route path="/credits" element={<CreditsWithMusic />}/>
+          <Route path="/thanks" element={<ThanksWithMusic />}/>
+          <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
+          <Route path="/404" element={<PageNotFound />}/>
+        </Routes>
+      </div>
+    </UserContext.Provider>
   )
 }
 //<Route path="*" element={<Navigate to="/404" />}/>

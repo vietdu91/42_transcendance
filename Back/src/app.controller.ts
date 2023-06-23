@@ -30,6 +30,23 @@ export class AppController {
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
   
+  @Get('getNickname')
+  async getNickname(@Req() request: Request, @Res() response: Response) {
+    console.log(request.cookies)
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    console.log("nick = " + user.nickname)
+    response.json({nick: user.nickname, name:user.name})
+  }
+
+
   @Post('newprofile')
   async enregistrerSurnom( @Body() body: { nickname: string }) {
     const { nickname } = body;
@@ -66,7 +83,7 @@ export class AppController {
     response.clearCookie('accessToken');
     response.clearCookie('id');
     response.redirect('http://localhost:3000/connect');
-  }
+  }   
 
   
   @Get('2fa/generate')

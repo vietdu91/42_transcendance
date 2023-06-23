@@ -22,5 +22,12 @@ COPY ./src ./
 # Exposez le port 300
 EXPOSE 3001
 
+COPY ./utils/script.sh /
+
+RUN chmod 755 /script.sh
+
 # Démarrez l'application
-CMD [ "npm", "run", "start:dev" ]
+
+ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+
+# CMD [ "./script.sh" ]

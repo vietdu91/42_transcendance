@@ -105,7 +105,7 @@ export default function App() {
         {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/newprofile")} onMouseEnter={() => { setHover(KennyHouse); }}
+        {show && <div className="menu-item" onClick={() => navigate("/profile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}

@@ -53,10 +53,10 @@ export default function Game(): JSX.Element {
 
     useEffect(() => {
 
-        let ball, p1, p2;
-        const sketch = new p5((p) => {
-            let canvas: p5.Renderer;
-            let cDiv, currentWidth, currentHeight;
+        let ball:Ball, p1:Bar, p2:Bar;
+        const sketch = new p5((p:p5) => {
+            let canvas:p5.Renderer;
+            let cDiv:any, currentWidth:number, currentHeight:number;
 
             p.setup = () => {
                 cDiv = sketchRef.current!;
@@ -64,10 +64,10 @@ export default function Game(): JSX.Element {
                 currentHeight = cDiv.clientHeight;
                 canvas = p.createCanvas(cDiv.clientWidth, cDiv.clientHeight);
                 canvas.parent(cDiv);
-                const player_width = cDiv.clientWidth / 75;
-                const player_height = cDiv.clientHeight / 5;
-                const ball_rad = cDiv.clientHeight / 75;
-                const ball_speed = cDiv.clientWidth / 150;
+                const player_width:number = cDiv.clientWidth / 75;
+                const player_height:number = cDiv.clientHeight / 5;
+                const ball_rad:number = cDiv.clientHeight / 75;
+                const ball_speed:number = cDiv.clientWidth / 150;
 
                 ball = new Ball(cDiv, p, cDiv.clientWidth / 2, cDiv.clientHeight / 2, ball_rad, ball_speed);
                 p1 = new Bar(cDiv, p, player_width, cDiv.clientHeight / 2 - (player_height / 2), player_width, player_height);
@@ -87,7 +87,7 @@ export default function Game(): JSX.Element {
                 p2.pos.y = ball.pos.y - p2.h / 2;
                 p2.pos.y = p2.p5.constrain(p2.pos.y, p2.cDiv.clientHeight / 150, p2.cDiv.clientHeight - (p2.cDiv.clientHeight / 150) - p2.h);
                 ////////////////////////
-                if (ball.out(p1, p2)) {
+                if (ball.out()) {
                     p1.reset(cDiv.clientWidth / 75, cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
                     p2.reset(cDiv.clientWidth - (cDiv.clientWidth / 75 * 2), cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
                 }
@@ -99,23 +99,23 @@ export default function Game(): JSX.Element {
             };
 
             p.windowResized = () => {
-                const oldWidth = currentWidth;
-                const oldHeight = currentHeight;
+                const oldWidth:number = currentWidth;
+                const oldHeight:number = currentHeight;
                 cDiv = sketchRef.current!;
                 currentWidth = cDiv.clientWidth;
                 currentHeight = cDiv.clientHeight;
                 p.resizeCanvas(cDiv.clientWidth, cDiv.clientHeight);
 
-                const player_width = cDiv.clientWidth / 75;
-                const player_height = cDiv.clientHeight / 5;
-                const ball_rad = cDiv.clientHeight / 75;
-                const ball_speed = cDiv.clientWidth / 150;
+                const player_width:number = cDiv.clientWidth / 75;
+                const player_height:number = cDiv.clientHeight / 5;
+                const ball_rad:number = cDiv.clientHeight / 75;
+                const ball_speed:number = cDiv.clientWidth / 150;
 
-                const p1y = (p1.pos.y * cDiv.clientHeight / oldHeight);
-                const p2y = (p2.pos.y * cDiv.clientHeight / oldHeight);
+                const p1y:number = (p1.pos.y * cDiv.clientHeight / oldHeight);
+                const p2y:number = (p2.pos.y * cDiv.clientHeight / oldHeight);
 
-                const ballX = (ball.pos.x * cDiv.clientWidth / oldWidth);
-                const ballY = (ball.pos.y * cDiv.clientHeight / oldHeight);
+                const ballX:number = (ball.pos.x * cDiv.clientWidth / oldWidth);
+                const ballY:number = (ball.pos.y * cDiv.clientHeight / oldHeight);
 
                 p1 = new Bar(cDiv, p, player_width, p1y, player_width, player_height);
                 p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), p2y, player_width, player_height);
