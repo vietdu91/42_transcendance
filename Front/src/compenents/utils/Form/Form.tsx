@@ -24,7 +24,7 @@ export default function Form() {
 
     // Envoyer une requête POST au serveur pour enregistrer le surnom
     axios
-      .post('http://localhost:3001/SouthTrans/newprofile', { nickname })
+      .post('http://localhost:3001/SouthTrans/setNickname', { nickname }, { withCredentials: true })
       .then((response) => {
         // Traiter la réponse du serveur si nécessaire
       })

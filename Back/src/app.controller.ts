@@ -47,14 +47,17 @@ export class AppController {
   }
 
 
-  @Post('newprofile')
-  async enregistrerSurnom( @Body() body: { nickname: string }) {
+  @Post('setNickname')
+  async setNickname( @Req() request, @Body() body: { nickname: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
     const { nickname } = body;
      const userUpdate = await this.prisma.user.update({
-       where: { id: 1 },
+       where: { id: Number(userId) },
        data: { nickname: nickname },
     });
-
     // if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
@@ -62,6 +65,25 @@ export class AppController {
     // ... Vos opérations d'enregistrement ici ...
     console.log("nickname == " + nickname);
     return { message: 'Surnom enregistré avec succès' };
+  }
+
+  @Post('setAge')
+  async setAge( @Req() request, @Body() body: { age: number }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { age } = body;
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { age: Number(age) },
+    });
+      // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    // Effectuer les opérations d'enregistrement du surnom dans la base de données
+    // ... Vos opérations d'enregistrement ici ...
+    return { message: 'Age enregistré avec succès' };
   }
 
   @Get('logout')

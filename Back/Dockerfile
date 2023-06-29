@@ -30,4 +30,4 @@ RUN chmod 755 /script.sh
 
 ENTRYPOINT [ "tail", "-f", "/dev/null" ]
 
-# CMD [ "./script.sh" ]
+# CMD [ "/script.sh" ]
