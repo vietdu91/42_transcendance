@@ -12,39 +12,40 @@ import "./Form.css";
 // 	);
 // }
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Form.css";
 
 export default function Form() {
   const [nickname, setNickname] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      axios
+          .post('http://localhost:3001/SouthTrans/setNickname', { nickname }, { withCredentials: true })
+          .then((response) => {
+            // Traiter la réponse du serveur si nécessaire
+          })
+          .catch((error) => {
+            // Gérer les erreurs de requête
+          });
+    }
     // Envoyer une requête POST au serveur pour enregistrer le surnom
-    axios
-      .post('http://localhost:3001/SouthTrans/setNickname', { nickname }, { withCredentials: true })
-      .then((response) => {
-        // Traiter la réponse du serveur si nécessaire
-      })
-      .catch((error) => {
-        // Gérer les erreurs de requête
-      });
-  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        id="barre"
-        type="text"
-        className="write"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-      />
-      <label className="hello">Ton petit surnom 👶</label>
-      <span className="enter"></span>
+    <>
+      <form onSubmit={handleSubmit}>
+        <input
+          id="barre"
+          type="text"
+          className="write"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+        />
+        <label className="hello">Ton petit surnom 👶</label>
+        <span className="enter"></span>
+      </form>
       <button type="submit">Enregistrer</button>
-    </form>
+    </>
   );
 }

@@ -63,6 +63,10 @@ form {
 	font-size: 200%;
   }
 
+  button {
+	z-index: 999999;
+  }
+
 @media (max-width: 850px) {
 	.hello {
 		font-size: 15px;
