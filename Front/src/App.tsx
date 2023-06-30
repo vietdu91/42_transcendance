@@ -13,7 +13,8 @@ import Credits from "./compenents/Credits/Credits"
 import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
-import Game from "./compenents/Game/Game"
+import GameMenu from "./compenents/Game/GameMenu/GameMenu"
+import Game from "./compenents/Game/Game/Game"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
 import Test from "./compenents/Test"
@@ -27,6 +28,7 @@ import queer_eye from './sounds/queer_eye.mp3'
 import southparkSound from './sounds/theme_song.mp3'
 import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
+import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
 
 const ConnexionWithMusic = () => (
   <>
@@ -99,6 +101,8 @@ export default function App() {
           <Route path="/test" element={<Test />}/>
           <Route path="/" element={<MenuWithMusic />}/>
           <Route path="/select" element={<CharacterSelectionWithMusic />}/>
+          <Route path="/gamemenu" element={<GameMenu />}/>
+          <Route path="/champselect" element={<ChampSelect />}/>
           <Route path="/game" element={<Game />}/>
           <Route path="/connect" element={<ConnexionWithMusic />}/>
           <Route path="/newprofile" element={<NewProfile />}/>

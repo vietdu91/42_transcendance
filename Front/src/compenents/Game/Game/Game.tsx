@@ -7,14 +7,13 @@ import Bar from "./Bar"
 import './Game.css'
 
 // COMPONENTS
-import '../utils/ReturnButtom/ReturnButtom'
-import ReturnButtom from '../utils/ReturnButtom/ReturnButtom'
+import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
 
 // IMG
-import Chaos from '../../img/backgrounds/backgrounds-game/chaos.jpg'
-import CityWok from '../../img/backgrounds/backgrounds-game/city_wok.jpg'
-import WallMart from '../../img/backgrounds/backgrounds-game/wallmart.jpg'
-import TimmyVSJimmy from '../../img/video/Timmy_Fights_Jimmy.mp4'
+import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
+import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
+import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
+import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
 export default function Game(): JSX.Element {
 
@@ -55,41 +54,42 @@ export default function Game(): JSX.Element {
 
         let ball:Ball, p1:Bar, p2:Bar;
         const sketch = new p5((p:p5) => {
-            let canvas:p5.Renderer;
+            let canvas: p5.Renderer;
             let cDiv:any, currentWidth:number, currentHeight:number;
 
             p.setup = () => {
                 cDiv = sketchRef.current!;
                 currentWidth = cDiv.clientWidth;
-                currentHeight = cDiv.clientHeight;
-                canvas = p.createCanvas(cDiv.clientWidth, cDiv.clientHeight);
+                currentHeight = (9 / 16) * cDiv.clientWidth;
+                canvas = p.createCanvas(cDiv.clientWidth, (9 / 16) * cDiv.clientWidth);
                 canvas.parent(cDiv);
                 const player_width:number = cDiv.clientWidth / 75;
-                const player_height:number = cDiv.clientHeight / 5;
-                const ball_rad:number = cDiv.clientHeight / 75;
+                const player_height:number = (9 / 16) * cDiv.clientWidth / 5;
+                const ball_rad:number = (9 / 16) * cDiv.clientWidth / 75;
                 const ball_speed:number = cDiv.clientWidth / 150;
 
-                ball = new Ball(cDiv, p, cDiv.clientWidth / 2, cDiv.clientHeight / 2, ball_rad, ball_speed);
-                p1 = new Bar(cDiv, p, player_width, cDiv.clientHeight / 2 - (player_height / 2), player_width, player_height);
-                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), cDiv.clientHeight / 2 - (player_height / 2), player_width, player_height);
+                ball = new Ball(cDiv, p, cDiv.clientWidth / 2, (9 / 16) * cDiv.clientWidth / 2, ball_rad, ball_speed);
+                p1 = new Bar(cDiv, p, player_width, (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height);
+                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height);
             };
 
             p.draw = () => {
-                p.background(52);
+                p.clear();
+                p.background('rgba(52, 52, 52, 0.7)');
                 p1.moveBar("w", "s");
 
                 // jouer contre joueur humain
-                // p2.moveBar("up", "down");
+                p2.moveBar("up", "down");
 
                 ////////////////////////
                 // jouer contre l'IA (impossible) / commenter ligne du dessus
 
-                p2.pos.y = ball.pos.y - p2.h / 2;
-                p2.pos.y = p2.p5.constrain(p2.pos.y, p2.cDiv.clientHeight / 150, p2.cDiv.clientHeight - (p2.cDiv.clientHeight / 150) - p2.h);
+                // p2.pos.y = ball.pos.y - p2.h / 2;
+                // p2.pos.y = p2.p5.constrain(p2.pos.y, p2.cDiv.clientHeight / 150, p2.cDiv.clientHeight - (p2.cDiv.clientHeight / 150) - p2.h);
                 ////////////////////////
                 if (ball.out()) {
-                    p1.reset(cDiv.clientWidth / 75, cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
-                    p2.reset(cDiv.clientWidth - (cDiv.clientWidth / 75 * 2), cDiv.clientHeight /2 - (cDiv.clientHeight / 10));
+                    p1.reset(cDiv.clientWidth / 75, (9 / 16) * cDiv.clientWidth / 2 - ((9 / 16) * cDiv.clientWidth / 10));
+                    p2.reset(cDiv.clientWidth - (cDiv.clientWidth / 75 * 2), (9 / 16) * cDiv.clientWidth / 2 - ((9 / 16) * cDiv.clientWidth / 10));
                 }
                 ball.update();
                 ball.hit(p1, p2);
@@ -103,19 +103,19 @@ export default function Game(): JSX.Element {
                 const oldHeight:number = currentHeight;
                 cDiv = sketchRef.current!;
                 currentWidth = cDiv.clientWidth;
-                currentHeight = cDiv.clientHeight;
-                p.resizeCanvas(cDiv.clientWidth, cDiv.clientHeight);
+                currentHeight = (9 / 16) * cDiv.clientWidth;
+                p.resizeCanvas(cDiv.clientWidth, (9 / 16) * cDiv.clientWidth);
 
                 const player_width:number = cDiv.clientWidth / 75;
-                const player_height:number = cDiv.clientHeight / 5;
-                const ball_rad:number = cDiv.clientHeight / 75;
+                const player_height:number = (9 / 16) * cDiv.clientWidth / 5;
+                const ball_rad:number = (9 / 16) * cDiv.clientWidth / 75;
                 const ball_speed:number = cDiv.clientWidth / 150;
 
-                const p1y:number = (p1.pos.y * cDiv.clientHeight / oldHeight);
-                const p2y:number = (p2.pos.y * cDiv.clientHeight / oldHeight);
+                const p1y:number = (p1.pos.y * (9 / 16) * cDiv.clientWidth / oldHeight);
+                const p2y:number = (p2.pos.y * (9 / 16) * cDiv.clientWidth / oldHeight);
 
                 const ballX:number = (ball.pos.x * cDiv.clientWidth / oldWidth);
-                const ballY:number = (ball.pos.y * cDiv.clientHeight / oldHeight);
+                const ballY:number = (ball.pos.y * (9 / 16) * cDiv.clientWidth / oldHeight);
 
                 p1 = new Bar(cDiv, p, player_width, p1y, player_width, player_height);
                 p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), p2y, player_width, player_height);

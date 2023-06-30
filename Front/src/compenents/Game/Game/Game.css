@@ -1,6 +1,6 @@
 @font-face {
     font-family: south_park_font;
-    src: url(../../fonts/south\ park.ttf)
+    src: url(../../../fonts/south\ park.ttf)
 }
 
 body {
@@ -28,11 +28,10 @@ body {
 #game {
     position: absolute;
     left: 15vw;
-    top: 20vh;
+    top: 10vh;
     width: 70vw;
     height: 60vh;
-    border: solid 4px #696969;
-    background-color: black;
+    /* background-color: black; */
     color: white;
     z-index: 1;
 }

@@ -15,22 +15,10 @@ export default function NewProfile() {
 
 	const navigate = useNavigate();
 
-	let [name, getName] = useState(null);
-	let [nick, getNick] = useState(null);
+	let [name, getName] = useState(0);
+	let [nick, getNick] = useState(0);
 
-	useEffect (() => {
-		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
-		.then(response => {
-			getName(response.data.name);
-		}).catch(error => {
-			console.error('Probleme');
-		});
-	}, [])
-
-	const handleClick = (e) => {
-		e.preventDefault();
-	
-		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+	axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
 		.then(response => {
 			getNick(response.data.nick);
 			// getName(response.data.name);
@@ -38,7 +26,33 @@ export default function NewProfile() {
 		}).catch(error => {
 			console.error('Probleme');
 		});
-		console.log(nick)
+
+	useEffect (() => {
+		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		.then(response => {
+			getName(response.data.name);
+			getNick(response.data.nick);
+		}).catch(error => {
+			console.error('Probleme');
+		});
+		console.log(nick);
+	}, [])
+
+	const fetchData = async () => {
+		await axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		.then(response => {
+			getNick(response.data.nick);
+			// getName(response.data.name);
+			// getAge(response.data.age);
+		}).catch(error => {
+			console.error('Probleme');
+		});
+	}
+
+	const handleClick = (e) => {
+		e.preventDefault();
+
+		fetchData();
 		if (nick)
 			navigate("/");
 	  };
