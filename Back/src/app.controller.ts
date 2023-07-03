@@ -59,9 +59,6 @@ export class AppController {
     // if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
-    // Effectuer les opérations d'enregistrement du surnom dans la base de données
-    // ... Vos opérations d'enregistrement ici ...
-    console.log("nickname == " + nickname);
     return { message: 'Surnom enregistré avec succès' };
   }
 
@@ -79,9 +76,24 @@ export class AppController {
       // if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
-    // Effectuer les opérations d'enregistrement du surnom dans la base de données
-    // ... Vos opérations d'enregistrement ici ...
     return { message: 'Age enregistré avec succès' };
+  }
+
+  @Post('setCharacter')
+  async setCharacter( @Req() request, @Body() body: { character: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { character } = body;
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { character: character },
+    });
+      // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Personnage modifié avec succès' };
   }
 
   @Get('logout')

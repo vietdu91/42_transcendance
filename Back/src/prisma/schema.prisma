@@ -16,6 +16,7 @@ model User {
   twoFactorEnabled  Boolean @default(false)
   nickname		      String? 	@unique
   age 			        Int?
+  character         String?
   games             Game[] @relation("players")
 }
 
@@ -24,6 +25,6 @@ model Game {
   players         User[] @relation("players")
   score           Int[]
   characters      String[]
-  date            DateTime
+  date            DateTime @default(now())
 }
 

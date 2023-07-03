@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { User } from '@prisma/client';
@@ -41,23 +42,52 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('leaveQueue')
-	handleLeaveQueue(client: Socket, userId: number): void {
-		console.log("leaving");
+	async handleLeaveQueue(client: Socket, userId: number): Promise<void> {
     	this.queue = this.queue.filter((player) => {
-			console.log(player.user.id + " " + userId);
-			player.user.id !== userId
+			player.user.id !== userId;
 		});
 	}
 
-	private createMatch(): void {
+	private async createMatch(): Promise<void> {
 		if (this.queue.length >= 2) {
+
 			const player1 = this.queue.shift();
 			const player2 = this.queue.shift();
 
-			const gameRoomId:String = '${player1.id}-${player2.id}';
+			const prisma = new PrismaService();
+
+			const date = new Date();
+
+			console.log(date);
+
+			const game = await prisma.game.create({
+				data: {
+					players: {
+						connect: [
+							{id: player1.user.id},
+							{id: player2.user.id},
+						]
+					},
+					score: [0, 0],
+					characters: [player1.user.character, player2.user.character],
+					date: date,
+				}
+			});
+
+			console.log(game);
+			// prisma.user.update({
+			// 	where: { id: player1.user.id },
+			// 	data: { games: {
+			// 			connect: [
+			// 				{id: game.id}
+			// 			]
+			// 		}
+			// 	}
+			// })
+
 			
-			this.server.to(player1.id).emit('matchFound', { roomId: gameRoomId, opponent: player2 });
-			this.server.to(player2.id).emit('matchFound', { roomId: gameRoomId, opponent: player1 });
+			this.server.to(player1.id).emit('matchFound', { roomId: 1, opponent: player2.user });
+			this.server.to(player2.id).emit('matchFound', { roomId: 1, opponent: player1.user });
 		}
 	}
 }

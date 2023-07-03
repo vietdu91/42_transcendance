@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react'
 import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 import ButtersBlood from "../../../img/backgrounds/butters_blood.jpg"
 
 import './Matchmaking.css';
@@ -69,14 +71,9 @@ export default function Matchmaking() {
 		setInQueue(false);
 	  };
 
-	const handlePageLeave = () => {
-		if (inQueue) {
-		  leaveQueue();
-		}
-	  };
-
 	const handleMatchFound = () => {
 		navigate('/game');
+		
 	}
 
 	return (

@@ -1,6 +1,7 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 import "./ChampSelect.css";
 
@@ -49,12 +50,21 @@ export default function ChampSelect() {
 
 	const navigate = useNavigate();
 
+
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);
 		audio.play();
 	};
 
-	const handleClick = () => {
+	const handleClick = async (character:String) => {
+		await axios
+			.post('http://localhost:3001/SouthTrans/setCharacter', { character }, { withCredentials: true })
+			.then((response) => {
+				console.log(response.data.message);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 		navigate("/matchmaking");
 	}
 
@@ -66,18 +76,18 @@ export default function ChampSelect() {
 				<img className="card" src={cartman} alt={'Cartman'}
 				onMouseEnter={() => {setCartman(CartmanSuper);}}
 				onMouseLeave={() => {setCartman(CartmanNormal);}}
-				onClick={() => {playSound(RespectezMonAutorite); setTimeout(() => {handleClick()}, 2000);}}></img>
+				onClick={() => {playSound(RespectezMonAutorite); setTimeout(() => {handleClick('Cartman')}, 1000);}}></img>
 				<img className="card" src={servietsky} alt={'Servietsky'}
 				onMouseEnter={() => {setServietsky(ServietskySuper);}}
 				onMouseLeave={() => {setServietsky(ServietskyNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick()}, 2000);}}></img>
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Servietsky')}, 1000);}}></img>
 				<img className="card" src={kenny} alt={'Kenny'}
 				onMouseEnter={() => {setKenny(KennySuper);}}
 				onMouseLeave={() => {setKenny(KennyNormal);}}></img>
 				<img className="card" src={timmy} alt={'Timmy'}
 				onMouseEnter={() => {setTimmy(TimmySuper);}}
 				onMouseLeave={() => {setTimmy(TimmyNormal);}}
-				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick()}, 2000);}}></img>
+				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick('Timmy')}, 1000);}}></img>
 				<img className="card" src={terrancePhilip} alt={'TerrancePhilip'}
 				onMouseEnter={() => {setTerrancePhilip(TerrancePhilipSuper);}}
 				onMouseLeave={() => {setTerrancePhilip(TerrancePhilipNormal);}}></img>
