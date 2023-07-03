@@ -17,6 +17,7 @@ import axios from "axios";
 import "./Form.css";
 
 export default function Form() {
+  console.log("Coucou Kiki");
   const [nickname, setNickname] = useState("");
 
     const handleSubmit = (e) => {
