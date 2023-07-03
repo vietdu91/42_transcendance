@@ -55,7 +55,7 @@ export default function ChampSelect() {
 	};
 
 	const handleClick = () => {
-		navigate("/game");
+		navigate("/matchmaking");
 	}
 
 	return (

@@ -23,6 +23,8 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtMiddleware } from './middleware/auth.middleware';
 import { ChatGateway } from './chat/chat.gateway';
+import { MatchmakingGateway } from './game/game.gateway';
+
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
@@ -37,7 +39,7 @@ import { ChatGateway } from './chat/chat.gateway';
   ],
   controllers: [AppController, UserController, AuthController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway],
 })
 export class AppModule {}
 

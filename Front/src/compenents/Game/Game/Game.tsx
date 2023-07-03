@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import p5 from 'p5'
 import Ball from "./Ball"
 import Bar from "./Bar"
@@ -16,7 +16,7 @@ import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
 export default function Game(): JSX.Element {
-
+    
     const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
     const sketchRef = useRef<HTMLDivElement>(null);
     const randomImage = getRandomImage(images);
@@ -69,24 +69,18 @@ export default function Game(): JSX.Element {
                 const ball_speed:number = cDiv.clientWidth / 150;
 
                 ball = new Ball(cDiv, p, cDiv.clientWidth / 2, (9 / 16) * cDiv.clientWidth / 2, ball_rad, ball_speed);
-                p1 = new Bar(cDiv, p, player_width, (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height);
-                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height);
+                p1 = new Bar(cDiv, p, player_width, (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height, 0);
+                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height, 0);
             };
 
             p.draw = () => {
                 p.clear();
-                p.background('rgba(52, 52, 52, 0.7)');
+                p.background('rgba(52, 52, 52, 0.75)');
                 p1.moveBar("w", "s");
 
                 // jouer contre joueur humain
                 p2.moveBar("up", "down");
 
-                ////////////////////////
-                // jouer contre l'IA (impossible) / commenter ligne du dessus
-
-                // p2.pos.y = ball.pos.y - p2.h / 2;
-                // p2.pos.y = p2.p5.constrain(p2.pos.y, p2.cDiv.clientHeight / 150, p2.cDiv.clientHeight - (p2.cDiv.clientHeight / 150) - p2.h);
-                ////////////////////////
                 if (ball.out()) {
                     p1.reset(cDiv.clientWidth / 75, (9 / 16) * cDiv.clientWidth / 2 - ((9 / 16) * cDiv.clientWidth / 10));
                     p2.reset(cDiv.clientWidth - (cDiv.clientWidth / 75 * 2), (9 / 16) * cDiv.clientWidth / 2 - ((9 / 16) * cDiv.clientWidth / 10));
@@ -117,8 +111,8 @@ export default function Game(): JSX.Element {
                 const ballX:number = (ball.pos.x * cDiv.clientWidth / oldWidth);
                 const ballY:number = (ball.pos.y * (9 / 16) * cDiv.clientWidth / oldHeight);
 
-                p1 = new Bar(cDiv, p, player_width, p1y, player_width, player_height);
-                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), p2y, player_width, player_height);
+                p1 = new Bar(cDiv, p, player_width, p1y, player_width, player_height, 0);
+                p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), p2y, player_width, player_height, 0);
 
                 p1.setAll(cDiv, player_width, p1y, player_width, player_height);
                 p2.setAll(cDiv, cDiv.clientWidth - (player_width * 2), p2y, player_width, player_height);
@@ -137,6 +131,7 @@ export default function Game(): JSX.Element {
     return (
         <>
             <GetBg randomImage={randomImage}/>
+            <div id="score">0 - 0</div>
             <div id="game" ref={sketchRef}></div>
             <div id="return">
                 <WhatReturnButtom randomImage={randomImage}/>

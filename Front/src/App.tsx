@@ -15,6 +15,7 @@ import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import GameMenu from "./compenents/Game/GameMenu/GameMenu"
 import Game from "./compenents/Game/Game/Game"
+import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
 import Test from "./compenents/Test"
@@ -103,6 +104,7 @@ export default function App() {
           <Route path="/select" element={<CharacterSelectionWithMusic />}/>
           <Route path="/gamemenu" element={<GameMenu />}/>
           <Route path="/champselect" element={<ChampSelect />}/>
+          <Route path="/matchmaking" element={<Matchmaking />}/>
           <Route path="/game" element={<Game />}/>
           <Route path="/connect" element={<ConnexionWithMusic />}/>
           <Route path="/newprofile" element={<NewProfile />}/>

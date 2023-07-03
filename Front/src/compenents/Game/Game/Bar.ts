@@ -6,13 +6,15 @@ export default class Bar {
     pos: p5.Vector;
     w: number;
     h: number;
+    score: number;
 
-    constructor(cDiv:any, p5:p5, x:number, y:number, w:number, h:number) {
+    constructor(cDiv:any, p5:p5, x:number, y:number, w:number, h:number, score:number) {
         this.cDiv = cDiv;
         this.pos = p5.createVector(x, y);
         this.p5 = p5;
         this.w = w;
         this.h = h;
+        this.score = score;
     }
     reset(x:number, y:number) {
         this.pos = this.p5.createVector(x, y);

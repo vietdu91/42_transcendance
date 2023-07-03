@@ -25,6 +25,19 @@ body {
     opacity: 0.7;
 }
 
+#score {
+    position: absolute;
+    background-color: #343434;
+    opacity: 75%;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    left: 45vw;
+    top: 1.5vh;
+    width: 10vw;
+    height: 7vh;
+}
+
 #game {
     position: absolute;
     left: 15vw;
