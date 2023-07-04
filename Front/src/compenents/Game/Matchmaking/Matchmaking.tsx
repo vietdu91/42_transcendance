@@ -33,7 +33,9 @@ export default function Matchmaking() {
 			setInQueue(true);
 		})
 	
-		newSocket.on('matchFound', handleMatchFound);
+		newSocket.on('matchFound',(response) => {
+			handleMatchFound(response.roomId);
+		}) 
 	
 		newSocket.on('disconnect', () => {
 				console.log('Disconnected');
@@ -71,9 +73,8 @@ export default function Matchmaking() {
 		setInQueue(false);
 	  };
 
-	const handleMatchFound = () => {
-		navigate('/game');
-		
+	const handleMatchFound = (roomId:string) => {
+		navigate(`/game/${roomId}`, {state: {roomId: roomId}});
 	}
 
 	return (

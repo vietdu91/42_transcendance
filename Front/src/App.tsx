@@ -106,6 +106,7 @@ export default function App() {
           <Route path="/champselect" element={<ChampSelect />}/>
           <Route path="/matchmaking" element={<Matchmaking />}/>
           <Route path="/game" element={<Game />}/>
+          <Route path="/game/:roomId" element={<Game />}/>
           <Route path="/connect" element={<ConnexionWithMusic />}/>
           <Route path="/newprofile" element={<NewProfile />}/>
           <Route path="/profile" element={<Profile />}/>

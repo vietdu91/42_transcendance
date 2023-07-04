@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react'
-import p5 from 'p5'
-import Ball from "./Ball"
-import Bar from "./Bar"
+import React, { useRef, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import p5 from 'p5';
+import Ball from "./Ball";
+import Bar from "./Bar";
 
 // CSS
 import './Game.css'
@@ -16,10 +18,29 @@ import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
 export default function Game(): JSX.Element {
+
+	const location = useLocation();
+	const { roomId } = location.state;
 	
+	const [p1, setP1] = useState(0);
+	const [p2, setP2] = useState(0);
+
 	const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
 	const randomImage = getRandomImage(images);
+	getPlayers();
+
+	async function getPlayers(): Promise<void> {
+		console.log(roomId);
+		const user1 = await axios.get("http://localhost:3001/Game/getGameById", {params: roomId}) // probleme ici
+			.then(response => {
+				console.log(response.data.id);
+				setP1(response.data.id);
+			})
+			.catch(error => {
+				console.error(error);
+			})
+	}
 
 	function getRandomImage(images: string[]): string {
 		const index = Math.floor(Math.random() * images.length);
@@ -131,7 +152,7 @@ export default function Game(): JSX.Element {
 	return (
 		<>
 			<GetBg randomImage={randomImage}/>
-			<div id="score">0 - 0</div>
+			<div id="score">{p1} 0 - 0 {}</div>
 			<div id="game" ref={sketchRef}></div>
 			<div id="return">
 				<WhatReturnButtom randomImage={randomImage}/>

@@ -2,6 +2,7 @@ import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, Htt
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
+import { GameService } from './game/game.service';
 import { Response,} from 'express';
 import { Request } from 'express';
 import * as qrcode from 'qrcode';
@@ -21,6 +22,7 @@ export class AppController {
     private readonly twofaService: TwofaService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly gameService: GameService,
   ) {}
 
   @Get('42') 
@@ -30,6 +32,16 @@ export class AppController {
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
   
+  @Get('getUserById')
+  async getUserById(@Req() request: Request, @Res() response: Response, @Body() body: { userId: number }) {
+    const { userId } = body;
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.json({user: user});
+  }
+
   @Get('getUser')
   async getUser(@Req() request: Request, @Res() response: Response) {
     // console.log(request.cookies)
@@ -42,7 +54,7 @@ export class AppController {
       throw new UnauthorizedException();
     }
     // console.log("nick = " + user.nickname)
-    response.json({nick: user.nickname, name: user.name, age: user.age})
+    response.json({nick: user.nickname, name: user.name, age: user.age, character: user.character});
   }
 
   @Post('setNickname')
