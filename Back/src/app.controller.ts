@@ -51,7 +51,7 @@ export class AppController {
     if (!userId) {
       throw new UnauthorizedException();
     }
-    var { nickname } = body;
+    const { nickname } = body;
     if (!nickname)
       throw new UnauthorizedException();
      const userUpdate = await this.prisma.user.update({
@@ -70,7 +70,7 @@ export class AppController {
     if (!userId) {
       throw new UnauthorizedException();
     }
-    var { age } = body;
+    const { age } = body;
     if (!age)
       throw new UnauthorizedException();
     const userUpdate = await this.prisma.user.update({
