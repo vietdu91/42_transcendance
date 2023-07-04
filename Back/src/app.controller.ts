@@ -41,7 +41,7 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    // console.log("nick = " + user.nickname)
+    console.log("nick = " + user.nickname)
     response.json({nick: user.nickname, name: user.name, age: user.age})
   }
 
@@ -51,7 +51,9 @@ export class AppController {
     if (!userId) {
       throw new UnauthorizedException();
     }
-    const { nickname } = body;
+    var { nickname } = body;
+    if (!nickname)
+      throw new UnauthorizedException();
      const userUpdate = await this.prisma.user.update({
        where: { id: Number(userId) },
        data: { nickname: nickname },
@@ -68,7 +70,9 @@ export class AppController {
     if (!userId) {
       throw new UnauthorizedException();
     }
-    const { age } = body;
+    var { age } = body;
+    if (!age)
+      throw new UnauthorizedException();
     const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
         data: { age: Number(age) },
@@ -90,7 +94,7 @@ export class AppController {
         where: { id: Number(userId) },
         data: { character: character },
     });
-      // if (!userUpdate) {
+    //   if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
     return { message: 'Personnage modifié avec succès' };

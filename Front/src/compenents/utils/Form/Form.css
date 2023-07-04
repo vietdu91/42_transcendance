@@ -3,13 +3,13 @@
 	src: url(../../../fonts/south\ park.ttf)
 }
 
-/* form {
+form {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
-.hello{
+/* .hello{
 	position: absolute;
 	left: 28%;
 	font-size: 25px;
@@ -21,18 +21,18 @@
   } */
 
   #barre[type=text]:focus~.hello {
-	  /* display: block; */
+	  display: block;
 	  color: black;
-	  /* margin-top: -85px;
+	  margin-top: -85px;
 	  margin-left: -3%;
-	  font-size: 16px; */
+	  font-size: 16px;
 	}
 
 	#barre[type=text]:focus~.hello::after{
 	visibility: hidden;
 }
 
-  /* #barre[type=text]:focus~.enter {
+  #barre[type=text]:focus~.enter {
 	background-color: rgb(71, 37, 5);
 	position: absolute;
 	 content: ' '; 
@@ -40,14 +40,14 @@
 	right: 45%; 
 	margin-top: 52px; 
 	transform: scaleX(5);
-  } */
+  }
 
-  /* .enter{
+  .enter{
 	transition: all ease 0.5s;
 	width: 9.9%;
 	transform: scaleX(1)
 
-  } */
+  }
 
   #barre[type="text"]
   {
@@ -56,21 +56,21 @@
   }
 
  textarea, #barre {
-	/* position: absolute; */
+	position: absolute;
 	outline: none;
 	border: 0;
 	border-bottom: 1px solid #cecece;
 	height: 50px;
 	width: 50%; 
 	/* font-family: south_park_font; */
-	/* max-width: 500px; */
+	max-width: 500px;
   }
 
-  /* #barre:focus{
+  #barre:focus{
 	content: 'prout';
-	font-family: south_park_font;
+	/* font-family: south_park_font; */
 	font-size: 200%;
-  } */
+  }
 
   button {
 	z-index: 999999;
