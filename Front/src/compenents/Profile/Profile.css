@@ -33,6 +33,12 @@ body {
   z-index: 1;
 }
 
+/*
+	display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+*/
+
 .box {
 	position: fixed;
 	top: 5%;
@@ -47,9 +53,21 @@ body {
 
 	z-index: 15;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
 	gap: 5%;
+}
+
+.pfp{
+	display: flex;
+    justify-content: center;
+    flex-direction: column;
+	align-items: center;
+}
+
+.pfp button{
+	max-width: 100px;
 }
 
 #welcome {
@@ -58,6 +76,14 @@ body {
 	font-family: south_park_font;
 	text-align: center;
 	/* position: relative; */
+	height: 75vh;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+
+#profile_font{
+	font-size: 200px;
 }
 
 #skeeter {

@@ -100,6 +100,18 @@ export class AppController {
     return { message: 'Personnage modifié avec succès' };
   }
 
+  @Get('/:id/profile-photo')
+  getUserProfilePhoto(
+      @Res({ passthrough: true }) res: Response
+  ): StreamableFile {
+
+      res.set({'Content-Type': 'image/jpeg'});
+
+      const imageLocation = join(process.cwd(), 'uploads', '15c924f42ffaa67b3f14a5be05f0a312');
+      const file = createReadStream(imageLocation);
+      return new StreamableFile(file);
+  }
+
   @Get('logout')
   async logout(@Req() request: Request, @Res() response: Response) {
     console.log("logout");
