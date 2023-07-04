@@ -27,19 +27,19 @@ body {
   object-fit: cover;
   background-color:#89cede;
 
-  /* position: absolute; */
+  position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
 }
 
-/*
+.box2 .button{
 	display: flex;
     justify-content: space-between;
     flex-direction: row;
-*/
+}
 
-.box {
+.box2 {
 	position: fixed;
 	top: 5%;
 	left: 10%;
@@ -49,7 +49,7 @@ body {
 
 	background-color: #ffc107;
 	border-radius: 5px;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	box2-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
 	z-index: 15;
 	display: flex;
@@ -70,12 +70,12 @@ body {
 	max-width: 100px;
 }
 
-#welcome {
+#welcome2 {
 	font-size: 100px;
 	margin-top: 30px;
 	font-family: south_park_font;
 	text-align: center;
-	/* position: relative; */
+	position: relative;
 	height: 75vh;
     justify-content: space-between;
     display: flex;
@@ -110,7 +110,7 @@ body {
 }
 
 @media (max-width: 850px) {
-	#welcome {
+	#welcome2 {
 		font-size: 50px;
 	}
 }
@@ -120,4 +120,4 @@ body {
 		width: 80px;
 		height: 80px;
 	}
-}
+} 

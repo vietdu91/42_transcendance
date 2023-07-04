@@ -32,10 +32,10 @@ export default function Profile() {
 		<div id="menu">
 			<img id="bg-menu" src={Bar} alt={'Bar'}></img>
 
-			<div className="box">
+			<div className="box2">
 				<p>CONTENT</p>
 
-				<div id="welcome">
+				<div id="welcome2">
 					<div id="profile_font">PROFIL</div>
 					<div>	Nick : ({nick})<br/><br/> 
 							Name : ({name})<br/><br/> 
