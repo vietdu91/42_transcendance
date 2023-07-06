@@ -45,9 +45,9 @@ export default function Profile() {
 					<p>CONTENT</p>
 				<div className="pfp">
 					<img src="https://media.giphy.com/media/26gJyImHbhEfKyem4/giphy.gif" alt="PPdeMORT"></img>
-					<button>Changer d'image</button><br/>
-					<button>Changer de pseudo</button><br/>
-					<button>Changer d'age</button><br/>
+					<button onClick={() => navigate("/NewProfile")}>Changer d'image</button><br/>
+					<button onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>
+					<button onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/>
 				</div>
 				<button id="move_on" onClick={() => navigate("/")}></button>
 			</div>

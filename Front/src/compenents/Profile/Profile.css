@@ -40,6 +40,10 @@ body {
 }
 
 .box2 {
+	min-width: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 	position: fixed;
 	top: 5%;
 	left: 10%;
@@ -52,10 +56,10 @@ body {
 	box2-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
 	z-index: 15;
-	display: flex;
+	/* display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-between; */
 	gap: 5%;
 }
 
