@@ -45,7 +45,37 @@ export default function App() {
   };
 
   function logout() {
-    window.location.href = 'http://localhost:3001/Southtrans/logout';
+    const cookies = document.cookie.split('; ');
+    let accessToken;
+    let id;
+  
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === 'accessToken') {
+        accessToken = value;
+      }
+      if (name === 'id') {  
+        id = value;
+      }
+    }
+
+    console.log('access token = ' + accessToken);
+    if (accessToken) {
+  
+      axios.post('http://localhost:3001/Southtrans/logout', null, {
+         headers: {
+           'Authorization': `Bearer ${accessToken}`
+         }
+       }).then(response => {
+         // Do something with the response
+         console.log("then redirect");
+       }).catch(error => {
+         // Handle the error
+         console.error('catch Access token not found in cookies.');
+       });
+     } else {
+       console.error('Access token not found in cookies.');
+     }
   }
 
   function twoFa() {

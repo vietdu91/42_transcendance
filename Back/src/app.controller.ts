@@ -108,15 +108,15 @@ export class AppController {
     return { message: 'Personnage modifié avec succès' };
   }
 
-  @Get('logout')
+  @Post('logout')
+  @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
-    console.log("logout");
-    console.log("id == " + request.cookies.id);
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const user = await this.userService.getUserById(userId);
+    const accessToken = request.headers.authorization?.split(' ')[1];
+    console.log("Access token: " + accessToken);  
+    const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
+    console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
+    //const expires = decodedJwtAccessToken.exp;
+    const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -124,10 +124,11 @@ export class AppController {
       where: { id: user.id },
       data: { accessToken: null },
     });
+    console.log("logout2");
     response.clearCookie('accessToken');
     response.clearCookie('id');
     response.redirect('http://localhost:3000/connect');
-  }   
+  }  
 
   
   @Get('2fa/generate')
