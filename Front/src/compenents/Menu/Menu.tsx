@@ -1,5 +1,4 @@
 import React from 'react'
-import QRCode from 'react-qr-code';
 
 // CSS
 import './Menu.css';
@@ -26,7 +25,8 @@ export default function App() {
   const [show2, setShow2] = React.useState(false);
   const [code, setCode] = React.useState("");
   
-
+  
+  const  apiEndpoint = 'http://localhost:3001';
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -45,8 +45,41 @@ export default function App() {
     }, 500);
   };
 
-  function logout() {
-    window.location.href = 'http://localhost:3001/Southtrans/logout';
+  async function logout() {
+    const cookies = document.cookie.split('; ');
+    let accessToken;
+    let id;
+  
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === 'accessToken') {
+        accessToken = value;
+      }
+      if (name === 'id') {  
+        id = value;
+      }
+    }
+
+    console.log('access token = ' + accessToken);
+    if (accessToken) {
+      try {
+          const res = await axios({
+            url: apiEndpoint + '/Southtrans/logout',
+            method: 'POST',
+            headers: {  'Authorization': `Bearer ${accessToken}` },
+            data: { msg: "Hello World!" }
+          })
+          console.log("IM HERE BRO")
+          navigate("/connect")
+          console.log("NAVIGATED")
+        }
+      catch (err) {
+        console.log("app-front: error: ", err)
+        // navigate("/connect")
+      }
+     } else {
+       console.error('Access token not found in cookies.');
+     }
   }
 
   function twoFa() {
@@ -80,10 +113,6 @@ export default function App() {
         console.log(response);
         setCode(response.data.code)
         setShow2(true);
-
-
-        //window.location.href = `http://localhost:3001/Southtrans/2fa/generate?accessToken=${accessToken}`;
-        //window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
       }).catch(error => {
         // Handle the error
         console.error('catch Access token not found in cookies.');
@@ -94,9 +123,6 @@ export default function App() {
   }
 
 
-  function twoff(){
-    window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
-  }
 
   function toggleThanks() {
     setShow(!show);
@@ -109,10 +135,10 @@ export default function App() {
         {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(KennyHouse); }}
+        {show && <div className="menu-item" onClick={() => navigate("/newprofile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/")} onMouseEnter={() => { setHover(NoFriend); }}
+        {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
           onMouseLeave={() => { setHover(Town); }}>Chat</div>}
 
         {show && <div className="menu-item" onClick={() => { handleClickCredits("/credits", Metrosexual); toggleThanks(); }} onMouseEnter={() => { setHover(Metrosexual); }}
@@ -123,13 +149,12 @@ export default function App() {
 
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
-{/* 
         {show2 && 
         <>
         <img src={code}></img>
         <input placeholder='code'></input>
         </>
-        } */}
+        } 
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}

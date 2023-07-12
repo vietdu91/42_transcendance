@@ -22,13 +22,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtMiddleware } from './middleware/auth.middleware';
+import { ChatGateway } from './chat/chat.gateway';
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
 
 @Module({
   imports: [
-    PrismaModule, PassportModule,  AuthModule, UserModule, AuthModule, TwofaModule,  PassportModule.register({ defaultStrategy: 'jwt' }),
+    PrismaModule, AuthModule, UserModule, AuthModule, TwofaModule,  PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
@@ -36,7 +37,7 @@ import { JwtMiddleware } from './middleware/auth.middleware';
   ],
   controllers: [AppController, UserController, AuthController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway],
 })
 export class AppModule {}
 

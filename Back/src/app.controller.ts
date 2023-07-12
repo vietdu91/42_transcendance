@@ -27,28 +27,46 @@ export class AppController {
   @Redirect("")
   getConnected() {
     console.log("42 route");
-    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
+    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
+  }
+  
+  @Post('newprofile')
+  @UseGuards(JwtAuthenticationGuard)
+  async enregistrerSurnom( @Body() body: { nickname: string }) {
+    const { nickname } = body;
+     const userUpdate = await this.prisma.user.update({
+       where: { id: 3 },
+       data: { nickname: nickname },
+    });
+    console.log("nickname == " + nickname);
+    return { message: 'Surnom enregistré avec succès' };
   }
 
-  @Get('logout')
+  @Post('logout')
+  @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
-    console.log("logout");
-    console.log("id == " + request.cookies.id);
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
+    try {
+      const accessToken = request.headers.authorization?.split(' ')[1];
+      console.log("Access token: " + accessToken);
+      const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
+      console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
+      //const expires = decodedJwtAccessToken.exp;
+      const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { accessToken: null },
+      });
+      console.log("logout2");
+      response.status(200).json("app-back: successfully logged out.")
     }
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new UnauthorizedException();
+    catch (err) {
+      console.log("app-back: user logged fail.")
+      response.status(404)
     }
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { accessToken: null },
-    });
-    response.clearCookie('accessToken');
-    response.clearCookie('id');
-    response.redirect('http://localhost:3000/connect');
+    // response.redirect('http://localhost:3000/connect');
   }
 
   

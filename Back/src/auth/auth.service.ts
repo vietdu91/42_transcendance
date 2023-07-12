@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 
 
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = "u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467"; // Remplacer par le client_id de votre application
-const clientSecret = "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";
+const client_id = "u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4"; // Remplacer par le client_id de votre application
+const clientSecret = "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";
 
 @Injectable()
 export class AuthService {
@@ -26,19 +26,34 @@ export class AuthService {
         if (!user ) {
             user = await this.createUser(userData);
 
-        }
-        const payload = { username: user.name, sub: user.id };
-        console.log("paylod = " + payload.sub + " " + payload.username);
-        const newToken = this.jwtService.sign(payload);
-        // JWT token use to get user data and validate user
-        console.log("new token ==  " + newToken);
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { accessToken: newToken },
+            const payload = { username: user.name, sub: user.id };
+            console.log("paylod = " + payload.sub + " " + payload.username);
+            const newToken = this.jwtService.sign(payload);
+            // JWT token use to get user data and validate user
+            console.log("new token ==  " + newToken);
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { accessToken: newToken },
           });
           res.cookie('accessToken', newToken);
           res.cookie('id', user.id);
-          res.redirect('http://localhost:3000');
+          res.redirect('http://localhost:3000/newprofile');
+        }
+        else {
+
+            const payload = { username: user.name, sub: user.id };
+            console.log("paylod = " + payload.sub + " " + payload.username);
+            const newToken = this.jwtService.sign(payload);
+            // JWT token use to get user data and validate user
+            console.log("new token ==  " + newToken);
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { accessToken: newToken },
+              });
+            res.cookie('accessToken', newToken);
+            res.cookie('id', user.id);
+            res.redirect('http://localhost:3000');
+        }
     }
 
     async getUserToken(id: number): Promise<any> {
@@ -59,6 +74,7 @@ export class AuthService {
                 redirect_uri: "http://localhost:3001/Auth/conexion" 
             });
             const accessToken = response.data.access_token;
+            console.log(accessToken + " == accessToken");
             return accessToken;
         } catch (error) {
             console.error(error);

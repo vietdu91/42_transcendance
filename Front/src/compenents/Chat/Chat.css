@@ -1,0 +1,47 @@
+Body {
+    background: #2c2b5c;
+}
+
+.chat-container {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid purple;
+    display: flex;
+    margin-top: 30vh;
+    flex-direction: column;
+}
+
+.chat-room-container    {
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-message-send   {
+    width: 100%;
+    height: 100%;
+    border: 1px solid yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2vh;
+}
+
+.wrapper-message-received   {
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper-goback {
+    width: 100%;
+    height: 100%;
+}
+
+.wrapper-goback:hover {
+    cursor: pointer;
+}

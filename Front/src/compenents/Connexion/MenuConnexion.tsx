@@ -23,8 +23,8 @@ export default function MenuConnexion() {
             {WarningBox() || null}
             <img id="bg-menu" src={hover} alt={'Hell'}></img>
             <div id="menu-items">
-                  <div className="menu-item" onClick={() => {
-                      window.location.href = "http://localhost:3001/southtrans/42"
+                  <div className="menu-item" onClick={() =>  {
+                      window.location.href = "http://localhost:3001/Southtrans/42"
                   }}
                 onMouseEnter={() => {setHover(Lotion);}}
                   onMouseLeave={() => {setHover(Town);}}>Se connecter</div>

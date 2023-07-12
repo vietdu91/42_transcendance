@@ -9,10 +9,12 @@ WORKDIR /usr/src/app
 COPY ./package*.json ./
 
 # Installez les dépendances
+RUN npm install xdg-utils
 RUN npm install -g npm@latest
 RUN npm install --save
 RUN npm install prisma --save-dev
 RUN npm i -g @nestjs/cli
+RUN npm i
 
 # Copiez tous les autres fichiers
 COPY ./src ./
