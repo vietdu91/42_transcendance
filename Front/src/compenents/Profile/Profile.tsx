@@ -4,13 +4,13 @@ import axios from 'axios'
 
 import './Profile.css'
 
-import UserContext from '../../App'
+import { User, UserContext } from '../../App'
 import Bar from "../../img/backgrounds/skeeters-bar.jpg"
 
 
 export default function Profile() {
 	
-	// const context = useContext(UserContext);
+	const context = useContext(UserContext);
 	const navigate = useNavigate();
 
 	let [nick, getNick] = useState(0);

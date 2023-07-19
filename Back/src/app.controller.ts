@@ -54,7 +54,15 @@ export class AppController {
       throw new UnauthorizedException();
     }
     // console.log("nick = " + user.nickname)
-    response.json({nick: user.nickname, name: user.name, age: user.age, character: user.character});
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,
+    });
   }
 
   @Post('setNickname')

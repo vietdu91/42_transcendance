@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 
 // CSS
 import './App.css';
 
 // PACKAGES
 import { Routes, Route } from "react-router-dom"
+import axios from "axios"
 
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
@@ -33,92 +34,108 @@ import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
 
 const ConnexionWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={southparkSound} delay={5000}/>
-    <Connexion />
+	<MusicPlayer audioSrc={southparkSound} delay={5000}/>
+	<Connexion />
   </>
 );
 
 const MenuWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={southparkSound} />
-    <Menu />
+	<MusicPlayer audioSrc={southparkSound} />
+	<Menu />
   </>
 );
 
 const CreditsWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={queer_eye} />
-    <Credits />
+	<MusicPlayer audioSrc={queer_eye} />
+	<Credits />
   </>
 );
 
 const ThanksWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={end_credit} />
-    <Thanks />
+	<MusicPlayer audioSrc={end_credit} />
+	<Thanks />
   </>
 );
 
 const CharacterSelectionWithMusic = () => (
   <>
-    <MusicPlayer audioSrc={choose_your_fighter} />
-    <CharacterSelection />
+	<MusicPlayer audioSrc={choose_your_fighter} />
+	<CharacterSelection />
   </>
 
 );
 
-class User {
-  id:number;
-  email:string;
-  name:string;
-  twoFactorSecret:string;
-  accessToken:string;
-  twoFactorEnabled:boolean;
-  nickname:string;
-  age:number;
-
-  constructor() {
-    this.id = -1;
-    this.email = '';
-    this.name = '';
-    this.twoFactorSecret = '';
-    this.accessToken = '';
-    this.twoFactorEnabled = false;
-    this.nickname = '';
-    this.age = -1;
-  }
+export interface User {
+	user: {
+		id:number;
+		email:string;
+		name:string;
+		twoFA:boolean;
+		nick:string;
+		age:number;
+	},
+	setUser: React.Dispatch<React.SetStateAction<{
+		id?:number;
+		email?:string;
+		name?:string;
+		twoFA?:boolean;
+		nick?:string;
+		age?:number;
+	}>>;
 }
 
-const UserContext = React.createContext(new User());
+export const UserContext = createContext<User>({
+  user: {
+	id: -1,
+	email: '',
+	name: '',
+	twoFA: false,
+	nick: '',
+	age: -1,
+  },
+  setUser: () => {},
+});
 
 export default function App() {
-  let user:User = new User();
+	const [contextData, setContextData] = useState<User>({
+		user: {
+			id: -1,
+			email: '',
+			name: '',
+			twoFA: false,
+			nick: '',
+			age: -1,
+		},
+			setUser: () => {},
+  	})
 
-  return (
-
-    <UserContext.Provider value={user}>
-      <div className="App">
-        <Routes>
-          <Route path="/test" element={<Test />}/>
-          <Route path="/" element={<MenuWithMusic />}/>
-          <Route path="/select" element={<CharacterSelectionWithMusic />}/>
-          <Route path="/gamemenu" element={<GameMenu />}/>
-          <Route path="/champselect" element={<ChampSelect />}/>
-          <Route path="/matchmaking" element={<Matchmaking />}/>
-          <Route path="/game" element={<Game />}/>
-          <Route path="/game/:roomId" element={<Game />}/>
-          <Route path="/connect" element={<ConnexionWithMusic />}/>
-          <Route path="/newprofile" element={<NewProfile />}/>
-          <Route path="/profile" element={<Profile />}/>
-          <Route path="/chat" element={<Chat />}/>
-          <Route path="/credits" element={<CreditsWithMusic />}/>
-          <Route path="/thanks" element={<ThanksWithMusic />}/>
-          <Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
-          <Route path="/404" element={<PageNotFound />}/>
-        </Routes>
-      </div>
-    </UserContext.Provider>
-  )
+	return (
+		<UserContext.Provider value={contextData}>
+			<div className="App">
+				<Routes>
+				<Route path="/test" element={<Test />}/>
+				<Route path="/" element={<MenuWithMusic />}/>
+				<Route path="/select" element={<CharacterSelectionWithMusic />}/>
+				<Route path="/gamemenu" element={<GameMenu />}/>
+				<Route path="/champselect" element={<ChampSelect />}/>
+				<Route path="/matchmaking" element={<Matchmaking />}/>
+				<Route path="/game" element={<Game />}/>
+				<Route path="/game/:roomId" element={<Game />}/>
+				<Route path="/connect" element={<ConnexionWithMusic />}/>
+				<Route path="/newprofile" element={<NewProfile />}/>
+				<Route path="/profile" element={<Profile />}/>
+				<Route path="/chat" element={<Chat />}/>
+				<Route path="/credits" element={<CreditsWithMusic />}/>
+				<Route path="/thanks" element={<ThanksWithMusic />}/>
+				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
+				<Route path="/404" element={<PageNotFound />}/>
+				</Routes>
+			</div>
+		</UserContext.Provider>
+	)
 }
 //<Route path="*" element={<Navigate to="/404" />}/>
 
