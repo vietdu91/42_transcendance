@@ -17,6 +17,7 @@ model User {
   nickname		      String? 	@unique
   age 			        Int?
   character         String?
+  url_image         String
   games             Game[] @relation("players")
 }
 

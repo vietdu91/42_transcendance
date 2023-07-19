@@ -37,6 +37,7 @@ export default function Profile() {
 				<p>CONTENT</p>
 
 				<div id="welcome2">
+						<div id="profile_font">PROFIL</div>
 					<div id="eric">
 						<div className="face">
 							<div className="hat"></div>
@@ -57,7 +58,6 @@ export default function Profile() {
 							<div className="foot-right"></div>
 						</div>
 					</div>
-						<div id="profile_font">PROFIL</div>
 						<div>	Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>

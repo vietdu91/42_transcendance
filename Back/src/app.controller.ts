@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -12,6 +12,12 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { Observable, of } from 'rxjs';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';                                                                                                                                                                                                                                                                                                                                          
+import path from 'path';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Controller('Southtrans')
 export class AppController {
@@ -21,6 +27,7 @@ export class AppController {
     private readonly twofaService: TwofaService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private cloudinary: CloudinaryService,
   ) {}
 
   @Get('42') 
@@ -100,7 +107,7 @@ export class AppController {
     return { message: 'Personnage modifié avec succès' };
   }
 
-  @Post('upload') // PFP 
+  // @Post('upload') // PFP 
   /*...*/
 
   // @Get('/:id/profile-photo')
@@ -174,5 +181,69 @@ export class AppController {
       }
       await this.userService.turnOnTwoFactorAuthentication(request.user.id);
     }
+/*
+*******************  UPLOAD LOCAL *******************
+*/
+  //   @Post('local')
+  //   @UseInterceptors(
+  //     FileInterceptor('file', {
+  //       storage: diskStorage({
+  //         destination: 'public/img',
+  //         filename: (req, file, cb) => {
+  //           cb(null, file.originalname);
+  //         },
+  //       }),
+  //     }),
+  //   )
+  //   async local(@UploadedFile() file: Express.Multer.File) {
+  //     return {
+  //       statusCode: 200,
+  //       data: file.path, 
+  //   }
+  // }
+
+/*
+*******************  UPLOAD Cloudinary *******************
+*/
+    @Post('local')
+    @UseInterceptors(
+      FileInterceptor('file', {
+        storage: diskStorage({
+          destination: 'public/img',
+          filename: (req, file, cb) => {
+            cb(null, file.originalname);
+          },
+        }),
+      }),
+    )
+    async local(@UploadedFile() file: Express.Multer.File) {
+      return {
+        statusCode: 200,
+        data: file.path,
+      };
+    }
+
+    @Post('online')
+    @UseInterceptors(FileInterceptor('file'))
+    async online(@UploadedFile() file: Express.Multer.File) {
+      return await this.cloudinary
+        .uploadImage(file)
+        .then((data) => {
+          return {
+            statusCode: 200,
+            data: data.secure_url,
+          };
+        })
+        .catch((err) => {
+          return {
+            statusCode: 400,
+            message: err.message,
+          };
+        });
+    }
+
+
+
+    
 }
 
