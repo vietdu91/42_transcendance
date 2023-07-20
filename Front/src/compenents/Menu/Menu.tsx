@@ -75,7 +75,7 @@ export default function App() {
         }
       catch (err) {
         console.log("app-front: error: ", err)
-        // navigate("/connect")
+        navigate("/connect")
       }
      } else {
        console.error('Access token not found in cookies.');
@@ -158,7 +158,7 @@ export default function App() {
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
-        {show && <button className="msn"></button>}
+        {show && <button className="msn" onClick={() => navigate("/chat")}></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
     </div>

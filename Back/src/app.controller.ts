@@ -24,7 +24,7 @@ export class AppController {
   ) {}
 
   @Get('42') 
-  @Redirect("")
+  @Redirect('http://localhost:3001/Auth/connexion')
   getConnected() {
     console.log("42 route");
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
@@ -49,7 +49,6 @@ export class AppController {
       const accessToken = request.headers.authorization?.split(' ')[1];
       console.log("Access token: " + accessToken);
       const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
-      console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
       //const expires = decodedJwtAccessToken.exp;
       const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
       if (!user) {
@@ -60,13 +59,14 @@ export class AppController {
         data: { accessToken: null },
       });
       console.log("logout2");
+      response.clearCookie('accessToken');
+      response.clearCookie('id');
       response.status(200).json("app-back: successfully logged out.")
     }
     catch (err) {
       console.log("app-back: user logged fail.")
       response.status(404)
     }
-    // response.redirect('http://localhost:3000/connect');
   }
 
   

@@ -50,8 +50,8 @@ export class AuthService {
                 where: { id: user.id },
                 data: { accessToken: newToken },
               });
-            res.cookie('accessToken', newToken);
-            res.cookie('id', user.id);
+              res.cookie('accessToken', newToken);
+              res.cookie('id', user.id);
             res.redirect('http://localhost:3000');
         }
     }
