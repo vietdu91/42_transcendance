@@ -25,7 +25,8 @@ export default function App() {
   const [show2, setShow2] = React.useState(false);
   const [code, setCode] = React.useState("");
   
-
+  
+  const  apiEndpoint = 'http://localhost:3001';
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -44,7 +45,7 @@ export default function App() {
     }, 500);
   };
 
-  function logout() {
+  async function logout() {
     const cookies = document.cookie.split('; ');
     let accessToken;
     let id;
@@ -61,23 +62,25 @@ export default function App() {
 
     console.log('access token = ' + accessToken);
     if (accessToken) {
-  
-      axios.post('http://localhost:3001/Southtrans/logout', null, {
-         headers: {
-           'Authorization': `Bearer ${accessToken}`
-         }
-       }).then(response => {
-         // Do something with the response
-         console.log("then redirect");
-       }).catch(error => {
-         // Handle the error
-         console.error('catch Access token not found in cookies.');
-       });
+      try {
+          const res = await axios({
+            url: apiEndpoint + '/Southtrans/logout',
+            method: 'POST',
+            headers: {  'Authorization': `Bearer ${accessToken}` },
+            data: { msg: "Hello World!" }
+          })
+          console.log("IM HERE BRO")
+          navigate("/connect")
+          console.log("NAVIGATED")
+        }
+      catch (err) {
+        console.log("app-front: error: ", err)
+        navigate("/connect")
+      }
      } else {
        console.error('Access token not found in cookies.');
      }
   }
-
   function twoFa() {
     console.log("2FA");
     console.log(document.cookie);
