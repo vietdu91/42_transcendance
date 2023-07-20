@@ -10,6 +10,9 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 
+import { GameService } from './game/game.service';
+import { GameController } from './game/game.controller';
+
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
@@ -24,9 +27,7 @@ import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtMiddleware } from './middleware/auth.middleware';
 import { ChatGateway } from './chat/chat.gateway';
 import { MatchmakingGateway } from './game/game.gateway';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
+
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
@@ -38,14 +39,10 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..'),
-    }),
-    CloudinaryModule,
   ],
-  controllers: [AppController, UserController, AuthController],
+  controllers: [AppController, UserController, AuthController, GameController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway,],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway, GameService],
 })
 export class AppModule {}
 

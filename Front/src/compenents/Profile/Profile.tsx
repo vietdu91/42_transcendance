@@ -4,13 +4,13 @@ import axios from 'axios'
 
 import './Profile.css'
 
-import UserContext from '../../App'
+import { User, UserContext } from '../../App'
 import Bar from "../../img/backgrounds/skeeters-bar.jpg"
 
 
 export default function Profile() {
 	
-	// const context = useContext(UserContext);
+	const context = useContext(UserContext);
 	const navigate = useNavigate();
 
 	let [nick, getNick] = useState(0);
@@ -37,7 +37,6 @@ export default function Profile() {
 				<p>CONTENT</p>
 
 				<div id="welcome2">
-						<div id="profile_font">PROFIL</div>
 					<div id="eric">
 						<div className="face">
 							<div className="hat"></div>
@@ -58,6 +57,7 @@ export default function Profile() {
 							<div className="foot-right"></div>
 						</div>
 					</div>
+						<div id="profile_font">PROFIL</div>
 						<div>	Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>

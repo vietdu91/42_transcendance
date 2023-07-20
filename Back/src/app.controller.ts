@@ -1,7 +1,8 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
+import { GameService } from './game/game.service';
 import { Response,} from 'express';
 import { Request } from 'express';
 import * as qrcode from 'qrcode';
@@ -12,12 +13,6 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import { Observable, of } from 'rxjs';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';                                                                                                                                                                                                                                                                                                                                          
-import path from 'path';
-import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Controller('Southtrans')
 export class AppController {
@@ -27,16 +22,26 @@ export class AppController {
     private readonly twofaService: TwofaService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private cloudinary: CloudinaryService,
+    private readonly gameService: GameService,
   ) {}
 
   @Get('42') 
-  @Redirect("")
+  @Redirect('http://localhost:3001/Auth/connexion')
   getConnected() {
     console.log("42 route");
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
-  
+
+  @Get('getUserById')
+  async getUserById(@Req() request: Request, @Res() response: Response, @Body() body: { userId: number }) {
+    const { userId } = body;
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.json({user: user});
+  }
+
   @Get('getUser')
   async getUser(@Req() request: Request, @Res() response: Response) {
     // console.log(request.cookies)
@@ -48,8 +53,16 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    console.log("nick = " + user.nickname)
-    response.json({nick: user.nickname, name: user.name, age: user.age})
+    // console.log("nick = " + user.nickname)
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,
+    });
   }
 
   @Post('setNickname')
@@ -106,42 +119,33 @@ export class AppController {
     // }
     return { message: 'Personnage modifié avec succès' };
   }
-
-  // @Post('upload') // PFP 
-  /*...*/
-
-  // @Get('/:id/profile-photo')
-  // getUserProfilePhoto(
-  //     @Res({ passthrough: true }) res: Response
-  // ): StreamableFile {
-
-  //     res.set({'Content-Type': 'image/jpeg'});
-
-  //     const imageLocation = join(process.cwd(), 'uploads', '15c924f42ffaa67b3f14a5be05f0a312');
-  //     const file = createReadStream(imageLocation);
-  //     return new StreamableFile(file);
-  // }
-
-  @Get('logout')
+  
+  @Post('logout')
+  @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
-    console.log("logout");
-    console.log("id == " + request.cookies.id);
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
+    try {
+      const accessToken = request.headers.authorization?.split(' ')[1];
+      console.log("Access token: " + accessToken);
+      const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
+      //const expires = decodedJwtAccessToken.exp;
+      const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { accessToken: null },
+      });
+      console.log("logout2");
+      response.clearCookie('accessToken');
+      response.clearCookie('id');
+      response.status(200).json("app-back: successfully logged out.")
     }
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new UnauthorizedException();
+    catch (err) {
+      console.log("app-back: user logged fail.")
+      response.status(404)
     }
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { accessToken: null },
-    });
-    response.clearCookie('accessToken');
-    response.clearCookie('id');
-    response.redirect('http://localhost:3000/connect');
-  }   
+  }
 
   
   @Get('2fa/generate')
@@ -181,69 +185,5 @@ export class AppController {
       }
       await this.userService.turnOnTwoFactorAuthentication(request.user.id);
     }
-/*
-*******************  UPLOAD LOCAL *******************
-*/
-  //   @Post('local')
-  //   @UseInterceptors(
-  //     FileInterceptor('file', {
-  //       storage: diskStorage({
-  //         destination: 'public/img',
-  //         filename: (req, file, cb) => {
-  //           cb(null, file.originalname);
-  //         },
-  //       }),
-  //     }),
-  //   )
-  //   async local(@UploadedFile() file: Express.Multer.File) {
-  //     return {
-  //       statusCode: 200,
-  //       data: file.path, 
-  //   }
-  // }
-
-/*
-*******************  UPLOAD Cloudinary *******************
-*/
-    @Post('local')
-    @UseInterceptors(
-      FileInterceptor('file', {
-        storage: diskStorage({
-          destination: 'public/img',
-          filename: (req, file, cb) => {
-            cb(null, file.originalname);
-          },
-        }),
-      }),
-    )
-    async local(@UploadedFile() file: Express.Multer.File) {
-      return {
-        statusCode: 200,
-        data: file.path,
-      };
-    }
-
-    @Post('online')
-    @UseInterceptors(FileInterceptor('file'))
-    async online(@UploadedFile() file: Express.Multer.File) {
-      return await this.cloudinary
-        .uploadImage(file)
-        .then((data) => {
-          return {
-            statusCode: 200,
-            data: data.secure_url,
-          };
-        })
-        .catch((err) => {
-          return {
-            statusCode: 400,
-            message: err.message,
-          };
-        });
-    }
-
-
-
-    
 }
 

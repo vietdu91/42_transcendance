@@ -25,7 +25,8 @@ export default function App() {
   const [show2, setShow2] = React.useState(false);
   const [code, setCode] = React.useState("");
   
-
+  
+  const  apiEndpoint = 'http://localhost:3001';
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -44,10 +45,42 @@ export default function App() {
     }, 500);
   };
 
-  function logout() {
-    window.location.href = 'http://localhost:3001/Southtrans/logout';
-  }
+  async function logout() {
+    const cookies = document.cookie.split('; ');
+    let accessToken;
+    let id;
+  
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === 'accessToken') {
+        accessToken = value;
+      }
+      if (name === 'id') {  
+        id = value;
+      }
+    }
 
+    console.log('access token = ' + accessToken);
+    if (accessToken) {
+      try {
+          const res = await axios({
+            url: apiEndpoint + '/Southtrans/logout',
+            method: 'POST',
+            headers: {  'Authorization': `Bearer ${accessToken}` },
+            data: { msg: "Hello World!" }
+          })
+          console.log("IM HERE BRO")
+          navigate("/connect")
+          console.log("NAVIGATED")
+        }
+      catch (err) {
+        console.log("app-front: error: ", err)
+        navigate("/connect")
+      }
+     } else {
+       console.error('Access token not found in cookies.');
+     }
+  }
   function twoFa() {
     console.log("2FA");
     console.log(document.cookie);
@@ -79,10 +112,6 @@ export default function App() {
         console.log(response);
         setCode(response.data.code)
         setShow2(true);
-
-
-        //window.location.href = `http://localhost:3001/Southtrans/2fa/generate?accessToken=${accessToken}`;
-        //window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
       }).catch(error => {
         // Handle the error
         console.error('catch Access token not found in cookies.');
@@ -131,7 +160,7 @@ export default function App() {
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
-        {show && <button className="msn"></button>}
+        {show && <button className="msn" onClick={() => navigate("/chat")}></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
     </div>

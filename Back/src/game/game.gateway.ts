@@ -35,7 +35,6 @@ export class MatchmakingGateway {
 		}
 
 		this.queue.push(player);
-
 		
 		client.emit('queueJoined', { success: true, message: 'Joined matchmaking queue' });
 		this.createMatch();
@@ -86,8 +85,8 @@ export class MatchmakingGateway {
 			// })
 
 			
-			this.server.to(player1.id).emit('matchFound', { roomId: 1, opponent: player2.user });
-			this.server.to(player2.id).emit('matchFound', { roomId: 1, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user });
+			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 }
