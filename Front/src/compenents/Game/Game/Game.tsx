@@ -72,7 +72,6 @@ export default function Game(): JSX.Element {
 	}
 
 	useEffect(() => {
-
 		let ball:Ball, p1:Bar, p2:Bar;
 		const sketch = new p5((p:p5) => {
 			let canvas: p5.Renderer;
