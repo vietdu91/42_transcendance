@@ -26,12 +26,12 @@ export class AppController {
   ) {}
 
   @Get('42') 
-  @Redirect("")
+  @Redirect('http://localhost:3001/Auth/connexion')
   getConnected() {
     console.log("42 route");
     return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
   }
-  
+
   @Get('getUserById')
   async getUserById(@Req() request: Request, @Res() response: Response, @Body() body: { userId: number }) {
     const { userId } = body;
@@ -119,8 +119,9 @@ export class AppController {
     // }
     return { message: 'Personnage modifié avec succès' };
   }
-
-  @Get('logout')
+  
+  @Post('logout')
+  @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
     try {
       const accessToken = request.headers.authorization?.split(' ')[1];
@@ -144,7 +145,7 @@ export class AppController {
       console.log("app-back: user logged fail.")
       response.status(404)
     }
-  }  
+  }
 
   
   @Get('2fa/generate')

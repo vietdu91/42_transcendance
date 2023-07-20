@@ -112,10 +112,6 @@ export default function App() {
         console.log(response);
         setCode(response.data.code)
         setShow2(true);
-
-
-        //window.location.href = `http://localhost:3001/Southtrans/2fa/generate?accessToken=${accessToken}`;
-        //window.location.href = 'http://localhost:3001/Southtrans/2fa/generate';
       }).catch(error => {
         // Handle the error
         console.error('catch Access token not found in cookies.');
@@ -142,6 +138,7 @@ export default function App() {
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
+        {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
           onMouseLeave={() => { setHover(Town); }}>Chat</div>}
 
         {show && <div className="menu-item" onClick={() => { handleClickCredits("/credits", Metrosexual); toggleThanks(); }} onMouseEnter={() => { setHover(Metrosexual); }}
@@ -161,10 +158,11 @@ export default function App() {
         <input placeholder='code'></input>
         </>
         } 
+        } 
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
-        {show && <button className="msn"></button>}
+        {show && <button className="msn" onClick={() => navigate("/chat")}></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
     </div>

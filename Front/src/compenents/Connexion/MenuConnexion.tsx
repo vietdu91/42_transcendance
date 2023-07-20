@@ -18,6 +18,8 @@ import Lotion from "../../img/backgrounds/lotion.jpg"
 
 export default function MenuConnexion() {
 
+    
+
 	const [hover, setHover] = useState(Town);
 	const context = useContext(UserContext);
 

@@ -4,6 +4,7 @@ import Message from '../Messages/message';
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
+import Lotion from "../../img/backgrounds/lotion.jpg"
 
 import './Chat.css';
 

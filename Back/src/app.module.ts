@@ -34,7 +34,7 @@ import { MatchmakingGateway } from './game/game.gateway';
 
 @Module({
   imports: [
-    PrismaModule, AuthModule, UserModule, AuthModule, TwofaModule, PassportModule.register({ defaultStrategy: 'jwt' }),
+    PrismaModule, AuthModule, UserModule, AuthModule, TwofaModule,  PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
