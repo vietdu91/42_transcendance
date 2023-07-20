@@ -72,6 +72,8 @@ export class AppController {
       throw new UnauthorizedException();
     }
     const { nickname } = body;
+    if (!nickname)
+      throw new UnauthorizedException();
      const userUpdate = await this.prisma.user.update({
        where: { id: Number(userId) },
        data: { nickname: nickname },
@@ -89,6 +91,8 @@ export class AppController {
       throw new UnauthorizedException();
     }
     const { age } = body;
+    if (!age)
+      throw new UnauthorizedException();
     const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
         data: { age: Number(age) },
@@ -110,14 +114,13 @@ export class AppController {
         where: { id: Number(userId) },
         data: { character: character },
     });
-      // if (!userUpdate) {
+    //   if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
     return { message: 'Personnage modifié avec succès' };
   }
 
-  @Post('logout')
-  @UseGuards(JwtAuthenticationGuard)
+  @Get('logout')
   async logout(@Req() request: Request, @Res() response: Response) {
     try {
       const accessToken = request.headers.authorization?.split(' ')[1];

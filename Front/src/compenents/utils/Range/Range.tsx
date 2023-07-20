@@ -41,10 +41,10 @@ export default function Range() {
 		setAge(event.target.value);
 	};
 	
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log(age);
-		axios
+		await axios
 			.post('http://localhost:3001/SouthTrans/setAge', { age }, { withCredentials: true })
 			.then((response) => {
 				console.log(response.data.message);
