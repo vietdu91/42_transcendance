@@ -138,7 +138,6 @@ export default function App() {
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
-        {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
           onMouseLeave={() => { setHover(Town); }}>Chat</div>}
 
         {show && <div className="menu-item" onClick={() => { handleClickCredits("/credits", Metrosexual); toggleThanks(); }} onMouseEnter={() => { setHover(Metrosexual); }}
@@ -157,7 +156,6 @@ export default function App() {
         <img src={code}></img>
         <input placeholder='code'></input>
         </>
-        } 
         } 
       </div>
       <div id="navbar">

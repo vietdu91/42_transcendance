@@ -28,7 +28,6 @@ import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
 // SOUNDS
 import queer_eye from './sounds/queer_eye.mp3'
 import southparkSound from './sounds/theme_song.mp3'
-import southparkSound from './sounds/theme_song.mp3'
 import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
