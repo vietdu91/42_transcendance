@@ -27,8 +27,9 @@ import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtMiddleware } from './middleware/auth.middleware';
 import { ChatGateway } from './chat/chat.gateway';
 import { MatchmakingGateway } from './game/game.gateway';
-
-
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 // Fournir des services à nos contrôleurs et à nos autres services
 
@@ -39,6 +40,10 @@ import { MatchmakingGateway } from './game/game.gateway';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..'),
+    }),
+    CloudinaryModule,
   ],
   controllers: [AppController, UserController, AuthController, GameController],
   providers: [

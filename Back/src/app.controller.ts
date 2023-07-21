@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -13,6 +13,9 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Controller('Southtrans')
 export class AppController {
@@ -23,6 +26,7 @@ export class AppController {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly gameService: GameService,
+    private cloudinary: CloudinaryService,
   ) {}
 
   @Get('42') 
@@ -185,5 +189,52 @@ export class AppController {
       }
       await this.userService.turnOnTwoFactorAuthentication(request.user.id);
     }
+
+
+/*
+    LOCAL IMG UPLOAD
+*/
+
+  //   @Post('local')
+  // @UseInterceptors(
+  //   FileInterceptor('file', {
+  //     storage: diskStorage({
+  //       destination: 'public/img',
+  //       filename: (req, file, cb) => {
+  //         cb(null, file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // async local(@UploadedFile() file: Express.Multer.File) {
+  //   return {
+  //     statusCode: 200,
+  //     data: file.path,
+  //   };
+  // }
+
+/*
+    ONLINE IMG UPLOAD
+*/
+
+@Post('online')
+  @UseInterceptors(FileInterceptor('file'))
+  async online(@UploadedFile() file: Express.Multer.File) {
+    return await this.cloudinary
+      .uploadImage(file)
+      .then((data) => {
+        return {
+          statusCode: 200,
+          data: data.secure_url,
+        };
+      })
+      .catch((err) => {
+        return {
+          statusCode: 400,
+          message: err.message,
+        };
+      });
+  }
+
 }
 
