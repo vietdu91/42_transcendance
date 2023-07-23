@@ -83,23 +83,28 @@ export default function ChampSelect() {
 				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Servietsky')}, 1000);}}></img>
 				<img className="card" src={kenny} alt={'Kenny'}
 				onMouseEnter={() => {setKenny(KennySuper);}}
-				onMouseLeave={() => {setKenny(KennyNormal);}}></img>
+				onMouseLeave={() => {setKenny(KennyNormal);}}
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Kenny')}, 1000);}}></img>
 				<img className="card" src={timmy} alt={'Timmy'}
 				onMouseEnter={() => {setTimmy(TimmySuper);}}
 				onMouseLeave={() => {setTimmy(TimmyNormal);}}
 				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick('Timmy')}, 1000);}}></img>
 				<img className="card" src={terrancePhilip} alt={'TerrancePhilip'}
 				onMouseEnter={() => {setTerrancePhilip(TerrancePhilipSuper);}}
-				onMouseLeave={() => {setTerrancePhilip(TerrancePhilipNormal);}}></img>
+				onMouseLeave={() => {setTerrancePhilip(TerrancePhilipNormal);}}
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('TerrancePhilip')}, 1000);}}></img>
 				<img className="card" src={garrison} alt={'Garrison'}
 				onMouseEnter={() => {setGarrison(GarrisonSuper);}}
-				onMouseLeave={() => {setGarrison(GarrisonNormal);}}></img>
+				onMouseLeave={() => {setGarrison(GarrisonNormal);}}
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Garrison')}, 1000);}}></img>
 				<img className="card" src={henrietta} alt={'Henrietta'}
 				onMouseEnter={() => {setHenrietta(HenriettaSuper);}}
-				onMouseLeave={() => {setHenrietta(HenriettaNormal);}}></img>
+				onMouseLeave={() => {setHenrietta(HenriettaNormal);}}
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Henrietta')}, 1000);}}></img>
 				<img className="card" src={butters} alt={'Butters'}
 				onMouseEnter={() => {setButters(ButtersSuper);}}
-				onMouseLeave={() => {setButters(ButtersNormal);}}></img>
+				onMouseLeave={() => {setButters(ButtersNormal);}}
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Butters')}, 1000);}}></img>
 			</div>
 		</div>
 	);

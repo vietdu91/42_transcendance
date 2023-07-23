@@ -9,8 +9,7 @@ import Bar from "../../img/backgrounds/skeeters-bar.jpg"
 
 
 export default function Profile() {
-	
-	const context = useContext(UserContext);
+
 	const navigate = useNavigate();
 
 	let [nick, getNick] = useState(0);
@@ -58,6 +57,7 @@ export default function Profile() {
 						</div>
 					</div>
 						<div id="profile_font">PROFIL</div>
+						<br/>
 						<div>	Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>

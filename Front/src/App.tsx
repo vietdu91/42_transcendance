@@ -69,51 +69,32 @@ const CharacterSelectionWithMusic = () => (
 );
 
 export interface User {
-	user: {
-		id:number;
-		email:string;
-		name:string;
-		twoFA:boolean;
-		nick:string;
-		age:number;
-	},
-	setUser: React.Dispatch<React.SetStateAction<{
-		id?:number;
-		email?:string;
-		name?:string;
-		twoFA?:boolean;
-		nick?:string;
-		age?:number;
-	}>>;
+	id:number;
+	setId:React.Dispatch<React.SetStateAction<number>>;
+	email:string;
+	setEmail:React.Dispatch<React.SetStateAction<string>>;
+	name:string;
+	setName:React.Dispatch<React.SetStateAction<string>>;
+	twoFA:boolean;
+	setTwoFA:React.Dispatch<React.SetStateAction<boolean>>;
+	nick:string;
+	setNick:React.Dispatch<React.SetStateAction<string>>;
+	age:number;
+	setAge:React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const UserContext = createContext<User>({
-  user: {
-	id: -1,
-	email: '',
-	name: '',
-	twoFA: false,
-	nick: '',
-	age: -1,
-  },
-  setUser: () => {},
-});
+export const UserContext = createContext<User>({} as User);
 
 export default function App() {
-	const [contextData, setContextData] = useState<User>({
-		user: {
-			id: -1,
-			email: '',
-			name: '',
-			twoFA: false,
-			nick: '',
-			age: -1,
-		},
-			setUser: () => {},
-  	})
+	const [id, setId] = useState(-1);
+	const [email, setEmail] = useState('');
+	const [name, setName] = useState('');
+	const [twoFA, setTwoFA] = useState(false);
+	const [nick, setNick] = useState('');
+	const [age, setAge] = useState(-1);
 
 	return (
-		<UserContext.Provider value={contextData}>
+		<UserContext.Provider value={{id, setId, email, setEmail, name, setName, twoFA, setTwoFA, nick, setNick, age, setAge}}>
 			<div className="App">
 				<Routes>
 				<Route path="/test" element={<Test />}/>
