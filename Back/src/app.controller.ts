@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -33,13 +33,19 @@ export class AppController {
   }
 
   @Get('getUserById')
-  async getUserById(@Req() request: Request, @Res() response: Response, @Body() body: { userId: number }) {
-    const { userId } = body;
+  async getUserById(@Query('userId') userId: number, @Req() request: Request, @Res() response: Response) {
     const user = await this.userService.getUserById(userId);
     if (!user) {
       throw new UnauthorizedException();
     }
-    response.json({user: user});
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,});
   }
 
   @Get('getUser')

@@ -9,13 +9,11 @@ export class GameService {
   ) {}
 
   async getGameById(roomId: number): Promise<Game | null> {
-    console.log('getGameById: roomId =', roomId);
     const room = await this.prisma.game.findUnique({
       where: { 
         id: parseInt(roomId.toString()),
       }
     });
-    // console.log('getUserById: user =', user);
     return room;
   }
 

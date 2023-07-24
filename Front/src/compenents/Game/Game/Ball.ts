@@ -49,16 +49,18 @@ export default class Ball {
     setCDiv(cDiv:any) {
         this.cDiv = cDiv;
     }
-    out() {
+    out(p1:Bar, p2:Bar) {
         if (this.pos.x > this.cDiv.clientWidth + this.rad) {
+            p1.score++;
             this.resetBall(); // right
-            return true;
+            return 'right';
         }
         if (this.pos.x < -this.rad) {
+            p2.score++;
             this.resetBall(); // left
-            return true;
+            return 'left';
         }
-        return false;
+        return '';
     }
     hit(b1:Bar, b2:Bar) {
         for (let bar of [b1, b2]) {
@@ -76,7 +78,7 @@ export default class Ball {
 
                     let a = this.vel.heading();
                     if (this.inertia < 8)
-                        this.inertia += 0.5;
+                        this.inertia += 0.5 * 9 / 16;
                     if (a > -PI/2 && a < PI/2) {
                         this.vel = p5.Vector.fromAngle(a/2, this.speed + this.inertia);
                     } else {

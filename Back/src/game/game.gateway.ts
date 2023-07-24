@@ -74,17 +74,7 @@ export class MatchmakingGateway {
 			});
 
 			console.log(game);
-			// prisma.user.update({
-			// 	where: { id: player1.user.id },
-			// 	data: { games: {
-			// 			connect: [
-			// 				{id: game.id}
-			// 			]
-			// 		}
-			// 	}
-			// })
 
-			
 			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user });
 			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
