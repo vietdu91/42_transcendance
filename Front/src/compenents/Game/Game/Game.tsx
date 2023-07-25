@@ -142,7 +142,7 @@ export default function Game(): JSX.Element {
 
 					let out = ball.out(p1, p2);
 					if (out) {
-						if (out == 'left') {
+						if (out === 'left') {
 							setGame((prevGame) => ({...prevGame, scoreRight: prevGame.scoreRight + 1}));
 						}
 						else {
@@ -205,7 +205,7 @@ export default function Game(): JSX.Element {
 			// Clean up the p5 sketch when the component unmounts
 			p5SketchRef.current?.remove();
 		};
-	}, [sketchRef]);
+	}, [sketchRef, setGame]);
 
 	return (
 		<>
