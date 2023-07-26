@@ -9,7 +9,7 @@ form {
 	justify-content: center;
 }
 
-.hello{
+/* .hello{
 	position: absolute;
 	left: 28%;
 	font-size: 25px;
@@ -18,8 +18,7 @@ form {
 	font-family: south_park_font;
 	transition: all 0.5s ease;
 	pointer-events: none;
-  }
-
+  } */
 
   #barre[type=text]:focus~.hello {
 	  display: block;
@@ -29,14 +28,18 @@ form {
 	  font-size: 16px;
 	}
 
+	#barre[type=text]:focus~.hello::after{
+	visibility: hidden;
+}
+
   #barre[type=text]:focus~.enter {
 	background-color: rgb(71, 37, 5);
 	position: absolute;
-	content: ' ';
+	 content: ' '; 
 	height: 1px;
-	right: 45%;
-	margin-top: 52px;
-	transform: scaleX(5)
+	right: 45%; 
+	margin-top: 52px; 
+	transform: scaleX(5);
   }
 
   .enter{
@@ -46,21 +49,31 @@ form {
 
   }
 
-  textarea, #barre {
+  #barre[type="text"]
+  {
+	font-size: 30px;
+	font-family: Arial;
+  }
+
+ textarea, #barre {
 	position: absolute;
 	outline: none;
 	border: 0;
 	border-bottom: 1px solid #cecece;
 	height: 50px;
-	width: 50%;
-	font-family: south_park_font;
-	/* max-width: 500px; */
+	width: 50%; 
+	/* font-family: south_park_font; */
+	max-width: 500px;
   }
 
   #barre:focus{
 	content: 'prout';
-	font-family: south_park_font;
+	/* font-family: south_park_font; */
 	font-size: 200%;
+  }
+
+  button {
+	z-index: 999999;
   }
 
 @media (max-width: 850px) {

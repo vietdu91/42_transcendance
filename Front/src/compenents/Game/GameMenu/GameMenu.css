@@ -1,0 +1,42 @@
+#bg-game {
+	display: block;
+	width: 100vw;
+	height: 100vh;
+	object-fit: cover;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#spec-menu {
+	left: 4vw;
+	top: 10vh;
+	width: 22vw;
+	height: 80vh;
+	border-radius: 20px;
+	border: 2px solid #3F3F3F;
+	position: absolute;
+	opacity: 75%;
+	background-color: #6F6F6F;
+	text-align: center;
+}
+
+#play-button {
+	right: 8vw;
+	top: 10vh;
+	width: 62vw;
+	height: 20vh;
+	opacity: 75%;
+	position: absolute;
+}
+
+#history {
+	right: 8vw;
+	bottom: 10vh;
+	width: 62vw;
+	height: 50vh;
+	background-color: red;
+	opacity: 75%;
+	position: absolute;
+	text-align: center;
+}

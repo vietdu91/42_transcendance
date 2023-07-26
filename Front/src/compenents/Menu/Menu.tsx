@@ -26,7 +26,6 @@ export default function App() {
   const [code, setCode] = React.useState("");
   
   
-  const  apiEndpoint = 'http://localhost:3001';
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -64,7 +63,7 @@ export default function App() {
     if (accessToken) {
       try {
           const res = await axios({
-            url: apiEndpoint + '/Southtrans/logout',
+            url:'http://localhost:3001/Southtrans/logout',
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
             data: { msg: "Hello World!" }
@@ -81,7 +80,6 @@ export default function App() {
        console.error('Access token not found in cookies.');
      }
   }
-
   function twoFa() {
     console.log("2FA");
     console.log(document.cookie);
@@ -132,10 +130,10 @@ export default function App() {
     <div id="menu">
       <img id="bg-menu" src={hover} alt={'bg'}></img>
       <div id="menu-items">
-        {show && <div className="menu-item" onClick={() => navigate("/game")} onMouseEnter={() => { setHover(ButtersBlood); }}
+        {show && <div className="menu-item" onClick={() => navigate("/gamemenu")} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>Jeu</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/newprofile")} onMouseEnter={() => { setHover(KennyHouse); }}
+        {show && <div className="menu-item" onClick={() => navigate("/profile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
         {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
@@ -149,6 +147,9 @@ export default function App() {
 
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
+
+        
+
         {show2 && 
         <>
         <img src={code}></img>

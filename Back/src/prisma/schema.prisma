@@ -8,13 +8,23 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
-  name            String	@unique
-  twoFactorSecret String  @unique
-  accessToken     String?  @unique
-  twoFactorEnabled Boolean @default(false)
-  nickname		String? 	@unique
-  age 			Int?
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  name              String	@unique
+  twoFactorSecret   String  @unique
+  accessToken       String?  @unique
+  twoFactorEnabled  Boolean @default(false)
+  nickname		      String? 	@unique
+  age 			        Int?
+  character         String?
+  games             Game[] @relation("players")
+}
+
+model Game {
+  id              Int     @id @default(autoincrement())
+  players         User[] @relation("players")
+  score           Int[]
+  characters      String[]
+  date            DateTime @default(now())
 }
 

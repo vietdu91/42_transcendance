@@ -10,6 +10,9 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 
+import { GameService } from './game/game.service';
+import { GameController } from './game/game.controller';
+
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
@@ -23,6 +26,8 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { JwtMiddleware } from './middleware/auth.middleware';
 import { ChatGateway } from './chat/chat.gateway';
+import { MatchmakingGateway } from './game/game.gateway';
+
 
 
 // Fournir des services à nos contrôleurs et à nos autres services
@@ -35,9 +40,9 @@ import { ChatGateway } from './chat/chat.gateway';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AppController, UserController, AuthController],
+  controllers: [AppController, UserController, AuthController, GameController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway, GameService],
 })
 export class AppModule {}
 

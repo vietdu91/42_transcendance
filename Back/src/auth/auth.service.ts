@@ -5,11 +5,15 @@ import { Response} from 'express';
 import { authenticator } from 'otplib';
 import { Prisma, User} from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { config } from 'dotenv';
+config();
 
 
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = "u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4"; // Remplacer par le client_id de votre application
-const clientSecret = "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";
+const client_id = process.env.CLIENT_ID; // Remplacer par le client_id de votre application
+const clientSecret = process.env.CLIENT_SECRET; // Remplacer par le client_secret de votre application
+const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'URL de redirection de votre application
+
 
 @Injectable()
 export class AuthService {
@@ -52,7 +56,7 @@ export class AuthService {
               });
               res.cookie('accessToken', newToken);
               res.cookie('id', user.id);
-            res.redirect('http://localhost:3000');
+            res.redirect(process.env.URL_HOME_FRONT);
         }
     }
 
@@ -65,16 +69,15 @@ export class AuthService {
 
 
     async getAccessToken(code: string): Promise<any> {
-        try {
-            const response = await axios.post('https://api.intra.42.fr/oauth/token', { 
+        try { 
+            const response = await axios.post(process.env.URL_TOKEN42, { 
                 client_id: client_id, 
                 client_secret: clientSecret,
                 grant_type: "authorization_code",
                 code: code,
-                redirect_uri: "http://localhost:3001/Auth/conexion" 
+                redirect_uri: urlRedirect,
             });
             const accessToken = response.data.access_token;
-            console.log(accessToken + " == accessToken");
             return accessToken;
         } catch (error) {
             console.error(error);
@@ -83,9 +86,8 @@ export class AuthService {
     }
     
     async getUserData(accessToken: string): Promise<any> {
-        console.log(accessToken + " == accessToken");
         try {
-            const userResponse = await axios.get('https://api.intra.42.fr/v2/me', {
+            const userResponse = await axios.get(process.env.URL_42ME, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

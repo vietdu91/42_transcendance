@@ -1,6 +1,6 @@
 @font-face {
     font-family: south_park_font;
-    src: url(../../fonts/south\ park.ttf)
+    src: url(../../../fonts/south\ park.ttf)
 }
 
 body {
@@ -25,14 +25,26 @@ body {
     opacity: 0.7;
 }
 
+#score {
+    position: absolute;
+    background-color: #343434;
+    opacity: 75%;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    left: 45vw;
+    top: 1.5vh;
+    width: 10vw;
+    height: 7vh;
+}
+
 #game {
     position: absolute;
     left: 15vw;
-    top: 20vh;
+    top: 10vh;
     width: 70vw;
     height: 60vh;
-    border: solid 4px #696969;
-    background-color: black;
+    /* background-color: black; */
     color: white;
     z-index: 1;
 }

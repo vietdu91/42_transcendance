@@ -2,6 +2,7 @@ import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, Htt
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
+import { GameService } from './game/game.service';
 import { Response,} from 'express';
 import { Request } from 'express';
 import * as qrcode from 'qrcode';
@@ -11,7 +12,6 @@ import JwtAuthenticationGuard from './jwt-guard/jwt-guard.guard';
 import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
 
 @Controller('Southtrans')
 export class AppController {
@@ -21,27 +21,105 @@ export class AppController {
     private readonly twofaService: TwofaService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly gameService: GameService,
   ) {}
 
   @Get('42') 
-  @Redirect('http://localhost:3001/Auth/connexion')
+  @Redirect(process.env.URL_REDIRECT)
   getConnected() {
+    console.log("process.env.URL_REDIRECT = " + process.env.URL_REDIRECT)
     console.log("42 route");
-    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
+    return {url: process.env.URL_42REDIRECT};
   }
-  
-  @Post('newprofile')
-  @UseGuards(JwtAuthenticationGuard)
-  async enregistrerSurnom( @Body() body: { nickname: string }) {
+
+  @Get('getUserById')
+  async getUserById(@Req() request: Request, @Res() response: Response, @Body() body: { userId: number }) {
+    const { userId } = body;
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.json({user: user});
+  }
+
+  @Get('getUser')
+  async getUser(@Req() request: Request, @Res() response: Response) {
+    // console.log(request.cookies)
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    // console.log("nick = " + user.nickname)
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,
+    });
+  }
+
+  @Post('setNickname')
+  async setNickname( @Req() request, @Body() body: { nickname: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
     const { nickname } = body;
+    if (!nickname)
+      throw new UnauthorizedException();
      const userUpdate = await this.prisma.user.update({
-       where: { id: 3 },
+       where: { id: Number(userId) },
        data: { nickname: nickname },
     });
-    console.log("nickname == " + nickname);
+    // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
     return { message: 'Surnom enregistré avec succès' };
   }
 
+  @Post('setAge')
+  async setAge( @Req() request, @Body() body: { age: number }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { age } = body;
+    if (!age)
+      throw new UnauthorizedException();
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { age: Number(age) },
+    });
+      // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Age enregistré avec succès' };
+  }
+
+  @Post('setCharacter')
+  async setCharacter( @Req() request, @Body() body: { character: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { character } = body;
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { character: character },
+    });
+    //   if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Personnage modifié avec succès' };
+  }
+  
   @Post('logout')
   @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {

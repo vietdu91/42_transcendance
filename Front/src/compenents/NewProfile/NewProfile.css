@@ -27,7 +27,7 @@ body {
   object-fit: cover;
   background-color:#89cede;
 
-  /* position: absolute; */
+  position: relative;
   left: 0;
   top: 0;
   z-index: 1;

@@ -1,14 +1,10 @@
 import { Controller, Get, Request, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { PrismaService} from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
 
 
 @Controller('Auth')
 export class AuthController {
-  constructor(private prisma: PrismaService,
-              private readonly AuthService: AuthService,
-              private readonly jwtService: JwtService ) {}
+  constructor(private readonly AuthService: AuthService,) {}
 
   @Get('conexion')
   async connexion(@Request() req, @Res({passthrough:true}) response): Promise<any> {

@@ -4,7 +4,6 @@ import Message from '../Messages/message';
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
-import Lotion from "../../img/backgrounds/lotion.jpg"
 
 import './Chat.css';
 
@@ -20,7 +19,9 @@ function Chat() {
     }
     
     useEffect(() => {
-        const newSocket = io("http://localhost:3001");
+        console.log('react api ==== ' + process.env.REACT_APP_API_ENDPOINT);
+        const apiEndpoint = 'http://localhost:3001';
+        const newSocket = io(apiEndpoint);
         setSocket(newSocket);
     }, [setSocket]);
 
