@@ -21,42 +21,49 @@ export class AuthService {
                 private twofaService: TwofaService,
                 private jwtService: JwtService,) {}
 
-    async apiConnexion(code: string, res: Response): Promise<any> {
-        const accessToken = await this.getAccessToken(code);
-        const userData = await this.getUserData(accessToken);
-        var user = await this.prisma.user.findUnique({
-            where: { email: userData.email },
-        });
-        if (!user ) {
-            user = await this.createUser(userData);
-
-            const payload = { username: user.name, sub: user.id };
-            console.log("paylod = " + payload.sub + " " + payload.username);
-            const newToken = this.jwtService.sign(payload);
-            // JWT token use to get user data and validate user
-            console.log("new token ==  " + newToken);
-            await this.prisma.user.update({
-                where: { id: user.id },
-                data: { accessToken: newToken },
-          });
-          res.cookie('accessToken', newToken);
-          res.cookie('id', user.id);
-          res.redirect('http://localhost:3000/newprofile');
-        }
-        else {
-
-            const payload = { username: user.name, sub: user.id };
-            console.log("paylod = " + payload.sub + " " + payload.username);
-            const newToken = this.jwtService.sign(payload);
-            // JWT token use to get user data and validate user
-            console.log("new token ==  " + newToken);
-            await this.prisma.user.update({
-                where: { id: user.id },
-                data: { accessToken: newToken },
+    async apiConnexion(userData: any, res: Response): Promise<User> {
+        try
+        {
+            var user = await this.prisma.user.findUnique({
+                where: { email: userData.email },
+            });
+            if (!user ) {
+                user = await this.createUser(userData);
+    
+                const payload = { username: user.name, sub: user.id };
+                console.log("paylod = " + payload.sub + " " + payload.username);
+                const newToken = this.jwtService.sign(payload);
+                // JWT token use to get user data and validate user
+                console.log("new token ==  " + newToken);
+                await this.prisma.user.update({
+                    where: { id: user.id },
+                    data: { accessToken: newToken },
               });
-              res.cookie('accessToken', newToken);
-              res.cookie('id', user.id);
-            res.redirect(process.env.URL_HOME_FRONT);
+              //res.cookie('accessToken', newToken);
+              //res.cookie('id', user.id);
+              //res.json({user: user, accessToken: newToken});
+              //res.redirect('http://localhost:3000/newprofile');
+              return user;
+            }
+            else {
+    
+                const payload = { username: user.name, sub: user.id };
+                console.log("paylod = " + payload.sub + " " + payload.username);
+                const newToken = this.jwtService.sign(payload);
+                // JWT token use to get user data and validate user
+                console.log("new token ==  " + newToken);
+                await this.prisma.user.update({
+                    where: { id: user.id },
+                    data: { accessToken: newToken },
+                  });
+                //res.cookie('accessToken', newToken);
+                //res.cookie('id', user.id);
+                //res.redirect(process.env.URL_HOME_FRONT);
+                return user;
+            }
+        }
+        catch (error) {
+            console.error(error);
         }
     }
 

@@ -123,6 +123,7 @@ export class AppController {
   @Post('logout')
   @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
+    console.log("logout ON");
     try {
       const accessToken = request.headers.authorization?.split(' ')[1];
       console.log("Access token: " + accessToken);
@@ -157,6 +158,7 @@ export class AppController {
     console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
     //const expires = decodedJwtAccessToken.exp;
     const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
+    console.log("user == " + user)
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
     //return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
     const code = await qrcode.toDataURL(otpauthUrl);

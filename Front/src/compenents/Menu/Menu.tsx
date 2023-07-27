@@ -63,7 +63,7 @@ export default function App() {
     if (accessToken) {
       try {
           const res = await axios({
-            url:'http://localhost:3001/Southtrans/logout',
+            url: "http://localhost:3001/Southtrans/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
             data: { msg: "Hello World!" }
@@ -74,13 +74,13 @@ export default function App() {
         }
       catch (err) {
         console.log("app-front: error: ", err)
-        navigate("/connect")
       }
      } else {
        console.error('Access token not found in cookies.');
      }
   }
-  function twoFa() {
+
+  async function twoFa() {
     console.log("2FA");
     console.log(document.cookie);
     const cookies = document.cookie.split('; ');
@@ -99,28 +99,25 @@ export default function App() {
     console.log("if id == " + id + " FIN");
     
     console.log("if access == " + accessToken + " FIN");
-    if (accessToken) {
-  
-     axios.get('http://localhost:3001/Southtrans/2fa/generate', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      }).then(response => {
-        // Do something with the response
-        console.log("then redirect");
-        console.log(response);
+    if (accessToken) 
+    {
+      try {
+        const res = await axios({
+          url: "http://localhost:3001/Southtrans/2fa/generate",
+          method: 'GET',
+          headers: {  'Authorization': `Bearer ${accessToken}` },
+        }).then(response => {
+        console.log("respond === " + response.data.code)
         setCode(response.data.code)
-        setShow2(true);
-      }).catch(error => {
-        // Handle the error
-        console.error('catch Access token not found in cookies.');
-      });
-    } else {
-      console.error('Access token not found in cookies.');
-    }
+        setShow2(true);})
+      }
+      catch (err) {
+        console.log("app-front: error: ", err)
+      }
+      } else {
+        console.error('Access token not found in cookies.');
+      }
   }
-
-
 
   function toggleThanks() {
     setShow(!show);
