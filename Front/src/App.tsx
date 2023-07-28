@@ -16,6 +16,7 @@ import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import GameMenu from "./compenents/Game/GameMenu/GameMenu"
 import Game from "./compenents/Game/Game/Game"
+import GameOver from "./compenents/Game/GameOver/GameOver"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
@@ -131,6 +132,7 @@ export default function App() {
 				<Route path="/credits" element={<CreditsWithMusic />}/>
 				<Route path="/thanks" element={<ThanksWithMusic />}/>
 				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
+				<Route path="/gameover" element={<GameOver />}/>
 				<Route path="/404" element={<PageNotFound />}/>
 				</Routes>
 			</div>
