@@ -11,7 +11,7 @@ interface Player {
 	user: User;
 }
 
-@WebSocketGateway()
+@WebSocketGateway({namespace: 'matchmaking'})
 export class MatchmakingGateway {
 	@WebSocketServer()
 	server: Server;
@@ -68,6 +68,7 @@ export class MatchmakingGateway {
 							{id: player2.user.id},
 						]
 					},
+					playersId: [player1.user.id, player2.user.id],
 					score: [0, 0],
 					characters: [player1.user.character, player2.user.character],
 					date: date,
@@ -97,7 +98,7 @@ interface Game {
 	ballY: number;
 }
 
-@WebSocketGateway()
+@WebSocketGateway({namespace: 'game'})
 export class GameGateway {
 	@WebSocketServer()
 	server: Server;
@@ -117,24 +118,40 @@ export class GameGateway {
 		ballY: 0,
 	}
 
-	@SubscribeMessage('gameStart')
-	async handleGameStart(socket: Socket, gameId, idLeft, idRight, charLeft, charRight): Promise<void> {
-		
+	@SubscribeMessage('roundStart')
+	async handleGameStart(socket: Socket, gameId: number, idLeft: number, idRight: number, charLeft: string, charRight: string): Promise<void> {
 		this.game.gameId = gameId;
 		this.game.idLeft = idLeft;
 		this.game.idRight = idRight;
 		this.game.charLeft = charLeft;
 		this.game.charRight = charRight;
+		socket.emit('roundStarted', { success: true, message: 'The round started' });
+	}
 
-		socket.emit('gameStarted', { success: true, message: 'The game started' });
+	@SubscribeMessage('leaveGame')
+	async handleLeaveGame(socket: Socket, params: number): Promise<void> {
+		const prisma = new PrismaService();
+		const gameUpdate = await prisma.game.update({
+			where: { id: params[0] },
+			data: {
+				// winnerId: winnerId,
+				score: [params[2], params[3]],
+			},
+		});
+		this.reset();
+		socket.emit('gameLeaved', { success: true, message: 'The game is over', isWinner: params[4] });
 	}
 
 	@SubscribeMessage('movePaddle')
 	async handleMovePaddle(socket: Socket, player: string, nb: number): Promise<void> {
-		if (player === 'left')
+		if (player === 'left') {
 			this.game.posLeft += nb;
-		else
+			console.log(this.game.posLeft);
+		}
+		else {
 			this.game.posRight += nb;
+			console.log(this.game.posRight);
+		}
 		socket.emit('paddleMoved', {success: true, message: 'The ' + player + ' paddle moved'});
 	}
 
@@ -153,6 +170,18 @@ export class GameGateway {
 			this.game.scoreRight++;
 		this.resetPos();
 		socket.emit('scoreUpdated', {success: true, message: player + '\'s player score updated'})
+	}
+
+	private async reset(): Promise<void> {
+		this.game.socketId = '';
+		this.game.gameId = 0;
+		this.game.idLeft = 0;
+		this.game.idRight = 0;
+		this.game.scoreLeft = 0;
+		this.game.scoreRight = 0;
+		this.game.charLeft = '';
+		this.game.charRight = '';
+		this.resetPos();
 	}
 
 	private async resetPos(): Promise<void> {

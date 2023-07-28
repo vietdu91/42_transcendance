@@ -18,6 +18,11 @@ export class GameController {
     private readonly jwtService: JwtService,
   ) {}
 
+  @Get('cookie')
+  async getCookie(@Req() request: Request, @Res() response: Response) {
+
+  }
+
   @Get('getGameById')
   async getGameById(@Query('roomId') roomId: number, @Req() request: Request, @Res() response: Response) {
     const room = await this.gameService.getGameById(roomId);
@@ -26,9 +31,10 @@ export class GameController {
     }
     response.json({
       id: room.id,
+      playersId: room.playersId,
       score: room.score,
       characters: room.characters,
     });
   }
-
+  
 }

@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useRef, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import io, { Socket } from "socket.io-client";
 import axios from 'axios';
 import p5 from 'p5';
-import { useAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
+import { useAtom, atom } from 'jotai';
+// import { atomWithStorage } from 'jotai/utils';
 import Ball from "./Ball";
 import Bar from "./Bar";
 
@@ -16,69 +17,127 @@ import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
 import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
-import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
+// import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
-interface Game {
-  gameId: number;
-  idLeft: number;
-  idRight: number;
-  scoreLeft: number;
-  scoreRight: number;
-  charLeft: string;
-  charRight: string;
+interface IGame {
+	gameId: number;
+	idLeft: number;
+	idRight: number;
+	scoreLeft: number;
+	scoreRight: number;
+	charLeft: string;
+	charRight: string;
 };
 
-const initGame: Game = {
-  gameId: -1,
+const initGame: IGame = {
+	gameId: -1,
   idLeft: -1,
   idRight: -1,
-  scoreLeft: -1,
-  scoreRight: -1,
+  scoreLeft: 0,
+  scoreRight: 0,
   charLeft: '',
   charRight: '',
 }
 
-const gameAtom = atomWithStorage<Game>('game', initGame);
+// const gameAtom = atom<IGame>(initGame);
 
 export default function Game(): JSX.Element {
-  	const [game, setGame] = useAtom(gameAtom);
-
-//   const location = useLocation();
-//   const { roomId } = location.state;
-
-	const roomId = 1;
-
-	const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
+	const [game, setGame] = useState(initGame);
+	const [socket, setSocket] = useState<Socket | null>(null);
+	const [gameOver, setGameOver] = useState(false);
+	const location = useLocation();
+	const { roomId } = location.state;
+	const navigate = useNavigate();
+	
+	// const roomId = 1;
+	
+	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
 	const randomImage = Chaos;
-
-	let scoreL:number, scoreR:number;
 	
 	useEffect(() => {
 		getPlayers();
-	}, []); // Empty dependency array ensures it runs only on mount
+	}, []);
+
+	useEffect(() => {
+		const gameSocket = io("http://localhost:3001/game");
+		setSocket(gameSocket);
+		
+		console.log(gameSocket);
+
+		gameSocket.on('roundStarted', (response) => {
+			console.log(response.message);
+		})
+
+		gameSocket.on('gameLeaved', (response) => {
+			if (response.isWinner)
+				navigate("/")
+			navigate("/profile")
+		})
+		
+		return () => {
+			gameSocket.disconnect();
+		}
+	}, []);
+	
+	if (game.scoreLeft >= 2 || game.scoreRight >= 2) {
+		if (!socket)
+			console.log("SOCKET NUL")
+		else {
+			let winnerId:number;
+			if (game.scoreLeft > game.scoreRight)
+				winnerId = game.idLeft;
+			else
+				winnerId = game.idRight;
+			const gameId:number = game.gameId;
+			const scoreLeft:number = game.scoreLeft;
+			const scoreRight:number = game.scoreRight;
+			let isWinner:boolean = false;
+			const handleGameLeaved = async () => {
+				const cookies = document.cookie.split('; ');
+				let id:string = '';
+				
+				for (const cookie of cookies) {
+					const [name, value] = cookie.split('=');
+					if (name === 'id')  
+						id = value;
+				}
+				await axios.get('https://localhost:3001/SouthTrans/getUserById', { params: { userId: id } })
+				.then((response) => {
+					if (response.data.id == winnerId)
+						isWinner = true;
+				}).catch((error) => {
+					console.log("probleme ici");
+				})
+			}
+			handleGameLeaved();
+			socket?.emit('leaveGame', gameId, winnerId, scoreLeft, scoreRight, isWinner);
+		}
+	}
+
+	socket?.emit('roundStart', game.gameId, game.idLeft, game.idRight, game.charLeft, game.charRight);
 	
   	async function getPlayers(): Promise<void> {
     	try {
      		const room = await axios.get("http://localhost:3001/Game/getGameById", { params: { roomId: roomId } });
-      		console.log(room.data);
-      		if (room.data) {
+			 if (room.data) {
 				setGame((prevGame) => ({
 					...prevGame,
 					gameId: room.data.id,
-					scoreLeft: room.data.score[0], // Assuming the score array contains left score at index 0 and right score at index 1
-					scoreRight: room.data.score[1],
-					charLeft: room.data.characters[0], // Assuming the characters array contains left character at index 0 and right character at index 1
+					idLeft: room.data.playersId[0],
+					idRight: room.data.playersId[1],
+					charLeft: room.data.characters[0],
 					charRight: room.data.characters[1],
 				}));
-      		}
+			}
     	} catch (error) {
       		console.error(error);
     	}
-  	}
-
-  	function WhatReturnButtom({randomImage}) {
+	}
+	
+	
+	function WhatReturnButtom({randomImage}) {
 		if (randomImage === CityWok || randomImage === Chaos)
 			return (
 				<ReturnButtom colorHexa='#FFFFFF' path='/'/>
@@ -116,7 +175,6 @@ export default function Game(): JSX.Element {
 				let cDiv: any, currentWidth: number, currentHeight: number;
 
 				p.setup = () => {
-					getPlayers();
 					cDiv = sketchRef.current!;
 					currentWidth = cDiv.clientWidth;
 					currentHeight = (9 / 16) * cDiv.clientWidth;
@@ -133,6 +191,8 @@ export default function Game(): JSX.Element {
 				};
 
 				p.draw = () => {
+					if (gameOver)
+						return;
 					p.clear();
 					p.background('rgba(52, 52, 52, 0.75)');
 					p1.moveBar("w", "s");
@@ -149,9 +209,10 @@ export default function Game(): JSX.Element {
 							setGame((prevGame) => ({...prevGame, scoreLeft: prevGame.scoreLeft + 1}));
 						}
 						console.log(p1.score + " " + p2.score);
-						if (p1.score >= 5 || p2.score >= 5) {
+						if (p1.score >= 2 || p2.score >= 2) {
 							console.log('FIN DU JEU')
-							setGame((prevGame) => ({...prevGame, scoreLeft: 0, scoreRight: 0}));
+							setGameOver(true);
+							// setGame((prevGame) => ({...prevGame, scoreLeft: 0, scoreRight: 0}));
 							p1.score = 0;
 							p2.score = 0;
 						}

@@ -23,6 +23,7 @@ model User {
 model Game {
   id              Int     @id @default(autoincrement())
   players         User[] @relation("players")
+  playersId       Int[]
   score           Int[]
   characters      String[]
   date            DateTime @default(now())

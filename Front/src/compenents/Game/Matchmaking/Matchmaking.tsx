@@ -15,7 +15,7 @@ export default function Matchmaking() {
 	const navigate = useNavigate();
 	
 	useEffect(() => {
-		const newSocket = io("http://localhost:3001");
+		const newSocket = io("http://localhost:3001/matchmaking");
 		
 		setSocket(newSocket);
 		

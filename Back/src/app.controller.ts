@@ -50,7 +50,6 @@ export class AppController {
 
   @Get('getUser')
   async getUser(@Req() request: Request, @Res() response: Response) {
-    // console.log(request.cookies)
     const userId = request.cookies.id;
     if (!userId) {
       throw new UnauthorizedException();
@@ -59,7 +58,6 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    // console.log("nick = " + user.nickname)
     response.json({
       id: user.id,
       email: user.email,
@@ -83,7 +81,7 @@ export class AppController {
      const userUpdate = await this.prisma.user.update({
        where: { id: Number(userId) },
        data: { nickname: nickname },
-    });
+     });
     // if (!userUpdate) {
     //   throw new BadRequestException('Impossible de mettre à jour le surnom');
     // }
