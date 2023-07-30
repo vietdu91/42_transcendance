@@ -1,50 +1,50 @@
 #bg-gameover {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	width: 100vw;
 	height: 100vh;
-	object-fit: cover;
 	position: absolute;
 	background-color: black;
-	/* display: flex;
-	justify-content: center;
-	align-items: center; */
-	/* font-family: south_park_font; */
-}
-
-  .span:first-child {
-	margin-right: 20px;
+	font-family: south_park_font;
+	font-size: 450%;
   }
 
-  .span:last-child {
-	color: black;
-	/* background-color: black; */
-	animation: fadeWhite 4s forwards;
-	animation-delay: 2s;
+  .span-container {
+	display: flex;
+	/* content: "GAME"; */
+	color: white;
+  }
+
+  .over {
+	left: 20px;
 	position: relative;
+	opacity: 0; /* Nouvelle ligne pour cacher le texte au début */
+	animation: showOverText 1s forwards; /* Nouvelle animation pour faire apparaître le texte */
+	animation-delay: 1s; /* Délay de 6 secondes avant l'apparition du texte */
   }
 
-  .span_over:last-child:after {
+  .over::after,
+  .over::before {
 	content: " OVER";
 	position: absolute;
+	top: 0;
+	color: white;
+	animation: glitch 3s infinite alternate-reverse;
+	animation-delay: 1s;
+  }
+
+  .over::after {
 	left: 2px;
-	top: 2px;
 	clip: rect(0, 900px, 0, 0);
-	/* background-color: black; */
-	color: white;
-	animation: glitch 3s infinite alternate-reverse;
-	animation-delay: 4s;
+	background-color: black;
   }
 
-  .span_over:last-child:before {
-	content: " OVER";
-	position: absolute;
+  .over::before {
 	left: -2px;
-	top: -2px;
 	clip: rect(0, 900px, 0, 0);
-	/* background-color: black; */
-	color: white;
-	animation: glitch 3s infinite alternate-reverse;
-	animation-delay: 4s;
+	background-color: black;
   }
 
   @keyframes fadeWhite {
@@ -52,69 +52,96 @@
 	  color: white;
 	}
   }
-
   @keyframes glitch {
 	0% {
-	  clip: rect(43px, 9999px, 37px, 0);
+	  clip: rect(96px, 9999px, 77px, 0);
 	}
 	5% {
-	  clip: rect(13px, 9999px, 9px, 0);
+	  clip: rect(90px, 9999px, 4px, 0);
 	}
 	10% {
-	  clip: rect(55px, 9999px, 75px, 0);
+	  clip: rect(1px, 9999px, 76px, 0);
 	}
 	15% {
-	  clip: rect(23px, 9999px, 58px, 0);
+	  clip: rect(94px, 9999px, 89px, 0);
 	}
 	20% {
-	  clip: rect(12px, 9999px, 72px, 0);
+	  clip: rect(98px, 9999px, 85px, 0);
 	}
 	25% {
-	  clip: rect(30px, 9999px, 97px, 0);
+	  clip: rect(34px, 9999px, 13px, 0);
 	}
 	30% {
-	  clip: rect(78px, 9999px, 4px, 0);
+	  clip: rect(7px, 9999px, 31px, 0);
 	}
 	35% {
-	  clip: rect(53px, 9999px, 62px, 0);
+	  clip: rect(88px, 9999px, 93px, 0);
 	}
 	40% {
-	  clip: rect(60px, 9999px, 74px, 0);
+	  clip: rect(23px, 9999px, 44px, 0);
 	}
 	45% {
-	  clip: rect(69px, 9999px, 63px, 0);
+	  clip: rect(22px, 9999px, 18px, 0);
 	}
 	50% {
-	  clip: rect(15px, 9999px, 60px, 0);
+	  clip: rect(47px, 9999px, 41px, 0);
 	}
 	55% {
-	  clip: rect(36px, 9999px, 62px, 0);
+	  clip: rect(35px, 9999px, 86px, 0);
 	}
 	60% {
-	  clip: rect(37px, 9999px, 37px, 0);
+	  clip: rect(83px, 9999px, 67px, 0);
 	}
 	65% {
-	  clip: rect(59px, 9999px, 16px, 0);
+	  clip: rect(65px, 9999px, 48px, 0);
 	}
 	70% {
-	  clip: rect(76px, 9999px, 76px, 0);
+	  clip: rect(78px, 9999px, 25px, 0);
 	}
 	75% {
-	  clip: rect(88px, 9999px, 6px, 0);
+	  clip: rect(93px, 9999px, 74px, 0);
 	}
 	80% {
-	  clip: rect(75px, 9999px, 46px, 0);
+	  clip: rect(45px, 9999px, 64px, 0);
 	}
 	85% {
-	  clip: rect(50px, 9999px, 66px, 0);
+	  clip: rect(46px, 9999px, 11px, 0);
 	}
 	90% {
-	  clip: rect(87px, 9999px, 54px, 0);
+	  clip: rect(31px, 9999px, 49px, 0);
 	}
 	95% {
-	  clip: rect(6px, 9999px, 47px, 0);
+	  clip: rect(23px, 9999px, 26px, 0);
 	}
 	100% {
-	  clip: rect(100px, 9999px, 54px, 0);
+	  clip: rect(15px, 9999px, 51px, 0);
 	}
   }
+
+  @keyframes showOverText {
+	100% {
+	  opacity: 1; /* Le texte "OVER" devient opaque à la fin de l'animation */
+	}
+  }
+
+  #img_gameover {
+	width: 500px;
+	height: 350px;
+	margin-top: 50px;
+	opacity: 0;
+	transform: translateY(50px);
+	transition: opacity 1s, transform 1s;
+  }
+
+  #bg-gameover.show-image #img_gameover {
+	opacity: 1;
+	transform: translateY(0);
+  }
+
+#button-cartman-sad {
+	bottom: 3vh;
+	right: 3vw;
+	width: 100px;
+	height: 100px;
+	position: absolute;
+}

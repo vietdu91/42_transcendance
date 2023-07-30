@@ -25,6 +25,7 @@ import CharacterSelection from './compenents/CharacterSelection/CharacterSelecti
 import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
+import Achievement from './compenents/utils/Achievement/Achievement';
 
 // SOUNDS
 import queer_eye from './sounds/queer_eye.mp3'
@@ -132,6 +133,7 @@ export default function App() {
 				<Route path="/credits" element={<CreditsWithMusic />}/>
 				<Route path="/thanks" element={<ThanksWithMusic />}/>
 				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
+				<Route path="/achievement" element={<Achievement />}/>
 				<Route path="/gameover" element={<GameOver />}/>
 				<Route path="/404" element={<PageNotFound />}/>
 				</Routes>

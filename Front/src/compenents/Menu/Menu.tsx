@@ -144,8 +144,6 @@ export default function App() {
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
 
-
-
         {show2 &&
         <>
         <img src={code}></img>
