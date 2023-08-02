@@ -32,12 +32,12 @@ interface IGame {
 
 const initGame: IGame = {
 	gameId: -1,
-  idLeft: -1,
-  idRight: -1,
-  scoreLeft: 0,
-  scoreRight: 0,
-  charLeft: '',
-  charRight: '',
+	idLeft: -1,
+	idRight: -1,
+	scoreLeft: 0,
+	scoreRight: 0,
+	charLeft: '',
+	charRight: '',
 }
 
 // const gameAtom = atom<IGame>(initGame);
@@ -59,27 +59,6 @@ export default function Game(): JSX.Element {
 	useEffect(() => {
 		getPlayers();
 	}, []);
-
-	useEffect(() => {
-		const gameSocket = io("http://localhost:3001/game");
-		setSocket(gameSocket);
-		
-		console.log(gameSocket);
-
-		gameSocket.on('roundStarted', (response) => {
-			console.log(response.message);
-		})
-
-		gameSocket.on('gameLeaved', (response) => {
-			if (response.isWinner)
-				navigate("/")
-			navigate("/profile")
-		})
-		
-		return () => {
-			gameSocket.disconnect();
-		}
-	}, []);
 	
 	if (game.scoreLeft >= 2 || game.scoreRight >= 2) {
 		if (!socket)
@@ -94,24 +73,18 @@ export default function Game(): JSX.Element {
 			const scoreLeft:number = game.scoreLeft;
 			const scoreRight:number = game.scoreRight;
 			let isWinner:boolean = false;
-			const handleGameLeaved = async () => {
-				const cookies = document.cookie.split('; ');
-				let id:string = '';
-				
-				for (const cookie of cookies) {
-					const [name, value] = cookie.split('=');
-					if (name === 'id')  
-						id = value;
-				}
-				await axios.get('https://localhost:3001/SouthTrans/getUserById', { params: { userId: id } })
-				.then((response) => {
-					if (response.data.id == winnerId)
-						isWinner = true;
-				}).catch((error) => {
-					console.log("probleme ici");
-				})
+			const cookies = document.cookie.split('; ');
+			let id:number = -1;
+			
+			for (const cookie of cookies) {
+				const [name, value] = cookie.split('=');
+				if (name === 'id')  
+					id = Number(value);
 			}
-			handleGameLeaved();
+			if (id == winnerId) {
+				// console.log("YOU ARE THE WINNER ! : " + );
+				isWinner = true;
+			}
 			socket?.emit('leaveGame', gameId, winnerId, scoreLeft, scoreRight, isWinner);
 		}
 	}
@@ -165,7 +138,34 @@ export default function Game(): JSX.Element {
   	const p5SketchRef = useRef<p5 | null>(null);
 
 	useEffect(() => {
+
 		let ball:Ball, p1:Bar, p2:Bar;
+
+		const gameSocket = io("http://localhost:3001/game");
+		setSocket(gameSocket);
+
+		gameSocket.on('roundStarted', (response) => {
+			console.log(response.message);
+		})
+
+		gameSocket.on('gameLeaved', (response) => {
+			console.log(response.message);
+			if (response.isWinner)
+				navigate("/")
+				//navigate("/win")
+			else
+				navigate("/profile")
+				//navigate("/gameover")
+		})
+
+		gameSocket.on('ballMoved', (response) => {
+			console.log(response.message);
+		})
+
+		gameSocket.on('ballSet', (response) => {
+			console.log(response.message);
+		})
+
 		if (!sketchRef.current) return;
 
 		// Create or recreate the p5 sketch when the sketchRef changes or component mounts
@@ -227,6 +227,7 @@ export default function Game(): JSX.Element {
 					p1.show();
 					p2.show();
 					ball.show();
+					gameSocket?.emit("moveBall", ball.pos.x, ball.pos.y);
 				};
 
 				p.windowResized = () => {
@@ -264,6 +265,7 @@ export default function Game(): JSX.Element {
 
 		return () => {
 			// Clean up the p5 sketch when the component unmounts
+			gameSocket.disconnect();
 			p5SketchRef.current?.remove();
 		};
 	}, [sketchRef, setGame]);

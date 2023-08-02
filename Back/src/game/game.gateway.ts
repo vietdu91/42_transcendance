@@ -4,7 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
-import { subscribe } from 'diagnostics_channel';
+// import { subscribe } from 'diagnostics_channel';
 
 interface Player {
 	id: string;
@@ -83,6 +83,15 @@ export class MatchmakingGateway {
 	}
 }
 
+interface Ball {
+	x: number;
+	y: number;
+	rad: number;
+	speed: number;
+	vx: number;
+	vy: number;
+}
+
 interface Game {
 	socketId: string;
 	gameId: number;
@@ -94,8 +103,7 @@ interface Game {
 	charRight: string;
 	posLeft: number;
 	posRight: number;
-	ballX: number;
-	ballY: number;
+	ball: Ball;
 }
 
 @WebSocketGateway({namespace: 'game'})
@@ -114,17 +122,25 @@ export class GameGateway {
 		charRight: '',
 		posLeft: 0,
 		posRight: 0,
-		ballX: 0,
-		ballY: 0,
+		ball: {
+			x: 0,
+			y: 0,
+			rad: 0,
+			speed: 0,
+			vx: 0,
+			vy: 0,
+		},
 	}
 
 	@SubscribeMessage('roundStart')
-	async handleGameStart(socket: Socket, gameId: number, idLeft: number, idRight: number, charLeft: string, charRight: string): Promise<void> {
-		this.game.gameId = gameId;
-		this.game.idLeft = idLeft;
-		this.game.idRight = idRight;
-		this.game.charLeft = charLeft;
-		this.game.charRight = charRight;
+	async handleGameStart(socket: Socket, params: any): Promise<void> {
+		this.game.gameId = params[0];
+		this.game.idLeft = params[1];
+		this.game.idRight = params[2];
+		this.game.charLeft = params[3];
+		this.game.charRight = params[4];
+		this.game.ball.vx = params[5];
+		this.game.ball.vy = params[6];
 		socket.emit('roundStarted', { success: true, message: 'The round started' });
 	}
 
@@ -143,23 +159,28 @@ export class GameGateway {
 	}
 
 	@SubscribeMessage('movePaddle')
-	async handleMovePaddle(socket: Socket, player: string, nb: number): Promise<void> {
-		if (player === 'left') {
-			this.game.posLeft += nb;
+	async handleMovePaddle(socket: Socket, params: any): Promise<void> {
+		if (params[0] === 'left') {
+			this.game.posLeft += params[1];
 			console.log(this.game.posLeft);
 		}
 		else {
-			this.game.posRight += nb;
+			this.game.posRight += params[1];
 			console.log(this.game.posRight);
 		}
-		socket.emit('paddleMoved', {success: true, message: 'The ' + player + ' paddle moved'});
+		socket.emit('paddleMoved', {success: true, message: 'The ' + params[0] + ' paddle moved'});
 	}
 
 	@SubscribeMessage('moveBall')
-	async handleMoveBall(socket: Socket, x: number, y: number): Promise<void> {
-		this.game.ballX = x;
-		this.game.ballY = y;
-		socket.emit('ballMoved', {success: true, message: 'The ball moved'})
+	async handleMoveBall(socket: Socket, params: number): Promise<void> {
+		this.game.ball.x = params[0];
+		this.game.ball.y = params[1];
+		socket.emit('ballMoved', {success: true, message: 'The ball moved at ' + params[0] + 'x, ' + params[1] + 'y'})
+	}
+
+	@SubscribeMessage('setBall')
+	async setBall(socket: Socket, params: number): Promise<void> {
+		socket.emit('ballSet', {success: true, message: 'The ball has been set', backBall: this.game.ball})
 	}
 
 	@SubscribeMessage('playerScored')
@@ -187,7 +208,7 @@ export class GameGateway {
 	private async resetPos(): Promise<void> {
 		this.game.posLeft = 0;
 		this.game.posRight = 0;
-		this.game.ballX = 0;
-		this.game.ballY = 0;
+		this.game.ball.x = 0;
+		this.game.ball.y = 0;
 	}
 }
