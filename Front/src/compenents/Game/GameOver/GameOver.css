@@ -125,12 +125,12 @@
   }
 
   #img_gameover {
-	width: 500px;
-	height: 350px;
-	margin-top: 50px;
-	opacity: 0;
-	transform: translateY(50px);
-	transition: opacity 1s, transform 1s;
+			width: 500px;
+			height: 350px;
+			margin-top: 50px;
+			opacity: 0;
+			transform: translateY(50px);
+			transition: opacity 1s, transform 1s;
   }
 
   #bg-gameover.show-image #img_gameover {
@@ -141,7 +141,49 @@
 #button-cartman-sad {
 	bottom: 3vh;
 	right: 3vw;
-	width: 100px;
-	height: 100px;
+	width: 120px;
+	height: 120px;
 	position: absolute;
+	transform: translateY(50px) translateX(100%);
+  transition: opacity 1s, transform 1s;
+	animation: moveFromRight 1s ease;
+}
+
+#bg-gameover.show-image #button-cartman-sad {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+
+#garrison_again {
+	bottom: 3vh;
+	left: 3vw;
+	width: 170px;
+	height: 170px;
+	position: absolute;
+	transform: translateY(50px) translateX(-100%);
+  transition: opacity 1s, transform 1s;
+	animation: moveFromLeft 1s ease;
+}
+
+#bg-gameover.show-image #garrison_again {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+
+@keyframes moveFromLeft {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes moveFromRight {
+	from {
+		transform: translateX(+100%);
+	}
+	to {
+		transform: translateX(0);
+	}
 }

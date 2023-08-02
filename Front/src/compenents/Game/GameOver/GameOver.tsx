@@ -15,13 +15,21 @@ import ButtersSad from '../../../img/gameover/butters_sad.gif';
 import ButtonCartmanSad1 from "../../../img/gameover/button_cartman_sad_1.gif";
 import ButtonCartmanSad2 from "../../../img/gameover/button_cartman_sad_2.gif";
 
+import GarrisonAgain from "../../../img/gameover/garrison_again_1.gif"
+import GarrisonAgain2 from "../../../img/gameover/garrison_again_2.gif"
+
 export default function GameOver() {
 
 	const [showButtonCartman, setShowButtonCartman] = useState(false);
+	const [showGarrison, setShowGarrison] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
 	const navigate = useNavigate();
 
 	const leavePage = () => {
+		navigate(`/`);
+	}
+
+	const tryagain = () => {
 		navigate(`/gamemenu`);
 	}
 
@@ -33,10 +41,10 @@ export default function GameOver() {
 	  }, []);
 
 	  useEffect(() => {
-		const showButtonCartmanDelay = 4000;
+		const showGarrisonDelay = 4000;
 		setTimeout(() => {
-		  setShowButtonCartman(true);
-		}, showButtonCartmanDelay);
+		  setShowGarrison(true);
+		}, showGarrisonDelay);
 	  }, []);
 
 	  const handleMouseEnter = () => {
@@ -68,11 +76,21 @@ export default function GameOver() {
 		  onClick={leavePage}
         />
       )}
+			{showGarrison && (
+				<img
+					id="garrison_again"
+					alt="#"
+					src={isHovering ? GarrisonAgain2 : GarrisonAgain}
+					onMouseEnter={handleMouseEnter}
+					onMouseLeave={handleMouseLeave}
+					onClick={tryagain}
+				/>
+			)}
 	    <div className="span-container">
 	      <span className="span">GAME</span>
 	      <span className="span over">OVER</span>
 	    </div>
-	    <img id="img_gameover" alt="gameOver" src={ServietskySad} />
+	    <img id="img_gameover" alt="gameOver" src={CartmanSad} />
 	  </div>
 	);
 }
