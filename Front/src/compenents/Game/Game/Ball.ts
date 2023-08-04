@@ -7,16 +7,17 @@ export default class Ball {
     cDiv: any;
     p5: p5;
     pos: p5.Vector;
+    vel: p5.Vector;
     rad: number;
     speed: number;
     inertia: number;
     angle: number;
-    vel: any;
 
-    constructor(cDiv:any, p5:p5, x:number, y:number, rad:number, speed:number) {
+    constructor(cDiv:any, p5:p5, x:number, y:number, rad:number, speed:number, vx:number, vy:number) {
         this.cDiv = cDiv;
         this.p5 = p5;
-        this.pos = p5.createVector(this.cDiv.clientWidth / 2, (9 / 16) * this.cDiv.clientWidth / 2);
+        this.pos = p5.createVector(x, y);
+        this.vel = p5.createVector(vx, vy)
         this.rad = rad;
         this.speed = speed;
         this.inertia = 0;
@@ -26,14 +27,6 @@ export default class Ball {
     resetBall() {
         this.inertia = 0;
         this.pos = this.p5.createVector(this.cDiv.clientWidth / 2, (9 / 16) * this.cDiv.clientWidth / 2);
-        let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
-        this.vel = p5.Vector.fromAngle(angle, this.speed);
-        if (Math.random() < 0.5) {
-            this.vel.y *= -1;
-        }
-        if (Math.random() < 0.5) {
-            this.vel.x *= -1;
-        }
     }
     setRad(rad:number) {
         this.rad = rad;
@@ -93,7 +86,7 @@ export default class Ball {
     update() {
         this.pos.add(this.vel);
         if(this.pos.y + this.rad >= (9 / 16) * this.cDiv.clientWidth || this.pos.y - this.rad <= 0) {
-            this.pos.y = this.p5.constrain(this.pos.y, this.rad, (9 / 16) * this.cDiv.clientWidth - this.rad);
+            // this.pos.y = this.p5.constrain(this.pos.y, this.rad, (9 / 16) * this.cDiv.clientWidth - this.rad);
             this.vel.y *= -1;
         }
     }

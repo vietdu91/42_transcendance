@@ -20,6 +20,15 @@ import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
 // import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
+interface BallBack {
+	x: number;
+	y: number;
+	rad: number;
+	speed: number;
+	vx: number;
+	vy: number;
+}
+
 interface IGame {
 	gameId: number;
 	idLeft: number;
@@ -28,6 +37,7 @@ interface IGame {
 	scoreRight: number;
 	charLeft: string;
 	charRight: string;
+	ball: BallBack;
 };
 
 const initGame: IGame = {
@@ -38,6 +48,14 @@ const initGame: IGame = {
 	scoreRight: 0,
 	charLeft: '',
 	charRight: '',
+	ball: {
+		x: 0,
+		y: 0,
+		rad: 0,
+		speed: 0,
+		vx: 0,
+		vy: 0,
+	},
 }
 
 // const gameAtom = atom<IGame>(initGame);
@@ -146,6 +164,18 @@ export default function Game(): JSX.Element {
 
 		gameSocket.on('roundStarted', (response) => {
 			console.log(response.message);
+			// setGame((prevGame) => ({
+			// 	...prevGame,
+			// 	ball: {
+			// 		x: response.ball.x,
+			// 		y: response.ball.y,
+			// 		rad: response.ball.rad,
+			// 		speed: response.ball.speed,
+			// 		vx: response.ball.vx,
+			// 		vy: response.ball.vy,
+			// 	},
+			// }));
+			console.log(game.ball);
 		})
 
 		gameSocket.on('gameLeaved', (response) => {
@@ -159,11 +189,11 @@ export default function Game(): JSX.Element {
 		})
 
 		gameSocket.on('ballMoved', (response) => {
-			console.log(response.message);
+			// console.log(response.message);
 		})
 
 		gameSocket.on('ballSet', (response) => {
-			console.log(response.message);
+			// console.log(response.message);
 		})
 
 		if (!sketchRef.current) return;
@@ -175,6 +205,7 @@ export default function Game(): JSX.Element {
 				let cDiv: any, currentWidth: number, currentHeight: number;
 
 				p.setup = () => {
+					console.log(game.ball.x + " in setup")
 					cDiv = sketchRef.current!;
 					currentWidth = cDiv.clientWidth;
 					currentHeight = (9 / 16) * cDiv.clientWidth;
@@ -182,10 +213,15 @@ export default function Game(): JSX.Element {
 					canvas.parent(cDiv);
 					const player_width:number = cDiv.clientWidth / 75;
 					const player_height:number = (9 / 16) * cDiv.clientWidth / 5;
-					const ball_rad:number = (9 / 16) * cDiv.clientWidth / 75;
-					const ball_speed:number = cDiv.clientWidth / 150;
+					const ball_x:number = game.ball.x * window.innerWidth / 100;
+					const ball_y:number = game.ball.y * window.innerWidth / 100;
+					const ball_rad:number = game.ball.rad * window.innerWidth / 100;
+					const ball_speed:number = game.ball.speed * window.innerWidth / 100;
+					const ball_vx:number = game.ball.vx * window.innerWidth / 100;
+					const ball_vy:number = game.ball.vy * window.innerWidth / 100;
 
-					ball = new Ball(cDiv, p, cDiv.clientWidth / 2, (9 / 16) * cDiv.clientWidth / 2, ball_rad, ball_speed);
+					ball = new Ball(cDiv, p, ball_x, ball_y, ball_rad, ball_speed, ball_vx, ball_vy);
+					// console.log(cDiv.clientWidth + ', ' + window.innerWidth);
 					p1 = new Bar(cDiv, p, player_width, (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height, 0);
 					p2 = new Bar(cDiv, p, cDiv.clientWidth - (player_width * 2), (9 / 16) * cDiv.clientWidth / 2 - (player_height / 2), player_width, player_height, 0);
 				};
@@ -195,11 +231,12 @@ export default function Game(): JSX.Element {
 						return;
 					p.clear();
 					p.background('rgba(52, 52, 52, 0.75)');
+					
 					p1.moveBar("w", "s");
 
 					// jouer contre joueur humain
 					p2.moveBar("up", "down");
-
+					
 					let out = ball.out(p1, p2);
 					if (out) {
 						if (out === 'left') {
@@ -222,12 +259,12 @@ export default function Game(): JSX.Element {
 						}
 						
 					}
+					// gameSocket?.emit("moveBall", ball.pos.x, ball.pos.y);
 					ball.update();
 					ball.hit(p1, p2);
 					p1.show();
 					p2.show();
 					ball.show();
-					gameSocket?.emit("moveBall", ball.pos.x, ball.pos.y);
 				};
 
 				p.windowResized = () => {

@@ -5,6 +5,9 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 // import { subscribe } from 'diagnostics_channel';
+import p5 from 'p5';
+
+let PI = Math.PI;
 
 interface Player {
 	id: string;
@@ -123,10 +126,10 @@ export class GameGateway {
 		posLeft: 0,
 		posRight: 0,
 		ball: {
-			x: 0,
-			y: 0,
-			rad: 0,
-			speed: 0,
+			x: 100 / 2,
+			y: (9/16) * 100 / 2,
+			rad: (9/16) * 100 / 75,
+			speed: 100 / 150,
 			vx: 0,
 			vy: 0,
 		},
@@ -139,9 +142,18 @@ export class GameGateway {
 		this.game.idRight = params[2];
 		this.game.charLeft = params[3];
 		this.game.charRight = params[4];
-		this.game.ball.vx = params[5];
-		this.game.ball.vy = params[6];
-		socket.emit('roundStarted', { success: true, message: 'The round started' });
+
+        let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
+
+		this.game.ball.vx = this.game.ball.speed * Math.cos(angle);
+		if (Math.random() < 0.5) {
+			this.game.ball.vx *= -1;
+		}
+		this.game.ball.vy = this.game.ball.speed * Math.sin(angle);
+		if (Math.random() < 0.5) {
+            this.game.ball.vy *= -1;
+        }
+		socket.emit('roundStarted', { success: true, message: 'The round started with ' + this.game.ball, ball: this.game.ball});
 	}
 
 	@SubscribeMessage('leaveGame')
@@ -150,7 +162,7 @@ export class GameGateway {
 		const gameUpdate = await prisma.game.update({
 			where: { id: params[0] },
 			data: {
-				// winnerId: winnerId,
+				winnerId: params[1],
 				score: [params[2], params[3]],
 			},
 		});
@@ -173,9 +185,12 @@ export class GameGateway {
 
 	@SubscribeMessage('moveBall')
 	async handleMoveBall(socket: Socket, params: number): Promise<void> {
-		this.game.ball.x = params[0];
-		this.game.ball.y = params[1];
-		socket.emit('ballMoved', {success: true, message: 'The ball moved at ' + params[0] + 'x, ' + params[1] + 'y'})
+		this.game.ball.x += this.game.ball.vx;
+		this.game.ball.y += this.game.ball.vy;
+		if (this.game.ball.y + this.game.ball.rad >= 100 || this.game.ball.y - this.game.ball.rad <= 0) {
+			this.game.ball.vy *= -1;
+		}
+		socket.emit('ballMoved', {success: true, message: 'The ball moved'})
 	}
 
 	@SubscribeMessage('setBall')
@@ -208,7 +223,6 @@ export class GameGateway {
 	private async resetPos(): Promise<void> {
 		this.game.posLeft = 0;
 		this.game.posRight = 0;
-		this.game.ball.x = 0;
-		this.game.ball.y = 0;
+		// this.game.ball.pos = p5.createVector(100 / 2, (9/16) * 100 / 2);
 	}
 }

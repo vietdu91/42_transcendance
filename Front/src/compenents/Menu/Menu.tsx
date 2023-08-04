@@ -75,7 +75,7 @@ export default function App() {
         }
       catch (err) {
         console.log("app-front: error: ", err)
-        navigate("/connect")
+        // navigate("/connect")
       }
      } else {
        console.error('Access token not found in cookies.');

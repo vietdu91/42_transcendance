@@ -25,6 +25,7 @@ model Game {
   players         User[] @relation("players")
   playersId       Int[]
   score           Int[]
+  winnerId        Int?
   characters      String[]
   date            DateTime @default(now())
 }

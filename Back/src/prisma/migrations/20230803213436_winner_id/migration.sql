@@ -18,6 +18,7 @@ CREATE TABLE "Game" (
     "id" SERIAL NOT NULL,
     "playersId" INTEGER[],
     "score" INTEGER[],
+    "winnerId" INTEGER,
     "characters" TEXT[],
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
