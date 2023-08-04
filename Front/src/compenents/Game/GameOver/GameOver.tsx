@@ -90,7 +90,7 @@ export default function GameOver() {
 	      <span className="span">GAME</span>
 	      <span className="span over">OVER</span>
 	    </div>
-	    <img id="img_gameover" alt="gameOver" src={CartmanSad} />
+	    <img id="img_gameover" alt="gameOver" src={KennySad} />
 	  </div>
 	);
 }

@@ -1,16 +1,62 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
 import MentalBattle from "../../../img/backgrounds/mental_battle.jpg"
 import RedCross from "../../../img/buttons/red_cross.png"
 
+import Loading from "../../utils/Loading/Loading"
+
 import './GameMenu.css';
 
 
 function SpecMenu() {
+	
+	const [isBlinking, setIsBlinking] = useState(false);
+
+	useEffect(() => {
+
+		const interval = setInterval(() => {
+			setIsBlinking((prevIsBlinking) => !prevIsBlinking);
+		  }, 500); 
+		return () => clearInterval(interval);	}, []);
+
 	return (
 		<div id="spec-menu">
-			Spectate Game
+			<div id="spectate-bg">
+				<div id="spectate-font">
+					PARTIE(S) <br/> EN COURS
+				</div>
+				<div className={`cercle ${isBlinking ? 'visible' : 'hidden'}`}></div>
+				<div id="live">
+					LIVE
+				</div>
+			</div>
+		</div>
+	)
+}
+
+function History() {
+
+	return (
+		<div id="history-menu">
+			<div id="history-bg">
+				<div id="history-font">
+					DERNIERES PARTIES JOUEES
+				</div>
+			</div>
+		</div>
+	)
+}
+
+function Classement() {
+
+	return (
+		<div id="classement-menu">
+			<div id="classement-bg">
+				<div id="classement-font">
+					CLASSEMENT
+				</div>
+			</div>
 		</div>
 	)
 }
@@ -39,31 +85,36 @@ function PlayButton() {
 	)
 }
 
-
-function History() {
-	return (
-		<div id="history">
-			Historique recent
-		</div>
-	)
-}
-
-
 export default function GameMenu() {
-
 	const navigate = useNavigate();
-
+	const [isLoading, setIsLoading] = useState(true);
+  
+	useEffect(() => {
+	  const timer = setTimeout(() => {
+		setIsLoading(false);
+	  }, 1500);
+  
+	  return () => clearTimeout(timer);
+	}, []);
+  
 	const leavePage = () => {
-		navigate(`/`);
-	}
-
+	  navigate(`/`);
+	};
+  
 	return (
-		<div id="bg-game">
+	  <>
+		{isLoading ? (
+			<Loading />
+		) : (
+		  <div id="bg-game">
 			<img id="bg-game" src={MentalBattle} alt={'ButtersBlood'}></img>
 			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
 			<SpecMenu />
 			<PlayButton />
 			<History />
-		</div>
-	)
-}
+			<Classement />
+		  </div>
+		)}
+	  </>
+	);
+  }
