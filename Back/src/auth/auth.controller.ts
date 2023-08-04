@@ -14,8 +14,7 @@ export class AuthController {
     const userData = await this.AuthService.getUserData(accessToken);
     const user = await this.AuthService.apiConnexion(userData, response);
     //console.log("user api connexion  = " + user);
-    //response.redirect("http://localhost:3000/newprofile");
-    response.json({user: user, accessToken: accessToken});
+    response.redirect("http://localhost:3000/newprofile");
     console.log("redirect to http://localhost:3000/newprofile");
     //console.log("redirect to http://localhost:3000/newprofile");
     }

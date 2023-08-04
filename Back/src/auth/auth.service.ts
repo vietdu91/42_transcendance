@@ -39,8 +39,8 @@ export class AuthService {
                     where: { id: user.id },
                     data: { accessToken: newToken },
               });
-              //res.cookie('accessToken', newToken);
-              //res.cookie('id', user.id);
+              res.cookie('accessToken', newToken);
+              res.cookie('id', user.id);
               //res.json({user: user, accessToken: newToken});
               //res.redirect('http://localhost:3000/newprofile');
               return user;
@@ -56,8 +56,8 @@ export class AuthService {
                     where: { id: user.id },
                     data: { accessToken: newToken },
                   });
-                //res.cookie('accessToken', newToken);
-                //res.cookie('id', user.id);
+                res.cookie('accessToken', newToken);
+                res.cookie('id', user.id);
                 //res.redirect(process.env.URL_HOME_FRONT);
                 return user;
             }

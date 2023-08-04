@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 import axios from "axios";
 
@@ -9,6 +10,10 @@ import ButtersBlood from "../../../img/backgrounds/butters_blood.jpg"
 import './Matchmaking.css';
 
 export default function Matchmaking() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
 	
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [inQueue, setInQueue] = useState(false);
@@ -49,26 +54,12 @@ export default function Matchmaking() {
 	}, []);
 
 	const joinQueue = () => {
-		const cookies = document.cookie.split('; ');
-		let id:string = '';
-		
-		for (const cookie of cookies) {
-			const [name, value] = cookie.split('=');
-			if (name === 'id')  
-				id = value;
-		}
+		const id = Cookies.get('id');
 		socket?.emit('joinQueue', Number(id));
 	}
 	
 	const leaveQueue = () => {
-		const cookies = document.cookie.split('; ');
-		let id:string = '';
-		
-		for (const cookie of cookies) {
-			const [name, value] = cookie.split('=');
-			if (name === 'id')  
-				id = value;
-		}
+		const id = Cookies.get('id');
 		socket?.emit('leaveQueue', Number(id));
 		setInQueue(false);
 	  };

@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import Cookies from 'js-cookie';
+
 
 import './Profile.css'
 
@@ -12,6 +14,10 @@ export default function Profile() {
 	
 	const context = useContext(UserContext);
 	const navigate = useNavigate();
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
 
 	let [nick, getNick] = useState(0);
 	let [name, getName] = useState(0);

@@ -17,8 +17,14 @@ import KennyHouse from "../../img/backgrounds/kennyhouse.png"
 import ButtersBlood from "../../img/backgrounds/butters_blood.jpg"
 import ChefAid from "../../img/chef_aid.png"
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function App() {
+  const accessToken = Cookies.get('accessToken');
+  
+  if (!accessToken) {
+    window.location.href = "/connect";
+  }
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
   const [show, setShow] = React.useState(true);
@@ -45,31 +51,21 @@ export default function App() {
   };
 
   async function logout() {
-    const cookies = document.cookie.split('; ');
-    let accessToken;
-    let id;
-  
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name === 'accessToken') {
-        accessToken = value;
-      }
-      if (name === 'id') {  
-        id = value;
-      }
-    }
+    const accessToken = Cookies.get('accessToken');
+    console.log("LOGOUT"); 
+    console.log("accessToken === " + accessToken);
 
-    console.log('access token = ' + accessToken);
     if (accessToken) {
       try {
+        console.log("AXIOS")
           const res = await axios({
             url: "http://localhost:3001/Southtrans/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
-            data: { msg: "Hello World!" }
           })
           console.log("IM HERE BRO")
-          navigate("/connect")
+          window.location.href = "/connect";
+          navigate("/connect");
           console.log("NAVIGATED")
         }
       catch (err) {
@@ -81,24 +77,10 @@ export default function App() {
   }
 
   async function twoFa() {
+
+    const accessToken = Cookies.get('accessToken');
     console.log("2FA");
-    console.log(document.cookie);
-    const cookies = document.cookie.split('; ');
-    let accessToken;
-    let id;
-  
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name === 'accessToken') {
-        accessToken = value;
-      }
-      if (name === 'id') {  
-        id = value;
-      }
-    }
-    console.log("if id == " + id + " FIN");
     
-    console.log("if access == " + accessToken + " FIN");
     if (accessToken) 
     {
       try {

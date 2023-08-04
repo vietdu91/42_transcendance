@@ -133,14 +133,15 @@ export class AppController {
       if (!user) {
         throw new UnauthorizedException();
       }
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: { accessToken: null },
-      });
+      // await this.prisma.user.update({
+      //   where: { id: user.id },
+      //   data: { accessToken: null },
+      // });
       console.log("logout2");
       response.clearCookie('accessToken');
       response.clearCookie('id');
-      response.status(200).json("app-back: successfully logged out.")
+      //response.redirect("http://localhost:3000/connect");
+      console.log("Cookies cleared"); 
     }
     catch (err) {
       console.log("app-back: user logged fail.")

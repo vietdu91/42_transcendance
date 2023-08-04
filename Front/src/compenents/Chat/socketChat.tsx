@@ -4,12 +4,18 @@ import Message from '../Messages/message';
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
+import Cookies from 'js-cookie';
 
 import './Chat.css';
 
 function Chat() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
+
     //const [value, setValue] = useState("");
     //const [joined, setJoined] = useState(false);
     //const [room, setRoom] = useState("");
