@@ -13,6 +13,7 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 
+
 @Controller('Southtrans')
 export class AppController {
   constructor(
@@ -144,6 +145,30 @@ export class AppController {
     }
   }
 
+    @Post('savedMessage')
+    async createMessage(@Body() messageData: { content: string, authorId: number }, @Res() response: Response): Promise<void> {
+      try {
+        // Enregistrement du message dans la base de données
+      //  const res =  await this.prisma.message.create({
+      //     data: {
+      //       content: messageData.content,
+      //       author: { connect: { id: messageData.authorId } }, // Associer l'auteur (utilisateur)
+      //     },
+      //   });
+        const newMessage = await this.prisma.message.create({
+          data: {
+            content: messageData.content,
+            authorId: parseInt(messageData.authorId.toString()),
+          },
+        });
+        response.status(201).json({ message: 'Message saved' });
+      } catch (error) {
+        // Gérer les erreurs
+        console.log(error)
+        throw new Error('Unable to save message.');
+      }
+    }
+
   
   @Get('2fa/generate')
   @UseGuards(JwtAuthenticationGuard)
@@ -185,4 +210,6 @@ export class AppController {
       await this.userService.turnOnTwoFactorAuthentication(request.user.id);
     }
 }
+
+
 

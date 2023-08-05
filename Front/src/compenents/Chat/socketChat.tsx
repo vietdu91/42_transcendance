@@ -1,6 +1,5 @@
 import { useState , useEffect } from 'react';
 import io , { Socket } from "socket.io-client";
-import Message from '../Messages/message';
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
@@ -25,14 +24,24 @@ function Chat() {
     }
     
     useEffect(() => {
-        console.log('react api ==== ' + process.env.REACT_APP_API_ENDPOINT);
+        console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
         const apiEndpoint = 'http://localhost:3001';
         const newSocket = io(apiEndpoint);
         setSocket(newSocket);
     }, [setSocket]);
 
     const messageListener = (newMessage: string) => {
+        const authorId = Cookies.get('id'); 
+        
         setMessages(prevMessages => [...prevMessages, newMessage]);
+        
+       fetch('http://localhost:3001/Southtrans/savedMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: newMessage , authorId}),
+    });
     }
 
     useEffect(() => {

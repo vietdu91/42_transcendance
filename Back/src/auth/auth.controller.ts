@@ -22,7 +22,5 @@ export class AuthController {
       response.redirect("http://localhost:3000");
     else
       response.redirect("http://localhost:3000/newprofile");
-      
-    //console.log("redirect to http://localhost:3000/newprofile");
     }
 }
