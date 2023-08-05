@@ -1,3 +1,50 @@
-#image {
-	width: 100%;
+.page404 {
+  font-family: sans-serif;
+  background-color: #111111;
+}
+/* 
+a {
+  color: #ff5f2e;
+}
+
+a:hover {
+  color: #fcbe32;
+} */
+
+#switcher-tv {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.page404 {
+  text-align: center;
+}
+
+.screen {
+  background-color: #e1eef6;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  content: ' ';
+  overflow: hidden;
+  background: #16222a;
+  background: -webkit-linear-gradient(to left, #16222a, #3a6073);
+  background: linear-gradient(to left, #16222a, #3a6073);
+  background-size: cover;
+  /* background-image: url(https://cldup.com/gn3s3Fg75t.gif); */
+  color: #e1eef6;
+  transition: height 0.2s, width 0.2s, background 0.2s;
+}
+
+.turned-on {
+  width: 100vw;
+  height: 2px;
+  background: #ffffff;
 }

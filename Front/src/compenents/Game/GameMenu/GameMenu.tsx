@@ -106,8 +106,8 @@ export default function GameMenu() {
 		{isLoading ? (
 			<Loading />
 		) : (
-		  <div id="bg-game">
-			<img id="bg-game" src={MentalBattle} alt={'ButtersBlood'}></img>
+		  <div className="bg-game">
+			<img className="bg-game bg-mental" src={MentalBattle} alt={'ButtersBlood'}></img>
 			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
 			<SpecMenu />
 			<PlayButton />

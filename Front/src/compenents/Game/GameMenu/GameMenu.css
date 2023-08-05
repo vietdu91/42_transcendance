@@ -3,16 +3,18 @@
     src: url(../../../fonts/Black\ Lives\ Matter.otf)
 }
 
-#bg-game {
+.bg-game {
 	display: block;
-	width: 100vw;
-	height: 100vh;
 	object-fit: cover;
 	position: absolute;
-    background-color:#89cede;
-    opacity: 0.9;
-	left: 0;
+    background-color: white;
 	top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.bg-mental {
+    opacity: 0.5;
 }
 
 /********* SPECTATE ***********/
@@ -31,10 +33,10 @@
     position: absolute;
     background:red;
     border-radius: 50%;
-    width:15px;
-    height:15px;
-    top: 4.5vh;
-    right: 6.5vw;
+    width: 15px;
+    height: 15px;
+    top: 45px;
+    left: 45px;
 }
 
 .visible {
@@ -46,16 +48,17 @@
 }
 
 #live {
-    position: fixed;
+    position: absolute;
     color: red;
-    top: 52%;
-    right: 13%;
+    top: 39px;
+    left: 65px;
     font-family: black_live_matters;
     font-size: 150%;
 }
 
 #spectate-bg {
     display: grid;
+    position: relative;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
     grid-template-columns: max-content auto;
     grid-template-rows: auto max-content;

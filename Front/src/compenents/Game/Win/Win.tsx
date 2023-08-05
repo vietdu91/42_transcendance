@@ -55,14 +55,9 @@ export default function Win() {
 	  }, []);
 
     const handleMouseEnter = () => {
-      setIsHovering(true);function Star() {
-
-    return(
-      <div className="shooting_star"></div>
-    )
-}
-      };
-  
+      setIsHovering(true);
+    };
+    
       const handleMouseLeave = () => {
       setIsHovering(false);
       };
@@ -107,7 +102,7 @@ export default function Win() {
           src={isHovering ? RandyWin2 : RandyWin1}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-		  onClick={leavePage}
+		      onClick={leavePage}
         />
       )}
 			{showAgainRandy && (
@@ -121,7 +116,7 @@ export default function Win() {
 				/>
 			)}
       <div id="victoire">T'ES UN WINNER !</div>
-      <img id="img_win" alt="win" src={CartmanWin} />
+      <img id="img_win" alt="win" src={TimmyWin} />
     </div>
   )
 }
