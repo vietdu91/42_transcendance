@@ -52,19 +52,17 @@ export default function App() {
 
   async function logout() {
     const accessToken = Cookies.get('accessToken');
-    console.log("LOGOUT"); 
-    console.log("accessToken === " + accessToken);
-
     if (accessToken) {
       try {
-        console.log("AXIOS")
+        console.log("AXIOS LOGOUT ON")
           const res = await axios({
             url: "http://localhost:3001/Southtrans/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
           })
-          console.log("IM HERE BRO")
-          window.location.href = "/connect";
+          Cookies.remove('accessToken');
+          Cookies.remove('id');
+          console.log("COOKIES REMOVED")
           navigate("/connect");
           console.log("NAVIGATED")
         }
@@ -77,7 +75,6 @@ export default function App() {
   }
 
   async function twoFa() {
-
     const accessToken = Cookies.get('accessToken');
     console.log("2FA");
     

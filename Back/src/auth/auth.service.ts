@@ -24,6 +24,7 @@ export class AuthService {
     async apiConnexion(userData: any, res: Response): Promise<User> {
         try
         {
+            console.log("email === " + userData.email);
             var user = await this.prisma.user.findUnique({
                 where: { email: userData.email },
             });
@@ -41,8 +42,6 @@ export class AuthService {
               });
               res.cookie('accessToken', newToken);
               res.cookie('id', user.id);
-              //res.json({user: user, accessToken: newToken});
-              //res.redirect('http://localhost:3000/newprofile');
               return user;
             }
             else {
@@ -58,7 +57,6 @@ export class AuthService {
                   });
                 res.cookie('accessToken', newToken);
                 res.cookie('id', user.id);
-                //res.redirect(process.env.URL_HOME_FRONT);
                 return user;
             }
         }

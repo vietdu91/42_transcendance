@@ -128,20 +128,15 @@ export class AppController {
       const accessToken = request.headers.authorization?.split(' ')[1];
       console.log("Access token: " + accessToken);
       const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
-      //const expires = decodedJwtAccessToken.exp;
       const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
       if (!user) {
         throw new UnauthorizedException();
       }
-      // await this.prisma.user.update({
-      //   where: { id: user.id },
-      //   data: { accessToken: null },
-      // });
-      console.log("logout2");
-      response.clearCookie('accessToken');
-      response.clearCookie('id');
-      //response.redirect("http://localhost:3000/connect");
-      console.log("Cookies cleared"); 
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { accessToken: null },
+      });
+      response.status(200).json({ message: 'Déconnexion réussie' });
     }
     catch (err) {
       console.log("app-back: user logged fail.")
@@ -173,6 +168,7 @@ export class AppController {
     async turnOnTwoFactorAuthentication(@Req() request: RequestWithUser,
     @Body('twoFactorAuthenticationCode') twoFactorAuthenticationCode: string
     )  {
+   
       console.log("turnOnTwoFactorAuthenticationCode = " + twoFactorAuthenticationCode);
       const userId =request.user.id;
       const user = await this.userService.getUserById(request.user.id);
