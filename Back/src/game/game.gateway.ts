@@ -20,6 +20,7 @@ type Ball = {
 	y: number;
 	rad: number;
 	speed: number;
+	inertia: number;
 	vx: number;
 	vy: number;
 }
@@ -81,11 +82,11 @@ export class MatchmakingGateway {
 	}
 
 	private async createMatch(): Promise<void> {
-		if (this.queue.length >= 2) {
-		// if (this.queue.length >= 1) {
+		// if (this.queue.length >= 2) {
+		if (this.queue.length >= 1) {
 
 			const player1 = this.queue.shift();
-			const player2 = this.queue.shift();
+			// const player2 = this.queue.shift();
 
 			const prisma = new PrismaService();
 
@@ -96,12 +97,12 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player2.user.id}, // change player1 to player2
+							{id: player1.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
+					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
 					date: date,
 				}
 			});
@@ -113,7 +114,7 @@ export class MatchmakingGateway {
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
 				sockLeft: player1.id,
-				sockRight: player2.id, //change to player2
+				sockRight: player1.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
@@ -125,6 +126,7 @@ export class MatchmakingGateway {
 					y: (9/16) * 100 / 2, // a changer ((9/16) * divsize / 2)
 					rad: (9/16) * 100 / 75, // a changer ((9/16) * divsize / 75)
 					speed: (9/16) * 100 / 150, // a changer ((9 /16) * divsize / 150)
+					inertia: 0,
 					vx: 0,
 					vy: 0,
 				}
@@ -144,8 +146,8 @@ export class MatchmakingGateway {
 
 			this.games[gameIdIndex] = newGame;
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
-			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player1.user }); // change player1 to player2
+			// this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 
@@ -163,7 +165,6 @@ export class MatchmakingGateway {
 		if (Math.random() < 0.5) {
             actualGame.ball.vy *= -1;
         }
-		console.log(actualGame.posLeft, actualGame.posRight);
 		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball});
 	}
 
@@ -171,7 +172,7 @@ export class MatchmakingGateway {
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 
-		const speed = (9/16) * 100 / 80;
+		const speed:number = (9/16) * 100 / 80;
 
 		if (params[1] === actualGame.idLeft) {
 			params[2] === 1 ? actualGame.posLeft -= speed : actualGame.posLeft += speed;
@@ -190,6 +191,94 @@ export class MatchmakingGateway {
 
 		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockRight).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
+	}
+
+	@SubscribeMessage('moveBall')
+	async handleMoveBall(socket: Socket, roomId: number) : Promise<void> {
+		const actualGame:Game = this.games[roomId];
+
+		actualGame.ball.x += actualGame.ball.vx;
+		actualGame.ball.y += actualGame.ball.vy;
+		if (actualGame.ball.y + actualGame.ball.rad >= (9/16) * 100 || actualGame.ball.y - actualGame.ball.rad <= 0)
+			actualGame.ball.vy *= -1;
+		
+		this.ballHit(actualGame);
+
+		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy});
+		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy});
+	}
+
+	private async ballHit(actualGame: Game) {
+		const ball:Ball = actualGame.ball;
+
+		// c'est le player gauche
+
+		if (((100 / 75) - ball.rad) < ball.x && ball.x < (100 / 75) + (100 / 75) + ball.rad) {
+			if ((actualGame.posLeft - ball.rad) < ball.y && ball.y < (actualGame.posLeft + ((9/16) * 100 / 5) + ball.rad)) {
+				
+				let centerX:number = 100 / 75 + (100 / 75) / 2;
+				let centerY:number = actualGame.posLeft + ((9/16) * 100 / 5) / 2;
+			
+				actualGame.ball.vx = actualGame.ball.x - centerX;
+				actualGame.ball.vy = actualGame.ball.y - centerY;
+				let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
+				if (magnitude > 10) {
+					actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
+					actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
+				}
+				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+				if (actualGame.ball.inertia < 4)
+					actualGame.ball.inertia += (9 / 16) * 0.05;
+				if (angle > -PI/2 && angle < PI/2) {
+					actualGame.ball.vx = Math.cos(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+					actualGame.ball.vy = Math.sin(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				} else {
+					const x:number = actualGame.ball.vx;
+					const y:number = actualGame.ball.vy;
+					actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
+					actualGame.ball.vx = x * Math.sin(PI) + y * Math.cos(PI);
+					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+					actualGame.ball.vx = Math.cos(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+					actualGame.ball.vy = Math.sin(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				}
+			}
+		}
+
+		if (((100 - ((100 / 75) * 2)) - ball.rad) <= ball.x && ball.x <= (100 - ((100 / 75) * 2)) + (100 / 75) + ball.rad) {
+			if ((actualGame.posRight - ball.rad) <= ball.y && ball.y <= (actualGame.posRight + ((9/16) * 100 / 5) + ball.rad)) {
+			
+				console.log("coucou");
+				actualGame.ball.vx *= -1;
+
+				// PROBLEME ICI JSP POURQUOI (player Right)
+
+				// let centerX:number = (100 - ((100 / 75) * 2)) + (100 / 75) / 2;
+				// let centerY:number = actualGame.posRight + ((9/16) * 100 / 5) / 2;
+			
+				// actualGame.ball.vx = actualGame.ball.x - centerX;
+				// actualGame.ball.vy = actualGame.ball.y - centerY;
+				// let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
+				// if (magnitude > 10) { //limit
+				// 	actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
+				// 	actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
+				// }
+				// let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
+				// if (actualGame.ball.inertia < 8)
+				// 	actualGame.ball.inertia += (9 / 16) * 0.5;
+				// if (angle > -PI/2 && angle < PI/2) {
+				// 	actualGame.ball.vx = Math.cos(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				// 	actualGame.ball.vy = Math.sin(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				// } else {
+				// 	const x:number = actualGame.ball.vx;
+				// 	const y:number = actualGame.ball.vy;
+				// 	actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
+				// 	actualGame.ball.vx = x * Math.sin(PI) + y * Math.cos(PI);
+				// 	let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+				// 	actualGame.ball.vx = Math.cos(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				// 	actualGame.ball.vy = Math.sin(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+				// }
+			}
+		}
 	}
 }
 

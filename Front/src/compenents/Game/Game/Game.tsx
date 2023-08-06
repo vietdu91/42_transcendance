@@ -70,7 +70,6 @@ const initGame: Game = {
 }
 
 export default function Game(): JSX.Element {
-	const [started, setStarted] = useState(false);
 	const game = useRef(initGame);
 	const socket = useContext(GameContext);
 	const location = useLocation();
@@ -145,7 +144,6 @@ export default function Game(): JSX.Element {
 				// }));
 				game.current = updatedGame;
 				console.log(game);
-				setStarted(true);
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -154,6 +152,22 @@ export default function Game(): JSX.Element {
 				...game.current,
 				posLeft: response.posLeft / 100 * window.innerWidth * 70 / 100,
 				posRight: response.posRight / 100 * window.innerWidth * 70 / 100,
+			}
+			game.current = updatedGame;
+		})
+
+		socket.on("ballMoved", (response) => {
+			// console.log("message === " + response.message);
+			const updatedGame:Game = {
+				...game.current,
+				ball: {
+					x: response.ballX / 100 * window.innerWidth * 70 / 100,
+					y: response.ballY / 100 * window.innerWidth * 70 / 100,
+					rad: game.current.ball.rad,
+					speed: game.current.ball.speed,
+					vx: response.vx / 100 * window.innerWidth * 70 / 100,
+					vy: response.vy / 100 * window.innerWidth * 70 / 100,
+				}
 			}
 			game.current = updatedGame;
 		})
@@ -183,6 +197,8 @@ export default function Game(): JSX.Element {
 					if (p.keyIsDown(83))
 						socket?.emit("movePlayer", roomId, id, 0);
 
+					socket?.emit("moveBall", roomId);
+
 					p.fill(255);
         			p.noStroke();
         			p.ellipse(game.current.ball.x, game.current.ball.y, game.current.ball.rad * 2);
@@ -211,7 +227,7 @@ export default function Game(): JSX.Element {
 						},
 					}
 					game.current = updatedGame;
-					p.draw();
+					// p.draw();
 				};
       		});
     	}
