@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { useContext } from 'react'
+import { GameContext, gameSocket } from './compenents/utils/GameContext';
 
 // CSS
 import './App.css';
@@ -68,33 +69,10 @@ const CharacterSelectionWithMusic = () => (
 
 );
 
-export interface User {
-	id:number;
-	setId:React.Dispatch<React.SetStateAction<number>>;
-	email:string;
-	setEmail:React.Dispatch<React.SetStateAction<string>>;
-	name:string;
-	setName:React.Dispatch<React.SetStateAction<string>>;
-	twoFA:boolean;
-	setTwoFA:React.Dispatch<React.SetStateAction<boolean>>;
-	nick:string;
-	setNick:React.Dispatch<React.SetStateAction<string>>;
-	age:number;
-	setAge:React.Dispatch<React.SetStateAction<number>>;
-}
-
-export const UserContext = createContext<User>({} as User);
-
 export default function App() {
-	const [id, setId] = useState(-1);
-	const [email, setEmail] = useState('');
-	const [name, setName] = useState('');
-	const [twoFA, setTwoFA] = useState(false);
-	const [nick, setNick] = useState('');
-	const [age, setAge] = useState(-1);
-
+	
 	return (
-		<UserContext.Provider value={{id, setId, email, setEmail, name, setName, twoFA, setTwoFA, nick, setNick, age, setAge}}>
+		<GameContext.Provider value={gameSocket}>
 			<div className="App">
 				<Routes>
 				<Route path="/test" element={<Test />}/>
@@ -115,7 +93,7 @@ export default function App() {
 				<Route path="/404" element={<PageNotFound />}/>
 				</Routes>
 			</div>
-		</UserContext.Provider>
+		</GameContext.Provider>
 	)
 }
 //<Route path="*" element={<Navigate to="/404" />}/>

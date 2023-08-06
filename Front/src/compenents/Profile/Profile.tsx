@@ -4,7 +4,6 @@ import axios from 'axios'
 
 import './Profile.css'
 
-import { User, UserContext } from '../../App'
 import Bar from "../../img/backgrounds/skeeters-bar.jpg"
 
 

@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+import { GameContext } from '../../utils/GameContext';
 
 import axios from "axios";
 
@@ -9,42 +10,38 @@ import ButtersBlood from "../../../img/backgrounds/butters_blood.jpg"
 import './Matchmaking.css';
 
 export default function Matchmaking() {
-	
-	const [socket, setSocket] = useState<Socket | null>(null);
+
+	const socket = useContext(GameContext);
 	const [inQueue, setInQueue] = useState(false);
 	const navigate = useNavigate();
 	
 	useEffect(() => {
-		const newSocket = io("http://localhost:3001");
 		
-		setSocket(newSocket);
-		
-		newSocket.on('connect', () => {
+		socket.on('connect', () => {
 			console.log('Connection established');
 		});
 	
-		newSocket.on('queueJoined', (response) => {
+		socket.on('queueJoined', (response) => {
 			console.log(response.message);
 			setInQueue(true);
 		})
 
-		newSocket.on('alreadyJoined', (response) => {
+		socket.on('alreadyJoined', (response) => {
 			console.log(response.message);
 			setInQueue(true);
 		})
 	
-		newSocket.on('matchFound',(response) => {
+		socket.on('matchFound',(response) => {
 			handleMatchFound(response.roomId);
 		}) 
 	
-		newSocket.on('disconnect', () => {
+		socket.on('disconnect', () => {
 				console.log('Disconnected');
 		})
 		
 		return () => {
-			newSocket.disconnect();
 			if (inQueue)
-			leaveQueue();
+				leaveQueue();
 		};
 	}, []);
 

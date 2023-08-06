@@ -25,11 +25,13 @@ type Ball = {
 }
 
 type Game = {
-	gameName: string;
+	gameRoom: string;
 	gameId: number;
 	isActive: boolean;
 	idLeft: number;
 	idRight: number;
+	sockLeft: string;
+	sockRight: string;
 	scoreLeft: number;
 	scoreRight: number;
 	charLeft: string;
@@ -80,6 +82,7 @@ export class MatchmakingGateway {
 
 	private async createMatch(): Promise<void> {
 		if (this.queue.length >= 2) {
+		// if (this.queue.length >= 1) {
 
 			const player1 = this.queue.shift();
 			const player2 = this.queue.shift();
@@ -93,28 +96,30 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player2.user.id},
+							{id: player2.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player2.user.id],
+					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player2.user.character],
+					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
 					date: date,
 				}
 			});
 		
 			let newGame: Game = {
-				gameName: v4(),
+				gameRoom: v4(),
 				gameId: game.id,
 				isActive: true,
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
+				sockLeft: player1.id,
+				sockRight: player2.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
 				charRight: game.characters[1],
-				posLeft: 0, // a changer 
-				posRight: 0, // a changer 
+				posLeft: (9/16) * 100 / 2, // a changer 
+				posRight: (9/16) * 100 / 2, // a changer 
 				ball: {
 					x: 100 / 2, // a changer (divsize / 2)
 					y: (9/16) * 100 / 2, // a changer ((9/16) * divsize / 2)
@@ -139,7 +144,7 @@ export class MatchmakingGateway {
 
 			this.games[gameIdIndex] = newGame;
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
 			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
@@ -158,7 +163,33 @@ export class MatchmakingGateway {
 		if (Math.random() < 0.5) {
             actualGame.ball.vy *= -1;
         }
-		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", ball: actualGame.ball});
+		console.log(actualGame.posLeft, actualGame.posRight);
+		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball});
+	}
+
+	@SubscribeMessage('movePlayer')
+	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
+		const actualGame:Game = this.games[params[0]];
+
+		const speed = (9/16) * 100 / 80;
+
+		if (params[1] === actualGame.idLeft) {
+			params[2] === 1 ? actualGame.posLeft -= speed : actualGame.posLeft += speed;
+			if (actualGame.posLeft < (9/16) * 100 / 150)
+				actualGame.posLeft = (9/16) * 100 / 150;
+			else if (actualGame.posLeft > (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5))
+				actualGame.posLeft = (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5);
+		}
+		if (params[1] === actualGame.idRight) {
+			params[2] === 1 ? actualGame.posRight -= speed : actualGame.posRight += speed;
+			if (actualGame.posRight < (9/16) * 100 / 150)
+				actualGame.posRight = (9/16) * 100 / 150;
+			else if (actualGame.posRight > (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5))
+				actualGame.posRight = (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5);
+		}
+
+		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
+		this.server.to(actualGame.sockRight).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 	}
 }
 
