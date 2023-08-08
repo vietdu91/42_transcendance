@@ -15,9 +15,10 @@ export default function NewProfile() {
 
 	const navigate = useNavigate();
 
-	let [name, setName] = useState(0);
-	let [nick, setNick] = useState(0);
+	let [name, setName] = useState("");
+	let [nick, setNick] = useState("");
 	let [age, setAge] = useState(0);
+
 	// axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
 	// 	.then(response => {
 	// 		getNick(response.data.nick);

@@ -4,15 +4,21 @@ import { User, Prisma } from '@prisma/client';
  
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService
-  ) {}
+  constructor(private prisma: PrismaService) {}
+
+  findOne(id: string){
+    const user = this.prisma.user.findUnique({
+      where: {id: parseInt(id.toString())}
+    });
+    return user;
+  }
 
   async getUserById(userId: number): Promise<User | null> {
     // console.log('getUserById: userId =', userId);
     const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) }
     });
+    // console.log("Mon ID :" + userId);
     // console.log('getUserById: user =', user);
     return user;
   }

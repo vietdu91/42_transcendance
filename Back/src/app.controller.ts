@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors, Param} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -57,7 +57,7 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    // console.log("nick = " + user.nickname)
+    console.log("nick = " + user.nickname)
     response.json({
       id: user.id,
       email: user.email,
@@ -67,6 +67,12 @@ export class AppController {
       age: user.age,
       character: user.character,
     });
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string){
+    console.log("Mon id:", id);
+    return this.userService.findOne(id);
   }
 
   @Post('setNickname')
@@ -218,15 +224,19 @@ export class AppController {
 */
 
 @Post('online')
+@UseGuards(JwtAuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async online(@UploadedFile() file: Express.Multer.File) {
+  async online(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
+    const accessToken = request.headers.authorization?.split(' ')[1];
+    console.log("Access token: " + accessToken);
+    const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
     return await this.cloudinary
       .uploadImage(file)
       .then((data) => {
-        return {
-          statusCode: 200,
-          data: data.secure_url,
-        };
+        return this.prisma.user.update({
+          where: { id: decodedJwtAccessToken.sub },
+          data: { pfp_url: data.secure_url },
+        });
       })
       .catch((err) => {
         return {

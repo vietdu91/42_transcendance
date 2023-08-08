@@ -13,9 +13,10 @@ export default function Profile() {
 	const context = useContext(UserContext);
 	const navigate = useNavigate();
 
-	let [nick, getNick] = useState(0);
-	let [name, getName] = useState(0);
+	let [nick, getNick] = useState("");
+	let [name, getName] = useState("");
 	let [age, getAge] = useState(0);
+	let [pfp_url, getPfpUrl] = useState("");
 
 	useEffect (() => {
 		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
@@ -23,6 +24,7 @@ export default function Profile() {
 			getNick(response.data.nick);
 			getName(response.data.name);
 			getAge(response.data.age);
+			getPfpUrl(response.data.pfp_url)
 		}).catch(error => {
 			console.error('Probleme');
 		});
@@ -61,6 +63,7 @@ export default function Profile() {
 						<div>	Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>
+								PFP: ({pfp_url})
 						</div>
 				</div>
 					<p>CONTENT</p>
