@@ -164,12 +164,35 @@ export default function Game(): JSX.Element {
 					x: response.ballX / 100 * window.innerWidth * 70 / 100,
 					y: response.ballY / 100 * window.innerWidth * 70 / 100,
 					rad: game.current.ball.rad,
-					speed: game.current.ball.speed,
+					speed: response.speed / 100 * window.innerWidth * 70 / 100,
 					vx: response.vx / 100 * window.innerWidth * 70 / 100,
 					vy: response.vy / 100 * window.innerWidth * 70 / 100,
 				}
 			}
 			game.current = updatedGame;
+		})
+
+		socket.on("newPoint", (response) => {
+			console.log(response.message);
+			socket?.emit("roundStart", roomId);
+		})
+
+		socket.on("endGame", (response) => {
+			console.log(response.message);
+			const cookies = document.cookie.split('; ');
+			let id:number = -1;
+			
+			for (const cookie of cookies) {
+				const [name, value] = cookie.split('=');
+				if (name === 'id')  
+					id = Number(value);
+			}
+			if (id == response.winnerId)
+				navigate('/')
+				// navigate('/win')
+			else
+				navigate('/profile')
+				// navigate('/gameover')
 		})
 
 		socket?.emit("roundStart", roomId);

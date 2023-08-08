@@ -26,7 +26,6 @@ type Ball = {
 }
 
 type Game = {
-	gameRoom: string;
 	gameId: number;
 	isActive: boolean;
 	idLeft: number;
@@ -108,7 +107,6 @@ export class MatchmakingGateway {
 			});
 		
 			let newGame: Game = {
-				gameRoom: v4(),
 				gameId: game.id,
 				isActive: true,
 				idLeft: game.playersId[0],
@@ -119,13 +117,13 @@ export class MatchmakingGateway {
 				scoreRight: 0,
 				charLeft: game.characters[0],
 				charRight: game.characters[1],
-				posLeft: (9/16) * 100 / 2, // a changer 
-				posRight: (9/16) * 100 / 2, // a changer 
+				posLeft: (9/16) * 100 / 2,
+				posRight: (9/16) * 100 / 2,
 				ball: {
-					x: 100 / 2, // a changer (divsize / 2)
-					y: (9/16) * 100 / 2, // a changer ((9/16) * divsize / 2)
-					rad: (9/16) * 100 / 75, // a changer ((9/16) * divsize / 75)
-					speed: (9/16) * 100 / 150, // a changer ((9 /16) * divsize / 150)
+					x: 100 / 2,
+					y: (9/16) * 100 / 2,
+					rad: (9/16) * 100 / 75,
+					speed: (9/16) * 100 / 150,
 					inertia: 0,
 					vx: 0,
 					vy: 0,
@@ -204,18 +202,63 @@ export class MatchmakingGateway {
 		
 		this.ballHit(actualGame);
 
-		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy});
-		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy});
+		if (actualGame.ball.x > 100 + actualGame.ball.rad || actualGame.ball.x < -actualGame.ball.rad) {
+			if (actualGame.ball.x > 100 + actualGame.ball.rad)
+				actualGame.scoreLeft++;
+			else
+				actualGame.scoreRight++;
+			this.games[roomId] = {
+				...actualGame,
+				scoreLeft: actualGame.scoreLeft,
+				scoreRight: actualGame.scoreRight,
+				posLeft: (9/16) * 100 / 2,
+				posRight: (9/16) * 100 / 2,
+				ball: {
+					x: 100 / 2,
+					y: (9/16) * 100 / 2,
+					rad: (9/16) * 100 / 75,
+					speed: (9/16) * 100 / 150,
+					inertia: 0,
+					vx: 0,
+					vy: 0,
+				}
+			}
+			if (actualGame.scoreLeft >= 2 || actualGame.scoreRight >= 2) {
+				const prisma = new PrismaService();
+				let winnerId:number;
+				
+				if (actualGame.scoreLeft >= 2)
+					winnerId = actualGame.idLeft;
+				else
+					winnerId = actualGame.idRight;
+				
+				actualGame.isActive = false;
+
+				const game = await prisma.game.update({
+					where: {id: actualGame.gameId},
+					data: {
+						score: [actualGame.scoreLeft, actualGame.scoreRight],
+						winnerId: winnerId,
+					}
+				});
+
+				this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+			}
+			this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
+			this.server.to(actualGame.sockRight).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
+		}
+
+		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
+		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 	}
 
 	private async ballHit(actualGame: Game) {
 		const ball:Ball = actualGame.ball;
 
-		// c'est le player gauche
-
 		if (((100 / 75) - ball.rad) < ball.x && ball.x < (100 / 75) + (100 / 75) + ball.rad) {
 			if ((actualGame.posLeft - ball.rad) < ball.y && ball.y < (actualGame.posLeft + ((9/16) * 100 / 5) + ball.rad)) {
-				
+
 				let centerX:number = 100 / 75 + (100 / 75) / 2;
 				let centerY:number = actualGame.posLeft + ((9/16) * 100 / 5) / 2;
 			
@@ -228,55 +271,50 @@ export class MatchmakingGateway {
 				}
 				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
 				if (actualGame.ball.inertia < 4)
-					actualGame.ball.inertia += (9 / 16) * 0.05;
-				if (angle > -PI/2 && angle < PI/2) {
-					actualGame.ball.vx = Math.cos(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-					actualGame.ball.vy = Math.sin(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+					actualGame.ball.inertia += (9 / 16) * 0.1;
+				if (angle > -(PI/2) && angle < (PI/2)) {
+					actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 				} else {
 					const x:number = actualGame.ball.vx;
 					const y:number = actualGame.ball.vy;
 					actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
-					actualGame.ball.vx = x * Math.sin(PI) + y * Math.cos(PI);
+					actualGame.ball.vy = x * Math.sin(PI) + y * Math.cos(PI);
 					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
-					actualGame.ball.vx = Math.cos(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-					actualGame.ball.vy = Math.sin(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
+					actualGame.ball.vx = Math.cos(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					actualGame.ball.vy = Math.sin(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 				}
 			}
 		}
 
 		if (((100 - ((100 / 75) * 2)) - ball.rad) <= ball.x && ball.x <= (100 - ((100 / 75) * 2)) + (100 / 75) + ball.rad) {
 			if ((actualGame.posRight - ball.rad) <= ball.y && ball.y <= (actualGame.posRight + ((9/16) * 100 / 5) + ball.rad)) {
-			
-				console.log("coucou");
-				actualGame.ball.vx *= -1;
 
-				// PROBLEME ICI JSP POURQUOI (player Right)
-
-				// let centerX:number = (100 - ((100 / 75) * 2)) + (100 / 75) / 2;
-				// let centerY:number = actualGame.posRight + ((9/16) * 100 / 5) / 2;
+				let centerX:number = (100 - ((100 / 75) * 2)) + (100 / 75) / 2;
+				let centerY:number = actualGame.posRight + ((9/16) * 100 / 5) / 2;
 			
-				// actualGame.ball.vx = actualGame.ball.x - centerX;
-				// actualGame.ball.vy = actualGame.ball.y - centerY;
-				// let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
-				// if (magnitude > 10) { //limit
-				// 	actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
-				// 	actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
-				// }
-				// let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
-				// if (actualGame.ball.inertia < 8)
-				// 	actualGame.ball.inertia += (9 / 16) * 0.5;
-				// if (angle > -PI/2 && angle < PI/2) {
-				// 	actualGame.ball.vx = Math.cos(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-				// 	actualGame.ball.vy = Math.sin(angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-				// } else {
-				// 	const x:number = actualGame.ball.vx;
-				// 	const y:number = actualGame.ball.vy;
-				// 	actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
-				// 	actualGame.ball.vx = x * Math.sin(PI) + y * Math.cos(PI);
-				// 	let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
-				// 	actualGame.ball.vx = Math.cos(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-				// 	actualGame.ball.vy = Math.sin(PI + angle / 2) * actualGame.ball.speed + actualGame.ball.inertia;
-				// }
+				actualGame.ball.vx = actualGame.ball.x - centerX;
+				actualGame.ball.vy = actualGame.ball.y - centerY;
+				let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
+				if (magnitude > 10) { //limit
+					actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
+					actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
+				}
+				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
+				if (actualGame.ball.inertia < 4)
+					actualGame.ball.inertia += (9 / 16) * 0.1;
+				if (angle > -PI/2 && angle < PI/2) {
+					actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+				} else {
+					const x:number = actualGame.ball.vx;
+					const y:number = actualGame.ball.vy;
+					actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
+					actualGame.ball.vy = x * Math.sin(PI) + y * Math.cos(PI);
+					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+					actualGame.ball.vx = Math.cos(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					actualGame.ball.vy = Math.sin(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+				}
 			}
 		}
 	}
