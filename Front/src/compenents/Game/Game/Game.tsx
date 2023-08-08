@@ -1,12 +1,6 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import io, { Socket } from "socket.io-client";
-import axios from 'axios';
 import p5 from 'p5';
-import { useAtom, atom } from 'jotai';
-// import { atomWithStorage } from 'jotai/utils';
-// import Ball from "./Ball";
-// import Bar from "./Bar";
 import { GameContext } from '../../utils/GameContext';
 
 // CSS
@@ -21,7 +15,7 @@ import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
 // import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 
-interface Ball {
+interface IBall {
 	x: number;
 	y: number;
 	rad: number;
@@ -30,7 +24,7 @@ interface Ball {
 	vy: number;
 }
 
-interface Game {
+interface IGame {
 	gameId: number;
 	isActive: boolean;
 	idLeft: number;
@@ -43,10 +37,10 @@ interface Game {
 	posRight: number;
 	wPlayer: number;
 	hPlayer: number;
-	ball: Ball;
+	ball: IBall;
 };
 
-const initGame: Game = {
+const initGame: IGame = {
 	gameId: -1,
 	isActive: false,
 	idLeft: -1,
@@ -122,7 +116,7 @@ export default function Game(): JSX.Element {
 			console.log("message === " + response.message);
 
 			let player_height: number = (9/16) * window.innerWidth * 70 / 100 / 5;
-			const updatedGame:Game = {
+			const updatedGame:IGame = {
 				...game.current,
 				gameId: response.game.gameId,
 				charLeft: response.game.charLeft,
@@ -138,17 +132,13 @@ export default function Game(): JSX.Element {
 					vy: response.ball.vy / 100 * window.innerWidth * 70 / 100,
 				},
 			}
-			// setGame((prevGame) => ({
-				// 	...prevGame,
-				
-				// }));
 				game.current = updatedGame;
 				console.log(game);
 		})
 		
 		socket.on('playerMoved', (response) => {
 			console.log("message === " + response.message);
-			const updatedGame:Game = {
+			const updatedGame:IGame = {
 				...game.current,
 				posLeft: response.posLeft / 100 * window.innerWidth * 70 / 100,
 				posRight: response.posRight / 100 * window.innerWidth * 70 / 100,
@@ -157,8 +147,7 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("ballMoved", (response) => {
-			// console.log("message === " + response.message);
-			const updatedGame:Game = {
+			const updatedGame:IGame = {
 				...game.current,
 				ball: {
 					x: response.ballX / 100 * window.innerWidth * 70 / 100,
@@ -187,7 +176,7 @@ export default function Game(): JSX.Element {
 				if (name === 'id')  
 					id = Number(value);
 			}
-			if (id == response.winnerId)
+			if (id === response.winnerId)
 				navigate('/')
 				// navigate('/win')
 			else
@@ -208,7 +197,6 @@ export default function Game(): JSX.Element {
 					currentHeight = (9 / 16) * cDiv.clientWidth;
 					canvas = p.createCanvas(cDiv.clientWidth, (9 / 16) * cDiv.clientWidth);
 					canvas.parent(cDiv);
-					const player_width:number = cDiv.clientWidth / 75;
 				};
 
 				p.draw = () => {
@@ -219,7 +207,6 @@ export default function Game(): JSX.Element {
 						socket?.emit("movePlayer", roomId, id, 1);
 					if (p.keyIsDown(83))
 						socket?.emit("movePlayer", roomId, id, 0);
-
 					socket?.emit("moveBall", roomId);
 
 					p.fill(255);
@@ -236,7 +223,7 @@ export default function Game(): JSX.Element {
 					currentWidth = cDiv.clientWidth;
 					currentHeight = (9 / 16) * cDiv.clientWidth;
 					p.resizeCanvas(cDiv.clientWidth, (9 / 16) * cDiv.clientWidth);
-					const updatedGame:Game = {
+					const updatedGame:IGame = {
 						...game.current,
 						posLeft: (game.current.posLeft * (9/16) * cDiv.clientWidth / oldHeight),
 						posRight: (game.current.posRight * (9/16) * cDiv.clientWidth / oldHeight),
@@ -250,16 +237,14 @@ export default function Game(): JSX.Element {
 						},
 					}
 					game.current = updatedGame;
-					// p.draw();
 				};
       		});
     	}
 
 		return () => {
-			// Clean up the p5 sketch when the component unmounts
 			p5SketchRef.current?.remove();
 		};
-	}, [sketchRef]);
+	}, [sketchRef, navigate, roomId, socket]);
 
 	return (
 		<>
