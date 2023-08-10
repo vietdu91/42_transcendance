@@ -31,10 +31,10 @@ model Game {
 }
 
 model Message {
-  id        Int?      @id @default(autoincrement())
-  content   String?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id        Int     @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
   author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
   authorId  Int?
 }

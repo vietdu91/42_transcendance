@@ -12,8 +12,7 @@ config();
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
 const client_id = process.env.CLIENT_ID; // Remplacer par le client_id de votre application
 const clientSecret = process.env.CLIENT_SECRET; // Remplacer par le client_secret de votre application
-const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'URL de redirection de votre application
-
+const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirection de votre application
 
 @Injectable()
 export class AuthService {

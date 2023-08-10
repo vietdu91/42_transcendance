@@ -24,7 +24,7 @@ function Chat() {
     }
     
     useEffect(() => {
-        console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
+       // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
         const apiEndpoint = 'http://localhost:3001';
         const newSocket = io(apiEndpoint);
         setSocket(newSocket);
