@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import p5 from 'p5';
 import { GameContext } from '../../utils/GameContext';
@@ -66,6 +66,8 @@ const initGame: IGame = {
 export default function Game(): JSX.Element {
 	const game = useRef(initGame);
 	const socket = useContext(GameContext);
+	const [scoreLeft, setScoreLeft] = useState(0);
+	const [scoreRight, setScoreRight] = useState(0);
 	const location = useLocation();
 	const { roomId } = location.state;
 	const navigate = useNavigate();
@@ -119,6 +121,8 @@ export default function Game(): JSX.Element {
 			const updatedGame:IGame = {
 				...game.current,
 				gameId: response.game.gameId,
+				scoreLeft: response.game.scoreLeft,
+				scoreRight: response.game.scoreRight,
 				charLeft: response.game.charLeft,
 				charRight: response.game.charRight,
 				posLeft: (response.game.posLeft / 100 * window.innerWidth * 70 / 100) - (player_height / 2),
@@ -132,8 +136,10 @@ export default function Game(): JSX.Element {
 					vy: response.ball.vy / 100 * window.innerWidth * 70 / 100,
 				},
 			}
-				game.current = updatedGame;
-				console.log(game);
+			game.current = updatedGame;
+			console.log(game);
+			setScoreLeft(game.current.scoreLeft);
+			setScoreRight(game.current.scoreRight);
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -178,10 +184,25 @@ export default function Game(): JSX.Element {
 			}
 			if (id === response.winnerId)
 				navigate('/')
-				// navigate('/win')
+				// navigate('/win');
 			else
 				navigate('/profile')
-				// navigate('/gameover')
+				// navigate('/gameover');
+		})
+
+		socket.on("gaveUp", (response) => {
+			console.log(response.message);
+			const cookies = document.cookie.split('; ');
+			let id:number = -1;
+			
+			for (const cookie of cookies) {
+				const [name, value] = cookie.split('=');
+				if (name === 'id')  
+					id = Number(value);
+			}
+			if (id !== response.id)
+				navigate('/newprofile');
+				// navigate('/giveup');
 		})
 
 		socket?.emit("roundStart", roomId);
@@ -202,7 +223,7 @@ export default function Game(): JSX.Element {
 				p.draw = () => {
 					p.clear();
 					p.background('rgba(52, 52, 52, 0.75)');
-
+					
 					if (p.keyIsDown(87))
 						socket?.emit("movePlayer", roomId, id, 1);
 					if (p.keyIsDown(83))
@@ -210,8 +231,9 @@ export default function Game(): JSX.Element {
 					socket?.emit("moveBall", roomId);
 
 					p.fill(255);
-        			p.noStroke();
-        			p.ellipse(game.current.ball.x, game.current.ball.y, game.current.ball.rad * 2);
+					p.noStroke();
+					p.ellipse(game.current.ball.x, game.current.ball.y, game.current.ball.rad * 2);
+					p.noStroke();
 					p.rect(cDiv.clientWidth / 75, game.current.posLeft, cDiv.clientWidth / 75, (9/16) * cDiv.clientWidth / 5);
 					p.rect(cDiv.clientWidth - ((cDiv.clientWidth / 75) * 2), game.current.posRight, cDiv.clientWidth / 75, (9/16) * cDiv.clientWidth / 5);
 				};
@@ -242,6 +264,18 @@ export default function Game(): JSX.Element {
     	}
 
 		return () => {
+			const cookies = document.cookie.split('; ');
+			let id:number = -1;
+
+			for (const cookie of cookies) {
+				const [name, value] = cookie.split('=');
+				if (name === 'id') {  
+					id = Number(value);
+				}
+			}
+			if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
+					socket?.emit("giveUp", roomId, id);
+			}
 			p5SketchRef.current?.remove();
 		};
 	}, [sketchRef, navigate, roomId, socket]);
@@ -249,7 +283,7 @@ export default function Game(): JSX.Element {
 	return (
 		<>
 		<GetBg randomImage={randomImage} />
-		<div id="score"> {game.current.charLeft}: {game.current.scoreLeft} - {game.current.charRight}: {game.current.scoreRight} </div>
+		<div id="score">{scoreLeft} - {scoreRight} </div>
 		<div id="game" ref={sketchRef}></div>
 		<div id="return">
 			<WhatReturnButtom randomImage={randomImage} />

@@ -38,6 +38,8 @@ type Game = {
 	charRight: string;
 	posLeft: number;
 	posRight: number;
+	powerLeft: boolean;
+	powerRight: boolean;
 	ball: Ball;
 }
 
@@ -49,6 +51,8 @@ export class MatchmakingGateway {
 	private queue: Player[] = [];
 
 	private games: Game[] = [];
+
+	private gaveUp: Boolean = false;
 
 	@SubscribeMessage('joinQueue')
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
@@ -116,6 +120,8 @@ export class MatchmakingGateway {
 				charRight: game.characters[1],
 				posLeft: (9/16) * 100 / 2,
 				posRight: (9/16) * 100 / 2,
+				powerLeft: false,
+				powerRight: false,
 				ball: {
 					x: 100 / 2,
 					y: (9/16) * 100 / 2,
@@ -160,6 +166,33 @@ export class MatchmakingGateway {
 		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball});
 	}
 
+	@SubscribeMessage('giveUp')
+	async handleGiveUp(socket: Socket, params: number): Promise<void> {
+		const actualGame:Game = this.games[params[0]];
+		const prisma = new PrismaService();
+
+		if (this.gaveUp)
+			return ;
+
+		const winnerId:number = params[1] === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
+		
+		actualGame.isActive = false;
+
+		const score = winnerId === actualGame.idLeft ? [5, 0] : [0, 5];
+
+		const game = await prisma.game.update({
+			where: {id: actualGame.gameId},
+			data: {
+				score: score,
+				winnerId: winnerId,
+			}
+		});
+		this.gaveUp = true;
+		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
+
+		this.server.to(sendTo).emit("gaveUp", {message: "The other player gave up ! Boooo !", id: params[1]});
+	}
+
 	@SubscribeMessage('movePlayer')
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
@@ -183,6 +216,40 @@ export class MatchmakingGateway {
 
 		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockRight).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
+	}
+	
+	@SubscribeMessage('usePower')
+	async handleUsePower(socket: Socket, params): Promise<void> {
+		const actualGame:Game = this.games[params[0]];
+
+		if (actualGame.idLeft === params[1] && !actualGame.powerLeft) {
+			switch (actualGame.charLeft) {
+				// uniquement jusqu'a la fin du round (sauf Henrietta)
+				case "Cartman": ; // allonger la barre
+				case "Servietsky": ; // aveugler le terrain ennemi
+				case "Kenny": ; // ne pas pouvoir mourir
+				case "Timmy": ; // controles aleatoires ennemi
+				case "TerrancePhilip": ; // ball speed augmentee
+				case "Garrison": ; // deuxieme barre mouvante devant lui
+				case "Henrietta": ; // -1 sur son propre score
+				case "Butters": ; // ne fait rien cheh
+			}
+			actualGame.powerLeft = true;
+		}
+		else if (actualGame.idRight === params[1] && !actualGame.powerRight) {
+			switch (actualGame.charLeft) {
+				// uniquement jusqu'a la fin du round (sauf Henrietta)
+				case "Cartman": ; // allonger la barre
+				case "Servietsky": ; // aveugler le terrain ennemi
+				case "Kenny": ; // ne pas pouvoir mourir
+				case "Timmy": ; // controles aleatoires ennemi
+				case "TerrancePhilip": ; // ball speed augmentee
+				case "Garrison": ; // deuxieme barre mouvante devant lui
+				case "Henrietta": ; // -1 sur son propre score
+				case "Butters": ; // ne fait rien cheh
+			}
+			actualGame.powerRight = true;
+		}
 	}
 
 	@SubscribeMessage('moveBall')
@@ -211,17 +278,17 @@ export class MatchmakingGateway {
 					x: 100 / 2,
 					y: (9/16) * 100 / 2,
 					rad: (9/16) * 100 / 75,
-					speed: (9/16) * 100 / 150,
+					speed: (9/16) * 100 / 175,
 					inertia: 0,
 					vx: 0,
 					vy: 0,
 				}
 			}
-			if (actualGame.scoreLeft >= 2 || actualGame.scoreRight >= 2) {
+			if (actualGame.scoreLeft >= 5 || actualGame.scoreRight >= 5) {
 				const prisma = new PrismaService();
 				let winnerId:number;
 
-				if (actualGame.scoreLeft >= 2)
+				if (actualGame.scoreLeft >= 5)
 					winnerId = actualGame.idLeft;
 				else
 					winnerId = actualGame.idRight;
@@ -264,8 +331,8 @@ export class MatchmakingGateway {
 					actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
 				}
 				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
-				if (actualGame.ball.inertia < 4)
-					actualGame.ball.inertia += (9 / 16) * 0.1;
+				if (actualGame.ball.inertia < 0.2)
+					actualGame.ball.inertia += (9 / 16) * 0.05;
 				if (angle > -(PI/2) && angle < (PI/2)) {
 					actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 					actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
