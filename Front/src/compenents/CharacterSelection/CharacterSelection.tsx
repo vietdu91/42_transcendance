@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 import "./CharacterSelection.css";
 
@@ -36,6 +37,10 @@ import EwwlibleauTimmay from "../../sounds/phrases/EwwlibleauTimmay.mp3"
 import ChooseYourFighter from "../../img/choose_your_fighter.gif"
 
 export default function CharacterSelection() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
 
 	const [cartman, setCartman] = useState(CartmanNormal);
 	const [kenny, setKenny] = useState(KennyNormal);

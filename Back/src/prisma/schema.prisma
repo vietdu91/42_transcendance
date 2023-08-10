@@ -1,18 +1,40 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
-  name            String?
-  twoFactorSecret String  @unique
-  accessToken     String?  @unique
-  twoFactorEnabled Boolean @default(false)
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  name             String    @unique
+  twoFactorSecret  String    @unique
+  accessToken      String?   @unique
+  twoFactorEnabled Boolean   @default(false)
+  nickname         String?   @unique
+  age              Int?
+  character        String?
+  games            Game[]    @relation("players")
+  messages         Message[] @relation("MessageAuthor")
 }
 
+model Game {
+  id         Int      @id @default(autoincrement())
+  players    User[]   @relation("players")
+  score      Int[]
+  characters String[]
+  date       DateTime @default(now())
+}
+
+model Message {
+  id        Int     @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
+  authorId  Int?
+}

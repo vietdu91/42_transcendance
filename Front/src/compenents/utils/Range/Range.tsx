@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import axios from 'axios';
 import "./Range.css";
 
 import Baby from '../../../img/age/0_baby_stan-0.png'
@@ -13,39 +14,61 @@ import Death from '../../../img/age/80_death-0.png'
 
 export default function Range() {
 
-	const [data, setData] = useState(0);
+	const [age, setAge] = useState(0);
 	const [emoji, setEmoji] = useState(Baby);
 
+
 	useEffect(() => {
-		if(data <= 6)
+		if(age <= 6)
 			setEmoji(Baby)
-		else if (data <= 14)
+		else if (age <= 14)
 			setEmoji(Stan)
-		else if (data <= 19)
+		else if (age <= 19)
 			setEmoji(Emo)
-		else if (data <= 29)
+		else if (age <= 29)
 			setEmoji(Evil)
-		else if (data <= 39)
+		else if (age <= 39)
 			setEmoji(Future)
-		else if (data <= 59)
+		else if (age <= 59)
 			setEmoji(Randy)
-		else if (data <= 79)
+		else if (age <= 79)
 			setEmoji(Marvin)
 		else
 			setEmoji(Death)
-	},[data])
+	},[age])
 
-	const handleChange = (event) => {setData(event.target.value);};
+	const handleChange = (event) => {
+		setAge(event.target.value);
+	};
+	
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		console.log(age);
+		await axios
+			.post('http://localhost:3001/SouthTrans/setAge', { age }, { withCredentials: true })
+			.then((response) => {
+				console.log(response.data.message);
+			})
+			.catch((error) => {
+				// Gérer les erreurs de requête
+			});
+	}
 
 	return (
-		<div className="range">
-			<img src={emoji} id="emoji" alt="Character"></img>
-			<div className="range-slider-wrapper">
-				<input type="range" className={data > 50?'heigh':'less'}
-				min='0' max='100' step="1" value={data}
-				onChange={handleChange}/>
+		<form onSubmit={handleSubmit}>
+			<div className="range">
+				<img src={emoji} id="emoji" alt="Character"></img>
+				<div className="range-slider-wrapper">
+					<input type="range" 
+					className={age > 50?'heigh':'less'}
+					min='0' max='100' 
+					step="1" 
+					value={age}
+					onChange={handleChange}/>
+				</div>
+				<h1>J'ai {age} {age <= 1 ? 'an' : 'ans'}</h1>
 			</div>
-			<h1>J'ai {data} {data <= 1 ? 'an' : 'ans'}</h1>
-		</div>
+			<button type="submit">Enregistrer</button>
+		</form>
 	);
 }

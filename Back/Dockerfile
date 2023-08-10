@@ -9,10 +9,12 @@ WORKDIR /usr/src/app
 COPY ./package*.json ./
 
 # Installez les dépendances
+RUN npm install xdg-utils
 RUN npm install -g npm@latest
 RUN npm install --save
 RUN npm install prisma --save-dev
 RUN npm i -g @nestjs/cli
+RUN npm i
 
 # Copiez tous les autres fichiers
 COPY ./src ./
@@ -20,5 +22,12 @@ COPY ./src ./
 # Exposez le port 300
 EXPOSE 3001
 
+COPY ./utils/script.sh /
+
+RUN chmod 755 /script.sh
+
 # Démarrez l'application
-CMD [ "npm", "run", "start:dev" ]
+
+ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+
+# CMD [ "/script.sh" ]

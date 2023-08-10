@@ -9,11 +9,10 @@ export class UserService {
   ) {}
 
   async getUserById(userId: number): Promise<User | null> {
-    console.log('getUserById: userId =', userId);
+     console.log('getUserById: userId =', userId);
     const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) }
     });
-    console.log('getUserById: user =', user);
     return user;
   }
   

@@ -5,11 +5,14 @@ import { Response} from 'express';
 import { authenticator } from 'otplib';
 import { Prisma, User} from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { config } from 'dotenv';
+config();
 
 
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = "u-s4t2ud-c28548ef4a6bc80adc6fbb6414520b8afb6ff47cfb674bdd8fabbca9e8b53467"; // Remplacer par le client_id de votre application
-const clientSecret = "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";
+const client_id = process.env.CLIENT_ID; // Remplacer par le client_id de votre application
+const clientSecret = process.env.CLIENT_SECRET; // Remplacer par le client_secret de votre application
+const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirection de votre application
 
 @Injectable()
 export class AuthService {
@@ -17,28 +20,48 @@ export class AuthService {
                 private twofaService: TwofaService,
                 private jwtService: JwtService,) {}
 
-    async apiConnexion(code: string, res: Response): Promise<any> {
-        const accessToken = await this.getAccessToken(code);
-        const userData = await this.getUserData(accessToken);
-        var user = await this.prisma.user.findUnique({
-            where: { email: userData.email },
-        });
-        if (!user ) {
-            user = await this.createUser(userData);
-
+    async apiConnexion(userData: any, res: Response): Promise<User> {
+        try
+        {
+            console.log("email === " + userData.email);
+            var user = await this.prisma.user.findUnique({
+                where: { email: userData.email },
+            });
+            if (!user ) {
+                user = await this.createUser(userData);
+    
+                const payload = { username: user.name, sub: user.id };
+                console.log("paylod = " + payload.sub + " " + payload.username);
+                const newToken = this.jwtService.sign(payload);
+                // JWT token use to get user data and validate user
+                console.log("new token ==  " + newToken);
+                await this.prisma.user.update({
+                    where: { id: user.id },
+                    data: { accessToken: newToken },
+              });
+              res.cookie('accessToken', newToken);
+              res.cookie('id', user.id);
+              return user;
+            }
+            else {
+    
+                const payload = { username: user.name, sub: user.id };
+                console.log("paylod = " + payload.sub + " " + payload.username);
+                const newToken = this.jwtService.sign(payload);
+                // JWT token use to get user data and validate user
+                console.log("new token ==  " + newToken);
+                await this.prisma.user.update({
+                    where: { id: user.id },
+                    data: { accessToken: newToken },
+                  });
+                res.cookie('accessToken', newToken);
+                res.cookie('id', user.id);
+                return user;
+            }
         }
-        const payload = { username: user.name, sub: user.id };
-        console.log("paylod = " + payload.sub + " " + payload.username);
-        const newToken = this.jwtService.sign(payload);
-        // JWT token use to get user data and validate user
-        console.log("new token ==  " + newToken);
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { accessToken: newToken },
-          });
-          res.cookie('accessToken', newToken);
-          res.cookie('id', user.id);
-          res.redirect('http://localhost:3000');
+        catch (error) {
+            console.error(error);
+        }
     }
 
     async getUserToken(id: number): Promise<any> {
@@ -50,13 +73,13 @@ export class AuthService {
 
 
     async getAccessToken(code: string): Promise<any> {
-        try {
-            const response = await axios.post('https://api.intra.42.fr/oauth/token', { 
+        try { 
+            const response = await axios.post(process.env.URL_TOKEN42, { 
                 client_id: client_id, 
                 client_secret: clientSecret,
                 grant_type: "authorization_code",
                 code: code,
-                redirect_uri: "http://localhost:3001/Auth/conexion" 
+                redirect_uri: urlRedirect,
             });
             const accessToken = response.data.access_token;
             return accessToken;
@@ -67,9 +90,8 @@ export class AuthService {
     }
     
     async getUserData(accessToken: string): Promise<any> {
-        console.log(accessToken + " == accessToken");
         try {
-            const userResponse = await axios.get('https://api.intra.42.fr/v2/me', {
+            const userResponse = await axios.get(process.env.URL_42ME, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
