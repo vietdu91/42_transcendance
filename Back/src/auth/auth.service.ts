@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
 config();
 
-
 const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
 const client_id = process.env.CLIENT_ID; // Remplacer par le client_id de votre application
 const clientSecret = process.env.CLIENT_SECRET; // Remplacer par le client_secret de votre application
@@ -74,7 +73,7 @@ export class AuthService {
 
     async getAccessToken(code: string): Promise<any> {
         try { 
-            const response = await axios.post(process.env.URL_TOKEN42, { 
+            const response = await axios.post(process.env.URL_42TOKEN, { 
                 client_id: client_id, 
                 client_secret: clientSecret,
                 grant_type: "authorization_code",

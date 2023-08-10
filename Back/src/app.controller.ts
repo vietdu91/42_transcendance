@@ -30,6 +30,7 @@ export class AppController {
   getConnected() {
     console.log("process.env.URL_REDIRECT = " + process.env.URL_REDIRECT)
     console.log("42 route");
+    console.log("process.env.URL_42REDIRECT = " + process.env.URL_42REDIRECT)
     return {url: process.env.URL_42REDIRECT};
   }
 

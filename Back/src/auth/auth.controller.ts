@@ -8,7 +8,7 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService,
               private prisma: PrismaService,) {}
 
-  @Get('conexion')
+  @Get('connexion')
   async connexion(@Request() req, @Res({passthrough:true}) response): Promise<any> {
     console.log("Connexion route")
     const code = req.query.code;
