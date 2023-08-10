@@ -11,9 +11,10 @@ export default function Profile() {
 
 	const navigate = useNavigate();
 
-	let [nick, getNick] = useState(0);
-	let [name, getName] = useState(0);
+	let [nick, getNick] = useState("");
+	let [name, getName] = useState("");
 	let [age, getAge] = useState(0);
+	let [pfp_url, getPfpUrl] = useState("");
 
 	useEffect (() => {
 		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
@@ -21,6 +22,7 @@ export default function Profile() {
 			getNick(response.data.nick);
 			getName(response.data.name);
 			getAge(response.data.age);
+			getPfpUrl(response.data.pfp_url)
 		}).catch(error => {
 			console.error('Probleme');
 		});
@@ -56,15 +58,16 @@ export default function Profile() {
 						</div>
 					</div>
 						<div id="profile_font">PROFIL</div>
-						<br/>
-						<div>	Nick : ({nick})<br/><br/> 
+						<div>	
+								Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>
+								{/* PFP: ({pfp_url}) */}
 						</div>
 				</div>
 					<p>CONTENT</p>
 				<div className ="pfp">
-					<img src="https://media.giphy.com/media/26gJyImHbhEfKyem4/giphy.gif" alt="PPdeMORT"></img>
+					<img src={pfp_url} alt="PPdeMORT"></img>
 					<div className="buttons">
 						<button className="btn-hover color-1" onClick={() => navigate("/NewProfile")}>Changer d'image</button><br/>
 						<button className="btn-hover color-2" onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>

@@ -18,6 +18,7 @@ model User {
   age 			        Int?
   character         String?
   games             Game[] @relation("players")
+  pfp_url           String?
 }
 
 model Game {

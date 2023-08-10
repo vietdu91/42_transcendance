@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, HttpCode } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors, Param} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -13,6 +13,9 @@ import { AuthService } from './auth/auth.service';
 import { BadRequestException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Controller('Southtrans')
 export class AppController {
@@ -23,6 +26,7 @@ export class AppController {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly gameService: GameService,
+    private cloudinary: CloudinaryService,
   ) {}
 
   @Get('42') 
@@ -58,6 +62,7 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
+    console.log("nick = " + user.nickname)
     response.json({
       id: user.id,
       email: user.email,
@@ -66,7 +71,14 @@ export class AppController {
       nick: user.nickname,
       age: user.age,
       character: user.character,
+      pfp_url: user.pfp_url,
     });
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string){
+    console.log("Mon id:", id);
+    return this.userService.findOne(id);
   }
 
   @Post('setNickname')
@@ -189,5 +201,56 @@ export class AppController {
       }
       await this.userService.turnOnTwoFactorAuthentication(request.user.id);
     }
+
+
+/*
+    LOCAL IMG UPLOAD
+*/
+
+  //   @Post('local')
+  // @UseInterceptors(
+  //   FileInterceptor('file', {
+  //     storage: diskStorage({
+  //       destination: 'public/img',
+  //       filename: (req, file, cb) => {
+  //         cb(null, file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  // async local(@UploadedFile() file: Express.Multer.File) {
+  //   return {
+  //     statusCode: 200,
+  //     data: file.path,
+  //   };
+  // }
+
+/*
+    ONLINE IMG UPLOAD
+*/
+
+@Post('online')
+@UseGuards(JwtAuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async online(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
+    const accessToken = request.headers.authorization?.split(' ')[1];
+    console.log("Access token: " + accessToken);
+    const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
+    return await this.cloudinary
+      .uploadImage(file)
+      .then((data) => {
+        return this.prisma.user.update({
+          where: { id: decodedJwtAccessToken.sub },
+          data: { pfp_url: data.secure_url },
+        });
+      })
+      .catch((err) => {
+        return {
+          statusCode: 400,
+          message: err.message,
+        };
+      });
+  }
+
 }
 
