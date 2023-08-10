@@ -11,13 +11,13 @@ Body {
     margin: 10px 0;
     width: 100%;
   }
-  
+
   /* Darker chat container */
   .darker {
     border-color: #ccc;
     background-color: #ddd;
   }
-  
+
   /* Clear floats */
   .chat-container::after {
     content: "";

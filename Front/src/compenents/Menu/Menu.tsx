@@ -24,8 +24,8 @@ export default function App() {
   const [show, setShow] = React.useState(true);
   const [show2, setShow2] = React.useState(false);
   const [code, setCode] = React.useState("");
-  
-  
+
+
   const  apiEndpoint = 'http://localhost:3001';
   const handleClickCredits = (path, image) => {
     setHover(image);
@@ -49,13 +49,13 @@ export default function App() {
     const cookies = document.cookie.split('; ');
     let accessToken;
     let id;
-  
+
     for (const cookie of cookies) {
       const [name, value] = cookie.split('=');
       if (name === 'accessToken') {
         accessToken = value;
       }
-      if (name === 'id') {  
+      if (name === 'id') {
         id = value;
       }
     }
@@ -87,21 +87,21 @@ export default function App() {
     const cookies = document.cookie.split('; ');
     let accessToken;
     let id;
-  
+
     for (const cookie of cookies) {
       const [name, value] = cookie.split('=');
       if (name === 'accessToken') {
         accessToken = value;
       }
-      if (name === 'id') {  
+      if (name === 'id') {
         id = value;
       }
     }
     console.log("if id == " + id + " FIN");
-    
+
     console.log("if access == " + accessToken + " FIN");
     if (accessToken) {
-  
+
      axios.get('http://localhost:3001/Southtrans/2fa/generate', {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -121,8 +121,6 @@ export default function App() {
     }
   }
 
-
-
   function toggleThanks() {
     setShow(!show);
   }
@@ -137,9 +135,6 @@ export default function App() {
         {show && <div className="menu-item" onClick={() => navigate("/profile")} onMouseEnter={() => { setHover(KennyHouse); }}
           onMouseLeave={() => { setHover(Town); }}>Profil</div>}
 
-        {show && <div className="menu-item" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }}
-          onMouseLeave={() => { setHover(Town); }}>Chat</div>}
-
         {show && <div className="menu-item" onClick={() => { handleClickCredits("/credits", Metrosexual); toggleThanks(); }} onMouseEnter={() => { setHover(Metrosexual); }}
           onMouseLeave={() => { setHover(Town); }}>On est qui</div>}
 
@@ -149,18 +144,16 @@ export default function App() {
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
 
-        
-
-        {show2 && 
+        {show2 &&
         <>
         <img src={code}></img>
         <input placeholder='code'></input>
         </>
-        } 
+        }
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
-        {show && <button className="msn" onClick={() => navigate("/chat")}></button>}
+        {show && <button className="msn" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }} onMouseLeave={() => { setHover(Town); }}></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
     </div>

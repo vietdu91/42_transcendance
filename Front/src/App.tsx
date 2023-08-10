@@ -16,7 +16,11 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import GameMenu from "./compenents/Game/GameMenu/GameMenu"
+import Decompte from "./compenents/Game/Decompte/Decompte"
 import Game from "./compenents/Game/Game/Game"
+import Win from "./compenents/Game/Win/Win"
+import GameOver from "./compenents/Game/GameOver/GameOver"
+import GameError from "./compenents/Game/GameError/GameError"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
@@ -25,6 +29,7 @@ import CharacterSelection from './compenents/CharacterSelection/CharacterSelecti
 import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
+import Achievement from './compenents/utils/Achievement/Achievement';
 
 // SOUNDS
 import queer_eye from './sounds/queer_eye.mp3'
@@ -90,6 +95,11 @@ export default function App() {
 				<Route path="/credits" element={<CreditsWithMusic />}/>
 				<Route path="/thanks" element={<ThanksWithMusic />}/>
 				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
+				<Route path="/achievement" element={<Achievement />}/>
+				<Route path="/decompte" element={<Decompte />}/>
+				<Route path="/gameover" element={<GameOver />}/>
+				<Route path="/errorgame" element={<GameError />}/>
+        		<Route path="/win" element={<Win />}/>
 				<Route path="/404" element={<PageNotFound />}/>
 				</Routes>
 			</div>
@@ -97,4 +107,3 @@ export default function App() {
 	)
 }
 //<Route path="*" element={<Navigate to="/404" />}/>
-

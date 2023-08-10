@@ -71,7 +71,9 @@ export default function ChampSelect() {
 	return (
 		<div className="menu">
 			<img id="bg--menu" src={BusStop} alt={'BusStop'}></img>
-			<img id="choose_your_fighter" src={ChooseYourFighter} alt={"ChooseYourFighter"}></img>
+			<div id="choose_center">
+				<img id="choose_your_fighter" src={ChooseYourFighter} alt={"ChooseYourFighter"}></img>
+			</div>
 			<div className="grid">
 				<img className="card" src={cartman} alt={'Cartman'}
 				onMouseEnter={() => {setCartman(CartmanSuper);}}

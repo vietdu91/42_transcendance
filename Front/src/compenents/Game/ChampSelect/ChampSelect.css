@@ -4,13 +4,20 @@
 	align-items: center;
 }
 
+#choose_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #choose_your_fighter {
   z-index: 1;
-  left: 10vw;
+  /* left: 10vw; */
   position: absolute;
   top: 3%;
   text-align: center;
 }
+
 
 #bg--menu {
   display: block;
