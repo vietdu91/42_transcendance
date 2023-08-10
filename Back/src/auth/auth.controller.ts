@@ -1,19 +1,26 @@
 import { Controller, Get, Request, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { PrismaService} from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 
 @Controller('Auth')
 export class AuthController {
-  constructor(private prisma: PrismaService,
-              private readonly AuthService: AuthService,
-              private readonly jwtService: JwtService ) {}
+  constructor(private readonly AuthService: AuthService,
+              private prisma: PrismaService,) {}
 
   @Get('connexion')
   async connexion(@Request() req, @Res({passthrough:true}) response): Promise<any> {
-      console.log("Connexion route")
-      const code = req.query.code;
-      const user = await this.AuthService.apiConnexion(code, response);
-      }
+    console.log("Connexion route")
+    const code = req.query.code;
+    const accessToken = await this.AuthService.getAccessToken(code);
+    const userData = await this.AuthService.getUserData(accessToken);
+    const user = await this.AuthService.apiConnexion(userData, response);
+    var user2 = await this.prisma.user.findUnique({
+      where: { email: userData.email },
+    });
+    if (user2)
+      response.redirect("http://localhost:3000");
+    else
+      response.redirect("http://localhost:3000/newprofile");
+    }
 }

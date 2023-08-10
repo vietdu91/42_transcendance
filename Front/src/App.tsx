@@ -38,6 +38,7 @@ import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
 
+
 const ConnexionWithMusic = () => (
   <>
 	<MusicPlayer audioSrc={southparkSound} delay={5000}/>
@@ -73,6 +74,37 @@ const CharacterSelectionWithMusic = () => (
   </>
 
 );
+
+export interface User {
+	user: {
+		id:number;
+		email:string;
+		name:string;
+		twoFA:boolean;
+		nick:string;
+		age:number;
+	},
+	setUser: React.Dispatch<React.SetStateAction<{
+		id?:number;
+		email?:string;
+		name?:string;
+		twoFA?:boolean;
+		nick?:string;
+		age?:number;
+	}>>;
+}
+
+export const UserContext = createContext<User>({
+  user: {
+	id: -1,
+	email: '',
+	name: '',
+	twoFA: false,
+	nick: '',
+	age: -1,
+  },
+  setUser: () => {},
+});
 
 export default function App() {
 	

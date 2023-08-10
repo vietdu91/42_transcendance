@@ -1,6 +1,7 @@
 import React, { useEffect, useState }  from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import Cookies from 'js-cookie';
 
 import './NewProfile.css'
 
@@ -12,6 +13,10 @@ import Form from "../../compenents/utils/Form/Form"
 import Range from "../../compenents/utils/Range/Range"
 
 export default function NewProfile() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
 
 	const navigate = useNavigate();
 

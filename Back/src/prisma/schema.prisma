@@ -1,7 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native"]
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -19,6 +20,7 @@ model User {
   character         String?
   games             Game[] @relation("players")
   pfp_url           String?
+  messages         Message[] @relation("MessageAuthor")
 }
 
 model Game {
@@ -31,3 +33,11 @@ model Game {
   date            DateTime @default(now())
 }
 
+model Message {
+  id        Int     @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
+  authorId  Int?
+}

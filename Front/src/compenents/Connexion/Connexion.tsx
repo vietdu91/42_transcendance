@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Cookie from 'js-cookie';
 
 // CSS
 import './Connexion.css';
@@ -14,6 +15,10 @@ import Dislaimer from "../../img/dislaimer.png"
 
 export default function Connexion() {
 
+	// const accessToken = Cookie.get('accessToken');
+	// if (accessToken) {
+	// 	window.location.href = '/';
+	// }
 	const [showImage, setShowImage] = useState(true);
 
 	useEffect(() => {

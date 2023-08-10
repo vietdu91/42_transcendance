@@ -1,16 +1,20 @@
 import { useState , useEffect } from 'react';
 import io , { Socket } from "socket.io-client";
-import Message from '../Messages/message';
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
-import Lotion from "../../img/backgrounds/lotion.jpg"
+import Cookies from 'js-cookie';
 
 import './Chat.css';
 
 function Chat() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+		window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
+
     //const [value, setValue] = useState("");
     //const [joined, setJoined] = useState(false);
     //const [room, setRoom] = useState("");
@@ -20,12 +24,24 @@ function Chat() {
     }
     
     useEffect(() => {
-        const newSocket = io("http://localhost:3001");
+       // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
+        const apiEndpoint = 'http://localhost:3001';
+        const newSocket = io(apiEndpoint);
         setSocket(newSocket);
     }, [setSocket]);
 
     const messageListener = (newMessage: string) => {
+        const authorId = Cookies.get('id'); 
+        
         setMessages(prevMessages => [...prevMessages, newMessage]);
+        
+       fetch('http://localhost:3001/Southtrans/savedMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: newMessage , authorId}),
+    });
     }
 
     useEffect(() => {

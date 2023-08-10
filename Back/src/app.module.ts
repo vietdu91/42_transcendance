@@ -47,7 +47,7 @@ import { join } from 'path';
   ],
   controllers: [AppController, UserController, AuthController, GameController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway/*GameGateway*/, GameService],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway, GameService],
 })
 export class AppModule {}
 

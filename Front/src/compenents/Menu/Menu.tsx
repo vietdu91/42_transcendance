@@ -17,8 +17,14 @@ import KennyHouse from "../../img/backgrounds/kennyhouse.png"
 import ButtersBlood from "../../img/backgrounds/butters_blood.jpg"
 import ChefAid from "../../img/chef_aid.png"
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function App() {
+  const accessToken = Cookies.get('accessToken');
+  
+  if (!accessToken) {
+    window.location.href = "/connect";
+  }
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
   const [show, setShow] = React.useState(true);
@@ -46,79 +52,51 @@ export default function App() {
   };
 
   async function logout() {
-    const cookies = document.cookie.split('; ');
-    let accessToken;
-    let id;
-
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name === 'accessToken') {
-        accessToken = value;
-      }
-      if (name === 'id') {
-        id = value;
-      }
-    }
-
-    console.log('access token = ' + accessToken);
+    const accessToken = Cookies.get('accessToken');
     if (accessToken) {
       try {
+        console.log("AXIOS LOGOUT ON")
           const res = await axios({
-            url: apiEndpoint + '/Southtrans/logout',
+            url: "http://localhost:3001/Southtrans/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
-            data: { msg: "Hello World!" }
           })
-          console.log("IM HERE BRO")
-          navigate("/connect")
+          Cookies.remove('accessToken');
+          Cookies.remove('id');
+          console.log("COOKIES REMOVED")
+          navigate("/connect");
           console.log("NAVIGATED")
         }
       catch (err) {
         console.log("app-front: error: ", err)
-        // navigate("/connect")
       }
      } else {
        console.error('Access token not found in cookies.');
      }
   }
-  function twoFa() {
+
+  async function twoFa() {
+    const accessToken = Cookies.get('accessToken');
     console.log("2FA");
-    console.log(document.cookie);
-    const cookies = document.cookie.split('; ');
-    let accessToken;
-    let id;
-
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name === 'accessToken') {
-        accessToken = value;
-      }
-      if (name === 'id') {
-        id = value;
-      }
-    }
-    console.log("if id == " + id + " FIN");
-
-    console.log("if access == " + accessToken + " FIN");
-    if (accessToken) {
-
-     axios.get('http://localhost:3001/Southtrans/2fa/generate', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      }).then(response => {
-        // Do something with the response
-        console.log("then redirect");
-        console.log(response);
+    
+    if (accessToken) 
+    {
+      try {
+        const res = await axios({
+          url: "http://localhost:3001/Southtrans/2fa/generate",
+          method: 'GET',
+          headers: {  'Authorization': `Bearer ${accessToken}` },
+        }).then(response => {
+        console.log("respond === " + response.data.code)
         setCode(response.data.code)
-        setShow2(true);
-      }).catch(error => {
-        // Handle the error
-        console.error('catch Access token not found in cookies.');
-      });
-    } else {
-      console.error('Access token not found in cookies.');
-    }
+        setShow2(true);})
+      }
+      catch (err) {
+        console.log("app-front: error: ", err)
+      }
+      } else {
+        console.error('Access token not found in cookies.');
+      }
   }
 
   function toggleThanks() {
@@ -144,7 +122,9 @@ export default function App() {
         {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
           onMouseLeave={() => { setHover(Town); }}>2FA</div>}
 
-        {show2 &&
+        
+
+        {show2 && 
         <>
         <img src={code}></img>
         <input placeholder='code'></input>

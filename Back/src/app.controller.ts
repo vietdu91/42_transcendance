@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
 import { GameService } from './game/game.service';
+import { GameService } from './game/game.service';
 import { Response,} from 'express';
 import { Request } from 'express';
 import * as qrcode from 'qrcode';
@@ -30,10 +31,11 @@ export class AppController {
   ) {}
 
   @Get('42') 
-  @Redirect('http://localhost:3001/Auth/connexion')
+  @Redirect(process.env.URL_REDIRECT)
   getConnected() {
+    console.log("process.env.URL_REDIRECT = " + process.env.URL_REDIRECT)
     console.log("42 route");
-    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-4ddb9a7637e5a92f4b3f663a47bfc753fcbfef4daf73ce630dc53f4363f740c8&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconnexion&response_type=code"};
+    return {url: process.env.URL_42REDIRECT};
   }
 
   @Get('getUserById')
@@ -54,6 +56,7 @@ export class AppController {
 
   @Get('getUser')
   async getUser(@Req() request: Request, @Res() response: Response) {
+    // console.log(request.cookies)
     const userId = request.cookies.id;
     if (!userId) {
       throw new UnauthorizedException();
@@ -62,7 +65,7 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    console.log("nick = " + user.nickname)
+    // console.log("nick = " + user.nickname)
     response.json({
       id: user.id,
       email: user.email,
@@ -74,7 +77,6 @@ export class AppController {
       pfp_url: user.pfp_url,
     });
   }
-
   @Get(':id')
   findOne(@Param('id') id: string){
     console.log("Mon id:", id);
@@ -93,12 +95,47 @@ export class AppController {
      const userUpdate = await this.prisma.user.update({
        where: { id: Number(userId) },
        data: { nickname: nickname },
-     });
-    // if (!userUpdate) {
-    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
-    // }
+    });
+    console.log("nickname == " + nickname);
     return { message: 'Surnom enregistré avec succès' };
   }
+
+  @Post('setAge')
+  async setAge( @Req() request, @Body() body: { age: number }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { age } = body;
+    if (!age)
+      throw new UnauthorizedException();
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { age: Number(age) },
+    });
+      // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Age enregistré avec succès' };
+  }
+
+  @Post('setCharacter')
+  async setCharacter( @Req() request, @Body() body: { character: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { character } = body;
+    const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { character: character },
+    });
+    //   if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Personnage modifié avec succès' };
+  }
+  
 
   @Post('setAge')
   async setAge( @Req() request, @Body() body: { age: number }) {
@@ -139,11 +176,11 @@ export class AppController {
   @Post('logout')
   @UseGuards(JwtAuthenticationGuard)
   async logout(@Req() request: Request, @Res() response: Response) {
+    console.log("logout ON");
     try {
       const accessToken = request.headers.authorization?.split(' ')[1];
       console.log("Access token: " + accessToken);
       const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
-      //const expires = decodedJwtAccessToken.exp;
       const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
       if (!user) {
         throw new UnauthorizedException();
@@ -152,16 +189,37 @@ export class AppController {
         where: { id: user.id },
         data: { accessToken: null },
       });
-      console.log("logout2");
-      response.clearCookie('accessToken');
-      response.clearCookie('id');
-      response.status(200).json("app-back: successfully logged out.")
+      response.status(200).json({ message: 'Déconnexion réussie' });
     }
     catch (err) {
       console.log("app-back: user logged fail.")
       response.status(404)
     }
   }
+
+    @Post('savedMessage')
+    async createMessage(@Body() messageData: { content: string, authorId: number }, @Res() response: Response): Promise<void> {
+      try {
+        // Enregistrement du message dans la base de données
+      //  const res =  await this.prisma.message.create({
+      //     data: {
+      //       content: messageData.content,
+      //       author: { connect: { id: messageData.authorId } }, // Associer l'auteur (utilisateur)
+      //     },
+      //   });
+        const newMessage = await this.prisma.message.create({
+          data: {
+            content: messageData.content,
+            authorId: parseInt(messageData.authorId.toString()),
+          },
+        });
+        response.status(201).json({ message: 'Message saved' });
+      } catch (error) {
+        // Gérer les erreurs
+        console.log(error)
+        throw new Error('Unable to save message.');
+      }
+    }
 
   
   @Get('2fa/generate')
@@ -173,6 +231,7 @@ export class AppController {
     console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
     //const expires = decodedJwtAccessToken.exp;
     const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
+    console.log("user == " + user)
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
     //return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
     const code = await qrcode.toDataURL(otpauthUrl);
@@ -186,6 +245,7 @@ export class AppController {
     async turnOnTwoFactorAuthentication(@Req() request: RequestWithUser,
     @Body('twoFactorAuthenticationCode') twoFactorAuthenticationCode: string
     )  {
+   
       console.log("turnOnTwoFactorAuthenticationCode = " + twoFactorAuthenticationCode);
       const userId =request.user.id;
       const user = await this.userService.getUserById(request.user.id);
@@ -253,4 +313,6 @@ export class AppController {
   }
 
 }
+
+
 
