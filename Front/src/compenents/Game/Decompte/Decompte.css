@@ -1,7 +1,7 @@
 #decompte_bg {
-  background-color: black;
-  height: 100vh;
-  z-index: 0;
+  background-image: url('../../../img/backgrounds/cartman_montagne.jpg');
+  max-width: 100%;
+  height: auto;
 }
 
 #decompte {

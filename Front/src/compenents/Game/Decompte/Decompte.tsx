@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Decompte.css';
 import { count } from 'console';
 
+import CartmanMontagne from '../../../img/backgrounds/cartman_montagne.png'
 import KickBaby from '../../../img/game/kick_baby.gif'
 import HeadIke from '../../../img/game/ike.png'
 import { useNavigate } from 'react-router-dom';
