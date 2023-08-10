@@ -1,45 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import './Decompte.css';
+import { count } from 'console';
 
 import KickBaby from '../../../img/game/kick_baby.gif'
+import HeadIke from '../../../img/game/ike.png'
+import { useNavigate } from 'react-router-dom';
 
 export default function Decompte() {
 
-    const [countdown, setCountdown] = useState(10);
-    const [showImage, setShowImage] = useState(false);
+    const [countdown, setCountdown] = useState(3);
+    const [showKickBaby, setShowKickBaby] = useState(false);
+    const [showHeadIke, setShowHeadIke] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-
         const interval = setInterval(() => {
-            if (countdown > 1)
+            if (countdown > 1) {
                 setCountdown(countdown - 1);
-            else {
+            } else {
                 clearInterval(interval);
-                setShowImage(true);
-                // code pour navigate sur le jeu + afficher kick bebe
+                setShowKickBaby(true);
+                setTimeout(() => {
+                    setShowHeadIke(true);
+                }, 500);
+                setTimeout(() => {
+                    setShowHeadIke(false);
+                    navigate('/game');
+                }, 1000);
             }
-            }, 1000);
+        }, 1000);
         return () => clearInterval(interval);
     }, [countdown]);
 
     return (
-    <div id="decompte">
-        <div className="wrapper">
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {!showImage && <div className="countdown"/>}
-            {showImage && <img src={KickBaby} alt="Début du jeu" />}
+    <div id="decompte_bg">
+        {showHeadIke && <img src={HeadIke} alt="HeadIke" id="ike"/>}
+        <div id="decompte">
+            {!showKickBaby && !showHeadIke && <div className={`countdown`}>{countdown}</div>}
+            {showKickBaby && <img src={KickBaby} alt="Début du jeu" />}
         </div>
     </div>
     )
