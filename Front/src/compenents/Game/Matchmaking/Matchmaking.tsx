@@ -3,9 +3,11 @@ import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from '../../utils/GameContext';
 
-import axios from "axios";
+import Fire from "../../../img/backgrounds/fire_randy.jpg"
+import RedCross from "../../../img/buttons/red_cross.png"
+import BallsWaiting from "../../../img/balls_waiting.gif"
 
-import ButtersBlood from "../../../img/backgrounds/butters_blood.jpg"
+import Loading from "../../utils/Loading/Loading"
 
 import './Matchmaking.css';
 
@@ -31,31 +33,28 @@ const MatchmakingQueue = ({ leaveQueue }) => (
 
 export default function Matchmaking() {
 
-	const [socket, setSocket] = useState<Socket | null>(null);
+	// const [socket, setSocket] = useState<Socket | null>(null);
+	const socket = useContext(GameContext);
 	const [isLoading, setIsLoading] = useState(true);
 	const [inQueue, setInQueue] = useState(false);
 	const [socketConnected, setSocketConnected] = useState(false);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-		  setIsLoading(false);
-		}, 1500);
+	// useEffect(() => {
+	// 	const timer = setTimeout(() => {
+	// 	  setIsLoading(false);
+	// 	}, 1500);
 	
-		return () => clearTimeout(timer);
-	  }, []);
+	// 	return () => clearTimeout(timer);
+	//   }, []);
 	
 	useEffect(() => {
-		const newSocket = io("http://localhost:3001");
-
-		setSocket(newSocket);
-
-		newSocket.on('connect', () => {
+		socket.on('connect', () => {
 			console.log('Connection established');
 			setSocketConnected(true);
 		});
 
-		newSocket.on('queueJoined', (response) => {
+		socket.on('queueJoined', (response) => {
 			console.log(response.message);
 			setInQueue(true);
 		})
@@ -65,11 +64,11 @@ export default function Matchmaking() {
 			setInQueue(true);
 		})
 
-		newSocket.on('matchFound',(response) => {
+		socket.on('matchFound',(response) => {
 			handleMatchFound(response.roomId);
 		})
 
-		newSocket.on('disconnect', () => {
+		socket.on('disconnect', () => {
 				console.log('Disconnected');
 		})
 
@@ -109,16 +108,17 @@ export default function Matchmaking() {
 	}
 
 	const handleMatchFound = (roomId:string) => {
-		navigate(`/game/${roomId}`, {state: {roomId: roomId}});
+		navigate(`/decompte`, {state: {roomId: roomId}});
 	}
 
-	if (isLoading || !socketConnected) {
-		return <Loading />;
-	  }
-	
-	  if (inQueue) {
-		return <MatchmakingQueue leaveQueue={leaveQueue} />;
-	  }
-	
-	  return <MatchmakingNotInQueue joinQueue={joinQueue} leavePage={leavePage} />;
+	// if (isLoading || !socketConnected) {
+	// 	console.log(isLoadin	g, socketConnected)
+	// 	return <Loading />;
+	// }
+
+	if (inQueue) {
+	return <MatchmakingQueue leaveQueue={leaveQueue} />;
+	}
+
+	return <MatchmakingNotInQueue joinQueue={joinQueue} leavePage={leavePage} />;
 }

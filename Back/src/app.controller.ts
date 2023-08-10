@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res,Headers, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors, Param} from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res, Query, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors, Param} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
@@ -33,7 +33,7 @@ export class AppController {
   @Redirect('http://localhost:3001/Auth/connexion')
   getConnected() {
     console.log("42 route");
-    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-0adef0effd9ace501b3d56f7e9eaf4c40bb9c552b2ea91ba35f745eeeb55b6b4&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconexion&response_type=code"};
+    return {url: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-4ddb9a7637e5a92f4b3f663a47bfc753fcbfef4daf73ce630dc53f4363f740c8&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FAuth%2Fconnexion&response_type=code"};
   }
 
   @Get('getUserById')

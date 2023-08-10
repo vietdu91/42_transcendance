@@ -4,13 +4,15 @@ import { count } from 'console';
 
 import KickBaby from '../../../img/game/kick_baby.gif'
 import HeadIke from '../../../img/game/ike.png'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function Decompte() {
 
     const [countdown, setCountdown] = useState(3);
     const [showKickBaby, setShowKickBaby] = useState(false);
     const [showHeadIke, setShowHeadIke] = useState(false);
+    const location = useLocation();
+	const { roomId } = location.state;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,7 +27,7 @@ export default function Decompte() {
                 }, 500);
                 setTimeout(() => {
                     setShowHeadIke(false);
-                    navigate('/game');
+                    navigate(`/game/${roomId}`, {state: {roomId: roomId}});
                 }, 1000);
             }
         }, 1000);

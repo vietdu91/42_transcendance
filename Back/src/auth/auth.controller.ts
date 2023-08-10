@@ -10,7 +10,7 @@ export class AuthController {
               private readonly AuthService: AuthService,
               private readonly jwtService: JwtService ) {}
 
-  @Get('conexion')
+  @Get('connexion')
   async connexion(@Request() req, @Res({passthrough:true}) response): Promise<any> {
       console.log("Connexion route")
       const code = req.query.code;
