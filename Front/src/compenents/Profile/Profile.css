@@ -70,6 +70,12 @@ body {
 	align-items: center;
 }
 
+.pfp img{
+	width: 300px;
+	height: 200px;
+	border: 15px solid black;
+}
+
 .pfp button{
 	max-width: 100px;
 }

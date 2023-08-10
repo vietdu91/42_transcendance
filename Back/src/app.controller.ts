@@ -66,6 +66,7 @@ export class AppController {
       nick: user.nickname,
       age: user.age,
       character: user.character,
+      pfp_url: user.pfp_url,
     });
   }
 
