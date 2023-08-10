@@ -75,44 +75,12 @@ const CharacterSelectionWithMusic = () => (
 
 );
 
-export interface User {
-	user: {
-		id:number;
-		email:string;
-		name:string;
-		twoFA:boolean;
-		nick:string;
-		age:number;
-	},
-	setUser: React.Dispatch<React.SetStateAction<{
-		id?:number;
-		email?:string;
-		name?:string;
-		twoFA?:boolean;
-		nick?:string;
-		age?:number;
-	}>>;
-}
-
-export const UserContext = createContext<User>({
-  user: {
-	id: -1,
-	email: '',
-	name: '',
-	twoFA: false,
-	nick: '',
-	age: -1,
-  },
-  setUser: () => {},
-});
-
 export default function App() {
 	
 	return (
 		<GameContext.Provider value={gameSocket}>
 			<div className="App">
 				<Routes>
-				<Route path="/test" element={<Test />}/>
 				<Route path="/" element={<MenuWithMusic />}/>
 				<Route path="/select" element={<CharacterSelectionWithMusic />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>

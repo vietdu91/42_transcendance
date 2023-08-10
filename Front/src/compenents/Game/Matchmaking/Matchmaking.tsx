@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from '../../utils/GameContext';
+import Cookies from 'js-cookie';
 
 import Fire from "../../../img/backgrounds/fire_randy.jpg"
 import RedCross from "../../../img/buttons/red_cross.png"
@@ -39,7 +40,9 @@ export default function Matchmaking() {
 	const [inQueue, setInQueue] = useState(false);
 	const [socketConnected, setSocketConnected] = useState(false);
 	const navigate = useNavigate();
-
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 	// useEffect(() => {
 	// 	const timer = setTimeout(() => {
 	// 	  setIsLoading(false);

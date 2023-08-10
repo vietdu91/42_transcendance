@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
 import { GameService } from './game/game.service';
-import { GameService } from './game/game.service';
 import { Response,} from 'express';
 import { Request } from 'express';
 import * as qrcode from 'qrcode';
@@ -99,43 +98,6 @@ export class AppController {
     console.log("nickname == " + nickname);
     return { message: 'Surnom enregistré avec succès' };
   }
-
-  @Post('setAge')
-  async setAge( @Req() request, @Body() body: { age: number }) {
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const { age } = body;
-    if (!age)
-      throw new UnauthorizedException();
-    const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: { age: Number(age) },
-    });
-      // if (!userUpdate) {
-    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
-    // }
-    return { message: 'Age enregistré avec succès' };
-  }
-
-  @Post('setCharacter')
-  async setCharacter( @Req() request, @Body() body: { character: string }) {
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const { character } = body;
-    const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: { character: character },
-    });
-    //   if (!userUpdate) {
-    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
-    // }
-    return { message: 'Personnage modifié avec succès' };
-  }
-  
 
   @Post('setAge')
   async setAge( @Req() request, @Body() body: { age: number }) {

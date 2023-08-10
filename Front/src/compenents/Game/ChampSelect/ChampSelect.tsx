@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import "./ChampSelect.css";
 
@@ -49,7 +50,9 @@ export default function ChampSelect() {
 	const [butters, setButters] = useState(ButtersNormal);
 
 	const navigate = useNavigate();
-
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);

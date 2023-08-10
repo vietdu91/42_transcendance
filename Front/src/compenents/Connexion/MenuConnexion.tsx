@@ -8,7 +8,6 @@ import './Connexion.css';
 
 // COMPENENTS
 import WarningBox from "../utils/WarningBox/WarningBox";
-import { User, UserContext } from '../../App';
 
 
 // IMG

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import p5 from 'p5';
 import { GameContext } from '../../utils/GameContext';
+import Cookies from 'js-cookie';
 
 // CSS
 import './Game.css'
@@ -72,8 +73,9 @@ export default function Game(): JSX.Element {
 	const { roomId } = location.state;
 	const navigate = useNavigate();
 	const p5SketchRef = useRef<p5 | null>(null);
-	
-	// const roomId = 1;
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 	
 	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);

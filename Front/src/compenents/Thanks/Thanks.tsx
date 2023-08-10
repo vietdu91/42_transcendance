@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import './Thanks.css'
 
@@ -101,7 +102,9 @@ function CreatedBy(){
 }
 
 export default function Thanks() {
-
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 	return (
 		<CreatedBy />
 	)

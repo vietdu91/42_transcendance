@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 import MentalBattle from "../../../img/backgrounds/mental_battle.jpg"
 import RedCross from "../../../img/buttons/red_cross.png"
@@ -88,7 +89,11 @@ function PlayButton() {
 export default function GameMenu() {
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(true);
-  
+	
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
+
 	useEffect(() => {
 	  const timer = setTimeout(() => {
 		setIsLoading(false);

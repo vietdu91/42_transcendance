@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import Cookies from "js-cookie";
 import './Achievement.css'; // Import the CSS file for styling
 
 const Achievement = () => {
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 	const [title, setTitle] = useState('');
 	const [score, setScore] = useState('');
 	const [rare, setRare] = useState(false);

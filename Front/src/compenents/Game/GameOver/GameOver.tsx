@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 import './GameOver.css';
 
@@ -19,6 +20,9 @@ import GarrisonAgain from "../../../img/gameover/garrison_again_1.gif"
 import GarrisonAgain2 from "../../../img/gameover/garrison_again_2.gif"
 
 export default function GameOver() {
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 
 	const [showButtonCartman, setShowButtonCartman] = useState(false);
 	const [showGarrison, setShowGarrison] = useState(false);

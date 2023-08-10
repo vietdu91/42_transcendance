@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 import './Win.css';
 
@@ -19,6 +20,9 @@ import RandyAgain from "../../../img/win/randy_again_1.gif"
 import RandyAgain2 from "../../../img/win/randy_again_2.gif"
 
 export default function Win() {
+  const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 
   const [showButtonRandy, setShowButtonRandy] = useState(false);
 	const [showAgainRandy, setShowAgainRandy] = useState(false);

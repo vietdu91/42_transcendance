@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 import './Credits.css'
 
@@ -45,6 +46,10 @@ function Cercle() {
 }
 
 export default function Credits() {
+
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 
 	return (
 		<>
