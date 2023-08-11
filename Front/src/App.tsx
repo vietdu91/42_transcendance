@@ -1,5 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { GameContext, gameSocket } from './compenents/utils/GameContext';
+import TextField from "@mui/material/TextField";
+import List from "./compenents/List/List"
 
 // CSS
 import './App.css';
@@ -76,7 +78,13 @@ const CharacterSelectionWithMusic = () => (
 );
 
 export default function App() {
-	
+	const [inputText, setInputText] = useState("");
+  let inputHandler = (e) => {
+    //convert input text to lower case
+    var lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+};
+
 	return (
 		<GameContext.Provider value={gameSocket}>
 			<div className="App">
@@ -101,7 +109,21 @@ export default function App() {
 				<Route path="/errorgame" element={<GameError />}/>
         		<Route path="/win" element={<Win />}/>
 				<Route path="/404" element={<PageNotFound />}/>
+				<Route path="/list" element={<List />}/>
 				</Routes>
+					<div className="main">
+						<h1>React Search</h1>
+					<div className="search">
+						<TextField
+							id="outlined-basic"
+							onChange={inputHandler}
+							variant="outlined"
+							fullWidth
+							label="Search"
+						/>
+					</div>
+						<List input={inputText} />
+					</div>
 			</div>
 		</GameContext.Provider>
 	)

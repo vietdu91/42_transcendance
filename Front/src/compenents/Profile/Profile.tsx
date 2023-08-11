@@ -39,7 +39,15 @@ export default function Profile() {
 
 			<div className
 			="box2">
-				<p>CONTENT</p>
+			<div>
+              <form>
+                  <input id="search" type="text" placeholder="search..."/>
+                  <button>clear</button>
+              </form></div>
+			<div>
+				<ul>
+				</ul>
+			</div>
 
 				<div id="welcome2">
 					<div id="eric">
