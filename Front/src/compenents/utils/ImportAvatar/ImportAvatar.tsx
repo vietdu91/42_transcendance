@@ -30,22 +30,17 @@ export default function Import() {
 		if (event.target.files && event.target.files[0]) 
 		{
 			setSelectedFile(event.target.files[0]);
-			// setImageURL(URL.createObjectURL(event.target.files[0]));
-			// getImg();
 		}
 		try{
 			if (event.target.files && event.target.files[0]) 
 			{
-				// setSelectedFile(event.target.files[0]);
 				console.log(event.target.files[0].type);
-				//   setImageURL(URL.createObjectURL(event.target.files[0]));
 				const formdata = new FormData();
 				formdata.append('file', event.target.files[0]);
 				const response = axios.post('http://localhost:3001/Southtrans/online', formdata, {headers: {  'Authorization': `Bearer ${accessToken}`} },
 				)
 				.then(response => { 
 						console.log(response)
-
 					 })
 				.catch(error => {
 					   console.log(error.response)
@@ -59,97 +54,29 @@ export default function Import() {
 			console.error(error);
 		}
 		return (console.log("UPLOAD SUCCEEDED"));
-
-		// async function logout() {
-		
-		// 	console.log('access token = ' + accessToken);
-		// 	if (accessToken) {
-		// 	  try {
-		// 		  const res = await axios({
-		// 			url: apiEndpoint + '/Southtrans/logout',
-		// 			method: 'POST',
-		// 			headers: {  'Authorization': `Bearer ${accessToken}` },
-		// 			data: { msg: "Hello World!" }
-		// 		  })
-		// 		  console.log("IM HERE BRO")
-		// 		  navigate("/connect")
-		// 		  console.log("NAVIGATED")
-		// 		}
-		// 	  catch (err) {
-		// 		console.log("app-front: error: ", err)
-		// 		navigate("/connect")
-		// 	  }
-		// 	 } else {
-		// 	   console.error('Access token not found in cookies.');
-		// 	 }
-		//   }
-// async function getImg(){
-// 	try {
-// 		if (event.target.files && event.target.files[0]){
-
-// 			const res = await axios({
-// 			  url: apiEndpoint + '/Southtrans/online',
-// 			  responseType: "blob",
-// 			  method: 'POST',
-// 			  headers: {'Content-Type': 'multipart/form-data'},
-// 			  data: {File: "file", Value: event.target.files[0]}
-// 			})
-// 			if(!res)
-// 				console.log("no res")
-// 		  }
-// 		}
-// 	catch (err) {
-// 	  console.log("app-front: error: ", err)
-// 	}
-// };
 }
 
-	  //if (event.target.files && event.target.files[0]) {
-		// 	const headers = {
-		// 		'Content-Type': 'multipart/form-data',
-		// 		'File' : 'file',
-		// 		'Value': setSelectedFile(event.target.files[0]),
-		// 	}
-		// 		// setSelectedFile(event.target.files[0]);
-		// 		axios.post('http://localhost:3001/Southtrans/online', {headers: headers} , { withCredentials: true })
-		// 		.then(response => {
-		// 			// setPfpUrl(response.data.pfp_url);
-		// 		}).catch(error => {
-		// 			console.error('Probleme');
-		// 		});
-		// 	}
-
-	  function IconOrImage() {
-		// if (!imageURL)
-			return (
-				<img id="new-img" src={KennyPhoto} alt={'kenny_school'}></img>
-			);
-		/* else
-			return (
-				// <img id="new-img" src={imageURL} alt={'imageURL'}></img>
-			);*/
-	  }
-
-  return (
-    <div className="import">
-      <div className="upload-container">
-        <label htmlFor="file-input">
-          	<div className="circle">
-				<IconOrImage />
-			</div>
-        </label>
-        <input
-          type="file"
-        //   id="file-input"
-        //   style={{ display: "none" }}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-        {selectedFile && <p>{selectedFile.name}</p>}
-		<div id="appareil">
-			<FontAwesomeIcon icon={faCamera} />
+return (
+<div className="import">
+  <div className="upload-container">
+	<label htmlFor="file-input">
+		  <div className="circle_new_profile">
+			<p>Change d'image</p>
+		  	<img id="new-img" src={KennyPhoto} alt={'kenny_school'}></img>
 		</div>
-      </div>
-    </div>
-  );
+	</label>
+	<input
+	  type="file"
+	  id="file-input"
+	  style={{ display: "none" }}
+	  onChange={handleFileChange}
+	  accept="image/*"
+	/>
+	{selectedFile && <p>{selectedFile.name}</p>}
+	<div id="appareil">
+		<FontAwesomeIcon icon={faCamera} />
+	</div>
+  </div>
+</div>
+);
 }

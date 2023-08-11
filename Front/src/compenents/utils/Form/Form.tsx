@@ -52,6 +52,7 @@ export default function Form() {
         />
         <label className="hello">Ton petit surnom 👶</label>
         <span className="enter"></span>
+        <button type="submit">Enregistrer</button>
       </form>
     </>
   );
