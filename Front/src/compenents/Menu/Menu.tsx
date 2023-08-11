@@ -57,7 +57,7 @@ export default function App() {
       try {
         console.log("AXIOS LOGOUT ON")
           const res = await axios({
-            url: "http://localhost:3001/Southtrans/logout",
+            url: "http://localhost:3001/auth/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
           })
@@ -83,7 +83,7 @@ export default function App() {
     {
       try {
         const res = await axios({
-          url: "http://localhost:3001/Southtrans/2fa/generate",
+          url: "http://localhost:3001/twofa/generate",
           method: 'GET',
           headers: {  'Authorization': `Bearer ${accessToken}` },
         }).then(response => {

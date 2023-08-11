@@ -22,32 +22,25 @@ export class AuthService {
     async apiConnexion(userData: any, res: Response): Promise<User> {
         try {
             let user: User;
-            // Vérifier si l'utilisateur existe déjà
-            user = await this.findUserByEmail(userData.email);
+            user = await this.userService.findUserByEmail(userData.email);
             if (!user) {
                 user = await this.userService.createUser(userData);
                 const newToken = await this.generateAndSetAccessToken(user);
                 this.setAuthCookies(res, newToken, user.id);
                 res.redirect("http://localhost:3000/newprofile");
-                return user;
             }
             else { 
                 const newToken = await this.generateAndSetAccessToken(user);
                 this.setAuthCookies(res, newToken, user.id);
                 res.redirect("http://localhost:3000");
-                return user;
             }
+            return user;
         }catch (error) {
             console.error("error = " + error);
             }
         }
             
-    private async findUserByEmail(email: string): Promise<User | null> {
-        return this.prisma.user.findUnique({
-            where: { email },
-        });
-    }
-        
+
             
     private async generateAndSetAccessToken(user: User): Promise<string> {
         const jwtPayload = { username: user.name, sub: user.id };
@@ -65,14 +58,6 @@ export class AuthService {
         res.cookie('id', userId);
     }
             
-    async getUserToken(id: number): Promise<any> {
-        const user = await this.prisma.user.findUnique({
-            where: { id: parseInt(id.toString()) },
-        });
-        return user.accessToken;
-    }
-
-
     async getAccessToken(code: string): Promise<any> {
         try { 
             const response = await axios.post(process.env.URL_42TOKEN, { 
