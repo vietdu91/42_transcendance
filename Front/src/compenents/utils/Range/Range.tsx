@@ -45,7 +45,7 @@ export default function Range() {
 		e.preventDefault();
 		console.log(age);
 		await axios
-			.post('http://localhost:3001/SouthTrans/setAge', { age }, { withCredentials: true })
+			.post('http://localhost:3001/profile/setAge', { age }, { withCredentials: true })
 			.then((response) => {
 				console.log(response.data.message);
 			})

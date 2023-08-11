@@ -15,12 +15,7 @@ export class AuthController {
     const accessToken = await this.AuthService.getAccessToken(code);
     const userData = await this.AuthService.getUserData(accessToken);
     const user = await this.AuthService.apiConnexion(userData, response);
-    var user2 = await this.prisma.user.findUnique({
-      where: { email: userData.email },
-    });
-    if (user2)
-      response.redirect("http://localhost:3000");
-    else
-      response.redirect("http://localhost:3000/newprofile");
-    }
+    return user;
+  }
 }
+

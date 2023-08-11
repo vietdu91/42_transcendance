@@ -24,17 +24,9 @@ export default function NewProfile() {
 	let [nick, setNick] = useState("");
 	let [age, setAge] = useState(0);
 
-	// axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
-	// 	.then(response => {
-	// 		getNick(response.data.nick);
-	// 		// getName(response.data.name);
-	// 		// getAge(response.data.age);
-	// 	}).catch(error => {
-	// 		console.error('Probleme');
-	// 	});
 
 	useEffect (() => {
-		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
 		.then(response => {
 			setName(response.data.name);
 			setNick(response.data.nick);
@@ -50,7 +42,7 @@ export default function NewProfile() {
 		let newnick:string = "";
 		let newage:number = 0;
 
-		await axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		await axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
 		.then(response => {
 			setNick(response.data.nick);
 			setAge(response.data.age);

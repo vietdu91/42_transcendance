@@ -1,10 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { authenticator } from 'otplib';
+import { HttpException, HttpStatus } from '@nestjs/common';
+
  
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
+
+  async createUser(userData: any): Promise<User> {
+    try {
+        const user = await this.prisma.user.create({
+            data: {
+                name: userData.name,
+                email: userData.email,
+                twoFactorSecret: authenticator.generateSecret(),
+                accessToken: userData.accessToken,
+            }
+        });
+        console.log('User created');
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+async deleteUser(id: number): Promise<User> {
+    try {
+        const user = await this.prisma.user.delete({
+            where: { id: id }
+        });
+        console.log('User deleted');
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 
   findOne(id: string){
     const user = this.prisma.user.findUnique({
