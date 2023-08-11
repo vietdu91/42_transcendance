@@ -1,17 +1,19 @@
-import { useState , useEffect } from 'react';
-import io , { Socket } from "socket.io-client";
+import { useState, useEffect } from 'react';
+import io, { Socket } from "socket.io-client";
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
 import Cookies from 'js-cookie';
 
+import RedCross from '../../img/chat/redcross.png'
+
 import './Chat.css';
 
 function Chat() {
 
-	const token = Cookies.get('accessToken');
+    const token = Cookies.get('accessToken');
     if (!token)
-		window.location.href = "http://localhost:3000/connect";
+        window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
 
@@ -22,26 +24,26 @@ function Chat() {
     const send = (value: string) => {
         socket?.emit('message', value);
     }
-    
+
     useEffect(() => {
-       // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
+        // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
         const apiEndpoint = 'http://localhost:3001';
         const newSocket = io(apiEndpoint);
         setSocket(newSocket);
     }, [setSocket]);
 
     const messageListener = (newMessage: string) => {
-        const authorId = Cookies.get('id'); 
-        
+        const authorId = Cookies.get('id');
+
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        
-       fetch('http://localhost:3001/Southtrans/savedMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: newMessage , authorId}),
-    });
+
+        fetch('http://localhost:3001/Southtrans/savedMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: newMessage, authorId }),
+        });
     }
 
     useEffect(() => {
@@ -52,28 +54,56 @@ function Chat() {
     }, [messageListener]);
 
     return (
-        <>  
-            <div className="chat-container">
+        <>
+            <div className="truc">
+                <div className="left-part-chat">
+                    <div className="conversations-list">
+                        <img src={RedCross} alt="redcross" id="chat_redcross"></img>
+                        <ul className="top-conversation-list">
+                            {/* liste d'images */}
+                        </ul>
+                        <ul className="option-conversation-list">
+
+                        </ul>
+                        <div className="topbar-conversation-list">
+
+                        </div>
+                        <div className="bottom-conversation-list">
+
+                        </div>
+                    </div>
+                    {/* <h1>Sakut</h1> */}
+                    {/* <div className="chat-container">
                 <aside>
-		            <header>
-                        <h1>Chat</h1>
-			            <input type="text" placeholder="search"></input>       
-		            </header>
+                <header>
+                <h1>Chat</h1>
+                <input type="text" placeholder="search"></input>
+                </header>
                 </aside>
                 <div className="chat-room-container">
-                    <Room room='Chat room name' />
+                <Room room='Chat room name' />
                 </div>
                 <div className="wrapper-message-send">
-                    <MessageInput send={send} messages={messages}/>
+                <MessageInput send={send} messages={messages} />
                 </div>
-                {/* <div className="wrapper-message-received"> */}
-                {/* </div> */}
+                <div className="wrapper-message-received">
+                </div> 
                 <div className="wrapper-goback">
-                    <ReturnButtom colorHexa='#ff30ff' path='/' />
+                <ReturnButtom colorHexa='#ff30ff' path='/' />
+                </div>
+            </div> */}
+                </div>
+                <div className="right-part-chat">
+
                 </div>
             </div>
+            <ul className="menu-footer">
+                    <li className="footer-first-element">Salam</li>
+                    <li className="footer-element">Salut</li>
+                    <li className="footer-element">hola</li>
+            </ul>
         </>
-    ); 
+    );
 }
 
 export default Chat;

@@ -1,11 +1,75 @@
-Body {
+.truc {
+    height: 97vh;
+    width: 100vw;
     background: #2c2b5c;
+    display: flex;
+    flex-direction: row;
+    background-image: url("./windows-xp-wallpaper-bliss.jpg");
+    /* position: fixed; */
+}
+
+.left-part-chat {
+    width: 50%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(50, 2%);
+	grid-template-rows: repeat(50, 2%);
+    /* background-color: red; */
+}
+
+.conversations-list {
+    grid-row-start: 4;
+    grid-row-end: 46;
+    grid-column-start: 8;
+    grid-column-end: 40;
+    background-color: #d5e2f7;
+    border-radius: 5px;
+    border-width: 3px;
+    border: solid;
+    border-color: #0256ef;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 1px rgb(67, 69, 82);
+}
+
+#chat_redcross {
+    position: absolute;
+    height: 25px;
+    width: 23px;
+}
+
+.top-conversation-list {
+    height: 5%;
+    width: 100%;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    background-color: #0256ef;
+}
+
+.option-conversation-list {
+    height: 3%;
+    width: 100%;
+    background-color: #ece8d8;
+}
+
+.topbar-conversation-list {
+    height: 17%;
+    background: linear-gradient(180deg, rgba(182,209,238,1) 0%, rgba(176,212,249,1) 3%,
+    rgba(248,248,250,1) 20%, rgba(232,238,242,1) 74%, rgba(224,234,239,1) 100%);
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px grey;
+    margin: 1px 2px 2px 2px;
+}
+
+.bottom-conversation-list {
+    height: 75%;
+    background-color: blueviolet;
 }
 
 /* Chat containers */
 .chat-container {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
+    /* border: 2px solid #dedede;
+    background-color: #f1f1f1; */
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0;
@@ -64,4 +128,51 @@ Body {
 
 .wrapper-goback:hover {
     cursor: pointer;
+}
+
+
+.right-part-chat {
+    width: 50%;
+    height: 100%;
+    background-color: orange;
+	/* background-image: url("./windows-xp-wallpaper-bliss.jpg"); */
+}
+
+.Footer {
+    height: 5vh;
+    width: 100vw;
+    background-color:#0256ef;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-first-element {
+    background: linear-gradient(180deg, rgba(0,235,67,1) 0%, rgba(0,157,44,1) 32%, rgba(0,185,53,1) 100%);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 8px;
+    width: 8%;
+    height:100%;
+}
+
+.menu-footer {
+    position: fixed;
+    height: 3vh;
+    width: 100vw;
+    /* display: inline; */
+    background-color:#0256ef;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-element {
+    width: 10%;
+}
+
+.menu-footer > li {
+    display: inline-block;
+    justify-content: flex-start;
+    /* border-right :solid;
+    border-right-width: 0.5px;
+    border-color: #d5e2f7; */
 }
