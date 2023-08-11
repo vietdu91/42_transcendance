@@ -74,7 +74,7 @@ export class AuthService {
 
     async getAccessToken(code: string): Promise<any> {
         try { 
-            const response = await axios.post(process.env.URL_TOKEN42, { 
+            const response = await axios.post(process.env.URL_42TOKEN, { 
                 client_id: client_id, 
                 client_secret: clientSecret,
                 grant_type: "authorization_code",

@@ -78,6 +78,11 @@
     border: 2px solid white;
   }
   
+  #spectate-bg:hover {
+    background: rgba(250, 250, 250, 0.5) url('../../../img/chinese_dodgeball.gif') center;
+    background-size: cover;
+}
+
   #spectate-bg:before {
     grid-row: 1 / 2;
     border-right: none;
@@ -122,14 +127,19 @@
     padding: 2rem; 
 }
 
+#history-bg:hover {
+    background-image: url('../../../img/fight_wing.gif');
+    color: rgb(209, 1, 1);
+}
+
 #history-bg:before, #history-bg:after {
     content: "";
     display: block;
     width: 100%;
     height: 100%;
     border: 2px solid white;
-  }
-  
+}
+
   #history-bg:before {
     grid-row: 1 / 2;
     border-right: none;
@@ -172,6 +182,11 @@
     width: 100%;
     height: 100%;
     padding: 2rem; 
+}
+
+#classement-bg:hover {
+    background: #333 url('../../../img/ActualBoysPenisSizes.gif') center;
+    background-size: cover;
 }
 
 #classement-bg:before, #classement-bg:after {
