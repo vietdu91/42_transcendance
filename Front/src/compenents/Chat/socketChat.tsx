@@ -69,7 +69,17 @@ function Chat() {
 
                         </div>
                         <div className="bottom-conversation-list">
+                            <div className="info-conversation-list">
 
+                            </div>
+                            <div className="display-list-convo">
+
+                            </div>
+                            <div className="Advertisement-scope">
+                                <div className="Advertisement">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {/* <h1>Sakut</h1> */}
@@ -94,13 +104,28 @@ function Chat() {
             </div> */}
                 </div>
                 <div className="right-part-chat">
+                    <div className="individual-convo-big-container">
+                        <div className="Navbar-individual-convo">
 
+                        </div>
+                        <div className="receiver-big-container">
+                            <div className="display-individual-convo">
+
+                            </div>
+                            <div className="profile-pic-reveiver">
+
+                            </div>
+                        </div>
+                        <div className="emitter-big-container">
+
+                        </div>
+                    </div>
                 </div>
             </div>
             <ul className="menu-footer">
-                    <li className="footer-first-element">Salam</li>
-                    <li className="footer-element">Salut</li>
-                    <li className="footer-element">hola</li>
+                <li className="footer-first-element">Salam</li>
+                <li className="footer-element">Salut</li>
+                <li className="footer-element">hola</li>
             </ul>
         </>
     );
