@@ -43,13 +43,6 @@ export default function Matchmaking() {
 	const token = Cookies.get('accessToken');
     if (!token)
         window.location.href = "http://localhost:3000/connect";
-	// useEffect(() => {
-	// 	const timer = setTimeout(() => {
-	// 	  setIsLoading(false);
-	// 	}, 1500);
-	
-	// 	return () => clearTimeout(timer);
-	//   }, []);
 	
 	useEffect(() => {
 		socket.on('connect', () => {
@@ -113,11 +106,6 @@ export default function Matchmaking() {
 	const handleMatchFound = (roomId:string) => {
 		navigate(`/decompte`, {state: {roomId: roomId}});
 	}
-
-	// if (isLoading || !socketConnected) {
-	// 	console.log(isLoadin	g, socketConnected)
-	// 	return <Loading />;
-	// }
 
 	if (inQueue) {
 	return <MatchmakingQueue leaveQueue={leaveQueue} />;

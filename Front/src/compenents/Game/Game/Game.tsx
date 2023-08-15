@@ -65,17 +65,20 @@ const initGame: IGame = {
 }
 
 export default function Game(): JSX.Element {
+	const token = Cookies.get('accessToken');
+    if (!token)
+        window.location.href = "http://localhost:3000/connect";
 	const game = useRef(initGame);
 	const socket = useContext(GameContext);
 	const [scoreLeft, setScoreLeft] = useState(0);
 	const [scoreRight, setScoreRight] = useState(0);
 	const location = useLocation();
+	if (location.state === null)
+		window.location.href = "/";
 	const { roomId } = location.state;
 	const navigate = useNavigate();
 	const p5SketchRef = useRef<p5 | null>(null);
-	const token = Cookies.get('accessToken');
-    if (!token)
-        window.location.href = "http://localhost:3000/connect";
+	
 	
 	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
@@ -123,6 +126,8 @@ export default function Game(): JSX.Element {
 			const updatedGame:IGame = {
 				...game.current,
 				gameId: response.game.gameId,
+				idLeft: response.game.idLeft,
+				idRight: response.game.idRight,
 				scoreLeft: response.game.scoreLeft,
 				scoreRight: response.game.scoreRight,
 				charLeft: response.game.charLeft,
@@ -184,12 +189,20 @@ export default function Game(): JSX.Element {
 				if (name === 'id')  
 					id = Number(value);
 			}
-			if (id === response.winnerId)
-				navigate('/')
-				// navigate('/win');
-			else
-				navigate('/profile')
-				// navigate('/gameover');
+			if (id === response.winnerId) {
+				console.log(id);
+				const char:string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
+				console.log(char);
+				setTimeout(() => {
+				  }, 1000);
+				navigate('/win', {state: {char: char}});
+			}
+			else {
+				const char:string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
+				setTimeout(() => {
+				}, 1000);
+				navigate('/gameover', {state: {char: char}});
+			}
 		})
 
 		socket.on("gaveUp", (response) => {
@@ -203,8 +216,7 @@ export default function Game(): JSX.Element {
 					id = Number(value);
 			}
 			if (id !== response.id)
-				navigate('/newprofile');
-				// navigate('/giveup');
+				navigate('/errorgame');
 		})
 
 		socket?.emit("roundStart", roomId);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from "js-cookie";
 
 import './GameOver.css';
@@ -28,6 +28,26 @@ export default function GameOver() {
 	const [showGarrison, setShowGarrison] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
+	if (location.state == null) {
+		window.location.href = "/";
+	}
+	const { char } = location.state;
+	
+
+	const whoCharacter = (char:string): string => {
+		switch (char) {
+			case "Cartman" : return (CartmanSad);
+			case "Servietsky" : return (ServietskySad);
+			case "Kenny" : return (KennySad);
+			case "Timmy" : return (TimmySad);
+			case "TerrancePhilip" : return (TerrancePhilipSad);
+			case "Garrison" : return (GarrisonSad);
+			case "Henrietta" : return (HenriettaSad);
+			case "Butters" : return (ButtersSad);
+		}
+		return "";
+	}
 
 	const leavePage = () => {
 		navigate(`/`);
@@ -94,7 +114,7 @@ export default function GameOver() {
 	      <span className="span">GAME</span>
 	      <span className="span over">OVER</span>
 	    </div>
-	    <img id="img_gameover" alt="gameOver" src={KennySad} />
+	    <img id="img_gameover" alt="gameOver" src={whoCharacter(char)} />
 	  </div>
 	);
 }

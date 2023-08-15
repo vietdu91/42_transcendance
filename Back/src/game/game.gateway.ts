@@ -152,6 +152,8 @@ export class MatchmakingGateway {
 	@SubscribeMessage('roundStart')
 	async handleGameStart(socket: Socket, roomId: number): Promise<void> {
 		const actualGame:Game = this.games[roomId];
+		if (actualGame == null)
+			return;
 
         let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
 
@@ -169,6 +171,8 @@ export class MatchmakingGateway {
 	@SubscribeMessage('giveUp')
 	async handleGiveUp(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
+		if (actualGame == null)
+			return;
 		const prisma = new PrismaService();
 
 		if (this.gaveUp)
@@ -196,6 +200,8 @@ export class MatchmakingGateway {
 	@SubscribeMessage('movePlayer')
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
+		if (actualGame == null)
+			return;
 
 		const speed:number = (9/16) * 100 / 80;
 
@@ -221,6 +227,8 @@ export class MatchmakingGateway {
 	@SubscribeMessage('usePower')
 	async handleUsePower(socket: Socket, params): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
+		if (actualGame == null)
+			return;
 
 		if (actualGame.idLeft === params[1] && !actualGame.powerLeft) {
 			switch (actualGame.charLeft) {
@@ -255,6 +263,8 @@ export class MatchmakingGateway {
 	@SubscribeMessage('moveBall')
 	async handleMoveBall(socket: Socket, roomId: number) : Promise<void> {
 		const actualGame:Game = this.games[roomId];
+		if (actualGame == null)
+			return;
 
 		actualGame.ball.x += actualGame.ball.vx;
 		actualGame.ball.y += actualGame.ball.vy;

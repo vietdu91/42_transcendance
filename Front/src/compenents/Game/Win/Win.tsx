@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from "js-cookie";
 
 import './Win.css';
@@ -21,20 +21,36 @@ import RandyAgain2 from "../../../img/win/randy_again_2.gif"
 
 export default function Win() {
   const token = Cookies.get('accessToken');
-    if (!token)
-        window.location.href = "http://localhost:3000/connect";
+  if (!token)
+	window.location.href = "http://localhost:3000/connect";
 
   const [showButtonRandy, setShowButtonRandy] = useState(false);
 	const [showAgainRandy, setShowAgainRandy] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
+	if (location.state == null) {
+		window.location.href = "/";
+	}
+	const { char } = location.state;
 
-  function Star() {
+	const whoCharacter = (char:string): string => {
+		switch (char) {
+			case "Cartman" : return (CartmanWin);
+			case "Servietsky" : return (ServietskyWin);
+			case "Kenny" : return (KennyWin);
+			case "Timmy" : return (TimmyWin);
+			case "TerrancePhilip" : return (TPWin);
+			case "Garrison" : return (GarrisonWin);
+			case "Henrietta" : return (HenriettaWin);
+			case "Butters" : return (ButtersWin);
+		}
+		return "";
+	}
 
-    return(
-      <div className="shooting_star"></div>
-    )
-  }
+	function Star() {
+		return(<div className="shooting_star"></div>)
+  	}
 
 	const leavePage = () => {
 		navigate(`/`);
@@ -58,57 +74,57 @@ export default function Win() {
 		}, showRandyAgainDelay);
 	  }, []);
 
-    const handleMouseEnter = () => {
-      setIsHovering(true);
-    };
-    
-      const handleMouseLeave = () => {
-      setIsHovering(false);
-      };
+	const handleMouseEnter = () => {
+	  setIsHovering(true);
+	};
+	
+	const handleMouseLeave = () => {
+		setIsHovering(false);
+	};
 
-  useEffect(() => {
+	useEffect(() => {
 	  const showImageDelay = 3000;
 	  setTimeout(() => {
-	    const bgWin = document.getElementById('bg-win');
-	    bgWin?.classList.add('show-image');
+		const bgWin = document.getElementById('bg-win');
+		bgWin?.classList.add('show-image');
 	  }, showImageDelay);
 	}, []);
 
-  return (
-    <div id="bg-win">
-      <div className="stars">
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-        <Star />
-      </div>
-      {showButtonRandy && (
-        <img
-          id="button-randy-win"
-          alt="#"
-          src={isHovering ? RandyWin2 : RandyWin1}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-		      onClick={leavePage}
-        />
-      )}
+	return (
+		<div id="bg-win">
+	  		<div className="stars">
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+				<Star />
+			</div>
+			{showButtonRandy && (
+				<img
+				id="button-randy-win"
+				alt="#"
+				src={isHovering ? RandyWin2 : RandyWin1}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+					onClick={leavePage}
+				/>
+			)}
 			{showAgainRandy && (
 				<img
 					id="garrison_again"
@@ -119,8 +135,8 @@ export default function Win() {
 					onClick={tryagain}
 				/>
 			)}
-      <div id="victoire">T'ES UN WINNER !</div>
-      <img id="img_win" alt="win" src={TimmyWin} />
-    </div>
+	  		<div id="victoire">T'ES UN WINNER !</div>
+		<img id="img_win" alt="win" src={whoCharacter(char)} />
+	</div>
   )
 }
