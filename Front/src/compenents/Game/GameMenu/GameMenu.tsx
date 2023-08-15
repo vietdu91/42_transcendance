@@ -7,6 +7,25 @@ import RedCross from "../../../img/buttons/red_cross.png"
 
 import Loading from "../../utils/Loading/Loading"
 
+/* YEUX */
+import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
+import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
+import EyesKennyWin from "../../../img/eyes/kennyWin.jpg"
+import EyesKennyLost from "../../../img/eyes/kennyLost.jpg"
+import EyesTimmyWin from "../../../img/eyes/timmyWin.jpg"
+import EyesTimmyLost from "../../../img/eyes/timmyLost.jpg"
+import EyesGarrisonWin from "../../../img/eyes/garrisonWin.jpg"
+import EyesGarrisonLost from "../../../img/eyes/garrisonLost.jpg"
+import EyesButtersWin from "../../../img/eyes/buttersWin.jpg"
+import EyesButtersLost from "../../../img/eyes/buttersLost.jpg"
+import EyesTPLost from "../../../img/eyes/TPLost.jpg"
+import EyesTPWin from "../../../img/eyes/TPWin.jpg"
+import EyesHenriettaWin from "../../../img/eyes/henriettaWin.jpg"
+import EyesHenriettaLost from "../../../img/eyes/henriettaLost.jpg"
+import EyesServietskyWin from "../../../img/eyes/servietskyWin.jpg"
+import EyesServietskyLost from "../../../img/eyes/servietskyLost.jpg"
+
+
 import './GameMenu.css';
 
 
@@ -31,6 +50,11 @@ function SpecMenu() {
 				<div id="live">
 					LIVE
 				</div>
+				{/* <div className="spectate-history">
+                    <div className="spectate-square"></div>
+                    <div className="spectate-square"></div>
+                    <div className="spectate-square"></div>
+                </div> */}
 			</div>
 		</div>
 	)
@@ -44,6 +68,20 @@ function History() {
 				<div id="history-font">
 					DERNIERES PARTIES JOUEES
 				</div>
+				<div className="match-history">
+                    <div className="match-square">
+						<img alt="#" src={EyesCartmanWin} className="eyesUp"></img>
+						<img alt="#" src={EyesCartmanLost} className="eyesDown"></img>
+					</div>
+                    <div className="match-square">
+						<img alt="#" src={EyesKennyWin} className="eyesUp"></img>
+						<img alt="#" src={EyesKennyLost} className="eyesDown"></img>
+					</div>
+                    <div className="match-square">
+						<img alt="#" src={EyesButtersWin} className="eyesUp"></img>
+						<img alt="#" src={EyesButtersLost} className="eyesDown"></img>						
+					</div>
+                </div>
 			</div>
 		</div>
 	)

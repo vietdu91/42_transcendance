@@ -120,7 +120,7 @@ export default function Win() {
 				/>
 			)}
       <div id="victoire">T'ES UN WINNER !</div>
-      <img id="img_win" alt="win" src={TimmyWin} />
+      <img id="img_win" alt="win" src={CartmanWin} />
     </div>
   )
 }

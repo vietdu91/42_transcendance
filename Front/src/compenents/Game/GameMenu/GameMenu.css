@@ -132,6 +132,14 @@
     color: rgb(209, 1, 1);
 }
 
+#history-bg:hover * .match-square {
+    opacity: 1;
+}
+
+#history-bg:hover * .match-square::before {
+    background-color: red;
+}
+
 #history-bg:before, #history-bg:after {
     content: "";
     display: block;
@@ -158,6 +166,66 @@
     max-width: 100%; 
     line-height: 1em;
 }
+
+.match-history {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 49vw;
+    height: 23vh;
+}
+
+.match-square {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #b8b3b3;
+    opacity: 0.2;
+    margin: 0 2vw;
+    border-radius: 35%;
+}
+
+.match-square::before {
+    content: ''; 
+    position: absolute; 
+    top: 50%; 
+    left: 0; 
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    z-index: 5;
+    border-radius: 35%;
+  }
+
+@media (max-width: 975px) {
+    .match-square {
+        margin: 0 1vw;
+
+    }
+}
+
+.eyesUp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 50%;
+  object-fit: cover;
+  border-top-left-radius: 35%;
+  border-top-right-radius: 35%;
+}
+
+.eyesDown {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%; 
+    height: 50%;
+    object-fit: cover;
+    border-bottom-left-radius: 35%;
+    border-bottom-right-radius: 35%;
+  }
 
 /********* CLASSEMENT  ***********/
 
