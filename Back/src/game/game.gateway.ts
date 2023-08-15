@@ -38,6 +38,10 @@ type Game = {
 	charRight: string;
 	posLeft: number;
 	posRight: number;
+	wLeft: number;
+	hLeft: number;
+	wRight: number;
+	hRight: number;
 	powerLeft: boolean;
 	powerRight: boolean;
 	ball: Ball;
@@ -120,6 +124,10 @@ export class MatchmakingGateway {
 				charRight: game.characters[1],
 				posLeft: (9/16) * 100 / 2,
 				posRight: (9/16) * 100 / 2,
+				wLeft: 100 / 75,
+				hLeft: (9/16) * 100 / 5,
+				wRight: 100 / 75,
+				hRight: (9/16) * 100 / 5,
 				powerLeft: false,
 				powerRight: false,
 				ball: {
@@ -225,39 +233,46 @@ export class MatchmakingGateway {
 	}
 	
 	@SubscribeMessage('usePower')
-	async handleUsePower(socket: Socket, params): Promise<void> {
+	async handleUsePower(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
 			return;
+		let char:string;
 
 		if (actualGame.idLeft === params[1] && !actualGame.powerLeft) {
 			switch (actualGame.charLeft) {
 				// uniquement jusqu'a la fin du round (sauf Henrietta)
-				case "Cartman": ; // allonger la barre
-				case "Servietsky": ; // aveugler le terrain ennemi
-				case "Kenny": ; // ne pas pouvoir mourir
-				case "Timmy": ; // controles aleatoires ennemi
-				case "TerrancePhilip": ; // ball speed augmentee
-				case "Garrison": ; // deuxieme barre mouvante devant lui
-				case "Henrietta": ; // -1 sur son propre score
-				case "Butters": ; // ne fait rien cheh
+				case "Cartman": ; break; // allonger la barre
+				case "Servietsky": ; break; // aveugler le terrain ennemi
+				case "Kenny": ; break; // ne pas pouvoir mourir
+				case "Timmy": ; break; // controles aleatoires ennemi
+				case "TerrancePhilip": ; break; // ball speed augmentee
+				case "Garrison": ; break; // deuxieme barre mouvante devant lui
+				case "Henrietta": actualGame.scoreRight--; break; // -1 sur son propre score
+				case "Butters": ; break; // ne fait rien cheh
 			}
+			char = actualGame.charLeft;
 			actualGame.powerLeft = true;
 		}
 		else if (actualGame.idRight === params[1] && !actualGame.powerRight) {
-			switch (actualGame.charLeft) {
+			switch (actualGame.charRight) {
 				// uniquement jusqu'a la fin du round (sauf Henrietta)
-				case "Cartman": ; // allonger la barre
-				case "Servietsky": ; // aveugler le terrain ennemi
-				case "Kenny": ; // ne pas pouvoir mourir
-				case "Timmy": ; // controles aleatoires ennemi
-				case "TerrancePhilip": ; // ball speed augmentee
-				case "Garrison": ; // deuxieme barre mouvante devant lui
-				case "Henrietta": ; // -1 sur son propre score
-				case "Butters": ; // ne fait rien cheh
+				case "Cartman": ; break; // allonger la barre
+				case "Servietsky": ; break; // aveugler le terrain ennemi
+				case "Kenny": ; break; // ne pas pouvoir mourir
+				case "Timmy": ; break; // controles aleatoires ennemi
+				case "TerrancePhilip": ; break; // ball speed augmentee
+				case "Garrison": ; break; // deuxieme barre mouvante devant lui
+				case "Henrietta": actualGame.scoreLeft--; break; // -1 sur son propre score
+				case "Butters": ; break; // ne fait rien cheh
 			}
+			char = actualGame.charRight;
 			actualGame.powerRight = true;
 		}
+		else
+			return ;
+		this.server.to(actualGame.sockLeft).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char});
+		this.server.to(actualGame.sockRight).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char});
 	}
 
 	@SubscribeMessage('moveBall')

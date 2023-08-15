@@ -1,12 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { GameContext, gameSocket } from './compenents/utils/GameContext';
 
 // CSS
 import './App.css';
 
 // PACKAGES
-import { Routes, Route } from "react-router-dom"
-import axios from "axios"
+import { Routes, Route, Navigate } from "react-router-dom"
 
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
@@ -24,7 +23,6 @@ import GameError from "./compenents/Game/GameError/GameError"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
-import Test from "./compenents/Test"
 import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
 import Chat from './compenents/Chat/socketChat';
 
@@ -101,6 +99,7 @@ export default function App() {
 				<Route path="/errorgame" element={<GameError />}/>
         		<Route path="/win" element={<Win />}/>
 				<Route path="/404" element={<PageNotFound />}/>
+				<Route path="*" element={<Navigate to="/404" />}/>
 				</Routes>
 			</div>
 		</GameContext.Provider>

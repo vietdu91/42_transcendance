@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import io, { Socket } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { GameContext } from '../../utils/GameContext';
 import Cookies from 'js-cookie';
@@ -7,8 +6,6 @@ import Cookies from 'js-cookie';
 import Fire from "../../../img/backgrounds/fire_randy.jpg"
 import RedCross from "../../../img/buttons/red_cross.png"
 import BallsWaiting from "../../../img/balls_waiting.gif"
-
-import Loading from "../../utils/Loading/Loading"
 
 import './Matchmaking.css';
 
@@ -34,20 +31,42 @@ const MatchmakingQueue = ({ leaveQueue }) => (
 
 export default function Matchmaking() {
 
-	// const [socket, setSocket] = useState<Socket | null>(null);
 	const socket = useContext(GameContext);
-	const [isLoading, setIsLoading] = useState(true);
 	const [inQueue, setInQueue] = useState(false);
-	const [socketConnected, setSocketConnected] = useState(false);
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
         window.location.href = "http://localhost:3000/connect";
+
+	const cookies = document.cookie.split('; ');
+	let id:string = '';
+
+	for (const cookie of cookies) {
+		const [name, value] = cookie.split('=');
+		if (name === 'id')
+			id = value;
+	}
+
+	const joinQueue = () => {
+		socket?.emit('joinQueue', Number(id));
+	}
+
+	const leaveQueue = () => {
+		socket?.emit('leaveQueue', Number(id));
+		setInQueue(false);
+	  };
+
+	const leavePage = () => {
+		navigate(`/gamemenu`);
+	}
+
+	const handleMatchFound = (roomId:string) => {
+		navigate(`/decompte`, {state: {roomId: roomId}});
+	}
 	
 	useEffect(() => {
 		socket.on('connect', () => {
 			console.log('Connection established');
-			setSocketConnected(true);
 		});
 
 		socket.on('queueJoined', (response) => {
@@ -72,40 +91,9 @@ export default function Matchmaking() {
 			if (inQueue)
 				leaveQueue();
 		};
-	}, [inQueue]);
+	}, [inQueue, socket]);
 
-	const joinQueue = () => {
-		const cookies = document.cookie.split('; ');
-		let id:string = '';
-
-		for (const cookie of cookies) {
-			const [name, value] = cookie.split('=');
-			if (name === 'id')
-				id = value;
-		}
-		socket?.emit('joinQueue', Number(id));
-	}
-
-	const leaveQueue = () => {
-		const cookies = document.cookie.split('; ');
-		let id:string = '';
-
-		for (const cookie of cookies) {
-			const [name, value] = cookie.split('=');
-			if (name === 'id')
-				id = value;
-		}
-		socket?.emit('leaveQueue', Number(id));
-		setInQueue(false);
-	  };
-
-	const leavePage = () => {
-		navigate(`/gamemenu`);
-	}
-
-	const handleMatchFound = (roomId:string) => {
-		navigate(`/decompte`, {state: {roomId: roomId}});
-	}
+	
 
 	if (inQueue) {
 	return <MatchmakingQueue leaveQueue={leaveQueue} />;
