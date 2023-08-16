@@ -50,11 +50,11 @@ function SpecMenu() {
 				<div id="live">
 					LIVE
 				</div>
-				{/* <div className="spectate-history">
-                    <div className="spectate-square"></div>
-                    <div className="spectate-square"></div>
-                    <div className="spectate-square"></div>
-                </div> */}
+				<div className="spectate-history" >
+                    <div id="spectate-square-1"></div>
+					<div id="spectate-square-2"></div>
+                    <div id="spectate-square-3"></div>
+				</div>
 			</div>
 		</div>
 	)
@@ -62,24 +62,127 @@ function SpecMenu() {
 
 function History() {
 
+	const [hoverMatchMenu, setHoverMatchMenu] = useState(false);
+	const [hoverMatch1Square, setHoverMatch1Square] = useState(false);
+	const [hoverMatch2Square, setHoverMatch2Square] = useState(false);
+	const [hoverMatch3Square, setHoverMatch3Square] = useState(false);
+
+	const changeMatchMenuEnter = () => {
+		setHoverMatchMenu(true);
+		const opacitySquare1 = document.getElementById('match-square-1');
+		if (!opacitySquare1) return
+		opacitySquare1.style.opacity = '0.75';
+		const opacitySquare2 = document.getElementById('match-square-2');
+		if (!opacitySquare2) return
+		opacitySquare2.style.opacity = '0.75';
+		const opacitySquare3 = document.getElementById('match-square-3');
+		if (!opacitySquare3) return
+		opacitySquare3.style.opacity = '0.75';
+	}
+
+	const changeMatchMenuLeave = () => {
+		setHoverMatchMenu(false);
+		console.log("prout");
+		const opacitySquare1 = document.getElementById('match-square-1');
+		if (!opacitySquare1) return
+		opacitySquare1.style.opacity = '0.2';
+		const opacitySquare2 = document.getElementById('match-square-2');
+		if (!opacitySquare2) return
+		opacitySquare2.style.opacity = '0.2';
+		console.log(opacitySquare2.style.opacity);
+		const opacitySquare3 = document.getElementById('match-square-3');
+		if (!opacitySquare3) return
+		opacitySquare3.style.opacity = '0.2';
+	}
+
+	const changeMatchSquare1Enter = () => {
+		setHoverMatch1Square(true);
+		const opacitySquare = document.getElementById('match-square-1');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '1';
+	}
+
+	const changeMatchSquare1Leave = () => {
+		setHoverMatch1Square(false);
+		const opacitySquare = document.getElementById('match-square-1');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '0.75';
+	}
+
+	const changeMatchSquare2Enter = () => {
+		setHoverMatch2Square(true);
+		const opacitySquare = document.getElementById('match-square-2');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '1';
+	}
+
+	const changeMatchSquare2Leave = () => {
+		setHoverMatch2Square(false);
+		const opacitySquare = document.getElementById('match-square-2');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '0.75';
+	}
+
+	const changeMatchSquare3Enter = () => {
+		setHoverMatch3Square(true);
+		const opacitySquare = document.getElementById('match-square-3');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '1';
+	}
+
+	const changeMatchSquare3Leave = () => {
+		setHoverMatch3Square(false);
+		const opacitySquare = document.getElementById('match-square-3');
+		if (!opacitySquare) return
+		opacitySquare.style.opacity = '0.75';
+	}
+
 	return (
-		<div id="history-menu">
+		<div id="history-menu" onMouseEnter={() => { changeMatchMenuEnter(); }}
+		onMouseLeave={() => { changeMatchMenuLeave(); }}>
 			<div id="history-bg">
 				<div id="history-font">
 					DERNIERES PARTIES JOUEES
 				</div>
-				<div className="match-history">
-                    <div className="match-square">
-						<img alt="#" src={EyesCartmanWin} className="eyesUp"></img>
-						<img alt="#" src={EyesCartmanLost} className="eyesDown"></img>
+				<div className="match-history" >
+                    <div id="match-square-1" onMouseEnter={() => { changeMatchSquare1Enter(); }}
+          			onMouseLeave={() => { changeMatchSquare1Leave(); }}>
+						<div id="container-eyesUp">
+							<img alt="#" src={EyesCartmanWin} className="eyesUp-1"></img>
+							{hoverMatch1Square && <div className="scoreUp">5</div>}
+							{hoverMatch1Square && <div className="playerUp">emtran</div>}
+						</div>
+						<div id="container-eyesDown">
+							<img alt="#" src={EyesCartmanLost} className="eyesDown-1"></img>
+							{hoverMatch1Square && <div className="playerDown">dyoula</div>}
+							{hoverMatch1Square && <div className="scoreDown">1</div>}
+						</div>
 					</div>
-                    <div className="match-square">
-						<img alt="#" src={EyesKennyWin} className="eyesUp"></img>
-						<img alt="#" src={EyesKennyLost} className="eyesDown"></img>
+                    <div id="match-square-2" onMouseEnter={() => { changeMatchSquare2Enter(); }}
+          			onMouseLeave={() => { changeMatchSquare2Leave(); }}>
+						<div id="container-eyesUp">
+							<img alt="#" src={EyesKennyWin} className="eyesUp-2"></img>
+							{hoverMatch2Square && <div className="scoreUp">5</div>}
+							{hoverMatch2Square && <div className="playerUp">emtran</div>}
+						</div>
+						<div id="container-eyesDown">
+							<img alt="#" src={EyesKennyLost} className="eyesDown-2"></img>
+							{hoverMatch2Square && <div className="playerDown">qujacob</div>}
+							{hoverMatch2Square && <div className="scoreDown">4</div>}
+						</div>
 					</div>
-                    <div className="match-square">
-						<img alt="#" src={EyesButtersWin} className="eyesUp"></img>
-						<img alt="#" src={EyesButtersLost} className="eyesDown"></img>						
+                    <div id="match-square-3" onMouseEnter={() => { changeMatchSquare3Enter(); }}
+          			onMouseLeave={() => { changeMatchSquare3Leave(); }}>
+						<div id="container-eyesUp">
+							<img alt="#" src={EyesButtersWin} className="eyesUp-3"></img>
+							{hoverMatch3Square && <div className="scoreUp">5</div>}
+							{hoverMatch3Square && <div className="playerUp">encule</div>}
+						</div>
+						<div id="container-eyesDown">
+							<img alt="#" src={EyesButtersLost} className="eyesDown-3"></img>
+							{hoverMatch3Square && <div className="playerDown">emtran</div>}
+							{hoverMatch3Square && <div className="scoreDown">2</div>}
+						</div>
 					</div>
                 </div>
 			</div>

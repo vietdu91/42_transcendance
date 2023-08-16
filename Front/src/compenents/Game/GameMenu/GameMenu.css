@@ -3,6 +3,11 @@
     src: url(../../../fonts/Black\ Lives\ Matter.otf)
 }
 
+@font-face {
+    font-family: erbos;
+    src: url(../../../fonts/ErbosDraco.ttf)
+}
+
 .bg-game {
 	display: block;
 	object-fit: cover;
@@ -58,7 +63,6 @@
 
 #spectate-bg {
     display: grid;
-    position: relative;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
     grid-template-columns: max-content auto;
     grid-template-rows: auto max-content;
@@ -102,6 +106,25 @@
     line-height: 1em;
 }
 
+.spectate-history {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    width: 48vw;
+    height: 17vh;
+}
+
+#spectate-square-1, #spectate-square-2, #spectate-square-3 {
+    position: relative;
+    width: 300px;
+    height: 163px;
+    background-color: #FBC638;
+    opacity: 0.8;
+    margin: 0 2vw;
+}
+
+
 /********* HISTORIQUE ***********/
 
 #history-menu {
@@ -132,11 +155,7 @@
     color: rgb(209, 1, 1);
 }
 
-#history-bg:hover * .match-square {
-    opacity: 1;
-}
-
-#history-bg:hover * .match-square::before {
+#history-bg:hover * #match-square::before {
     background-color: red;
 }
 
@@ -172,11 +191,11 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-    width: 49vw;
+    width: 48vw;
     height: 23vh;
 }
 
-.match-square {
+#match-square-1, #match-square-2, #match-square-3 {
     position: relative;
     width: 300px;
     height: 200px;
@@ -186,7 +205,7 @@
     border-radius: 35%;
 }
 
-.match-square::before {
+#match-square1::before, #match-square2::before, #match-square3::before {
     content: ''; 
     position: absolute; 
     top: 50%; 
@@ -199,33 +218,91 @@
   }
 
 @media (max-width: 975px) {
-    .match-square {
+    #match-square1, #match-square2, #match-square3 {
         margin: 0 1vw;
 
     }
 }
 
-.eyesUp {
+#container-eyesUp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eyesUp-1, .eyesUp-2, .eyesUp-3 {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%; 
   height: 50%;
   object-fit: cover;
-  border-top-left-radius: 35%;
-  border-top-right-radius: 35%;
+  border-top-left-radius: 150px 100px;
+  border-top-right-radius: 150px 100px;
 }
 
-.eyesDown {
+#container-eyesDown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eyesDown-1, .eyesDown-2, .eyesDown-3 {
     position: absolute;
     top: 50%;
     left: 0;
     width: 100%; 
     height: 50%;
     object-fit: cover;
-    border-bottom-left-radius: 35%;
-    border-bottom-right-radius: 35%;
-  }
+    border-bottom-left-radius: 150px 100px;
+    border-bottom-right-radius: 150px 100px;
+}
+
+.scoreUp {
+    position: absolute;
+    margin-top: 20px;
+    font-family: south_park_font;
+    font-weight: bold;
+    font-size: 300%;
+    color:#000a96;
+    opacity: 1 !important;
+}
+
+.playerUp {
+    position: absolute;
+    margin-top: 70px;
+    font-family: south_park_font;
+    color:#000a96;
+    opacity: 1 !important;
+}
+
+.scoreDown {
+    position: absolute;
+    margin-top: 145px;
+    font-family: south_park_font;
+    font-weight: bold;
+    font-size: 300%;
+    color:red;
+    opacity: 1 !important;
+}
+
+.playerDown {
+    position: absolute;
+    margin-top: 120px;
+    font-family: south_park_font;
+    color:red;
+    opacity: 1 !important;
+}
 
 /********* CLASSEMENT  ***********/
 
