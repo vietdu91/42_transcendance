@@ -42,8 +42,10 @@ type Game = {
 	hLeft: number;
 	wRight: number;
 	hRight: number;
-	powerLeft: boolean;
-	powerRight: boolean;
+	usedPowLeft: boolean;
+	usedPowRight: boolean;
+	isPowLeft: boolean;
+	isPowRight: boolean;
 	ball: Ball;
 }
 
@@ -128,8 +130,10 @@ export class MatchmakingGateway {
 				hLeft: (9/16) * 100 / 5,
 				wRight: 100 / 75,
 				hRight: (9/16) * 100 / 5,
-				powerLeft: false,
-				powerRight: false,
+				usedPowLeft: false,
+				usedPowRight: false,
+				isPowLeft: false,
+				isPowRight: false,
 				ball: {
 					x: 100 / 2,
 					y: (9/16) * 100 / 2,
@@ -163,8 +167,10 @@ export class MatchmakingGateway {
 		if (actualGame == null)
 			return;
 
-        let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
-
+		actualGame.isPowLeft = actualGame.isPowRight = false;
+		// actualGame.ball.speed = (9/16) * 100 / 150;
+        
+		let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
 		actualGame.ball.vx = actualGame.ball.speed * Math.cos(angle);
 		if (Math.random() < 0.5) {
 			actualGame.ball.vx *= -1;
@@ -173,6 +179,7 @@ export class MatchmakingGateway {
 		if (Math.random() < 0.5) {
             actualGame.ball.vy *= -1;
         }
+
 		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball});
 	}
 
@@ -239,40 +246,40 @@ export class MatchmakingGateway {
 			return;
 		let char:string;
 
-		if (actualGame.idLeft === params[1] && !actualGame.powerLeft) {
+		if (actualGame.idLeft === params[1] && !actualGame.usedPowLeft) {
 			switch (actualGame.charLeft) {
 				// uniquement jusqu'a la fin du round (sauf Henrietta)
 				case "Cartman": ; break; // allonger la barre
 				case "Servietsky": ; break; // aveugler le terrain ennemi
 				case "Kenny": ; break; // ne pas pouvoir mourir
 				case "Timmy": ; break; // controles aleatoires ennemi
-				case "TerrancePhilip": ; break; // ball speed augmentee
+				case "TerrancePhilip": actualGame.ball.inertia = 0.3; break; // ball speed augmentee
 				case "Garrison": ; break; // deuxieme barre mouvante devant lui
 				case "Henrietta": actualGame.scoreRight--; break; // -1 sur son propre score
 				case "Butters": ; break; // ne fait rien cheh
 			}
 			char = actualGame.charLeft;
-			actualGame.powerLeft = true;
+			actualGame.usedPowLeft = actualGame.isPowLeft = true;
 		}
-		else if (actualGame.idRight === params[1] && !actualGame.powerRight) {
+		else if (actualGame.idRight === params[1] && !actualGame.usedPowRight) {
 			switch (actualGame.charRight) {
 				// uniquement jusqu'a la fin du round (sauf Henrietta)
 				case "Cartman": ; break; // allonger la barre
 				case "Servietsky": ; break; // aveugler le terrain ennemi
 				case "Kenny": ; break; // ne pas pouvoir mourir
 				case "Timmy": ; break; // controles aleatoires ennemi
-				case "TerrancePhilip": ; break; // ball speed augmentee
+				case "TerrancePhilip": actualGame.ball.inertia = 0.3; break; // ball speed augmentee
 				case "Garrison": ; break; // deuxieme barre mouvante devant lui
 				case "Henrietta": actualGame.scoreLeft--; break; // -1 sur son propre score
 				case "Butters": ; break; // ne fait rien cheh
 			}
 			char = actualGame.charRight;
-			actualGame.powerRight = true;
+			actualGame.usedPowRight = actualGame.isPowRight = true;
 		}
 		else
 			return ;
-		this.server.to(actualGame.sockLeft).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char});
-		this.server.to(actualGame.sockRight).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char});
+		this.server.to(actualGame.sockLeft).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
+		this.server.to(actualGame.sockRight).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 	}
 
 	@SubscribeMessage('moveBall')
@@ -288,51 +295,62 @@ export class MatchmakingGateway {
 		
 		this.ballHit(actualGame);
 
+		let kenny:boolean = false;
 		if (actualGame.ball.x > 100 + actualGame.ball.rad || actualGame.ball.x < -actualGame.ball.rad) {
-			if (actualGame.ball.x > 100 + actualGame.ball.rad)
+			if ((actualGame.charRight != "Kenny" || !actualGame.isPowRight) && actualGame.ball.x > 100 + actualGame.ball.rad)
 				actualGame.scoreLeft++;
-			else
+			else if ((actualGame.charLeft != "Kenny" || !actualGame.isPowLeft) && actualGame.ball.x < -actualGame.ball.rad)
 				actualGame.scoreRight++;
-			this.games[roomId] = {
-				...actualGame,
-				scoreLeft: actualGame.scoreLeft,
-				scoreRight: actualGame.scoreRight,
-				posLeft: (9/16) * 100 / 2,
-				posRight: (9/16) * 100 / 2,
-				ball: {
-					x: 100 / 2,
-					y: (9/16) * 100 / 2,
-					rad: (9/16) * 100 / 75,
-					speed: (9/16) * 100 / 175,
-					inertia: 0,
-					vx: 0,
-					vy: 0,
+			else if (actualGame.charLeft == "Kenny" && actualGame.isPowLeft || actualGame.charRight == "Kenny" && actualGame.isPowRight) { //Kenny Power
+				kenny = true;
+				if (actualGame.ball.x > 100 + actualGame.ball.rad && actualGame.charRight == "Kenny" && actualGame.isPowRight 
+				|| actualGame.ball.x < -actualGame.ball.rad && actualGame.charLeft == "Kenny" && actualGame.isPowLeft) {
+					actualGame.ball.vx *= -1;
+					actualGame.ball.vy *= -1;
 				}
 			}
-			if (actualGame.scoreLeft >= 5 || actualGame.scoreRight >= 5) {
-				const prisma = new PrismaService();
-				let winnerId:number;
-
-				if (actualGame.scoreLeft >= 5)
-					winnerId = actualGame.idLeft;
-				else
-					winnerId = actualGame.idRight;
-				
-				actualGame.isActive = false;
-
-				const game = await prisma.game.update({
-					where: {id: actualGame.gameId},
-					data: {
-						score: [actualGame.scoreLeft, actualGame.scoreRight],
-						winnerId: winnerId,
+			if (!kenny) {
+				this.games[roomId] = {
+					...actualGame,
+					scoreLeft: actualGame.scoreLeft,
+					scoreRight: actualGame.scoreRight,
+					posLeft: (9/16) * 100 / 2,
+					posRight: (9/16) * 100 / 2,
+					ball: {
+						x: 100 / 2,
+						y: (9/16) * 100 / 2,
+						rad: (9/16) * 100 / 75,
+						speed: (9/16) * 100 / 175,
+						inertia: 0,
+						vx: 0,
+						vy: 0,
 					}
-				});
-
-				this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-				this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				}
+				if (actualGame.scoreLeft >= 5 || actualGame.scoreRight >= 5) {
+					const prisma = new PrismaService();
+					let winnerId:number;
+	
+					if (actualGame.scoreLeft >= 5)
+						winnerId = actualGame.idLeft;
+					else
+						winnerId = actualGame.idRight;
+					
+					actualGame.isActive = false;
+	
+					const game = await prisma.game.update({
+						where: {id: actualGame.gameId},
+						data: {
+							score: [actualGame.scoreLeft, actualGame.scoreRight],
+							winnerId: winnerId,
+						}
+					});
+	
+					this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+					this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				}
+				this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
+				this.server.to(actualGame.sockRight).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 			}
-			this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
-			this.server.to(actualGame.sockRight).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 		}
 
 		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
