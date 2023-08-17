@@ -104,20 +104,40 @@ function Chat() {
             </div> */}
                 </div>
                 <div className="right-part-chat">
-                    <div className="individual-convo-big-container">
-                        <div className="Navbar-individual-convo">
+                    <div className="individual-convo-main-container">
+                        <div className="navbar-conv">
 
                         </div>
                         <div className="receiver-big-container">
                             <div className="display-individual-convo">
-
+                                <div className="Navbar-individual-convo">
+                                    <div className="to-who"></div>
+                                    <div className="receiver-status"></div>
+                                    <div className="text-already-sent"></div>
+                                </div>
                             </div>
-                            <div className="profile-pic-reveiver">
-
+                            <div className="profile-pic-reveiver-container">
+                                <div className="profile-pic-receiver">
+                                </div>
                             </div>
                         </div>
                         <div className="emitter-big-container">
+                            <div className="container-write-text">
+                                <div className="upper-part-write-text">
 
+                                </div>
+                                <div className="middle-part-write-text">
+
+                                </div>
+                                <div className="bottom-part-write-text">
+
+                                </div>
+                            </div>
+                            <div className="profile-pic-container-emitter">
+                                <div className="profile-pic-last-block">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
