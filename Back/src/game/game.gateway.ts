@@ -46,6 +46,8 @@ type Game = {
 	usedPowRight: boolean;
 	isPowLeft: boolean;
 	isPowRight: boolean;
+	tocLeft: number;
+	tocRight: number;
 	ball: Ball;
 }
 
@@ -59,6 +61,9 @@ export class MatchmakingGateway {
 	private games: Game[] = [];
 
 	private gaveUp: Boolean = false;
+
+	private lTocSpeed: number = (9/16) * 100 / 160;
+	private rTocSpeed: number = (9/16) * 100 / 160;
 
 	@SubscribeMessage('joinQueue')
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
@@ -134,6 +139,8 @@ export class MatchmakingGateway {
 				usedPowRight: false,
 				isPowLeft: false,
 				isPowRight: false,
+				tocLeft: null,
+				tocRight: null,
 				ball: {
 					x: 100 / 2,
 					y: (9/16) * 100 / 2,
@@ -168,8 +175,11 @@ export class MatchmakingGateway {
 			return;
 
 		actualGame.isPowLeft = actualGame.isPowRight = false;
-		// actualGame.ball.speed = (9/16) * 100 / 150;
-        
+		actualGame.tocLeft = actualGame.tocRight = null;
+
+		actualGame.hLeft = (9/16) * 100 / 5;
+		actualGame.hRight = (9/16) * 100 / 5;
+		
 		let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
 		actualGame.ball.vx = actualGame.ball.speed * Math.cos(angle);
 		if (Math.random() < 0.5) {
@@ -224,15 +234,15 @@ export class MatchmakingGateway {
 			params[2] === 1 ? actualGame.posLeft -= speed : actualGame.posLeft += speed;
 			if (actualGame.posLeft < (9/16) * 100 / 150)
 				actualGame.posLeft = (9/16) * 100 / 150;
-			else if (actualGame.posLeft > (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5))
-				actualGame.posLeft = (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5);
+			else if (actualGame.posLeft > (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft))
+				actualGame.posLeft = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft);
 		}
 		if (params[1] === actualGame.idRight) {
 			params[2] === 1 ? actualGame.posRight -= speed : actualGame.posRight += speed;
 			if (actualGame.posRight < (9/16) * 100 / 150)
 				actualGame.posRight = (9/16) * 100 / 150;
-			else if (actualGame.posRight > (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5))
-				actualGame.posRight = (9/16) * 100 - ((9/16) * 100 / 150) - ((9/16) * 100 / 5);
+			else if (actualGame.posRight > (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hRight))
+				actualGame.posRight = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hRight);
 		}
 
 		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
@@ -248,30 +258,28 @@ export class MatchmakingGateway {
 
 		if (actualGame.idLeft === params[1] && !actualGame.usedPowLeft) {
 			switch (actualGame.charLeft) {
-				// uniquement jusqu'a la fin du round (sauf Henrietta)
-				case "Cartman": ; break; // allonger la barre
-				case "Servietsky": ; break; // aveugler le terrain ennemi
-				case "Kenny": ; break; // ne pas pouvoir mourir
-				case "Timmy": ; break; // controles aleatoires ennemi
-				case "TerrancePhilip": actualGame.ball.inertia = 0.3; break; // ball speed augmentee
-				case "Garrison": ; break; // deuxieme barre mouvante devant lui
-				case "Henrietta": actualGame.scoreRight--; break; // -1 sur son propre score
-				case "Butters": ; break; // ne fait rien cheh
+				case "Cartman": actualGame.hLeft = (9/16) * 100 / 2; break;
+				case "Servietsky": ; break;
+				case "Kenny": ; break;
+				case "Timmy": ; break;
+				case "TerrancePhilip": actualGame.ball.inertia = 0.5; break;
+				case "Garrison": actualGame.tocLeft = (9/16) * 100 / 2; break;
+				case "Henrietta": actualGame.scoreRight--; break;
+				case "Butters": ; break;
 			}
 			char = actualGame.charLeft;
 			actualGame.usedPowLeft = actualGame.isPowLeft = true;
 		}
 		else if (actualGame.idRight === params[1] && !actualGame.usedPowRight) {
 			switch (actualGame.charRight) {
-				// uniquement jusqu'a la fin du round (sauf Henrietta)
-				case "Cartman": ; break; // allonger la barre
-				case "Servietsky": ; break; // aveugler le terrain ennemi
-				case "Kenny": ; break; // ne pas pouvoir mourir
-				case "Timmy": ; break; // controles aleatoires ennemi
-				case "TerrancePhilip": actualGame.ball.inertia = 0.3; break; // ball speed augmentee
-				case "Garrison": ; break; // deuxieme barre mouvante devant lui
-				case "Henrietta": actualGame.scoreLeft--; break; // -1 sur son propre score
-				case "Butters": ; break; // ne fait rien cheh
+				case "Cartman": actualGame.hRight = (9/16) * 100 / 2; break;
+				case "Servietsky": ; break;
+				case "Kenny": ; break;
+				case "Timmy": ; break;
+				case "TerrancePhilip": actualGame.ball.inertia = 0.5; break;
+				case "Garrison": actualGame.tocRight = (9/16) * 100 / 2; break;
+				case "Henrietta": actualGame.scoreLeft--; break;
+				case "Butters": ; break;
 			}
 			char = actualGame.charRight;
 			actualGame.usedPowRight = actualGame.isPowRight = true;
@@ -292,7 +300,36 @@ export class MatchmakingGateway {
 		actualGame.ball.y += actualGame.ball.vy;
 		if (actualGame.ball.y + actualGame.ball.rad >= (9/16) * 100 || actualGame.ball.y - actualGame.ball.rad <= 0)
 			actualGame.ball.vy *= -1;
+		if (actualGame.ball.y == 0)
+			actualGame.ball.y = 1;
+		if (actualGame.ball.y == 100)
+			actualGame.ball.y = 99;
 		
+		// MONSIEUR TOC START
+		if (actualGame.tocLeft != null) {
+			actualGame.tocLeft -= this.lTocSpeed;
+			if (actualGame.tocLeft < (9/16) * 100 / 150) {
+				this.lTocSpeed *= -1;
+				actualGame.tocLeft = (9/16) * 100 / 150;
+			}
+			else if (actualGame.tocLeft > (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft / 2)) {
+				this.lTocSpeed *= -1;
+				actualGame.tocLeft = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft / 2);
+			}
+		}
+		if (actualGame.tocRight != null) {
+			actualGame.tocRight -= this.rTocSpeed;
+			if (actualGame.tocRight < (9/16) * 100 / 150) {
+				this.rTocSpeed *= -1;
+				actualGame.tocRight = (9/16) * 100 / 150;
+			}
+			else if (actualGame.tocRight > (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft / 2)) {
+				this.rTocSpeed *= -1;
+				actualGame.tocRight = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hLeft / 2);
+			}
+		}
+		// MONSIEUR TOC STOP
+
 		this.ballHit(actualGame);
 
 		let kenny:boolean = false;
@@ -353,18 +390,18 @@ export class MatchmakingGateway {
 			}
 		}
 
-		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
-		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
+		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
+		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 	}
 
 	private async ballHit(actualGame: Game) {
 		const ball:Ball = actualGame.ball;
 
 		if (((100 / 75) - ball.rad) < ball.x && ball.x < (100 / 75) + (100 / 75) + ball.rad) {
-			if ((actualGame.posLeft - ball.rad) < ball.y && ball.y < (actualGame.posLeft + ((9/16) * 100 / 5) + ball.rad)) {
+			if ((actualGame.posLeft - ball.rad) < ball.y && ball.y < (actualGame.posLeft + (actualGame.hLeft) + ball.rad)) {
 
 				let centerX:number = 100 / 75 + (100 / 75) / 2;
-				let centerY:number = actualGame.posLeft + ((9/16) * 100 / 5) / 2;
+				let centerY:number = actualGame.posLeft + (actualGame.hLeft) / 2;
 			
 				actualGame.ball.vx = actualGame.ball.x - centerX;
 				actualGame.ball.vy = actualGame.ball.y - centerY;
@@ -392,10 +429,10 @@ export class MatchmakingGateway {
 		}
 
 		if (((100 - ((100 / 75) * 2)) - ball.rad) <= ball.x && ball.x <= (100 - ((100 / 75) * 2)) + (100 / 75) + ball.rad) {
-			if ((actualGame.posRight - ball.rad) <= ball.y && ball.y <= (actualGame.posRight + ((9/16) * 100 / 5) + ball.rad)) {
+			if ((actualGame.posRight - ball.rad) <= ball.y && ball.y <= (actualGame.posRight + (actualGame.hRight) + ball.rad)) {
 
 				let centerX:number = (100 - ((100 / 75) * 2)) + (100 / 75) / 2;
-				let centerY:number = actualGame.posRight + ((9/16) * 100 / 5) / 2;
+				let centerY:number = actualGame.posRight + (actualGame.hRight) / 2;
 			
 				actualGame.ball.vx = actualGame.ball.x - centerX;
 				actualGame.ball.vy = actualGame.ball.y - centerY;
@@ -418,6 +455,71 @@ export class MatchmakingGateway {
 					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
 					actualGame.ball.vx = Math.cos(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 					actualGame.ball.vy = Math.sin(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+				}
+			}
+		}
+
+		if (actualGame.tocLeft != null) {
+			if (((100 / 75 * 4) - ball.rad) < ball.x && ball.x < (100 / 75 * 4) + (100 / 75) + ball.rad) {
+				if ((actualGame.tocLeft - ball.rad) < ball.y && ball.y < (actualGame.tocLeft + (actualGame.hLeft / 2) + ball.rad)) {
+	
+					let centerX:number = (100 / 75 * 4) + (100 / 75) / 2;
+					let centerY:number = actualGame.tocLeft + (actualGame.hLeft / 2) / 2;
+				
+					actualGame.ball.vx = actualGame.ball.x - centerX;
+					actualGame.ball.vy = actualGame.ball.y - centerY;
+					let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
+					if (magnitude > 10) {
+						actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
+						actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
+					}
+					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+					if (actualGame.ball.inertia < 0.2)
+						actualGame.ball.inertia += (9 / 16) * 0.05;
+					if (angle > -(PI/2) && angle < (PI/2)) {
+						actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+						actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					} else {
+						const x:number = actualGame.ball.vx;
+						const y:number = actualGame.ball.vy;
+						actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
+						actualGame.ball.vy = x * Math.sin(PI) + y * Math.cos(PI);
+						let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+						actualGame.ball.vx = Math.cos(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+						actualGame.ball.vy = Math.sin(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					}
+				}
+			}
+		}
+		if (actualGame.tocRight != null) {
+			if (((100 - ((100 / 75) * 5)) - ball.rad) <= ball.x && ball.x <= (100 - ((100 / 75) * 5)) + (100 / 75) + ball.rad) {
+				if ((actualGame.tocRight - ball.rad) <= ball.y && ball.y <= (actualGame.tocRight + (actualGame.hRight / 2) + ball.rad)) {
+	
+					let centerX:number = (100 - ((100 / 75) * 5)) + (100 / 75) / 2;
+					let centerY:number = actualGame.tocRight + (actualGame.hRight) / 2 / 2;
+				
+					actualGame.ball.vx = actualGame.ball.x - centerX;
+					actualGame.ball.vy = actualGame.ball.y - centerY;
+					let magnitude:number = Math.sqrt(actualGame.ball.vx ** 2 + actualGame.ball.vy ** 2);
+					if (magnitude > 10) { //p5.vector.limit
+						actualGame.ball.vx = actualGame.ball.vx * 10 / magnitude;
+						actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
+					}
+					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
+					if (actualGame.ball.inertia < 0.2)
+						actualGame.ball.inertia += (9 / 16) * 0.05;
+					if (angle > -PI/2 && angle < PI/2) {
+						actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+						actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					} else {
+						const x:number = actualGame.ball.vx;
+						const y:number = actualGame.ball.vy;
+						actualGame.ball.vx = x * Math.cos(PI) - y * Math.sin(PI);
+						actualGame.ball.vy = x * Math.sin(PI) + y * Math.cos(PI);
+						let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
+						actualGame.ball.vx = Math.cos(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+						actualGame.ball.vy = Math.sin(PI + angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
+					}
 				}
 			}
 		}

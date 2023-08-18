@@ -23,7 +23,6 @@ import GameError from "./compenents/Game/GameError/GameError"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
-import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
 import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
@@ -65,10 +64,10 @@ const ThanksWithMusic = () => (
   </>
 );
 
-const CharacterSelectionWithMusic = () => (
+const ChampSelectWithMusic = () => (
   <>
 	<MusicPlayer audioSrc={choose_your_fighter} />
-	<CharacterSelection />
+	<ChampSelect />
   </>
 
 );
@@ -80,9 +79,8 @@ export default function App() {
 			<div className="App">
 				<Routes>
 				<Route path="/" element={<MenuWithMusic />}/>
-				<Route path="/select" element={<CharacterSelectionWithMusic />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
-				<Route path="/champselect" element={<ChampSelect />}/>
+				<Route path="/champselect" element={<ChampSelectWithMusic />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>
 				<Route path="/game" element={<Game />}/>
 				<Route path="/game/:roomId" element={<Game />}/>
