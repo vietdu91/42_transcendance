@@ -6,6 +6,8 @@ import Room from '../Room/room';
 import Cookies from 'js-cookie';
 
 import RedCross from '../../img/chat/redcross.png'
+import Maximize from '../../img/chat/rsz_1maximize_1.png'
+import Advertisement from '../../img/chat/advertisement.jpg'
 
 import './Chat.css';
 
@@ -58,12 +60,19 @@ function Chat() {
             <div className="truc">
                 <div className="left-part-chat">
                     <div className="conversations-list">
-                        <img src={RedCross} alt="redcross" id="chat_redcross"></img>
+                        
                         <ul className="top-conversation-list">
                             {/* liste d'images */}
+                            <li><img src={RedCross} alt="redcross" id="chat_redcross"></img></li>
+                            <li><img src={Maximize} alt="maximize" id="chat_maximize"></img></li>
+                            <li><img src={RedCross} alt="redcross" id="chat_redcross"></img></li>
                         </ul>
                         <ul className="option-conversation-list">
-
+                            <li>File</li>
+                            <li>Contacts</li>
+                            <li>Actions</li>
+                            <li>Tools</li>
+                            <li>Help</li>
                         </ul>
                         <div className="topbar-conversation-list">
 
@@ -77,7 +86,7 @@ function Chat() {
                             </div>
                             <div className="Advertisement-scope">
                                 <div className="Advertisement">
-
+                                <img src={Advertisement} alt="advertisement" id="chat_advertisement"></img>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +120,7 @@ function Chat() {
                         <div className="receiver-big-container">
                             <div className="display-individual-convo">
                                 <div className="Navbar-individual-convo">
-                                    <div className="to-who"></div>
+                                    <div className="to-who">To: Name and userid.transcendance.net</div>
                                     <div className="receiver-status"></div>
                                     <div className="text-already-sent"></div>
                                 </div>

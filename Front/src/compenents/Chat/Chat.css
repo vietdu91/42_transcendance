@@ -32,10 +32,16 @@
     box-shadow: 1px 1px 1px rgb(67, 69, 82);
 }
 
+#chat_maximize {
+    /* position: absolute; */
+    width: 30px;
+    height: 30px;
+}
+
 #chat_redcross {
-    position: absolute;
-    height: 25px;
-    width: 23px;
+    /* position: absolute; */
+    width: 30px;
+    height: 30px;
 }
 
 .top-conversation-list {
@@ -44,12 +50,38 @@
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     background-color: #0256ef;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.top-conversation-list li {
+    padding:0;
+    margin: 1px 1px 1px 1px;
+    /* height: 1vh; */
 }
 
 .option-conversation-list {
     height: 3%;
     width: 100%;
+    list-style-type: none;
     background-color: #ece8d8;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 0;
+    font-size: 50%;
+    align-items: center;
+}
+
+.option-conversation-list * {
+    height: auto;
+    padding-right: 3%;
+    font-size: 0.8vw;
+    padding-left: 7px;
 }
 
 .topbar-conversation-list {
@@ -113,8 +145,15 @@
     height: 98%;
     border: solid;
     border-width: 1px;
-    /* background-color: black; */
+    /* background-image: url("./images.jpeg"); */
+    /* background-size: 100; a modifier plus tard */
+    background-repeat: no-repeat;
+    /* object-fit: cover; */
+}
 
+#chat_advertisement {
+    height:100%;
+    width:100%;
 }
 
 /* Chat containers */
@@ -212,7 +251,8 @@
     height: 20%;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: goldenrod;
+    background-color: #e8f0fc;
+    font-size:0.8vw;
 }
 
 .receiver-status {
@@ -230,7 +270,7 @@
 .text-already-sent {
     width: 100;
     height: 60%;
-    background-color: salmon;
+    background-color: #FCFDFF;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -277,7 +317,10 @@
     margin-right: 10%; */
     /* width: 30%;
     height: 60%; */
-    background-color: #2c2b5c;
+    border: solid;
+    border-width: 1px;
+    border-color: grey;
+    background-color: #e8f2fd;
     display: grid;
     grid-template-columns: repeat(50, 2%);
 	grid-template-rows: repeat(50, 2%);
@@ -321,13 +364,21 @@
     height: 20%;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: white;
+    background-color: #E1EAF3;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: solid;
+    border-width: 1px;
+    border-color: #7483af;
 }
 
 .middle-part-write-text {
     width: 100%;
     height: 60%;
-    background-color: black;
+    background-color: #F9FAFD;
+    border: solid;
+    border-width: 1px;
+    border-color: #7483af;
 }
 
 .bottom-part-write-text {
@@ -336,6 +387,9 @@
     border-bottom-left-radius: 5px;;
     border-bottom-right-radius: 5px;;
     background-color: pink;
+    border: solid;
+    border-width: 1px;
+    border-color: #7483af;
 } 
 
 .profile-pic-container-emitter {
