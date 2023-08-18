@@ -93,7 +93,7 @@ export default function Game(): JSX.Element {
 	const randomImage = Chaos;
 
 	const cookies = document.cookie.split('; ');
-	let id:number;
+	let id:number = -1;
 
 	for (const cookie of cookies) {
 		const [name, value] = cookie.split('=');
@@ -163,8 +163,6 @@ export default function Game(): JSX.Element {
 				},
 			}
 			game.current = updatedGame;
-			setScoreLeft(game.current.scoreLeft);
-			setScoreRight(game.current.scoreRight);
 			powLeft = powRight = weed = timmy = fart = toc = false;
 		})
 		
@@ -181,6 +179,8 @@ export default function Game(): JSX.Element {
 		socket.on("ballMoved", (response) => {
 			const updatedGame:IGame = {
 				...game.current,
+				scoreLeft: response.game.scoreLeft,
+				scoreRight: response.game.scoreLeft,
 				tocLeft: response.game.tocLeft / 100 * window.innerWidth * 70 / 100,
 				tocRight: response.game.tocRight / 100 * window.innerWidth * 70 / 100,
 				ball: {
@@ -193,6 +193,8 @@ export default function Game(): JSX.Element {
 				}
 			}
 			game.current = updatedGame;
+			setScoreLeft(game.current.scoreLeft);
+			setScoreRight(game.current.scoreRight);
 		})
 
 		socket.on("usedPower", (response) => {
@@ -270,8 +272,8 @@ export default function Game(): JSX.Element {
 					if (p.keyIsDown(32))
 						socket?.emit("usePower", roomId, id);
 					if (timmy && 
-					(powLeft && game.current.charLeft == "Timmy" && id != game.current.idLeft
-					|| powRight && game.current.charRight == "Timmy" && id != game.current.idRight)) {
+					((powLeft && game.current.charLeft === "Timmy" && id !== game.current.idLeft)
+					|| (powRight && game.current.charRight === "Timmy" && id !== game.current.idRight))) {
 						if (p.keyIsDown(87))
 							socket?.emit("movePlayer", roomId, id, 0);
 						if (p.keyIsDown(83))
@@ -352,7 +354,7 @@ export default function Game(): JSX.Element {
 			}
 			p5SketchRef.current?.remove();
 		};
-	}, [sketchRef, navigate, roomId, socket]);
+	}, [sketchRef, navigate, roomId, socket, id]);
 
 	return (
 		<>
