@@ -180,7 +180,7 @@ export default function Game(): JSX.Element {
 			const updatedGame:IGame = {
 				...game.current,
 				scoreLeft: response.game.scoreLeft,
-				scoreRight: response.game.scoreLeft,
+				scoreRight: response.game.scoreRight,
 				tocLeft: response.game.tocLeft / 100 * window.innerWidth * 70 / 100,
 				tocRight: response.game.tocRight / 100 * window.innerWidth * 70 / 100,
 				ball: {
@@ -302,19 +302,19 @@ export default function Game(): JSX.Element {
 					if (toc) {
 						p.fill(255);
 						p.noStroke();
-						if (powLeft)
+						if (powLeft && game.current.charLeft === "Garrison")
 							p.rect(cDiv.clientWidth / 75 * 4, game.current.tocLeft, game.current.wLeft, game.current.hLeft / 2);
-						if (powRight)
+						if (powRight && game.current.charRight === "Garrison")
 							p.rect(cDiv.clientWidth - ((cDiv.clientWidth / 75) * 5), game.current.tocRight, game.current.wRight, game.current.hRight / 2);
 					}
 					
 					if (weed) {
 						p.fill('rgba(255, 255, 255, 0.95)');
 						p.noStroke();
-						if (powLeft)
-							p.rect(cDiv.clientWidth - (cDiv.clientWidth / 3), 0, cDiv.clientWidth / 3, cDiv.clientHeight);
-						if (powRight)
-							p.rect(0, 0, cDiv.clientWidth / 3, cDiv.clientHeight); 
+						if (powLeft && game.current.charLeft === "Servietsky")
+							p.rect(cDiv.clientWidth - (cDiv.clientWidth / 3), 0, cDiv.clientWidth / 3, (9/16) * cDiv.clientWidth);
+						if (powRight && game.current.charRight === "Servietsky")
+							p.rect(0, 0, cDiv.clientWidth / 3, (9/16) * cDiv.clientWidth); 
 					}
 				
 				};

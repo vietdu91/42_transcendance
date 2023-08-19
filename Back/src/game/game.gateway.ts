@@ -163,6 +163,15 @@ export class MatchmakingGateway {
 			}
 			this.games[gameIdIndex] = newGame;
 
+			await prisma.user.update({
+				where: {id: game.playersId[0]},
+				data: {actualGame: game.id},
+			})
+			await prisma.user.update({
+				where: {id: game.playersId[1]},
+				data: {actualGame: game.id},
+			})
+
 			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
 			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
@@ -216,6 +225,14 @@ export class MatchmakingGateway {
 				winnerId: winnerId,
 			}
 		});
+		await prisma.user.update({
+			where: {id: game.playersId[0]},
+			data: {actualGame: null},
+		})
+		await prisma.user.update({
+			where: {id: game.playersId[1]},
+			data: {actualGame: null},
+		})
 		this.gaveUp = true;
 		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
@@ -381,6 +398,15 @@ export class MatchmakingGateway {
 							winnerId: winnerId,
 						}
 					});
+
+					await prisma.user.update({
+						where: {id: game.playersId[0]},
+						data: {actualGame: null},
+					})
+					await prisma.user.update({
+						where: {id: game.playersId[1]},
+						data: {actualGame: null},
+					})
 	
 					this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});

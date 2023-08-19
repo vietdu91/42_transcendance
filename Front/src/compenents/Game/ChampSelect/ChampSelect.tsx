@@ -61,7 +61,7 @@ export default function ChampSelect() {
 
 	const handleClick = async (character:String) => {
 		await axios
-			.post('http://localhost:3001/SouthTrans/setCharacter', { character }, { withCredentials: true })
+			.post(process.env.REACT_APP_LOCAL_B + '/SouthTrans/setCharacter', { character }, { withCredentials: true })
 			.then((response) => {
 				console.log(response.data.message);
 			})

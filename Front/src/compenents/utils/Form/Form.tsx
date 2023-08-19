@@ -27,7 +27,7 @@ export default function Form() {
     e.preventDefault();
     console.log(nickname);
     await axios
-    .post('http://localhost:3001/SouthTrans/setNickname', { nickname }, { withCredentials: true })
+    .post(process.env.REACT_APP_LOCAL_B + '/SouthTrans/setNickname', { nickname }, { withCredentials: true })
     .then((response) => {
       console.log(response.data.message);
       // Traiter la réponse du serveur si nécessaire
