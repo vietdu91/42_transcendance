@@ -1,0 +1,25 @@
+.chat-conversation-area {
+    width: 50%;
+    height: 100%;
+    /* background-color: orange; */
+	/* background-image: url("./windows-xp-wallpaper-bliss.jpg"); */
+}
+
+
+.individual-convo-main-container {
+    height: 50%;
+    width: 50%;
+    background-color: #e4f1f8;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+.navbar-conv {
+    height: 13%;
+    width: 100%;
+    background-color: skyblue;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+

@@ -1,0 +1,30 @@
+.menu-footer {
+    position: fixed;
+    height: 3vh;
+    width: 100vw;
+    /* display: inline; */
+    background-color:#0256ef;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-first-element {
+    background: linear-gradient(180deg, rgba(0,235,67,1) 0%, rgba(0,157,44,1) 32%, rgba(0,185,53,1) 100%);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 8px;
+    width: 8%;
+    height:100%;
+}
+
+.footer-element {
+    width: 10%;
+}
+
+.menu-footer > li {
+    display: inline-block;
+    justify-content: flex-start;
+    /* border-right :solid;
+    border-right-width: 0.5px;
+    border-color: #d5e2f7; */
+}

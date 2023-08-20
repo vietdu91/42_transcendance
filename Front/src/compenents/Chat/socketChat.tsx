@@ -5,11 +5,17 @@ import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
 import Cookies from 'js-cookie';
 
-import RedCross from '../../img/chat/redcross.png'
-import Maximize from '../../img/chat/rsz_1maximize_1.png'
-import Advertisement from '../../img/chat/advertisement.jpg'
+
+import ConversationContainer from './ConversationContainer/ConversationContainer'; 
+import TextComposerContainer from './TextComposerContainer/TextComposerContainer';
+import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
+import FooterMenu from './FooterMenu/FooterMenu';
+import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
+import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
+
 
 import './Chat.css';
+import axios from "axios"
 
 function Chat() {
 
@@ -18,6 +24,23 @@ function Chat() {
         window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
+    	let [nick, getNick] = useState("");
+	let [name, getName] = useState("");
+	let [age, getAge] = useState(0);
+	let [pfp_url, getPfpUrl] = useState("");
+
+    useEffect (() => {
+		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		.then(response => {
+			getNick(response.data.nick);
+			getName(response.data.name);
+			getAge(response.data.age);
+			getPfpUrl(response.data.pfp_url)
+		}).catch(error => {
+			console.error('Probleme');
+		});
+	}, [])
+    
 
     //const [value, setValue] = useState("");
     //const [joined, setJoined] = useState(false);
@@ -60,102 +83,13 @@ function Chat() {
             <div className="truc">
                 <div className="left-part-chat">
                     <div className="conversations-list">
-                        
-                        <ul className="top-conversation-list">
-                            {/* liste d'images */}
-                            <li><img src={RedCross} alt="redcross" id="chat_redcross"></img></li>
-                            <li><img src={Maximize} alt="maximize" id="chat_maximize"></img></li>
-                            <li><img src={RedCross} alt="redcross" id="chat_redcross"></img></li>
-                        </ul>
-                        <ul className="option-conversation-list">
-                            <li>File</li>
-                            <li>Contacts</li>
-                            <li>Actions</li>
-                            <li>Tools</li>
-                            <li>Help</li>
-                        </ul>
-                        <div className="topbar-conversation-list">
-
-                        </div>
-                        <div className="bottom-conversation-list">
-                            <div className="info-conversation-list">
-
-                            </div>
-                            <div className="display-list-convo">
-
-                            </div>
-                            <div className="Advertisement-scope">
-                                <div className="Advertisement">
-                                <img src={Advertisement} alt="advertisement" id="chat_advertisement"></img>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* <h1>Sakut</h1> */}
-                    {/* <div className="chat-container">
-                <aside>
-                <header>
-                <h1>Chat</h1>
-                <input type="text" placeholder="search"></input>
-                </header>
-                </aside>
-                <div className="chat-room-container">
-                <Room room='Chat room name' />
-                </div>
-                <div className="wrapper-message-send">
-                <MessageInput send={send} messages={messages} />
-                </div>
-                <div className="wrapper-message-received">
-                </div> 
-                <div className="wrapper-goback">
-                <ReturnButtom colorHexa='#ff30ff' path='/' />
-                </div>
-            </div> */}
-                </div>
-                <div className="right-part-chat">
-                    <div className="individual-convo-main-container">
-                        <div className="navbar-conv">
-
-                        </div>
-                        <div className="receiver-big-container">
-                            <div className="display-individual-convo">
-                                <div className="Navbar-individual-convo">
-                                    <div className="to-who">To: Name and userid.transcendance.net</div>
-                                    <div className="receiver-status"></div>
-                                    <div className="text-already-sent"></div>
-                                </div>
-                            </div>
-                            <div className="profile-pic-reveiver-container">
-                                <div className="profile-pic-receiver">
-                                </div>
-                            </div>
-                        </div>
-                        <div className="emitter-big-container">
-                            <div className="container-write-text">
-                                <div className="upper-part-write-text">
-
-                                </div>
-                                <div className="middle-part-write-text">
-
-                                </div>
-                                <div className="bottom-part-write-text">
-
-                                </div>
-                            </div>
-                            <div className="profile-pic-container-emitter">
-                                <div className="profile-pic-last-block">
-
-                                </div>
-                            </div>
-                        </div>
+                        <ConversationListHeader name={name} />
+                        <ConversationListSummary />
                     </div>
                 </div>
+                <ChatConversationArea />
             </div>
-            <ul className="menu-footer">
-                <li className="footer-first-element">Salam</li>
-                <li className="footer-element">Salut</li>
-                <li className="footer-element">hola</li>
-            </ul>
+            <FooterMenu />
         </>
     );
 }
