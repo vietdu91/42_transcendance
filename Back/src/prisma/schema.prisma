@@ -31,6 +31,7 @@ model Game {
   score           Int[]
   winnerId        Int?
   characters      String[]
+  playing         Boolean
   date            DateTime @default(now())
 }
 

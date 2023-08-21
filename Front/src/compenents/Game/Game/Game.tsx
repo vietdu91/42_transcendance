@@ -124,8 +124,6 @@ export default function Game(): JSX.Element {
 			)
 	}
 
-	socket?.emit("movePlayer", roomId, 1, 0);
-
 	useEffect(() => {
 		let powLeft: boolean = false;
 		let powRight: boolean = false;
@@ -232,16 +230,14 @@ export default function Game(): JSX.Element {
 			console.log(response.message);
 			if (id === response.winnerId) {
 				const char:string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
-				setTimeout(() => {
-				  }, 1000);
 				navigate('/win', {state: {char: char}});
 			}
-			else {
+			else if (id === game.current.idLeft || id === game.current.idRight) {
 				const char:string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
-				setTimeout(() => {
-				}, 1000);
 				navigate('/gameover', {state: {char: char}});
 			}
+			else
+				navigate('/gamemenu');
 		})
 
 		socket.on("gaveUp", (response) => {

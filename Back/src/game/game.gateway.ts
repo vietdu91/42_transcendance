@@ -114,6 +114,7 @@ export class MatchmakingGateway {
 					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
 					score: [0, 0],
 					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
+					playing: true,
 					date: date,
 				}
 			});
@@ -182,13 +183,13 @@ export class MatchmakingGateway {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)
 			return;
-
+		
 		actualGame.isPowLeft = actualGame.isPowRight = false;
 		actualGame.tocLeft = actualGame.tocRight = null;
-
+		
 		actualGame.hLeft = (9/16) * 100 / 5;
 		actualGame.hRight = (9/16) * 100 / 5;
-		
+			
 		let angle = Math.floor(Math.random() * ((3*PI/3) - (PI/3) + 1) + (PI/3));
 		actualGame.ball.vx = actualGame.ball.speed * Math.cos(angle);
 		if (Math.random() < 0.5) {
@@ -196,8 +197,8 @@ export class MatchmakingGateway {
 		}
 		actualGame.ball.vy = actualGame.ball.speed * Math.sin(angle);
 		if (Math.random() < 0.5) {
-            actualGame.ball.vy *= -1;
-        }
+			actualGame.ball.vy *= -1;
+		}
 
 		socket.emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball});
 	}
@@ -223,6 +224,7 @@ export class MatchmakingGateway {
 			data: {
 				score: score,
 				winnerId: winnerId,
+				playing: false,
 			}
 		});
 		await prisma.user.update({
@@ -262,6 +264,8 @@ export class MatchmakingGateway {
 				actualGame.posRight = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hRight);
 		}
 
+		// socket.emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
+		this.server.emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockRight).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 	}
@@ -303,6 +307,8 @@ export class MatchmakingGateway {
 		}
 		else
 			return ;
+		// socket.emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
+		this.server.emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 		this.server.to(actualGame.sockLeft).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 		this.server.to(actualGame.sockRight).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 	}
@@ -396,6 +402,7 @@ export class MatchmakingGateway {
 						data: {
 							score: [actualGame.scoreLeft, actualGame.scoreRight],
 							winnerId: winnerId,
+							playing: false,
 						}
 					});
 
@@ -408,14 +415,20 @@ export class MatchmakingGateway {
 						data: {actualGame: null},
 					})
 	
+					// socket.emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+					this.server.to(socket.id).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 				}
+				// socket.emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
+				this.server.to(socket.id).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(actualGame.sockRight).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 			}
 		}
 
+		// socket.emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
+		this.server.to(socket.id).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 	}
