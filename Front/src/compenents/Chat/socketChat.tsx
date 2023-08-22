@@ -20,7 +20,8 @@ function Chat() {
     //const [room, setRoom] = useState("");
 
     const send = (value: string) => {
-        socket?.emit('message', value);
+        const id = Cookies.get('id');
+        socket?.emit('message', value, id);
     }
     
     useEffect(() => {
@@ -31,17 +32,7 @@ function Chat() {
     }, [setSocket]);
 
     const messageListener = (newMessage: string) => {
-        const authorId = Cookies.get('id'); 
-        
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        
-       fetch('http://localhost:3001/Southtrans/savedMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: newMessage , authorId}),
-    });
     }
 
     useEffect(() => {

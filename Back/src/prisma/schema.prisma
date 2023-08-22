@@ -41,3 +41,12 @@ model Message {
   author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
   authorId  Int?
 }
+
+
+model Channel {
+  id        Int     @id @default(autoincrement())
+  ownerId String   
+  name      String
+  // Ajoutez d'autres champs de modèle si nécessaire
+  // ...
+}
