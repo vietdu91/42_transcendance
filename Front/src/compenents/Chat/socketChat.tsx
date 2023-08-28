@@ -87,7 +87,7 @@ function Chat() {
                         <ConversationListSummary />
                     </div>
                 </div>
-                <ChatConversationArea />
+                <ChatConversationArea name={name}/>
             </div>
             <FooterMenu />
         </>

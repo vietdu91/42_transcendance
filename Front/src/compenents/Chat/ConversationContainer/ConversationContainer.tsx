@@ -8,7 +8,12 @@ const ConversationContainer = () => {
                 <div className="Navbar-individual-convo">
                     <div className="to-who">To: Name and userid.transcendance.net</div>
                     <div className="receiver-status"></div>
-                    <div className="text-already-sent"></div>
+                    <div className="text-already-sent">
+                        <ul>
+                            <li>Hey</li>
+                            <li>Ca va</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div className="profile-pic-reveiver-container">
