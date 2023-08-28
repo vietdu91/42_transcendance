@@ -14,11 +14,7 @@ function Chat() {
 		window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
-
-    //const [value, setValue] = useState("");
-    //const [joined, setJoined] = useState(false);
-    //const [room, setRoom] = useState("");
-
+    
     const send = (value: string) => {
         const id = Cookies.get('id');
         socket?.emit('message', value, id);

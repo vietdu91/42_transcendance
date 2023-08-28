@@ -45,7 +45,7 @@ model Message {
 
 model Channel {
   id        Int     @id @default(autoincrement())
-  ownerId String   
+  ownerId   String   
   name      String
   // Ajoutez d'autres champs de modèle si nécessaire
   // ...

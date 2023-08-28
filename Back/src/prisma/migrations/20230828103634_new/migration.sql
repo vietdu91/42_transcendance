@@ -40,6 +40,7 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "Channel" (
     "id" SERIAL NOT NULL,
+    "ownerId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
