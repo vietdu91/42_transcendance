@@ -45,7 +45,12 @@ const Room: React.FC<RoomProps> = ({ room }) => {
     setIsRoomCreated(true);
     const id = Cookies.get('id');
     // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
-    socket?.emit('channelName', channelName, id, isPrivate, password);
+    if (isPrivate) {
+      socket?.emit('channelName', { name: channelName, ownerId: id, isPrivate, password });
+    } else {
+      // Si la room n'est pas privée, n'envoyer que le nom de la room
+      socket?.emit('channelName', { name: channelName, ownerId: id });
+    }
   };
 
   useEffect(() => {

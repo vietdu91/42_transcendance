@@ -19,18 +19,28 @@ export class ChatGateway {
 
     this.server.emit('message', message[0]);
     }
-
-  @SubscribeMessage('channelName')
-  async handleCreateChannel(@MessageBody() name: string): Promise<void> {
-    console.log(name + ' channel created');
-    await this.prisma.channel.create({
-      data: {
-        name: name[0],
-        ownerId: name[1],
-      },
-    });
-    this.server.emit({message: 'channelCreated', name: name});
-  }
+    @SubscribeMessage('channelName')
+    async handleCreateChannel(@MessageBody() data: { name: string, ownerId: string, isPrivate?: boolean, password?: string }): Promise<void> {
+      const { name, ownerId, isPrivate, password } = data;
+    
+      console.log(name + ' channel created');
+    
+      // Vous pouvez maintenant utiliser les valeurs `name`, `ownerId`, `isPrivate` et `password` pour créer la room en conséquence.
+      
+      const channelData = {
+        name,
+        ownerId,
+        isPrivate: !!isPrivate, // Convertir en booléen
+        password: isPrivate ? password : null, // Stocker le mot de passe si la room est privée, sinon null
+      };
+    
+      await this.prisma.channel.create({
+        data: channelData,
+      });
+    
+      // Émettre un événement pour informer que la room a été créée
+      this.server.emit({ message: 'channelCreated', name });
+    }
 
   // @SubscribeMessage('joinRoom') // Écoutez l'événement 'joinRoom'
   // async handleJoinRoom(@MessageBody() data: { roomName: string, userId: number }): Promise<void> {
