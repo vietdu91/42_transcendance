@@ -4,10 +4,10 @@ import Cookies from 'js-cookie';
 
 import MentalBattle from "../../../img/backgrounds/mental_battle.jpg"
 import RedCross from "../../../img/buttons/red_cross.png"
-
+import MustWatchIt from "../../../img/must_watch_it.gif"
 import Loading from "../../utils/Loading/Loading"
 
-/* YEUX */
+/* YEUX - HISTORY */
 import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
 import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
 import EyesKennyWin from "../../../img/eyes/kennyWin.jpg"
@@ -25,6 +25,27 @@ import EyesHenriettaLost from "../../../img/eyes/henriettaLost.jpg"
 import EyesServietskyWin from "../../../img/eyes/servietskyWin.jpg"
 import EyesServietskyLost from "../../../img/eyes/servietskyLost.jpg"
 
+/* SPECTATE */
+import CartmanL from "../../../img/en_cours/cartman_left.png"
+import CartmanR from "../../../img/en_cours/cartman_right.png"
+import GarrisonL from "../../../img/en_cours/garrison_left.png"
+import GarrisonR from "../../../img/en_cours/garrison_right.png"
+import KennyL from "../../../img/en_cours/kenny_left.png"
+import KennyR from "../../../img/en_cours/kenny_right.png"
+import TimmyL from "../../../img/en_cours/timmy_left.png"
+import TimmyR from "../../../img/en_cours/timmy_right.png"
+import TP_L from "../../../img/en_cours/TP_left.png"
+import TP_R from "../../../img/en_cours/TP_right.png"
+import ButtersL from "../../../img/en_cours/butters_left.png"
+import ButtersR from "../../../img/en_cours/butters_right.png"
+import HenriettaL from "../../../img/en_cours/henrietta_left.png"
+import HenriettaR from "../../../img/en_cours/henrietta_right.png"
+import ServietskyL from "../../../img/en_cours/servietsky_left.png"
+import ServietskyR from "../../../img/en_cours/servietsky_right.png"
+
+import VS from "../../../img/en_cours/VS.png"
+
+import StaticNoise from '../../../img/static_noise.gif';
 
 import './GameMenu.css';
 
@@ -32,6 +53,12 @@ import './GameMenu.css';
 function SpecMenu() {
 	
 	const [isBlinking, setIsBlinking] = useState(false);
+    const [hoveredPartie, setHoveredPartie] = useState(StaticNoise);
+	const navigate = useNavigate();
+	
+	const goToPartiesEnCours = () => {
+        navigate(`/partiesencours`)
+    };
 
 	useEffect(() => {
 
@@ -39,6 +66,29 @@ function SpecMenu() {
 			setIsBlinking((prevIsBlinking) => !prevIsBlinking);
 		  }, 500); 
 		return () => clearInterval(interval);	}, []);
+
+	    function GetPartie({img_left, img_right}) {
+
+			return (
+				<div className="spectate-tv" onMouseEnter={() => setHoveredPartie(null)} onMouseLeave={() => setHoveredPartie(StaticNoise)}>
+				{hoveredPartie === null ? (
+					<>
+						<div id="container-spectate-partieLeft">
+							<img alt="#" src={img_left} className="spectate-playerLeft-img"></img>
+							<div className="spectate-playerLeft">emtran</div>
+						</div>
+						<div id="container-spectate-partieRight">
+							<img alt="#" src={img_right} className="spectate-playerRight-img"></img>
+							<div className="spectate-playerRight">dyoula</div>
+						</div>
+						<img alt="#" src={VS} className="spectate-versus-encours"></img>
+					</>
+				) : (
+					<img src={StaticNoise} alt="static_noise" className="spectate-tv" />
+				)}
+			</div>
+			);
+		}
 
 	return (
 		<div id="spec-menu">
@@ -51,10 +101,10 @@ function SpecMenu() {
 					LIVE
 				</div>
 				<div className="spectate-history" >
-                    <div id="spectate-square-1"></div>
-					<div id="spectate-square-2"></div>
-                    <div id="spectate-square-3"></div>
+					<GetPartie img_left={GarrisonL} img_right={GarrisonR} />
+                    <GetPartie img_left={KennyL} img_right={KennyR} />
 				</div>
+				<img src={MustWatchIt} alt="#" id="mustWatchIt" onClick={goToPartiesEnCours}></img>
 			</div>
 		</div>
 	)
@@ -161,12 +211,12 @@ function History() {
                     <div id="match-square-2" onMouseEnter={() => { changeMatchSquare2Enter(); }}
           			onMouseLeave={() => { changeMatchSquare2Leave(); }}>
 						<div id="container-eyesUp">
-							<img alt="#" src={EyesKennyWin} className="eyesUp-2"></img>
+							<img alt="#" src={EyesTimmyWin} className="eyesUp-2"></img>
 							{hoverMatch2Square && <div className="scoreUp">5</div>}
 							{hoverMatch2Square && <div className="playerUp">emtran</div>}
 						</div>
 						<div id="container-eyesDown">
-							<img alt="#" src={EyesKennyLost} className="eyesDown-2"></img>
+							<img alt="#" src={EyesTimmyLost} className="eyesDown-2"></img>
 							{hoverMatch2Square && <div className="playerDown">qujacob</div>}
 							{hoverMatch2Square && <div className="scoreDown">4</div>}
 						</div>
@@ -174,12 +224,12 @@ function History() {
                     <div id="match-square-3" onMouseEnter={() => { changeMatchSquare3Enter(); }}
           			onMouseLeave={() => { changeMatchSquare3Leave(); }}>
 						<div id="container-eyesUp">
-							<img alt="#" src={EyesButtersWin} className="eyesUp-3"></img>
+							<img alt="#" src={EyesHenriettaWin} className="eyesUp-3"></img>
 							{hoverMatch3Square && <div className="scoreUp">5</div>}
 							{hoverMatch3Square && <div className="playerUp">encule</div>}
 						</div>
 						<div id="container-eyesDown">
-							<img alt="#" src={EyesButtersLost} className="eyesDown-3"></img>
+							<img alt="#" src={EyesHenriettaLost} className="eyesDown-3"></img>
 							{hoverMatch3Square && <div className="playerDown">emtran</div>}
 							{hoverMatch3Square && <div className="scoreDown">2</div>}
 						</div>
@@ -198,6 +248,55 @@ function Classement() {
 				<div id="classement-font">
 					CLASSEMENT
 				</div>
+				<table className="classement-table">
+					<tr>
+						<td className="number">1</td>
+						<td className="name">emtran</td>
+						<td className="points">100% 
+						<img className="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+						</td>
+					</tr>
+					<tr>
+						<td className="number">2</td>
+						<td className="name">benmoham</td>
+						<td className="points">95.4%</td>
+					</tr>
+					<tr>
+						<td className="number">3</td>
+						<td className="name">jkaruk</td>
+						<td className="points">94%</td>
+					</tr>
+					<tr>
+						<td className="number">4</td>
+						<td className="name">dyoula</td>
+						<td className="points">85%</td>
+					</tr>
+					<tr>
+						<td className="number">5</td>
+						<td className="name">qujabob</td>
+						<td className="points">13%</td>
+					</tr>
+					<tr>
+						<td className="number">5</td>
+						<td className="name">qujabob</td>
+						<td className="points">13%</td>
+					</tr>
+					<tr>
+						<td className="number">5</td>
+						<td className="name">qujabob</td>
+						<td className="points">13%</td>
+					</tr>
+					<tr>
+						<td className="number">5</td>
+						<td className="name">qujabob</td>
+						<td className="points">13%</td>
+					</tr>
+										<tr>
+						<td className="number">5</td>
+						<td className="name">qujabob</td>
+						<td className="points">13%</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	)

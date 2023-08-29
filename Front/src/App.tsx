@@ -16,6 +16,7 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import GameMenu from "./compenents/Game/GameMenu/GameMenu"
+import EnCours from "./compenents/Game/EnCours/EnCours"
 import Decompte from "./compenents/Game/Decompte/Decompte"
 import Game from "./compenents/Game/Game/Game"
 import Win from "./compenents/Game/Win/Win"
@@ -97,6 +98,7 @@ export default function App() {
 				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
 				<Route path="/achievement" element={<Achievement />}/>
 				<Route path="/decompte" element={<Decompte />}/>
+				<Route path="/partiesencours" element={<EnCours />}/>
 				<Route path="/gameover" element={<GameOver />}/>
 				<Route path="/errorgame" element={<GameError />}/>
         		<Route path="/win" element={<Win />}/>
