@@ -36,5 +36,16 @@ export class GameController {
       characters: room.characters,
     });
   }
-  
+
+  @Get('spectateLastGame')
+  async spectateLastGame(@Req() request : Request, @Res() response : Response) {
+    const room =  await this.gameService.getLastGameActive();
+    if (!room) {
+      throw new UnauthorizedException();
+    }
+    response.json({
+      id: room.id
+    })
+  }
+
 }

@@ -11,7 +11,7 @@ import KennyPhoto from "../../../img/kenny_school_photo.jpg"
 export default function Import() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
-	const  apiEndpoint = 'http://localhost:3001';
+	const  apiEndpoint = process.env.REACT_APP_LOCAL_B;
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 	const cookies = document.cookie.split('; ');
@@ -41,7 +41,7 @@ export default function Import() {
 				//   setImageURL(URL.createObjectURL(event.target.files[0]));
 				const formdata = new FormData();
 				formdata.append('file', event.target.files[0]);
-				const response = axios.post('http://localhost:3001/Southtrans/online', formdata, {headers: {  'Authorization': `Bearer ${accessToken}`} },
+				const response = axios.post(process.env.REACT_APP_LOCAL_B + '/Southtrans/online', formdata, {headers: {  'Authorization': `Bearer ${accessToken}`} },
 				)
 				.then(response => { 
 						console.log(response)
@@ -111,7 +111,7 @@ export default function Import() {
 		// 		'Value': setSelectedFile(event.target.files[0]),
 		// 	}
 		// 		// setSelectedFile(event.target.files[0]);
-		// 		axios.post('http://localhost:3001/Southtrans/online', {headers: headers} , { withCredentials: true })
+		// 		axios.post(process.env.REACT_APP_LOCAL_B + '/Southtrans/online', {headers: headers} , { withCredentials: true })
 		// 		.then(response => {
 		// 			// setPfpUrl(response.data.pfp_url);
 		// 		}).catch(error => {

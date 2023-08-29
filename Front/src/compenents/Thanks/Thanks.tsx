@@ -82,6 +82,7 @@ function CreatedBy(){
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Frerots</div>
 				<div className="orange subtitle">lgaducew</div>
+				<div className="purple subtitle">bbrassar</div>
 			</div>
 		)
 	}

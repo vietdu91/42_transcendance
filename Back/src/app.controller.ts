@@ -64,7 +64,7 @@ export class AppController {
     if (!user) {
       throw new UnauthorizedException();
     }
-    // console.log("nick = " + user.nickname)
+    console.log("name = " + user.name)
     response.json({
       id: user.id,
       email: user.email,

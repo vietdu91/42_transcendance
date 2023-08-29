@@ -25,8 +25,8 @@ function Chat() {
     
     useEffect(() => {
        // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
-        const apiEndpoint = 'http://localhost:3001';
-        const newSocket = io(apiEndpoint);
+        const apiEndpoint = process.env.REACT_APP_LOCAL_B;
+        const newSocket = io(String(apiEndpoint));
         setSocket(newSocket);
     }, [setSocket]);
 
@@ -35,7 +35,7 @@ function Chat() {
         
         setMessages(prevMessages => [...prevMessages, newMessage]);
         
-       fetch('http://localhost:3001/Southtrans/savedMessage', {
+       fetch(process.env.REACT_APP_LOCAL_B + '/Southtrans/savedMessage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

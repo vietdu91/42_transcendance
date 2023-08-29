@@ -19,8 +19,8 @@ export class AuthController {
       where: { email: userData.email },
     });
     if (user2)
-      response.redirect("http://localhost:3000");
+      response.redirect(process.env.URL_LOCAL_F);
     else
-      response.redirect("http://localhost:3000/newprofile");
+      response.redirect(process.env.URL_LOCAL_F + "newprofile");
     }
 }
