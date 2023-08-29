@@ -19,6 +19,7 @@ export class ChatGateway {
 
     this.server.emit('message', message[0]);
     }
+    
     @SubscribeMessage('channelName')
     async handleCreateChannel(@MessageBody() data: { name: string, ownerId: string, isPrivate?: boolean, password?: string }): Promise<void> {
       const { name, ownerId, isPrivate, password } = data;

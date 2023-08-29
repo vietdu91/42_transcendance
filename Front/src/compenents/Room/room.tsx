@@ -35,7 +35,6 @@ const Room: React.FC<RoomProps> = ({ room }) => {
     setIsRoomCreated(false);
     setIsPrivate(false);
     setPassword('');
-  
     setJoined(false);
   };
 
