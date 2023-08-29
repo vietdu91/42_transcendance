@@ -1,0 +1,17 @@
+.wrapper-message-send input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.wrapper-message-send button {
+    padding: 5px 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.wrapper-message-send button:hover {
+    background-color: #45a049;
+}

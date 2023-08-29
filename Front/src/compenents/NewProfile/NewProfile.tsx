@@ -24,14 +24,6 @@ export default function NewProfile() {
 	let [nick, setNick] = useState("");
 	let [age, setAge] = useState(0);
 
-	// axios.get(process.env.REACT_APP_LOCAL_B + '/Southtrans/getUser', { withCredentials: true })
-	// 	.then(response => {
-	// 		getNick(response.data.nick);
-	// 		// getName(response.data.name);
-	// 		// getAge(response.data.age);
-	// 	}).catch(error => {
-	// 		console.error('Probleme');
-	// 	});
 
 	useEffect (() => {
 		axios.get(process.env.REACT_APP_LOCAL_B + '/Southtrans/getUser', { withCredentials: true })

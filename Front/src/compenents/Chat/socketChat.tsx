@@ -24,30 +24,10 @@ function Chat() {
         window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
-    	let [nick, getNick] = useState("");
-	let [name, getName] = useState("");
-	let [age, getAge] = useState(0);
-	let [pfp_url, getPfpUrl] = useState("");
-
-    useEffect (() => {
-		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
-		.then(response => {
-			getNick(response.data.nick);
-			getName(response.data.name);
-			getAge(response.data.age);
-			getPfpUrl(response.data.pfp_url)
-		}).catch(error => {
-			console.error('Probleme');
-		});
-	}, [])
     
-
-    //const [value, setValue] = useState("");
-    //const [joined, setJoined] = useState(false);
-    //const [room, setRoom] = useState("");
-
     const send = (value: string) => {
-        socket?.emit('message', value);
+        const id = Cookies.get('id');
+        socket?.emit('message', value, id);
     }
 
     useEffect(() => {
@@ -61,14 +41,6 @@ function Chat() {
         const authorId = Cookies.get('id');
 
         setMessages(prevMessages => [...prevMessages, newMessage]);
-        
-       fetch(process.env.REACT_APP_LOCAL_B + '/Southtrans/savedMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: newMessage , authorId}),
-    });
     }
 
     useEffect(() => {

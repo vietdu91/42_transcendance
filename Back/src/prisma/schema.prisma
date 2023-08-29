@@ -43,3 +43,15 @@ model Message {
   author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
   authorId  Int?
 }
+
+
+model Channel {
+  id        Int     @id @default(autoincrement())
+  ownerId   String   
+  name      String
+  isPrivate Boolean @default(false)
+  password  String?
+  //messages  Message[] @relation("ChannelMessages")
+  // Ajoutez d'autres champs de modèle si nécessaire
+  // ...
+}
