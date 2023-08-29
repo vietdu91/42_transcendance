@@ -1,19 +1,46 @@
-import { useState , useEffect } from 'react';
-import io , { Socket } from "socket.io-client";
+import { useState, useEffect } from 'react';
+import io, { Socket } from "socket.io-client";
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
 import Cookies from 'js-cookie';
 
+
+import ConversationContainer from './ConversationContainer/ConversationContainer'; 
+import TextComposerContainer from './TextComposerContainer/TextComposerContainer';
+import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
+import FooterMenu from './FooterMenu/FooterMenu';
+import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
+import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
+
+
 import './Chat.css';
+import axios from "axios"
 
 function Chat() {
 
-	const token = Cookies.get('accessToken');
+    const token = Cookies.get('accessToken');
     if (!token)
-		window.location.href = "http://localhost:3000/connect";
+        window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
+    	let [nick, getNick] = useState("");
+	let [name, getName] = useState("");
+	let [age, getAge] = useState(0);
+	let [pfp_url, getPfpUrl] = useState("");
+
+    useEffect (() => {
+		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		.then(response => {
+			getNick(response.data.nick);
+			getName(response.data.name);
+			getAge(response.data.age);
+			getPfpUrl(response.data.pfp_url)
+		}).catch(error => {
+			console.error('Probleme');
+		});
+	}, [])
+    
 
     //const [value, setValue] = useState("");
     //const [joined, setJoined] = useState(false);
@@ -22,7 +49,7 @@ function Chat() {
     const send = (value: string) => {
         socket?.emit('message', value);
     }
-    
+
     useEffect(() => {
        // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
         const apiEndpoint = process.env.REACT_APP_LOCAL_B;
@@ -31,8 +58,8 @@ function Chat() {
     }, [setSocket]);
 
     const messageListener = (newMessage: string) => {
-        const authorId = Cookies.get('id'); 
-        
+        const authorId = Cookies.get('id');
+
         setMessages(prevMessages => [...prevMessages, newMessage]);
         
        fetch(process.env.REACT_APP_LOCAL_B + '/Southtrans/savedMessage', {
@@ -52,28 +79,19 @@ function Chat() {
     }, [messageListener]);
 
     return (
-        <>  
-            <div className="chat-container">
-                <aside>
-		            <header>
-                        <h1>Chat</h1>
-			            <input type="text" placeholder="search"></input>       
-		            </header>
-                </aside>
-                <div className="chat-room-container">
-                    <Room room='Chat room name' />
+        <>
+            <div className="truc">
+                <div className="left-part-chat">
+                    <div className="conversations-list">
+                        <ConversationListHeader name={name} />
+                        <ConversationListSummary />
+                    </div>
                 </div>
-                <div className="wrapper-message-send">
-                    <MessageInput send={send} messages={messages}/>
-                </div>
-                {/* <div className="wrapper-message-received"> */}
-                {/* </div> */}
-                <div className="wrapper-goback">
-                    <ReturnButtom colorHexa='#ff30ff' path='/' />
-                </div>
+                <ChatConversationArea name={name}/>
             </div>
+            <FooterMenu />
         </>
-    ); 
+    );
 }
 
 export default Chat;
