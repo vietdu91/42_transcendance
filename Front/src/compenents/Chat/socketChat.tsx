@@ -24,6 +24,10 @@ function Chat() {
         window.location.href = "http://localhost:3000/connect";
     const [socket, setSocket] = useState<Socket>();
     const [messages, setMessages] = useState<string[]>([]);
+    let [nick, getNick] = useState("");
+	let [name, getName] = useState("");
+	let [age, getAge] = useState(0);
+	let [pfp_url, getPfpUrl] = useState("");
     
     const send = (value: string) => {
         const id = Cookies.get('id');
@@ -31,6 +35,15 @@ function Chat() {
     }
 
     useEffect(() => {
+        axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
+        .then(response => {
+            getNick(response.data.nick);
+            getName(response.data.name);
+            getAge(response.data.age);
+            getPfpUrl(response.data.pfp_url)
+        }).catch(error => {
+            console.error('Probleme');
+        });
        // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
         const apiEndpoint = process.env.REACT_APP_LOCAL_B;
         const newSocket = io(String(apiEndpoint));

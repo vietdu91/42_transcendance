@@ -56,7 +56,6 @@ function SpecMenu() {
 	const [isBlinking, setIsBlinking] = useState(false);
 	const click = useRef(false);
 	const [id, setId] = useState(-1);
-	const navigate = useNavigate();
 	// const socket = useContext(GameContext);
 
 	const spectateGame = () => {

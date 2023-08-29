@@ -26,7 +26,7 @@ export default function NewProfile() {
 
 
 	useEffect (() => {
-		axios.get(process.env.REACT_APP_LOCAL_B + '/Southtrans/getUser', { withCredentials: true })
+		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
 		.then(response => {
 			setName(response.data.name);
 			setNick(response.data.nick);
@@ -42,7 +42,7 @@ export default function NewProfile() {
 		let newnick:string = "";
 		let newage:number = 0;
 
-		await axios.get(process.env.REACT_APP_LOCAL_B + '/Southtrans/getUser', { withCredentials: true })
+		await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
 		.then(response => {
 			setNick(response.data.nick);
 			setAge(response.data.age);

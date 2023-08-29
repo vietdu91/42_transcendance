@@ -45,7 +45,7 @@ export default function Range() {
 		e.preventDefault();
 		console.log(age);
 		await axios
-			.post(process.env.REACT_APP_LOCAL_B + '/SouthTrans/setAge', { age }, { withCredentials: true })
+			.post(process.env.REACT_APP_LOCAL_B + '/profile/setAge', { age }, { withCredentials: true })
 			.then((response) => {
 				console.log(response.data.message);
 			})

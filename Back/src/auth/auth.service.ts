@@ -27,12 +27,12 @@ export class AuthService {
                 user = await this.userService.createUser(userData);
                 const newToken = await this.generateAndSetAccessToken(user);
                 this.setAuthCookies(res, newToken, user.id);
-                res.redirect("http://localhost:3000/newprofile");
+                res.redirect(process.env.URL_LOCAL_F + "/newprofile");
             }
             else { 
                 const newToken = await this.generateAndSetAccessToken(user);
                 this.setAuthCookies(res, newToken, user.id);
-                res.redirect("http://localhost:3000");
+                res.redirect(process.env.URL_LOCAL_F);
             }
             return user;
         }catch (error) {
