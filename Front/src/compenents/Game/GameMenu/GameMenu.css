@@ -330,6 +330,10 @@
     opacity: 0.2;
     margin: 0 2vw;
     border-radius: 35%;
+    border-top-left-radius: 150px 100px;
+    border-top-right-radius: 150px 100px;
+    border-bottom-left-radius: 150px 100px;
+    border-bottom-right-radius: 150px 100px;
 }
 
 #match-square1::before, #match-square2::before, #match-square3::before {
@@ -488,33 +492,90 @@
     line-height: 1em;
 }
 
-.classement-table {
+.div-classement-table {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+    margin-right: 30px;
+    max-height: 450px; 
+
+    overflow-y: scroll;
+    scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
+    scrollbar-width: auto;
+}
+
+.classement-table {
+    position: relative;
     width: 70%;
     border-collapse: collapse;
     table-layout: fixed;
     color: #141a39;
     cursor: default;
-    margin-top: 200px;
-    margin-left: 30px;
-    margin-right: 30px;
 }
   
   tr {
     transition: all 0.2s ease-in-out;
     border-radius: 0.2rem;
+    color: rgb(0, 0, 0);
+    background-color: #6bb1d1;
   }
   
-  tr:not(:first-child):hover {
-    background-color: #fff;
+  tr:nth-child(odd) {
+      background-color: #e6d4ba;
+      color: rgb(39, 78, 163);
+    }
+    
+    tr:hover {
+      background-color: #fff;
+      transform: scale(1.1);
+      color: rgb(0, 0, 0);
+      -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+      box-shadow: 0px 5px 15px 8px #e4e7fb;
+    }
+
+  tr:nth-child(1) {
+    background-color: #ffd700;
+    color: #FF240D;
+  }
+
+  tr:nth-child(1):hover {
+    background: url(../../../img/rainbow.gif) center;
+    color: magenta;
+    transform: scale(1.1);
+    -webkit-box-shadow: 0px 5px 15px 8px #db08e2;
+    box-shadow: 0px 5px 15px 8px #db08e2;
+  }
+
+  tr:nth-child(2) {
+    background-color: grey;
+    color: #ffffff;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+
+  }
+
+  tr:nth-child(2):hover {
+    background: url(../../../img/game/second_cartman.gif) center;
+    color: #fff;
     transform: scale(1.1);
     -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
     box-shadow: 0px 5px 15px 8px #e4e7fb;
   }
-  
-  tr:nth-child(odd) {
-    background-color: #f9f9f9;
+
+  tr:nth-child(3) {
+    background-color: rgb(202, 121, 0);
+    color: #ffffff;
   }
+
+  tr:nth-child(3):hover {
+    background: url(../../../img/game/kyle-schwartz.gif) 45% 65%;
+    color: #207c04;
+    transform: scale(1.1);
+    -webkit-box-shadow: 0px 5px 15px 8px #30910a;
+    box-shadow: 0px 5px 15px 8px #30910a;
+    text-shadow: -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff;
+  }
+
   
   td {
     height: 5rem;
@@ -547,16 +608,6 @@
   .points:first-child {
     width: 10rem;
   }
-  
-  .gold-medal {
-    height: 3rem;
-    margin-left: 1.5rem;
-  }
-
-
-
-
-
 
 /********* PLAY BUTTON ***********/
 
