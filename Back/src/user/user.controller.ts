@@ -14,9 +14,10 @@ export class UserController {
     constructor(private readonly userService: UserService,
                 private readonly prisma: PrismaService) {}
 
-    @Get('getUserById')
-    async getUserById(@Query('userId') userId: number, @Req() request: Request, @Res() response: Response) {
-      const user = await this.userService.getUserById(userId);
+    @Get('getUserByName')
+    async getUserByName(@Query('username') username: string, @Req() request: Request, @Res() response: Response) {
+      console.log(username + " ICICIICCIICIC");
+      const user = await this.userService.getUserByName(username);
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -27,7 +28,9 @@ export class UserController {
         twoFA: user.twoFactorEnabled,
         nick: user.nickname,
         age: user.age,
-        character: user.character,});
+        character: user.character,
+        pfp_url: user.pfp_url,
+      });
     }
   
     @Get('getUser')
@@ -111,6 +114,4 @@ export class UserController {
       // }
       return { message: 'Personnage modifié avec succès' };
     }
-
-
 }

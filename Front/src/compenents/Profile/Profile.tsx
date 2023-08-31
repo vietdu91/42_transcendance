@@ -68,7 +68,6 @@ export default function Profile() {
 								Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>
-								{/* PFP: ({pfp_url}) */}
 						</div>
 				</div>
 					<p>CONTENT</p>
