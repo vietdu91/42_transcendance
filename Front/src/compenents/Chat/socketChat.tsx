@@ -72,7 +72,7 @@ function Chat() {
                         <ConversationListSummary />
                     </div>
                 </div>
-                <ChatConversationArea name={name}/>
+                {/* <ChatConversationArea name={name}/> */}
             </div>
             <FooterMenu />
         </>

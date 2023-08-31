@@ -1,44 +1,43 @@
-import React from 'react';
-import { useState } from 'react'
+import React, { useState } from 'react';
 import './ConversationListSummary.css';
-import Advertisement from './../../../img/chat/advertisement.jpg'
+import Advertisement from './../../../img/chat/advertisement.jpg';
+import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+// ... (import statements)
 
 const ConversationListSummary = () => {
-    const [visibleItems, setVisibleItems] = useState([]);
+    const [visibleItems, setVisibleItems] = useState<boolean[]>([true, true, true, true]);
 
-    const openConvOnClick = (Text) => {
-        alert(Text);
+    const toggleConvSummary = (index: number) => {
+        const newVisibleItems = [...visibleItems];
+        newVisibleItems[index] = !newVisibleItems[index];
+        setVisibleItems(newVisibleItems);
     };
+
     return (
         <div className="conversation-list-summary">
             <div className="info-conversation-list">
+                {/* Content for the conversation info */}
             </div>
             <div className="display-list-convo">
                 {/* Content for the conversation list */}
                 <ul>
-                    <li onClick={() => openConvOnClick("First")}>je suis une conv</li>
-                    <li onClick={() => openConvOnClick("Second")}>je suis un channel</li>
-                    <li onClick={() => openConvOnClick("Third")}>je suis une conv</li>
-                    <li onClick={() => openConvOnClick("Fourth")}>je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(0)}>je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(1)}>je suis un channel</li>
+                    <li onClick={() => toggleConvSummary(2)}>je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(3)}>je suis une conv</li>
                 </ul>
-
-                {/* afficher une liste de tableau  */}
-                {/* const listItems = products.map(product =>
-                    <li key={product.id}>
-                        {product.title}
-                    </li>
-                    );
-                return (
-                <ul>{listItems}</ul>
-                ); */}
             </div>
             <div className="advertisement-scope">
                 <div className="advertisement">
                     <img src={Advertisement} alt="advertisement" id="chat_advertisement" />
                 </div>
             </div>
+            {/* Render conversation summaries based on visibility */}
+            {visibleItems.map((isVisible, index) => (
+                <ChatConversationArea key={index} name={"dyoula"} isVisible={isVisible} />
+            ))}
         </div>
     );
-};
+}
 
 export default ConversationListSummary;
