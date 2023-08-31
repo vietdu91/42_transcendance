@@ -3,7 +3,8 @@ import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import { useState, useEffect } from 'react';
-import CreateChannel from '../CreateChannel/CreateChannel';
+import DropdownChannel from '../DropdownChannel/DropdownChannels';
+import DropdownContact from '../DropdownContacts/DropdownContact';
 
 const ConversationListHeader = ({ name }) => {
     const [state, setState] = useState({
@@ -28,11 +29,11 @@ const ConversationListHeader = ({ name }) => {
                     <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
                 </div>
             </ul>
-            {state.showHideDemo1 && <CreateChannel />}
             <hr />
             <ul className="option-conversation-list">
-                <li onClick={() => hideComponent('showHideDemo1')}>Channels</li> {/*Create Join Delete*/}
-                <li>Contacts</li> {/* Add Block Delete MP Liste D'amis*/}
+                {/* <li onClick={() => showContact("First")}></li> */}
+                <DropdownChannel />{/*Create Join Delete*/}
+                <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
                 <li>Actions</li> { /*  */}
                 <li>Tools</li> { /* */}
                 <li>Help</li>
