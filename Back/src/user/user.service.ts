@@ -17,6 +17,7 @@ export class UserService {
                 email: userData.email,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,
+                pfp_url: userData.pfp,
             }
         });
         console.log('User created');
