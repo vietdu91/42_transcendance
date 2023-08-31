@@ -8,13 +8,14 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/strategy/jwt.strategy';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [UserModule, PassportModule, PrismaModule, JwtModule.register({
     secret: process.env.JWT_SECRET,
     signOptions: { expiresIn: '1d'},
   })],
-  providers: [AuthService, TwofaService, ConfigService, PrismaService, JwtStrategy],
+  providers: [AuthService, TwofaService, ConfigService, PrismaService, JwtStrategy, UserService],
   exports: [AuthService],
 })
 export class AuthModule {}

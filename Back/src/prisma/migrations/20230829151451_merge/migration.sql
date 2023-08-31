@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "nickname" TEXT,
     "age" INTEGER,
     "character" TEXT,
+    "actualGame" INTEGER,
     "pfp_url" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -21,6 +22,7 @@ CREATE TABLE "Game" (
     "score" INTEGER[],
     "winnerId" INTEGER,
     "characters" TEXT[],
+    "playing" BOOLEAN NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
@@ -35,6 +37,17 @@ CREATE TABLE "Message" (
     "authorId" INTEGER,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Channel" (
+    "id" SERIAL NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "isPrivate" BOOLEAN NOT NULL DEFAULT false,
+    "password" TEXT,
+
+    CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

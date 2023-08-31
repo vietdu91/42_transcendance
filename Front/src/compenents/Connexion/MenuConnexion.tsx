@@ -19,12 +19,12 @@ export default function MenuConnexion() {
 
 	async function CookieStorage() {
 
-		window.location.href = "http://localhost:3001/southtrans/42";
+		window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
 		// console.log("app-front: CookieStorage: ");
 		// try {
 		// 	console.log("app-front: CookieStorage: try: ");
 		// 	const res = await axios({
-		// 		url: "http://localhost:3001/Auth/conexion",
+		// 		url: process.env.REACT_APP_LOCAL_B + "/Auth/conexion",
 		// 		method: 'GET',
 		// 	}).then(response => {
 		// 		console.log("app-front: res.data.accessToken: ", response.data.accessToken 
@@ -47,7 +47,7 @@ export default function MenuConnexion() {
 			<img id="bg-menu" src={hover} alt={'Hell'}></img>
 			<div id="menu-items">
 				<div className="menu-item" onClick={CookieStorage}
-					//window.location.href = "http://localhost:3001/southtrans/42";
+					//window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
 					onMouseEnter={() => {setHover(Lotion);}}
 					onMouseLeave={() => {setHover(Town);}}>Se connecter</div>
 			</div>

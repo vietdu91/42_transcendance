@@ -1,8 +1,7 @@
 import { Injectable, Request, Query , HttpException, HttpStatus} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { TwofaService } from 'src/twofa/twofa.service';
 import { Response} from 'express';
-import { authenticator } from 'otplib';
+import { UserService } from '../user/user.service';
 import { Prisma, User} from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
@@ -17,61 +16,48 @@ const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirect
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService,
-                private twofaService: TwofaService,
-                private jwtService: JwtService,) {}
+                private jwtService: JwtService,
+                private userService: UserService) {}
 
     async apiConnexion(userData: any, res: Response): Promise<User> {
-        try
-        {
-            console.log("email === " + userData.email);
-            var user = await this.prisma.user.findUnique({
-                where: { email: userData.email },
-            });
-            if (!user ) {
-                user = await this.createUser(userData);
-    
-                const payload = { username: user.name, sub: user.id };
-                console.log("paylod = " + payload.sub + " " + payload.username);
-                const newToken = this.jwtService.sign(payload);
-                // JWT token use to get user data and validate user
-                console.log("new token ==  " + newToken);
-                await this.prisma.user.update({
-                    where: { id: user.id },
-                    data: { accessToken: newToken },
-              });
-              res.cookie('accessToken', newToken);
-              res.cookie('id', user.id);
-              return user;
+        try {
+            let user: User;
+            user = await this.userService.findUserByEmail(userData.email);
+            if (!user) {
+                user = await this.userService.createUser(userData);
+                const newToken = await this.generateAndSetAccessToken(user);
+                this.setAuthCookies(res, newToken, user.id);
+                res.redirect(process.env.URL_LOCAL_F + "/newprofile");
             }
-            else {
-    
-                const payload = { username: user.name, sub: user.id };
-                console.log("paylod = " + payload.sub + " " + payload.username);
-                const newToken = this.jwtService.sign(payload);
-                // JWT token use to get user data and validate user
-                console.log("new token ==  " + newToken);
-                await this.prisma.user.update({
-                    where: { id: user.id },
-                    data: { accessToken: newToken },
-                  });
-                res.cookie('accessToken', newToken);
-                res.cookie('id', user.id);
-                return user;
+            else { 
+                const newToken = await this.generateAndSetAccessToken(user);
+                this.setAuthCookies(res, newToken, user.id);
+                res.redirect(process.env.URL_LOCAL_F);
+            }
+            return user;
+        }catch (error) {
+            console.error("error = " + error);
             }
         }
-        catch (error) {
-            console.error(error);
-        }
-    }
+            
 
-    async getUserToken(id: number): Promise<any> {
-        const user = await this.prisma.user.findUnique({
-            where: { id: parseInt(id.toString()) },
+            
+    private async generateAndSetAccessToken(user: User): Promise<string> {
+        const jwtPayload = { username: user.name, sub: user.id };
+        const newToken = this.jwtService.sign(jwtPayload);
+
+        await this.prisma.user.update({
+            where: { id: user.id },
+            data: { accessToken: newToken },
         });
-        return user.accessToken;
+        return newToken;
     }
-
-
+            
+    private setAuthCookies(res: Response, accessToken: string, userId: number): void {
+        res.cookie('accessToken', accessToken);
+        res.cookie('id', userId);
+    }
+            
     async getAccessToken(code: string): Promise<any> {
         try { 
             const response = await axios.post(process.env.URL_42TOKEN, { 
@@ -107,37 +93,5 @@ export class AuthService {
             throw new HttpException('Failed to retrieve user data', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    async createUser(userData: any): Promise<User> {
-        try {
-            const user = await this.prisma.user.create({
-                data: {
-                    name: userData.name,
-                    email: userData.email,
-                    twoFactorSecret: authenticator.generateSecret(),
-                    accessToken: userData.accessToken,
-                }
-            });
-            console.log('User created');
-            return user;
-        } catch (error) {
-            console.error(error);
-            throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    async deleteUser(id: number): Promise<User> {
-        try {
-            const user = await this.prisma.user.delete({
-                where: { id: id }
-            });
-            console.log('User deleted');
-            return user;
-        } catch (error) {
-            console.error(error);
-            throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }
     

@@ -19,6 +19,7 @@ model User {
   age 			        Int?
   character         String?
   games             Game[] @relation("players")
+  actualGame        Int?
   pfp_url           String?
   messages         Message[] @relation("MessageAuthor")
 }
@@ -30,6 +31,7 @@ model Game {
   score           Int[]
   winnerId        Int?
   characters      String[]
+  playing         Boolean
   date            DateTime @default(now())
 }
 
@@ -40,4 +42,16 @@ model Message {
   updatedAt DateTime  @updatedAt
   author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
   authorId  Int?
+}
+
+
+model Channel {
+  id        Int     @id @default(autoincrement())
+  ownerId   String   
+  name      String
+  isPrivate Boolean @default(false)
+  password  String?
+  //messages  Message[] @relation("ChannelMessages")
+  // Ajoutez d'autres champs de modèle si nécessaire
+  // ...
 }

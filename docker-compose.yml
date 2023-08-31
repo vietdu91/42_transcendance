@@ -46,6 +46,8 @@ services:
     build:
       context: ./Front
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     volumes:

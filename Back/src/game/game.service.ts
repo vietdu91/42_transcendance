@@ -17,4 +17,19 @@ export class GameService {
     return room;
   }
 
+  async getLastGameActive(): Promise<Game | null> {
+    const count = await this.prisma.game.count();
+    let room;
+    for (let i:number = 1; i <= count; i++) {
+      const newroom = await this.prisma.game.findUnique({
+        where: {
+          id: i
+        }
+      })
+      if (newroom.playing)
+        room = newroom;
+    }
+    return room;
+  }
+
 }

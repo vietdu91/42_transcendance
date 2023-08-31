@@ -1,12 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { GameContext, gameSocket } from './compenents/utils/GameContext';
 
 // CSS
 import './App.css';
 
 // PACKAGES
-import { Routes, Route } from "react-router-dom"
-import axios from "axios"
+import { Routes, Route, Navigate } from "react-router-dom"
 
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
@@ -16,6 +15,7 @@ import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
 import QuoiQuoiDansMesFesses from "./compenents/QuoiQuoiDansMesFesses/QuoiQuoiDansMesFesses"
 import GameMenu from "./compenents/Game/GameMenu/GameMenu"
+import EnCours from "./compenents/Game/EnCours/EnCours"
 import Decompte from "./compenents/Game/Decompte/Decompte"
 import Game from "./compenents/Game/Game/Game"
 import Win from "./compenents/Game/Win/Win"
@@ -24,8 +24,6 @@ import GameError from "./compenents/Game/GameError/GameError"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
-import Test from "./compenents/Test"
-import CharacterSelection from './compenents/CharacterSelection/CharacterSelection';
 import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
@@ -67,10 +65,10 @@ const ThanksWithMusic = () => (
   </>
 );
 
-const CharacterSelectionWithMusic = () => (
+const ChampSelectWithMusic = () => (
   <>
 	<MusicPlayer audioSrc={choose_your_fighter} />
-	<CharacterSelection />
+	<ChampSelect />
   </>
 
 );
@@ -82,9 +80,8 @@ export default function App() {
 			<div className="App">
 				<Routes>
 				<Route path="/" element={<MenuWithMusic />}/>
-				<Route path="/select" element={<CharacterSelectionWithMusic />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
-				<Route path="/champselect" element={<ChampSelect />}/>
+				<Route path="/champselect" element={<ChampSelectWithMusic />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>
 				<Route path="/game" element={<Game />}/>
 				<Route path="/game/:roomId" element={<Game />}/>
@@ -97,10 +94,12 @@ export default function App() {
 				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
 				<Route path="/achievement" element={<Achievement />}/>
 				<Route path="/decompte" element={<Decompte />}/>
+				<Route path="/partiesencours" element={<EnCours />}/>
 				<Route path="/gameover" element={<GameOver />}/>
 				<Route path="/errorgame" element={<GameError />}/>
         		<Route path="/win" element={<Win />}/>
 				<Route path="/404" element={<PageNotFound />}/>
+				<Route path="*" element={<Navigate to="/404" />}/>
 				</Routes>
 			</div>
 		</GameContext.Provider>

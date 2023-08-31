@@ -31,8 +31,8 @@ export default function App() {
   const [show2, setShow2] = React.useState(false);
   const [code, setCode] = React.useState("");
 
-
-  const  apiEndpoint = 'http://localhost:3001';
+  // console.log(process.env.REACT_APP_LOCAL_B);
+  const  apiEndpoint = process.env.REACT_APP_LOCAL_B;
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -57,7 +57,7 @@ export default function App() {
       try {
         console.log("AXIOS LOGOUT ON")
           const res = await axios({
-            url: "http://localhost:3001/Southtrans/logout",
+            url: process.env.REACT_APP_LOCAL_B + "/Southtrans/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
           })
@@ -83,7 +83,7 @@ export default function App() {
     {
       try {
         const res = await axios({
-          url: "http://localhost:3001/Southtrans/2fa/generate",
+          url: process.env.REACT_APP_LOCAL_B + "/Southtrans/2fa/generate",
           method: 'GET',
           headers: {  'Authorization': `Bearer ${accessToken}` },
         }).then(response => {

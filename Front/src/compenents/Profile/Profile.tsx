@@ -22,14 +22,15 @@ export default function Profile() {
 	let [pfp_url, getPfpUrl] = useState("");
 
 	useEffect (() => {
-		axios.get('http://localhost:3001/Southtrans/getUser', { withCredentials: true })
+		// axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
+		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
 		.then(response => {
 			getNick(response.data.nick);
 			getName(response.data.name);
 			getAge(response.data.age);
 			getPfpUrl(response.data.pfp_url)
 		}).catch(error => {
-			console.error('Probleme');
+			console.error(error);
 		});
 	}, [])
 
