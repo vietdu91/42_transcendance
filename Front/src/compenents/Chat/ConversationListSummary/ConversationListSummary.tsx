@@ -12,7 +12,6 @@ const ConversationListSummary = () => {
     return (
         <div className="conversation-list-summary">
             <div className="info-conversation-list">
-                click here to learn about
             </div>
             <div className="display-list-convo">
                 {/* Content for the conversation list */}

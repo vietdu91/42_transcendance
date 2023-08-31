@@ -2,8 +2,22 @@ import React from 'react';
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import { useState, useEffect } from 'react';
+import CreateChannel from '../CreateChannel/CreateChannel';
 
 const ConversationListHeader = ({ name }) => {
+    const [state, setState] = useState({
+        name: 'React',
+        showHideDemo1: false,
+    });
+
+    const hideComponent = (name) => {
+        setState((prevState) => ({
+            ...prevState,
+            [name]: !prevState[name]
+        }));
+    };
+
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
@@ -14,11 +28,13 @@ const ConversationListHeader = ({ name }) => {
                     <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
                 </div>
             </ul>
+            {state.showHideDemo1 && <CreateChannel />}
+            <hr />
             <ul className="option-conversation-list">
-                <li>File</li>
-                <li>Contacts</li>
-                <li>Actions</li>
-                <li>Tools</li>
+                <li onClick={() => hideComponent('showHideDemo1')}>Channels</li> {/*Create Join Delete*/}
+                <li>Contacts</li> {/* Add Block Delete MP Liste D'amis*/}
+                <li>Actions</li> { /*  */}
+                <li>Tools</li> { /* */}
                 <li>Help</li>
             </ul>
             <div className="topbar-conversation-list">
