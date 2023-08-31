@@ -22,6 +22,8 @@ model User {
   games             Game[] @relation("players")
   actualGame        Int?
   pfp_url           String?
+  friendList        Int[]
+  blockList         Int[]
   messages         Message[] @relation("MessageAuthor")
 }
 

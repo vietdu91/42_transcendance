@@ -11,25 +11,37 @@ export default function UserProfile() {
 
 	const navigate = useNavigate();
 	let { username } = useParams();
+	let [id, getId] = useState(0);
 	let [nick, getNick] = useState("");
 	let [name, getName] = useState("");
 	let [age, getAge] = useState(0);
 	let [pfp_url, getPfpUrl] = useState("");
 	
 	const token = Cookies.get('accessToken');
-    const id = Cookies.get('id');
+    const userId = Cookies.get('id');
 	if (!token)
 		window.location.href = "http://localhost:3000/connect";
 
-	
+	const addFriend = () => {
+		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', id, {headers: {  'Authorization': `Bearer ${token}`} })
+		.then(response => {})
+		.catch(error => {
+			console.log(error);
+		})
+	}
+
+	const removeFriend = () => {
+
+	}
 
 	useEffect(() => {
 		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', {params: {username: username}})
 		.then(response => {
-			if (id == response.data.id) {
+			if (userId == response.data.id) {
 				navigate("/profile");
 				return (<></>)
 			}
+			getId(response.data.id)
 			getNick(response.data.nick)
 			getName(response.data.name)
 			getAge(response.data.age)
@@ -56,6 +68,10 @@ export default function UserProfile() {
 				</div>
 				<div className ="pfp">
 					<img src={pfp_url} alt="PPdeMORT"></img>
+					<div className="buttons">
+						<button className="btn-hover color-1" onClick={() => addFriend()}>Add Friend !!!!!!!!</button><br/>
+						<button className="btn-hover color-2" onClick={() => removeFriend()}>Remove Friend :(</button><br/>
+					</div>
 				</div>
 				<button id="move_on" onClick={() => navigate("/")}></button>
 			</div>

@@ -61,6 +61,50 @@ export class UserController {
       console.log("Mon id:", id);
       return this.userService.findOne(id);
     }
+
+    @Post('addFriend')
+    async addFriend( @Req() request, @Body() body: {id: number}) {;
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      const { id } = body;
+      console.log(id);
+      if (!id) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {id: Number(userId) }
+      })
+      const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: {friendList: user.friendList.push(id)},
+      })
+      console.log("travail termine");
+    }
+    @Post('removeFriend')
+    async removeFriend( @Req() request, @Body() body: {id: number}) {
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      const { id } = body;
+      if (!id) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {id: Number(userId) }
+      })
+      let array = user.friendList;
+      const index = array.indexOf(id, 0);
+      if (index > -1) {
+        array.splice(index, 1);
+        const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: {friendList: array},
+        })
+      }
+    }
   
     @Post('setNickname')
     async setNickname( @Req() request, @Body() body: { nickname: string }) {
