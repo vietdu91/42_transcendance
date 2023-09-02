@@ -11,6 +11,8 @@ CREATE TABLE "User" (
     "character" TEXT,
     "actualGame" INTEGER,
     "pfp_url" TEXT,
+    "friendsList" INTEGER[],
+    "blockList" INTEGER[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -46,6 +48,8 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "isPrivate" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT,
+    "usersList" INTEGER[],
+    "banList" INTEGER[],
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );

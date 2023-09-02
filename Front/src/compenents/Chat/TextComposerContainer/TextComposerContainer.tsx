@@ -1,33 +1,24 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './TextComposerContainer.css'; // Import your CSS styles
 // import Wizz from '../../../img/chat/FAcejwHWEAMfcAO.jpeg'
 import Wizz from '../../../img/chat/wizz.png'
 import MessageInput from '../../Messages/messageInput';
 import Cookies from 'js-cookie';
-import io , { Socket } from "socket.io-client";
+import { ChatContext } from '../../utils/ChatContext';
 
 
 const TextComposerContainer = ({ name }) => {
+    const socket = useContext(ChatContext);
 
     const [messages, setMessages] = useState<string[]>([]);
-    const [socket, setSocket] = useState<Socket>();
-
 
     const send = (value: string) => {
         const id = Cookies.get('id');
         socket?.emit('message', value, id);
     }
 
-    useEffect(() => {
-        // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
-        const apiEndpoint = process.env.REACT_APP_LOCAL_B;
-        const newSocket = io(String(apiEndpoint));
-        setSocket(newSocket);
-     }, [setSocket]);
-
-
-     const messageListener = (newMessage: string) => {
+    const messageListener = (newMessage: string) => {
         const authorId = Cookies.get('id');
 
         setMessages(prevMessages => [...prevMessages, newMessage]);

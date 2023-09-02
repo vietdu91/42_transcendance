@@ -21,6 +21,8 @@ model User {
   games             Game[] @relation("players")
   actualGame        Int?
   pfp_url           String?
+  friendsList       Int[]
+  blockList         Int[]
   messages         Message[] @relation("MessageAuthor")
 }
 
@@ -44,13 +46,14 @@ model Message {
   authorId  Int?
 }
 
-
 model Channel {
   id        Int     @id @default(autoincrement())
   ownerId   String   
-  name      String
+  name      String  @unique
   isPrivate Boolean @default(false)
   password  String?
+  usersList Int[]
+  banList   Int[]
   //messages  Message[] @relation("ChannelMessages")
   // Ajoutez d'autres champs de modèle si nécessaire
   // ...

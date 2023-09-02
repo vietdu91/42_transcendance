@@ -23,16 +23,15 @@ export class ChatGateway {
     @SubscribeMessage('channelName')
     async handleCreateChannel(@MessageBody() data: { name: string, ownerId: string, isPrivate?: boolean, password?: string }): Promise<void> {
       const { name, ownerId, isPrivate, password } = data;
-    
+
       console.log(name + ' channel created');
-    
       // Vous pouvez maintenant utiliser les valeurs `name`, `ownerId`, `isPrivate` et `password` pour créer la room en conséquence.
       
       const channelData = {
         name,
         ownerId,
         isPrivate: !!isPrivate, // Convertir en booléen
-        password: isPrivate ? password : null, // Stocker le mot de passe si la room est privée, sinon null
+        //password: isPrivate ? password : null, // Stocker le mot de passe si la room est privée, sinon null
       };
     
       await this.prisma.channel.create({
@@ -43,29 +42,88 @@ export class ChatGateway {
       this.server.emit({ message: 'channelCreated', name });
     }
 
-  // @SubscribeMessage('joinRoom') // Écoutez l'événement 'joinRoom'
-  // async handleJoinRoom(@MessageBody() data: { roomName: string, userId: number }): Promise<void> {
-  //   const { roomName, userId } = data;
+    
+  @SubscribeMessage('joinRoom') // Écoutez l'événement 'joinRoom'
+  async handleJoinRoom(@MessageBody() data: { name: string, userId: number }): Promise<void> {
+    const { name, userId } = data;
+  
+    console.log(userId + ' joined ' + name);
+    const chann = await this.prisma.channel.findUnique({
+      where: {
+        name: name // Assurez-vous que "name" est correctement défini
+      }
+    });
 
-  //   // Ici, vous pouvez implémenter la logique pour gérer la jointure de l'utilisateur à la room.
-  //   // Par exemple, ajouter l'utilisateur à une liste de participants à la room, etc.
+    const userIdNumber = parseInt(userId.toString());
+    const updatedUsersList = [...chann.usersList, userIdNumber];
+    try {
+      await this.prisma.channel.update({
+        where: { name: name },
+        data: {
+          usersList: updatedUsersList,
+        },
+      });
+    }
+    catch (e) {
+      console.log(e);
+    }
+    this.server.to(name).emit('userJoined', { userId });
+  }
 
-  //   // Vous pouvez également émettre un événement pour informer les autres utilisateurs que quelqu'un a rejoint la room.
-  //   // Par exemple :
-  //   this.server.to(roomName).emit('userJoined', { userId });
+  @SubscribeMessage('leaveRoom') // Écoutez l'événement 'leaveRoom'
+  async handleLeaveRoom(@MessageBody() data: { name: string, userId: number }): Promise<void> {
+    {
+      const { name, userId } = data;
+      console.log(userId + ' left ' + name);
+      const chann = await this.prisma.channel.findUnique({
+        where: {
+          name: name // Assurez-vous que "name" est correctement défini
+        }
+      });
 
-  //   // Vous pouvez également stocker les informations de la room et des utilisateurs dans votre base de données Prisma.
+      const userIdNumber = parseInt(userId.toString());
+      const updatedUsersList = chann.usersList.filter((id) => id !== userIdNumber);
+      try {
+        await this.prisma.channel.update({
+          where: { name: name },
+          data: {
+            usersList: updatedUsersList,
+          },
+        });
+      }
+      catch (e) {
+        console.log(e);
+      }
+      this.server.to(name).emit('userLeft', { userId });
+    }
+  }
 
-  //   // Assurez-vous d'adapter ce code à votre logique d'adhésion à la room et de gestion des utilisateurs.
-  // }
-
-  // Méthodes OnGatewayConnection et OnGatewayDisconnect pour gérer les connexions et les déconnexions des utilisateurs
-  //handleConnection(client: Socket) {
-    // Gérer la connexion d'un utilisateur
-  //}
-
-  //handleDisconnect(client: Socket) {
-    // Gérer la déconnexion d'un utilisateur
-  //}
+  @SubscribeMessage('deleteRoom')
+  async handleDeleteRoom(@MessageBody() data: { name: string }): Promise<void> {
+    {
+    const { name } = data;
+  
+    console.log('Deleted room with name:', name);
+  
+    // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
+    const room = await this.prisma.channel.findUnique({
+      where: { name: name },
+    });
+  
+    if (room) {
+      // Supprimez la room en utilisant son ID (si vous en avez un).
+      await this.prisma.channel.delete({
+        where: { id: room.id },
+      });
+  
+      // Émettez un événement pour informer les clients que la room a été supprimée.
+      this.server.emit('roomDeleted', { name });
+    } else {
+      // Gérer le cas où la room n'a pas été trouvée.
+      console.log('Room not found:', name);
+    }
+  }
+} 
 }
+
 
