@@ -70,6 +70,34 @@ export class ChatGateway {
     this.server.to(name).emit('userJoined', { userId });
   }
 
+
+  @SubscribeMessage('kickUser') // Écoutez l'événement 'kickUser'
+  async handleKickUser(@MessageBody() data: { name: string, userId: number }): Promise<void> {
+    const { name, userId } = data;
+  
+    console.log(userId + ' kicked from ' + name);
+    const chann = await this.prisma.channel.findUnique({
+      where: {
+        name: name // Assurez-vous que "name" est correctement défini
+      }
+    });
+
+    const userIdNumber = parseInt(userId.toString());
+    const updatedUsersList = chann.usersList.filter((id) => id !== userIdNumber);
+    try {
+      await this.prisma.channel.update({
+        where: { name: name },
+        data: {
+          usersList: updatedUsersList,
+        },
+      });
+    }
+    catch (e) {
+      console.log(e);
+    }
+    this.server.to(name).emit('userKicked', { userId });
+  }
+
   @SubscribeMessage('leaveRoom') // Écoutez l'événement 'leaveRoom'
   async handleLeaveRoom(@MessageBody() data: { name: string, userId: number }): Promise<void> {
     {
@@ -121,9 +149,63 @@ export class ChatGateway {
     } else {
       // Gérer le cas où la room n'a pas été trouvée.
       console.log('Room not found:', name);
+      }
     }
   }
-} 
+
+  @SubscribeMessage('banRoom')
+  async handleBanRoom(@MessageBody() data: { name: string, userId: number}): Promise<void> {
+    
+    const { name, userId } = data;
+
+    console.log('Banned user with id:', userId, 'from room:', name);
+
+    const userIdNumber = parseInt(userId.toString());
+
+    const chann = await this.prisma.channel.findUnique({
+      where: {
+        name: name // Assurez-vous que "name" est correctement défini
+      }
+    });
+
+    const updatedUsersList = chann.usersList.filter((id) => id !== userIdNumber);
+    const updatedBanList = [...chann.banList, userIdNumber];
+    try {
+      await this.prisma.channel.update({
+        where: { name: name },
+        data: {
+         banList: updatedBanList,
+          usersList: updatedUsersList,
+        },
+      });
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+      
+
+
+  // @SubscribeMessage('messageToRoom') // Écoutez l'événement 'messageToRoom'
+  // async handleMessageToRoom(@MessageBody() data: { name: string, message: string, userId: number }): Promise<void> {
+  //   const { name, message, userId } = data;
+  
+  //   console.log(userId + ' sent ' + message + ' to ' + name);
+  
+  //   // Vous pouvez maintenant utiliser les valeurs `name`, `message` et `userId` pour créer le message en conséquence.
+  //   const messageData = {
+  //     content: message,
+  //     authorId: userId,
+  //   };
+  
+  //   await this.prisma.message.create({
+  //     data: messageData,
+  //   });
+  
+  //   // Émettre un événement pour informer que le message a été envoyé.
+  //   this.server.to(name).emit('message', { message, userId });
+  // }
+
 }
 
 

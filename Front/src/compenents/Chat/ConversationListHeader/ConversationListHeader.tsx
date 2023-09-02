@@ -55,6 +55,19 @@ const ConversationListHeader = ({ name }) => {
             socket?.emit('leaveRoom', {name: 'test', userId: id});
         }
 
+    const handleBan = () => {
+            const id = Cookies.get('id');
+            console.log("Banned user:", id);
+            socket?.emit('banRoom', {name: 'test', userId: id});
+        }
+
+    const handleKik = () => {
+            const id = Cookies.get('id');
+            console.log("Kicked user:", id);
+            socket?.emit('kickUser', {name: 'test', userId: id});
+        }
+
+
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
@@ -70,7 +83,8 @@ const ConversationListHeader = ({ name }) => {
                 <li onClick={handleCreate}>Create</li>
                 <li onClick={handleDelete}>Delete</li>
                 <li onClick={handleLeave}>Leave</li>
-                <li>Help</li>
+                <li onClick={handleBan}>Ban</li>
+                <li onClick={handleKik}>Kick</li>
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger"></div>
