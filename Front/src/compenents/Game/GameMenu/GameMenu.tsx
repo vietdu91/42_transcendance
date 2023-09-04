@@ -58,11 +58,6 @@ function SpecMenu() {
 	const [id, setId] = useState(-1);
 	// const socket = useContext(GameContext);
 
-	const spectateGame = () => {
-		if (click.current) {
-			navigate(`/game/${id}`, {state: {roomId: id}});
-		}
-	}
     const [hoveredPartie, setHoveredPartie] = useState(StaticNoise);
 	const navigate = useNavigate();
 	
@@ -71,17 +66,6 @@ function SpecMenu() {
     };
 
 	useEffect(() => {
-
-		axios.get(process.env.REACT_APP_LOCAL_B + '/Game/spectateLastGame')
-		.then(response => {
-			console.log(response.data.id);
-			click.current = true;
-			setId(response.data.id);
-		})
-		.catch(error => {
-			// console.log(error);
-			console.log("no game playing");
-		})
 
 		const interval = setInterval(() => {
 			setIsBlinking((prevIsBlinking) => !prevIsBlinking);
@@ -112,7 +96,7 @@ function SpecMenu() {
 		}
 
 	return (
-		<div id="spec-menu" onClick={spectateGame}>
+		<div id="spec-menu">
 			<div id="spectate-bg">
 				<div id="spectate-font">
 					PARTIE(S) <br/> EN COURS

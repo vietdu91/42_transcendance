@@ -21,7 +21,9 @@ model User {
   games             Game[] @relation("players")
   actualGame        Int?
   pfp_url           String?
-  messages         Message[] @relation("MessageAuthor")
+  wins              Int @default(0)
+  looses            Int @default(0)
+  messages          Message[] @relation("MessageAuthor")
 }
 
 model Game {

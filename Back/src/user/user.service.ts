@@ -48,7 +48,6 @@ async deleteUser(id: number): Promise<User> {
   }
 
   async getUserById(userId: number): Promise<User | null> {
-     console.log('getUserById: userId =', userId);
     const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) }
     });
@@ -64,11 +63,19 @@ async deleteUser(id: number): Promise<User> {
     });
   }
 
-  async turnOnTwoFactorAuthentication(userId: number) {
-    console.log("turnOnTwoFactorAuthentication = TRUE" + userId);
+  async turnOnTwoFactorAuthentication(userId: number): Promise<User> {
+    console.log("turnOnTwoFa for " + userId);
     return this.prisma.user.update({
       where: { id: userId },
       data: { twoFactorEnabled: true }
+    });
+  }
+
+  async turnOffTwoFactorAuthentication(userId: number): Promise<User> {
+    console.log("turnOffTwoFa for " + userId);
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { twoFactorEnabled: false }
     });
   }
 

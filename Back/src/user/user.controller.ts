@@ -6,6 +6,7 @@ import { Query } from '@nestjs/common';
 import { Req } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Res } from '@nestjs/common';
+import { kMaxLength } from 'buffer';
 
 
 
@@ -58,8 +59,19 @@ export class UserController {
       console.log("Mon id:", id);
       return this.userService.findOne(id);
     }
+
+    @Patch('disableTwoFA')
+    async disableTwoFa( @Req() request: Request, @Body() body: {state: boolean}) {
+      const userId = parseInt(request.cookies.id);
+      console.log(userId);
+      if (!userId)
+        throw new UnauthorizedException();
+      console.log("ici")
+      this.userService.turnOffTwoFactorAuthentication(userId);
+      return {message: 'Disabled 2FA'};
+    }
   
-    @Post('setNickname')
+    @Patch('setNickname')
     async setNickname( @Req() request, @Body() body: { nickname: string }) {
       const userId = request.cookies.id;
       if (!userId) {

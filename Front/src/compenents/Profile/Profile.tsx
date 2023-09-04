@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
@@ -20,6 +20,48 @@ export default function Profile() {
 	let [name, getName] = useState("");
 	let [age, getAge] = useState(0);
 	let [pfp_url, getPfpUrl] = useState("");
+	let [qrCode, setQrCode] = useState("");
+	let [showFa, setShowFa] = useState(false);
+	let [twoFa, setTwoFa] = useState(false);
+	let [code, setCode] = useState("");
+	
+	async function generateTwoFa() {
+		await axios.get(process.env.REACT_APP_LOCAL_B + '/twofa/generate', {headers: {  'Authorization': `Bearer ${token}` }},)
+		.then(response => {
+			console.log("respond === " + response.data.code);
+			setShowFa(true);
+			setQrCode(response.data.code);
+		})
+		.catch(err => {
+			console.log("app-front: error: ", err)
+		})
+	}
+
+	const handleChange = (event) => {
+		setCode(event.target.value);
+	  };
+
+	const handleEnable = async (e) => {
+		console.log(code);
+		// e.preventDefault();
+		await axios.post(process.env.REACT_APP_LOCAL_B + '/twofa/turn-on', { code }, { withCredentials: true, headers: {  'Authorization': `Bearer ${token}` } })
+		.then(response => {
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	}
+
+	async function handleDisable() {
+		const state:boolean = false;
+		await axios.patch(process.env.REACT_APP_LOCAL_B + '/profile/disableTwoFA', {state}, {withCredentials: true})
+		.then(response => {
+
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	}
 
 	useEffect (() => {
 		// axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
@@ -28,10 +70,12 @@ export default function Profile() {
 			getNick(response.data.nick);
 			getName(response.data.name);
 			getAge(response.data.age);
-			getPfpUrl(response.data.pfp_url)
+			setTwoFa(response.data.twoFA);
+			getPfpUrl(response.data.pfp_url);
 		}).catch(error => {
 			console.error(error);
 		});
+	
 	}, [])
 
 	return (
@@ -68,16 +112,27 @@ export default function Profile() {
 								Nick : ({nick})<br/><br/> 
 								Name : ({name})<br/><br/> 
 								Age: ({age})<br/><br/>
-								{/* PFP: ({pfp_url}) */}
 						</div>
 				</div>
 					<p>CONTENT</p>
 				<div className ="pfp">
-					<img src={pfp_url} alt="PPdeMORT"></img>
+					<img id="profile_pic" src={pfp_url} alt="PPdeMORT"></img>
 					<div className="buttons">
 						<button className="btn-hover color-1" onClick={() => navigate("/NewProfile")}>Changer d'image</button><br/>
 						<button className="btn-hover color-2" onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>
-						<button className="btn-hover color-3" onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/></div>
+						<button className="btn-hover color-3" onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/>
+						{twoFa && <><button className="twofa_on" onClick={handleDisable}>Disable 2FA</button><br/></>}
+						{!twoFa && <><button className="twofa_off" onClick={generateTwoFa}>Enable 2FA</button><br/></>}
+						{showFa && 
+							<>
+								<br/>
+								<img src={qrCode}></img>
+								<form onSubmit={handleEnable}>
+									<input placeholder='code' value={code} onChange={handleChange}></input>
+								</form>
+							</>
+						}
+					</div>
 				</div>
 				<button id="move_on" onClick={() => navigate("/")}></button>
 			</div>

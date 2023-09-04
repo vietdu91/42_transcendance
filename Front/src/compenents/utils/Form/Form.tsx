@@ -1,18 +1,4 @@
-import React from "react";
-import "./Form.css";
-
-// export default function Form() {
-
-// 	return (
-// 		<form>
-// 			<input id="barre" type="text" className="write"></input>
-// 			  <label className="hello">Ton petit surnom 👶</label>
-// 			<span className="enter"></span>
-// 	  	</form>
-// 	);
-// }
-
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./Form.css";
 
@@ -27,7 +13,7 @@ export default function Form() {
     e.preventDefault();
     console.log(nickname);
     await axios
-    .post(process.env.REACT_APP_LOCAL_B + '/profile/setNickname', { nickname }, { withCredentials: true })
+    .patch(process.env.REACT_APP_LOCAL_B + '/profile/setNickname', { nickname }, { withCredentials: true })
     .then((response) => {
       console.log(response.data.message);
       // Traiter la réponse du serveur si nécessaire

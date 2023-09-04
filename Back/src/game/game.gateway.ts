@@ -96,10 +96,10 @@ export class MatchmakingGateway {
 	}
 
 	private async createMatch(): Promise<void> {
-		if (this.queue.length >= 2) {
-		// if (this.queue.length >= 1) {
+		// if (this.queue.length >= 2) {
+		if (this.queue.length >= 1) {
 			const player1 = this.queue.shift();
-			const player2 = this.queue.shift();
+			// const player2 = this.queue.shift();
 			const prisma = new PrismaService();
 			const date = new Date();
 
@@ -108,12 +108,12 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player2.user.id}, // change player1 to player2
+							{id: player1.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
+					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
 					playing: true,
 					date: date,
 				}
@@ -125,13 +125,13 @@ export class MatchmakingGateway {
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
 				sockLeft: player1.id,
-				sockRight: player2.id, //change to player2
+				sockRight: player1.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
 				charRight: game.characters[1],
-				posLeft: (9/16) * 100 / 2,
-				posRight: (9/16) * 100 / 2,
+				posLeft: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
+				posRight: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
 				wLeft: 100 / 75,
 				hLeft: (9/16) * 100 / 5,
 				wRight: 100 / 75,
@@ -146,7 +146,7 @@ export class MatchmakingGateway {
 					x: 100 / 2,
 					y: (9/16) * 100 / 2,
 					rad: (9/16) * 100 / 75,
-					speed: (9/16) * 100 / 150,
+					speed: (9/16) * 100 / 125,
 					inertia: 0,
 					vx: 0,
 					vy: 0,
@@ -173,8 +173,8 @@ export class MatchmakingGateway {
 				data: {actualGame: game.id},
 			})
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
-			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player1.user }); // change player1 to player2
+			// this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 
@@ -227,14 +227,40 @@ export class MatchmakingGateway {
 				playing: false,
 			}
 		});
-		await prisma.user.update({
-			where: {id: game.playersId[0]},
-			data: {actualGame: null},
-		})
-		await prisma.user.update({
-			where: {id: game.playersId[1]},
-			data: {actualGame: null},
-		})
+		
+		if (winnerId === game.playersId[0]) {
+			await prisma.user.update({
+				where: {id: game.playersId[0]},
+				data: {
+					actualGame: null,
+					wins: {increment: 1},
+				},
+			})
+			await prisma.user.update({
+				where: {id: game.playersId[1]},
+				data: {
+					actualGame: null,
+					looses: {increment: 1},
+				},
+			})
+		}
+		else if (winnerId === game.playersId[1]) {
+			await prisma.user.update({
+				where: {id: game.playersId[0]},
+				data: {
+					actualGame: null,
+					looses: {increment: 1},
+				},
+			})
+			await prisma.user.update({
+				where: {id: game.playersId[1]},
+				data: {
+					actualGame: null,
+					wins: {increment: 1},
+				},
+			})
+		}
+
 		this.gaveUp = true;
 		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
@@ -283,7 +309,7 @@ export class MatchmakingGateway {
 				case "Servietsky": ; break;
 				case "Kenny": ; break;
 				case "Timmy": ; break;
-				case "TerrancePhilip": actualGame.ball.inertia = 0.5; break;
+				case "TerrancePhilip": actualGame.ball.inertia = 0.6; break;
 				case "Garrison": actualGame.tocLeft = (9/16) * 100 / 2; break;
 				case "Henrietta": actualGame.scoreRight--; break;
 				case "Butters": ; break;
@@ -297,7 +323,7 @@ export class MatchmakingGateway {
 				case "Servietsky": ; break;
 				case "Kenny": ; break;
 				case "Timmy": ; break;
-				case "TerrancePhilip": actualGame.ball.inertia = 0.5; break;
+				case "TerrancePhilip": actualGame.ball.inertia = 0.6; break;
 				case "Garrison": actualGame.tocRight = (9/16) * 100 / 2; break;
 				case "Henrietta": actualGame.scoreLeft--; break;
 				case "Butters": ; break;
@@ -374,13 +400,13 @@ export class MatchmakingGateway {
 					...actualGame,
 					scoreLeft: actualGame.scoreLeft,
 					scoreRight: actualGame.scoreRight,
-					posLeft: (9/16) * 100 / 2,
-					posRight: (9/16) * 100 / 2,
+					posLeft: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
+					posRight: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
 					ball: {
 						x: 100 / 2,
 						y: (9/16) * 100 / 2,
 						rad: (9/16) * 100 / 75,
-						speed: (9/16) * 100 / 175,
+						speed: (9/16) * 100 / 125,
 						inertia: 0,
 						vx: 0,
 						vy: 0,
@@ -406,14 +432,39 @@ export class MatchmakingGateway {
 						}
 					});
 
-					await prisma.user.update({
-						where: {id: game.playersId[0]},
-						data: {actualGame: null},
-					})
-					await prisma.user.update({
-						where: {id: game.playersId[1]},
-						data: {actualGame: null},
-					})
+					if (winnerId === game.playersId[0]) {
+						await prisma.user.update({
+							where: {id: game.playersId[0]},
+							data: {
+								actualGame: null,
+								wins: {increment: 1},
+							},
+						})
+						await prisma.user.update({
+							where: {id: game.playersId[1]},
+							data: {
+								actualGame: null,
+								looses: {increment: 1},
+							},
+						})
+					}
+					else if (winnerId === game.playersId[1]) {
+						await prisma.user.update({
+							where: {id: game.playersId[0]},
+							data: {
+								actualGame: null,
+								looses: {increment: 1},
+							},
+						})
+						await prisma.user.update({
+							where: {id: game.playersId[1]},
+							data: {
+								actualGame: null,
+								wins: {increment: 1},
+							},
+						})
+					}
+
 	
 					// socket.emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(socket.id).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
@@ -450,8 +501,8 @@ export class MatchmakingGateway {
 					actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
 				}
 				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
-				if (actualGame.ball.inertia < 0.2)
-					actualGame.ball.inertia += (9 / 16) * 0.05;
+				if (actualGame.ball.inertia < 0.4)
+					actualGame.ball.inertia += (9 / 16) * 0.1;
 				if (angle > -(PI/2) && angle < (PI/2)) {
 					actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 					actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
@@ -481,8 +532,8 @@ export class MatchmakingGateway {
 					actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
 				}
 				let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
-				if (actualGame.ball.inertia < 0.2)
-					actualGame.ball.inertia += (9 / 16) * 0.05;
+				if (actualGame.ball.inertia < 0.4)
+					actualGame.ball.inertia += (9 / 16) * 0.1;
 				if (angle > -PI/2 && angle < PI/2) {
 					actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 					actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
@@ -513,8 +564,8 @@ export class MatchmakingGateway {
 						actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
 					}
 					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx);
-					if (actualGame.ball.inertia < 0.2)
-						actualGame.ball.inertia += (9 / 16) * 0.05;
+					if (actualGame.ball.inertia < 0.4)
+						actualGame.ball.inertia += (9 / 16) * 0.1;
 					if (angle > -(PI/2) && angle < (PI/2)) {
 						actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 						actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
@@ -545,8 +596,8 @@ export class MatchmakingGateway {
 						actualGame.ball.vy = actualGame.ball.vy * 10 / magnitude;
 					}
 					let angle:number = Math.atan2(actualGame.ball.vy, actualGame.ball.vx); //heading
-					if (actualGame.ball.inertia < 0.2)
-						actualGame.ball.inertia += (9 / 16) * 0.05;
+					if (actualGame.ball.inertia < 0.4)
+						actualGame.ball.inertia += (9 / 16) * 0.1;
 					if (angle > -PI/2 && angle < PI/2) {
 						actualGame.ball.vx = Math.cos(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
 						actualGame.ball.vy = Math.sin(angle / 2) * (actualGame.ball.speed + actualGame.ball.inertia);
