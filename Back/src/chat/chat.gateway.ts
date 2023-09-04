@@ -54,6 +54,22 @@ export class ChatGateway {
       }
     });
 
+    for (let i = 0; i < chann.usersList.length; i++) {
+      if(chann.usersList[i] == userId){
+        console.log(userId + ' is already in' + name);
+        //this.server.emit('userBanned', { userId });
+        return;
+      }
+    }
+  
+    for (let i = 0; i < chann.banList.length; i++) {
+      if(chann.banList[i] == userId){
+        console.log(userId + ' is banned from ' + name);
+        //this.server.emit('userBanned', { userId });
+        return;
+      }
+    }
+
     const userIdNumber = parseInt(userId.toString());
     const updatedUsersList = [...chann.usersList, userIdNumber];
     try {
@@ -120,7 +136,13 @@ export class ChatGateway {
         });
       }
       catch (e) {
-        console.log(e);
+        console.log(e);  for (let i = 0; i < chann.banList.length; i++) {
+      if(chann.banList[i] == userId){
+        console.log(userId + ' is banned from ' + name);
+        //this.server.emit('userBanned', { userId });
+        return;
+      }
+    }
       }
       this.server.to(name).emit('userLeft', { userId });
     }
@@ -183,6 +205,67 @@ export class ChatGateway {
       console.log(e);
     }
   }
+
+  @SubscribeMessage('setAdmin')
+  async handleSetAdmin(@MessageBody() data: { name: string, userId: number}): Promise<void> {
+    
+    const { name, userId } = data;
+
+    console.log('Set admin with id:', userId, 'from room:', name);
+
+    const userIdNumber = parseInt(userId.toString());
+
+    const chann = await this.prisma.channel.findUnique({
+      where: {
+        name: name // Assurez-vous que "name" est correctement défini
+      }
+    });
+
+    const updatedAdminList = [...chann.adminList, userIdNumber];
+    try {
+      await this.prisma.channel.update({
+        where: { name: name },
+        data: {
+         adminList: updatedAdminList,
+        },
+      });
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
+  @SubscribeMessage('unsetAdmin')
+  async handleUnsetAdmin(@MessageBody() data: { name: string, userId: number}): Promise<void> {
+    
+    const { name, userId } = data;
+
+    console.log('Unset admin with id:', userId, 'from room:', name);
+
+    const userIdNumber = parseInt(userId.toString());
+
+    const chann = await this.prisma.channel.findUnique({
+      where: {
+        name: name // Assurez-vous que "name" est correctement défini
+      }
+    });
+
+    const updatedAdminList = chann.adminList.filter((id) => id !== userIdNumber);
+    
+    try {
+      await this.prisma.channel.update({
+        where: { name: name },
+        data: {
+         adminList: updatedAdminList,
+        },
+      });
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+
+
       
 
 

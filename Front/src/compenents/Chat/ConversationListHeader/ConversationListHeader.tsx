@@ -67,6 +67,12 @@ const ConversationListHeader = ({ name }) => {
             socket?.emit('kickUser', {name: 'test', userId: id});
         }
 
+    const handleSetAdmin = () => {
+            const id = Cookies.get('id');
+            console.log("Set admin:", id);
+            socket?.emit('setAdmin', {name: 'test', userId: id});
+        }
+
 
     return (
         <div className="conversations-list-header">
@@ -85,6 +91,7 @@ const ConversationListHeader = ({ name }) => {
                 <li onClick={handleLeave}>Leave</li>
                 <li onClick={handleBan}>Ban</li>
                 <li onClick={handleKik}>Kick</li>
+                <li onClick={handleSetAdmin}>Set Admin</li>
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger"></div>

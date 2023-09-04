@@ -50,6 +50,7 @@ CREATE TABLE "Channel" (
     "password" TEXT,
     "usersList" INTEGER[],
     "banList" INTEGER[],
+    "adminList" INTEGER[],
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );
@@ -74,6 +75,9 @@ CREATE UNIQUE INDEX "User_accessToken_key" ON "User"("accessToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_nickname_key" ON "User"("nickname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Channel_name_key" ON "Channel"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_players_AB_unique" ON "_players"("A", "B");

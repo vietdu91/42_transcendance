@@ -54,6 +54,7 @@ model Channel {
   password  String?
   usersList Int[]
   banList   Int[]
+  adminList Int[]
   //messages  Message[] @relation("ChannelMessages")
   // Ajoutez d'autres champs de modèle si nécessaire
   // ...

@@ -83,7 +83,7 @@ export default function App() {
     {
       try {
         const res = await axios({
-          url: process.env.REACT_APP_LOCAL_B + "/Southtrans/2fa/generate",
+          url: process.env.REACT_APP_LOCAL_B + "/twofa/generate",
           method: 'GET',
           headers: {  'Authorization': `Bearer ${accessToken}` },
         }).then(response => {

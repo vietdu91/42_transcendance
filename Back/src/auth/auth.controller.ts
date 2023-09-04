@@ -16,7 +16,7 @@ export class AuthController {
               private readonly userService: UserService) {}
 
   @Get('connexion')
-  async connexion(@Req() req, @Res({passthrough:true}) response): Promise<any> {
+  async connexion(@Req() req, @Res() response): Promise<any> {
     console.log("Connexion route")
     const code = req.query.code;
     const accessToken = await this.AuthService.getAccessToken(code);
