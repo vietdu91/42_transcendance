@@ -3,12 +3,13 @@ import './ChatConversationArea.css'; // Import your CSS styles
 import ConversationContainer from '../ConversationContainer/ConversationContainer'; // Import the ConversationContainer component
 import TextComposerContainer from '../TextComposerContainer/TextComposerContainer'; // Import the TextComposerContainer component
 
-interface ChatConversationAreaProps {
+type ChatConversationAreaProps = {
   name: string;
   isVisible: boolean;
-}
+  pfp: any; // Add the `pfp` prop with the appropriate type
+};
 
-function ChatConversationArea({ name, isVisible }: ChatConversationAreaProps) {
+function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProps) {
   return (
     <div className={`chat-conversation-area ${isVisible ? 'visible' : 'hidden'}`}>
       {isVisible && (
@@ -17,7 +18,7 @@ function ChatConversationArea({ name, isVisible }: ChatConversationAreaProps) {
             {/* Content for the navbar */}
           </div>
           <ConversationContainer />
-          <TextComposerContainer name={name} />
+          <TextComposerContainer name={name} pfp={pfp} />
         </div>
       )}
     </div>

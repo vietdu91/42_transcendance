@@ -4,8 +4,8 @@ import Advertisement from './../../../img/chat/advertisement.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 // ... (import statements)
 
-const ConversationListSummary = () => {
-    const [visibleItems, setVisibleItems] = useState<boolean[]>([true, true, true, true]);
+const ConversationListSummary = ({name, pfp}) => {
+    const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
 
     const toggleConvSummary = (index: number) => {
         const newVisibleItems = [...visibleItems];
@@ -23,8 +23,8 @@ const ConversationListSummary = () => {
                 <ul>
                     <li onClick={() => toggleConvSummary(0)}>je suis une conv</li>
                     <li onClick={() => toggleConvSummary(1)}>je suis un channel</li>
-                    <li onClick={() => toggleConvSummary(2)}>je suis une conv</li>
-                    <li onClick={() => toggleConvSummary(3)}>je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(2)}>je suis une ju</li>
+                    <li onClick={() => toggleConvSummary(3)}>je suis un</li>
                 </ul>
             </div>
             <div className="advertisement-scope">
@@ -34,7 +34,7 @@ const ConversationListSummary = () => {
             </div>
             {/* Render conversation summaries based on visibility */}
             {visibleItems.map((isVisible, index) => (
-                <ChatConversationArea key={index} name={"dyoula"} isVisible={isVisible} />
+                <ChatConversationArea  name={name} isVisible={isVisible} pfp={pfp} />
             ))}
         </div>
     );

@@ -3,7 +3,7 @@ import './TextComposerContainer.css'; // Import your CSS styles
 // import Wizz from '../../../img/chat/FAcejwHWEAMfcAO.jpeg'
 import Wizz from '../../../img/chat/wizz.png'
 
-const TextComposerContainer = ({ name }) => {
+const TextComposerContainer = ({ name, pfp }) => {
     return (
         <div className="text-composer-container">
             <div className="container-write-text">
@@ -16,15 +16,16 @@ const TextComposerContainer = ({ name }) => {
                     {/* Content for the middle part */}
                 </div>
                 <div className="bottom-part-write-text">
-                    <input type="text" placeholder="search"></input>
+                    <input type="text" placeholder="search" />
                     {/* Content for the bottom part */}
                 </div>
             </div>
             <div className="profile-pic-container-emitter">
                 <div className="profile-pic-last-block">
+                    <img className="individual-conv-pfp" src={pfp} alt="individual-conv-pfp"></img>
                     {/* You can add content or image for the profile picture */}
                 </div>
-                {name}
+                <div className="My-name-in-conv">{name}</div> {/* Add a div for the name with a class */}
             </div>
         </div>
     );

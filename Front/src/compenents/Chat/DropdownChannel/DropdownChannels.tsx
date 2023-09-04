@@ -39,25 +39,35 @@ function DropdownChannels() {
         <div className="channel-creation-container">
           {/* Add content for channel creation */}
           <input type="text" placeholder="Channel Name" />
+          <div className="checkboxes-tick">
+            <input type="checkbox" id="public" />
+            <label htmlFor="public">Public</label>
+            <input type="checkbox" id="private" />
+            <label htmlFor="private">Private</label>
+          </div>
+          <input type="text" placeholder="Password" />
           <button onClick={toggleCreateChannel}>Create</button>
         </div>
       )}
       {
         isOpenForJoinChannel && (
           <div className="channel-join-container">
-          {/* Add content for channel join */}
-          <input type="text" placeholder="Channel Name" />
-          <button onClick={toggleJoinChannel}>Join</button>
+            {/* Add content for channel join */}
+            <input type="text" placeholder="Channel Name" />
+            {/* fairee apparaitre le password que si il est prive*/}
+            <input type="text" placeholder="Password" />
+            <button onClick={toggleJoinChannel}>Join</button>
           </div>
         )
       }
       {
         isOpenForDeleteChannel && (
           <div className="channel-delete-container">
-          {/* Add content for channel delete */}
-          <input type="text" placeholder="Channel Name" />
-          <button onClick={toggleDeleteChannel}>Delete</button>
-          </div>  
+            {/* Add content for channel delete */}
+            <input type="text" placeholder="Channel Name" />
+            <input type="text" placeholder="Password" />
+            <button onClick={toggleDeleteChannel}>Delete</button>
+          </div>
         )
       }
     </div>

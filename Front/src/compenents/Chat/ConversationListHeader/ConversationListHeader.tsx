@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
-const ConversationListHeader = ({ name }) => {
+const ConversationListHeader = ({ name, pfp }) => {
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
@@ -39,8 +39,9 @@ const ConversationListHeader = ({ name }) => {
                 <li>Help</li>
             </ul>
             <div className="topbar-conversation-list">
-                <div className="profile-pic-messenger"></div>
-                <div className="user-informations">
+                <div className="profile-pic-messenger">
+                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" /> {/* Add the profile picture */}
+                </div>                <div className="user-informations">
                     <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
                     <h4 className="status-edit">status to Edit</h4>
                 </div>
