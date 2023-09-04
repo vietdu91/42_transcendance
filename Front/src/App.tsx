@@ -10,6 +10,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 // COMPONENTS
 import Menu from "./compenents/Menu/Menu"
 import Connexion from "./compenents/Connexion/Connexion"
+import TwoFa from "./compenents/TwoFa/TwoFa"
 import Credits from "./compenents/Credits/Credits"
 import PageNotFound from "./compenents/PageNotFound/PageNotFound"
 import Thanks from "./compenents/Thanks/Thanks"
@@ -81,6 +82,7 @@ export default function App() {
 				<Routes>
 				<Route path="/" element={<MenuWithMusic />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
+				<Route path="/2fa" element={<TwoFa />}/>
 				<Route path="/champselect" element={<ChampSelectWithMusic />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>
 				<Route path="/game" element={<Game />}/>

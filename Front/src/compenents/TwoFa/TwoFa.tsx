@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 import './TwoFa.css';
 
 export default function TwoFa() {
-
+	const navigate = useNavigate();
 	const [code, setCode] = useState("");
 
 	const handleChange = (event) => {
@@ -13,6 +15,13 @@ export default function TwoFa() {
 	const handleEnable = async (e) => {
 		console.log(code);
 		e.preventDefault();
+		await axios.post(process.env.REACT_APP_LOCAL_B + '/auth/connect2fa', {code}, {withCredentials: true})
+		.then(response => {
+			navigate('/');
+		})
+		.catch(err => {
+			console.log(err);
+		});
 	}
 
 	return (

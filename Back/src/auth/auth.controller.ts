@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, UseGuards , Req, UnauthorizedException} from '@nestjs/common';
+import { Controller, Get, Res, Post, Body, UseGuards , Req, UnauthorizedException, BadRequestException} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response,} from 'express';
 import { Request } from 'express';
@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import JwtAuthenticationGuard from '../jwt-guard/jwt-guard.guard';
 import { UserService } from '../user/user.service';
+import { TwofaService } from 'src/twofa/twofa.service';
 
 
 @Controller('Auth')
@@ -13,7 +14,8 @@ export class AuthController {
   constructor(private readonly AuthService: AuthService,
               private prisma: PrismaService,
               private readonly jwtService: JwtService,
-              private readonly userService: UserService) {}
+              private readonly userService: UserService,
+              private readonly twoFaService: TwofaService) {}
 
   @Get('connexion')
   async connexion(@Req() req, @Res({passthrough:true}) response): Promise<any> {
@@ -22,6 +24,20 @@ export class AuthController {
     const accessToken = await this.AuthService.getAccessToken(code);
     const userData = await this.AuthService.getUserData(accessToken);
     const user = await this.AuthService.apiConnexion(userData, response);
+  }
+
+  @Post('connect2fa')
+  async connect2fa(@Req() req: Request, @Res() res: Response, @Body() body: { code: string }) {
+    const { code } = body;
+    const userId = parseInt(req.cookies.id);
+    const user = await this.userService.getUserById(userId);
+    if (!user.twoFactorSecret || !user.twoFactorEnabled)
+      throw new BadRequestException('2Fa is not enabled for this user');
+    const isCodeValid = this.twoFaService.isTwoFactorAuthenticationCodeValid(code, user);
+    if (!isCodeValid)
+      throw new UnauthorizedException('Wrong authentication code');
+    await this.AuthService.apiConnexion2fa(user, res);
+    res.redirect(process.env.URL_LOCAL_F);
   }
 
   @Post('logout')
