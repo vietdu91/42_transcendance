@@ -122,7 +122,7 @@ export default function Profile() {
 						<button className="btn-hover color-2" onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>
 						<button className="btn-hover color-3" onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/>
 						{twoFa && <><button className="twofa_on" onClick={handleDisable}>Disable 2FA</button><br/></>}
-						{!twoFa && <><button className="twofa_off" onClick={generateTwoFa}>Enable 2FA</button><br/></>}
+						{!showFa && !twoFa && <><button className="twofa_off" onClick={generateTwoFa}>Enable 2FA</button><br/></>}
 						{showFa && 
 							<>
 								<br/>
