@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './ConversationListSummary.css';
 import Advertisement from './../../../img/chat/advertisement.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+import Channel from '../Channels/Channels';
+
 // ... (import statements)
 
 const ConversationListSummary = ({name, pfp}) => {
@@ -36,6 +38,7 @@ const ConversationListSummary = ({name, pfp}) => {
             {visibleItems.map((isVisible, index) => (
                 <ChatConversationArea  name={name} isVisible={isVisible} pfp={pfp} />
             ))}
+            <Channel />
         </div>
     );
 }
