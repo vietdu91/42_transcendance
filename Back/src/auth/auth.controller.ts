@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, UseGuards , Req, UnauthorizedException, BadRequestException} from '@nestjs/common';
+import { Controller, Get, Res, Post, Query, UseGuards , Req, UnauthorizedException, BadRequestException} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response,} from 'express';
 import { Request } from 'express';
@@ -26,9 +26,9 @@ export class AuthController {
     const user = await this.AuthService.apiConnexion(userData, response);
   }
 
-  @Post('connect2fa')
-  async connect2fa(@Req() req: Request, @Res() res: Response, @Body() body: { code: string }) {
-    const { code } = body;
+  @Get('connect2fa')
+  async connect2fa(@Query('code') code: string, @Req() req: Request, @Res() res: Response) {
+    console.log(code);
     const userId = parseInt(req.cookies.id);
     const user = await this.userService.getUserById(userId);
     if (!user.twoFactorSecret || !user.twoFactorEnabled)
@@ -37,7 +37,8 @@ export class AuthController {
     if (!isCodeValid)
       throw new UnauthorizedException('Wrong authentication code');
     await this.AuthService.apiConnexion2fa(user, res);
-    res.redirect(process.env.URL_LOCAL_F);
+    console.log(process.env.URL_LOCAL_F);
+    res.status(200).json({ message: 'Déconnexion réussie' });
   }
 
   @Post('logout')

@@ -11,6 +11,8 @@ CREATE TABLE "User" (
     "character" TEXT,
     "actualGame" INTEGER,
     "pfp_url" TEXT,
+    "wins" INTEGER NOT NULL DEFAULT 0,
+    "looses" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
