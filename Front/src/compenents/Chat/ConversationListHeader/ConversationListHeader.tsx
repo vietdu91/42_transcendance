@@ -6,11 +6,15 @@ import { ChatContext } from '../../utils/ChatContext';
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import { useState, useEffect } from 'react';
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
 const ConversationListHeader = ({ name, pfp }) => {
+    const socket = useContext(ChatContext);
+    const [joined, setJoined] = useState(false);
+    const [channelName, setChannelName] = useState('');
+    const [isRoomCreated, setIsRoomCreated] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
@@ -21,20 +25,13 @@ const ConversationListHeader = ({ name, pfp }) => {
             ...prevState,
             [name]: !prevState[name]
         }));
-    };
-
-const ConversationListHeader = ({ name }) => {
-    const socket = useContext(ChatContext);
-    const [joined, setJoined] = useState(false);
-    const [channelName, setChannelName] = useState('');
-    const [isRoomCreated, setIsRoomCreated] = useState(false);
-    const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
+    }
 
     const handleJoin = () => {
         const id = Cookies.get('id');
         socket?.emit('joinRoom', {name: 'test', userId: id});
         setJoined(true);
-      };
+    };
 
 
   const handleCreate = ()=> {
@@ -69,25 +66,25 @@ const ConversationListHeader = ({ name }) => {
             setIsPrivate(false);
             setJoined(false);
             socket?.emit('leaveRoom', {name: 'test', userId: id});
-        }
+    }
 
     const handleBan = () => {
             const id = Cookies.get('id');
             console.log("Banned user:", id);
             socket?.emit('banRoom', {name: 'test', userId: id});
-        }
+    }
 
     const handleKik = () => {
             const id = Cookies.get('id');
             console.log("Kicked user:", id);
             socket?.emit('kickUser', {name: 'test', userId: id});
-        }
+    }
 
     const handleSetAdmin = () => {
             const id = Cookies.get('id');
             console.log("Set admin:", id);
             socket?.emit('setAdmin', {name: 'test', userId: id});
-        }
+    }
 
 
     return (
