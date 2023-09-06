@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Game, Prisma } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -48,12 +48,23 @@ async deleteUser(id: number): Promise<User> {
   }
 
   async getUserById(userId: number): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: parseInt(userId.toString()) }
+    const user: User = await this.prisma.user.findUnique({
+      where: { id: parseInt(userId.toString()) },
     });
-    // console.log("Mon ID :" + userId);
-    // console.log('getUserById: user =', user);
     return user;
+  }
+
+  async getGamesByUserId(userId: number) {
+    const games = await this.prisma.game.findMany({
+      where: {players: {some: {id: parseInt(userId.toString())}}},
+    });
+    return games.map(game => {
+      return {
+        names: game.playersName,
+        score: game.score,
+        date: game.date,
+      }
+    });
   }
   
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {

@@ -42,8 +42,11 @@ export class UserController {
       if (!user) {
         throw new UnauthorizedException();
       }
-      // console.log("nick = " + user.nickname)
       let percentage: number = user.looses === 0 ? 100 : Math.round(user.wins / (user.wins + user.looses) * 100);
+
+      const games = await this.userService.getGamesByUserId(userId);
+
+      console.log(games);
 
       response.json({
         id: user.id,
@@ -57,6 +60,7 @@ export class UserController {
         wins: user.wins,
         looses: user.looses,
         percentage: percentage,
+        games: games,
       });
     }
     @Get(':id')

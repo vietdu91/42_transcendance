@@ -112,6 +112,7 @@ export class MatchmakingGateway {
 						]
 					},
 					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
+					playersName: [player1.user.name, player1.user.name], // change player1 n2 to player2
 					score: [0, 0],
 					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
 					playing: true,

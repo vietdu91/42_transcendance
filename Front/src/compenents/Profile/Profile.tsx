@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
@@ -7,6 +7,11 @@ import './Profile.css'
 
 import Bar from "../../img/backgrounds/skeeters-bar.jpg"
 
+interface Game {
+	names: string[],
+	score: number[],
+	date: Date,
+}
 
 export default function Profile() {
 
@@ -16,17 +21,18 @@ export default function Profile() {
     if (!token)
 		window.location.href = "http://localhost:3000/connect";
 
-	let [nick, getNick] = useState("");
-	let [name, getName] = useState("");
-	let [age, getAge] = useState(0);
-	let [pfp_url, getPfpUrl] = useState("");
-	let [wins, getWins] = useState(0);
-	let [looses, getLooses] = useState(0);
-	let [percentage, getPercentage] = useState(0);
-	let [qrCode, setQrCode] = useState("");
-	let [showFa, setShowFa] = useState(false);
-	let [twoFa, setTwoFa] = useState(false);
-	let [code, setCode] = useState("");
+	const [nick, getNick] = useState("");
+	const [name, getName] = useState("");
+	const [age, getAge] = useState(0);
+	const [pfp_url, getPfpUrl] = useState("");
+	const [wins, getWins] = useState(0);
+	const [looses, getLooses] = useState(0);
+	const [percentage, getPercentage] = useState(0);
+	const [qrCode, setQrCode] = useState("");
+	const [showFa, setShowFa] = useState(false);
+	const [twoFa, setTwoFa] = useState(false);
+	const [code, setCode] = useState("");
+	let games = useRef<Game[]>([]);
 	
 	async function generateTwoFa() {
 		await axios.get(process.env.REACT_APP_LOCAL_B + '/twofa/generate', {headers: {  'Authorization': `Bearer ${token}` }},)
@@ -78,11 +84,20 @@ export default function Profile() {
 			getWins(response.data.wins);
 			getLooses(response.data.looses);
 			getPercentage(response.data.percentage);
+			const updatedGames:Game[] = [...games.current];
+			const limit = response.data.games.length > 3 ? response.data.games.length - 3 : 0;
+			for (let i = response.data.games.length - 1; i >= limit; i--) {
+				updatedGames.push(response.data.games[i]);
+				console.log(response.data.games[i]);
+			}
+			games.current = updatedGames;
 		}).catch(error => {
 			console.error(error);
 		});
 	
 	}, [])
+
+	console.log(games.current);
 
 	return (
 		<div id="menu">
@@ -119,6 +134,12 @@ export default function Profile() {
 							Name : ({name})<br/><br/> 
 							Age: ({age})<br/><br/>
 							W/L : {wins} / {looses} ({percentage}%)<br/><br/>
+					</div>
+					<div id="profile_font">HISTORIQUE</div>
+					<div>
+						{games.current.map((game, i) => (
+    						<><div key={i}>{game.names[0]} {game.score[0]} - {game.score[1]} {game.names[1]}</div><br/><br/></>
+  						))}
 					</div>
 				</div>
 					<p>CONTENT</p>	
