@@ -20,6 +20,9 @@ export default function Profile() {
 	let [name, getName] = useState("");
 	let [age, getAge] = useState(0);
 	let [pfp_url, getPfpUrl] = useState("");
+	let [wins, getWins] = useState(0);
+	let [looses, getLooses] = useState(0);
+	let [percentage, getPercentage] = useState(0);
 	let [qrCode, setQrCode] = useState("");
 	let [showFa, setShowFa] = useState(false);
 	let [twoFa, setTwoFa] = useState(false);
@@ -72,6 +75,9 @@ export default function Profile() {
 			getAge(response.data.age);
 			setTwoFa(response.data.twoFA);
 			getPfpUrl(response.data.pfp_url);
+			getWins(response.data.wins);
+			getLooses(response.data.looses);
+			getPercentage(response.data.percentage);
 		}).catch(error => {
 			console.error(error);
 		});
@@ -87,7 +93,7 @@ export default function Profile() {
 				<p>CONTENT</p>
 
 				<div id="welcome2">
-					<div id="eric">
+					{/* <div id="eric">
 						<div className="face">
 							<div className="hat"></div>
 							<div className="eye-left"></div>
@@ -106,15 +112,16 @@ export default function Profile() {
 							<div className="foot-left"></div>
 							<div className="foot-right"></div>
 						</div>
+					</div> */}
+					<div id="profile_font">PROFIL</div>
+					<div>	
+							Nick : ({nick})<br/><br/> 
+							Name : ({name})<br/><br/> 
+							Age: ({age})<br/><br/>
+							W/L : {wins} / {looses} ({percentage}%)<br/><br/>
 					</div>
-						<div id="profile_font">PROFIL</div>
-						<div>	
-								Nick : ({nick})<br/><br/> 
-								Name : ({name})<br/><br/> 
-								Age: ({age})<br/><br/>
-						</div>
 				</div>
-					<p>CONTENT</p>
+					<p>CONTENT</p>	
 				<div className ="pfp">
 					<img id="profile_pic" src={pfp_url} alt="PPdeMORT"></img>
 					<div className="buttons">

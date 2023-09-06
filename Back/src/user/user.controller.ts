@@ -43,6 +43,8 @@ export class UserController {
         throw new UnauthorizedException();
       }
       // console.log("nick = " + user.nickname)
+      let percentage: number = user.looses === 0 ? 100 : Math.round(user.wins / (user.wins + user.looses) * 100);
+
       response.json({
         id: user.id,
         email: user.email,
@@ -52,6 +54,9 @@ export class UserController {
         age: user.age,
         character: user.character,
         pfp_url: user.pfp_url,
+        wins: user.wins,
+        looses: user.looses,
+        percentage: percentage,
       });
     }
     @Get(':id')
