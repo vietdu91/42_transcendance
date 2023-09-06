@@ -1,25 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Cookies from 'js-cookie';
+import { ChatContext } from '../../utils/ChatContext';
 import './DropdownChannels.css'
 
 function DropdownChannels() {
+  const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);
   const [isOpenForJoinChannel, setIsOpenForJoinChannel] = useState(false);
   const [isOpenForDeleteChannel, setIsOpenForDeleteChannel] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
 
   const toggleChannels = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleCreateChannel = () => {
-    setIsOpenForCreateChannel(!isOpenForCreateChannel);
+    const id = Cookies.get('id');
+    // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
+     if (isPrivate) {
+       socket?.emit('channelName', { name: 'test', ownerId: id, isPrivate });
+    } else {
+      // Si la room n'est pas privée, n'envoyer que le nom de la room
+      socket?.emit('channelName', { name: 'test', ownerId: id });
+    }
+      setIsOpenForCreateChannel(!isOpenForCreateChannel);
   };
 
   const toggleJoinChannel = () => {
-    setIsOpenForJoinChannel(!isOpenForJoinChannel);
+    const id = Cookies.get('id');
+    socket?.emit('joinRoom', {name: 'test', userId: id});
+    setIsOpenForJoinChannel(true);
   };
 
   const toggleDeleteChannel = () => {
+     socket?.emit('deleteRoom', {name: 'test'});
     setIsOpenForDeleteChannel(!isOpenForDeleteChannel);
   };
 

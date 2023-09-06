@@ -99,9 +99,6 @@ const ConversationListHeader = ({ name, pfp }) => {
             </ul>
             <hr />
             <ul className="option-conversation-list">
-                <li onClick={handleJoin}>Join</li>
-                <li onClick={handleCreate}>Create</li>
-                <li onClick={handleDelete}>Delete</li>
                 <li onClick={handleLeave}>Leave</li>
                 <li onClick={handleBan}>Ban</li>
                 <li onClick={handleKik}>Kick</li>
