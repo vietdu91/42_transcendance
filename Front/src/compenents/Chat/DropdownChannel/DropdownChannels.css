@@ -1,0 +1,176 @@
+/* Base styles for DropdownChannels */
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-toggle {
+	color: #333;
+	/* Dark text color */
+	border: none;
+	cursor: pointer;
+}
+
+.dropdown-menu {
+	position: absolute;
+	background-color: #f9f4e1;
+	/* Light beige background color for the menu */
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	display: none;
+}
+
+.dropdown-menu li {
+	padding: 10px 20px;
+	cursor: pointer;
+}
+
+/* Dropdown animation */
+.dropdown:hover .dropdown-menu {
+	display: block;
+	animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.channel-creation-container {
+	position: fixed;
+	display: flex;
+	gap: 10px;  
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background-color: #f9e8c0;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.checkboxes-tick {
+	display: flex;
+	justify-content: space-between;
+}
+
+.checkboxes-tick input[type="checkbox"] {
+	/* margin-right: 20px; */
+  }
+
+.channel-creation-container input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.channel-creation-container button {
+	background-color: #f5e1b2;
+	/* Beige background color */
+	color: #333;
+	/* Dark text color */
+	border: none;
+	padding: 8px 16px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+.channel-creation-container button:hover {
+	background-color: #f9e8c0;
+	/* Lighter beige background color on hover */
+}
+
+.channel-join-container {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background-color: #f5e1b2;
+	/* Beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+	max-width: 300px;
+}
+
+.channel-join-container input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.channel-join-container button {
+	background-color: #f9f4e1;
+	/* Light beige background color */
+	color: #333;
+	/* Dark text color */
+	border: none;
+	padding: 8px 16px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+}
+
+.channel-join-container button:hover {
+	background-color: #f5e1b2;
+	/* Beige background color on hover */
+}
+
+
+/* Channel delete container */
+.channel-delete-container {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background-color: #f9c0c0; /* Light red background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+	max-width: 300px;
+  }
+  
+  .channel-delete-container input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+  }
+  
+  .channel-delete-container button {
+	background-color: #f9f4e1; /* Light beige background color */
+	color: #333; /* Dark text color */
+	border: none;
+	padding: 8px 16px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .channel-delete-container button:hover {
+	background-color: #f9c0c0; /* Light red background color on hover */
+  }
+  

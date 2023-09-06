@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
 
-const TextComposerContainer = ({ name }) => {
+const TextComposerContainer = ({ name, pfp }) => {
     const socket = useContext(ChatContext);
 
     const [messages, setMessages] = useState<string[]>([]);
@@ -50,9 +50,10 @@ const TextComposerContainer = ({ name }) => {
             </div>
             <div className="profile-pic-container-emitter">
                 <div className="profile-pic-last-block">
+                    <img className="individual-conv-pfp" src={pfp} alt="individual-conv-pfp"></img>
                     {/* You can add content or image for the profile picture */}
                 </div>
-                {name}
+                <div className="My-name-in-conv">{name}</div> {/* Add a div for the name with a class */}
             </div>
         </div>
     );

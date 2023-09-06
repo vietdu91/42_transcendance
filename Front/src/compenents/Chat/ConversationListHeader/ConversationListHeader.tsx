@@ -6,6 +6,22 @@ import { ChatContext } from '../../utils/ChatContext';
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import { useState, useEffect } from 'react';
+import DropdownChannel from '../DropdownChannel/DropdownChannels';
+import DropdownContact from '../DropdownContacts/DropdownContact';
+
+const ConversationListHeader = ({ name, pfp }) => {
+    const [state, setState] = useState({
+        name: 'React',
+        showHideDemo1: false,
+    });
+
+    const hideComponent = (name) => {
+        setState((prevState) => ({
+            ...prevState,
+            [name]: !prevState[name]
+        }));
+    };
 
 const ConversationListHeader = ({ name }) => {
     const socket = useContext(ChatContext);
@@ -84,6 +100,7 @@ const ConversationListHeader = ({ name }) => {
                     <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
                 </div>
             </ul>
+            <hr />
             <ul className="option-conversation-list">
                 <li onClick={handleJoin}>Join</li>
                 <li onClick={handleCreate}>Create</li>
@@ -92,10 +109,17 @@ const ConversationListHeader = ({ name }) => {
                 <li onClick={handleBan}>Ban</li>
                 <li onClick={handleKik}>Kick</li>
                 <li onClick={handleSetAdmin}>Set Admin</li>
+                {/* <li onClick={() => showContact("First")}></li> */}
+                <DropdownChannel />{/*Create Join Delete*/}
+                <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
+                <li>Actions</li> { /*  */}
+                <li>Tools</li> { /* */}
+                <li>Help</li>
             </ul>
             <div className="topbar-conversation-list">
-                <div className="profile-pic-messenger"></div>
-                <div className="user-informations">
+                <div className="profile-pic-messenger">
+                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" /> {/* Add the profile picture */}
+                </div>                <div className="user-informations">
                     <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
                     <h4 className="status-edit">status to Edit</h4>
                 </div>

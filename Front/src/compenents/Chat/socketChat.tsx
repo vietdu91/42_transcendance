@@ -49,11 +49,11 @@ function Chat() {
             <div className="truc">
                 <div className="left-part-chat">
                     <div className="conversations-list">
-                        <ConversationListHeader name={name} />
-                        <ConversationListSummary />
+                        <ConversationListHeader name={name} pfp={pfp_url}/>
+                        <ConversationListSummary name={name} pfp={pfp_url}/>
                     </div>
                 </div>
-                <ChatConversationArea name={name}/>
+                {/* <ChatConversationArea name={name}/> */}
             </div>
             <FooterMenu />
         </>

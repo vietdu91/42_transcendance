@@ -41,12 +41,14 @@
 }
 
 .upper-part-write-text:hover {
-    background-color: rgba(0, 0, 0, 0.5); /* Change background color on hover */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Change background color on hover */
     position: relative;
 }
 
 .upper-part-write-text:hover img {
-    opacity: 0.7; /* Reduce image opacity on hover */
+    opacity: 0.7;
+    /* Reduce image opacity on hover */
 }
 
 .middle-part-write-text {
@@ -61,13 +63,15 @@
 .bottom-part-write-text {
     width: 100%;
     height: 20%;
-    border-bottom-left-radius: 5px;;
-    border-bottom-right-radius: 5px;;
+    border-bottom-left-radius: 5px;
+    ;
+    border-bottom-right-radius: 5px;
+    ;
     background-color: #E6EEFB;
     border: solid;
     border-width: 1px;
     border-color: #7483af;
-} 
+}
 
 .profile-pic-container-emitter {
     grid-row-start: 3;
@@ -81,7 +85,7 @@
     border-color: #7483af;
     display: grid;
     grid-template-columns: repeat(50, 2%);
-	grid-template-rows: repeat(50, 2%);
+    grid-template-rows: repeat(50, 2%);
 }
 
 .profile-pic-last-block {
@@ -90,5 +94,22 @@
     grid-column-start: 5;
     grid-column-end: 45;
     background-color: forestgreen;
-    border-radius: 5px;;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.individual-conv-pfp {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.My-name-in-conv {
+    font-family: 'Your Nice Font', sans-serif;
+    /* Replace 'Your Nice Font' with the desired font name */
+    font-size: 16px;
+    /* Adjust the font size as needed */
+    margin-top: 10px;
+    /* Add margin to separate the name from the profile picture */
 }

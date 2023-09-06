@@ -115,6 +115,12 @@ body {
     border-radius: 5px;
 }
 
+.Your-profile-pic-topbar {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
 .user-informations {
     grid-row-start: 13;
     grid-row-end: 42;
