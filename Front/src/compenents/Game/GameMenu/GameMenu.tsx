@@ -9,6 +9,8 @@ import RedCross from "../../../img/buttons/red_cross.png"
 import MustWatchIt from "../../../img/must_watch_it.gif"
 import Loading from "../../utils/Loading/Loading"
 
+import Couronne from "../../../img/game/couronne.png"
+
 /* YEUX - HISTORY */
 import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
 import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
@@ -263,18 +265,28 @@ function History() {
 
 function Classement() {
 
+	function CouronneOrNot() {
+
+		return (
+			<img src={Couronne} alt="couronne" id="classement-couronne"></img>
+		)
+	}
+	
 	function GetPlace({position, name, points}) {
 		
 		return (
 			<tr>
 				<td className="number">{position}</td>
+				<td className="classement-photo-profil">
+					<img className="classement-photo" src={EyesCartmanWin} alt="#"></img>
+				</td>
 				<td className="name">{name}</td>
 				<td className="points">{points}</td>
 			</tr>
 		)
-
+		
 	}
-
+	
 	return (
 		<div id="classement-menu">
 			<div id="classement-bg">

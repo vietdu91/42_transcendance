@@ -515,6 +515,7 @@
 }
   
   tr {
+    opacity: 0.9;
     transition: all 0.2s ease-in-out;
     border-radius: 0.2rem;
     color: rgb(0, 0, 0);
@@ -522,11 +523,13 @@
   }
   
   tr:nth-child(odd) {
+    opacity: 0.9;
       background-color: #e6d4ba;
       color: rgb(39, 78, 163);
     }
     
     tr:hover {
+        opacity: 1;
       background-color: #fff;
       transform: scale(1.1);
       color: rgb(0, 0, 0);
@@ -534,12 +537,23 @@
       box-shadow: 0px 5px 15px 8px #e4e7fb;
     }
 
+    tr:nth-child(odd):hover {
+        opacity: 1;
+      background-color: #fff;
+      transform: scale(1.1);
+      color: rgb(39, 78, 163);
+      -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+      box-shadow: 0px 5px 15px 8px #e4e7fb;
+        }
+
   tr:nth-child(1) {
+    opacity: 0.9;
     background-color: #ffd700;
     color: #FF240D;
   }
 
   tr:nth-child(1):hover {
+    opacity: 1;
     background: url(../../../img/rainbow.gif) center;
     color: magenta;
     transform: scale(1.1);
@@ -548,13 +562,14 @@
   }
 
   tr:nth-child(2) {
+    opacity: 0.9;
     background-color: grey;
     color: #ffffff;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
-
   }
 
   tr:nth-child(2):hover {
+    opacity: 1;
     background: url(../../../img/game/second_cartman.gif) center;
     color: #fff;
     transform: scale(1.1);
@@ -563,11 +578,13 @@
   }
 
   tr:nth-child(3) {
+    opacity: 0.9;
     background-color: rgb(202, 121, 0);
     color: #ffffff;
   }
 
   tr:nth-child(3):hover {
+    opacity: 1;
     background: url(../../../img/game/kyle-schwartz.gif) 45% 65%;
     color: #207c04;
     transform: scale(1.1);
@@ -587,26 +604,59 @@
   
   .number {
     width: 1rem;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: left;
   }
   
   .name {
     text-align: left;
-    font-size: 1.7rem;
+    font-size: 1.3rem;
   }
   
   .points {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
   }
   
-  .points:first-child {
+  /* .points:first-child {
     width: 10rem;
+  } */
+
+  .classement-photo-profil {
+    justify-content: flex-end;
+    align-items: center;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+  }
+
+  .classement-photo {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	object-fit: cover;
+    border: 2px solid rgb(0, 0, 0);
+  }
+
+  tr:nth-child(1) .classement-photo{
+    border: 2px solid goldenrod;
+  }
+
+  tr:nth-child(2) .classement-photo{
+    border: 2px solid silver;
+  }
+
+  tr:nth-child(3) .classement-photo{
+    border: 2px solid #B36700;
+  }
+
+  tr:nth-child(odd) .classement-photo{
+    border: 2px solid rgb(39, 78, 163);
   }
 
 /********* PLAY BUTTON ***********/

@@ -386,40 +386,40 @@ export class MatchmakingGateway {
 						vy: 0,
 					}
 				}
-				if (actualGame.scoreLeft >= 5 || actualGame.scoreRight >= 5) {
-					const prisma = new PrismaService();
-					let winnerId:number;
+				// if (actualGame.scoreLeft >= 5 || actualGame.scoreRight >= 5) {
+				// 	const prisma = new PrismaService();
+				// 	let winnerId:number;
 	
-					if (actualGame.scoreLeft >= 5)
-						winnerId = actualGame.idLeft;
-					else
-						winnerId = actualGame.idRight;
+				// 	if (actualGame.scoreLeft >= 5)
+				// 		winnerId = actualGame.idLeft;
+				// 	else
+				// 		winnerId = actualGame.idRight;
 					
-					actualGame.isActive = false;
+				// 	actualGame.isActive = false;
 	
-					const game = await prisma.game.update({
-						where: {id: actualGame.gameId},
-						data: {
-							score: [actualGame.scoreLeft, actualGame.scoreRight],
-							winnerId: winnerId,
-							playing: false,
-						}
-					});
+				// 	const game = await prisma.game.update({
+				// 		where: {id: actualGame.gameId},
+				// 		data: {
+				// 			score: [actualGame.scoreLeft, actualGame.scoreRight],
+				// 			winnerId: winnerId,
+				// 			playing: false,
+				// 		}
+				// 	});
 
-					await prisma.user.update({
-						where: {id: game.playersId[0]},
-						data: {actualGame: null},
-					})
-					await prisma.user.update({
-						where: {id: game.playersId[1]},
-						data: {actualGame: null},
-					})
+				// 	await prisma.user.update({
+				// 		where: {id: game.playersId[0]},
+				// 		data: {actualGame: null},
+				// 	})
+				// 	await prisma.user.update({
+				// 		where: {id: game.playersId[1]},
+				// 		data: {actualGame: null},
+				// 	})
 	
-					// socket.emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-					this.server.to(socket.id).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-					this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-					this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-				}
+				// 	// socket.emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				// 	this.server.to(socket.id).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				// 	this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				// 	this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
+				// }
 				// socket.emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(socket.id).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
