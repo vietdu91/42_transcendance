@@ -8,28 +8,7 @@ import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
 
-const TextComposerContainer = ({ name, pfp }) => {
-    const socket = useContext(ChatContext);
-
-    const [messages, setMessages] = useState<string[]>([]);
-
-    const send = (value: string) => {
-        const id = Cookies.get('id');
-        socket?.emit('message', value, id);
-    }
-
-    const messageListener = (newMessage: string) => {
-        const authorId = Cookies.get('id');
-
-        setMessages(prevMessages => [...prevMessages, newMessage]);
-    }
-
-    useEffect(() => {
-        socket?.on('message', messageListener);
-        return () => {
-            socket?.off('message', messageListener);
-        }
-    }, [messageListener]);
+const TextComposerContainer = ({ name, pfp, send, messages }) => {
 
     return (
         <div className="text-composer-container">
@@ -40,10 +19,10 @@ const TextComposerContainer = ({ name, pfp }) => {
                     {/* Content for the upper part */}
                 </div>
                 <div className="middle-part-write-text">
+                    <MessageInput send={send} messages={messages}/>
                     {/* Content for the middle part */}
                 </div>
                 <div className="bottom-part-write-text">
-                    <MessageInput send={send} messages={messages}/>
                     {/* <input type="text" placeholder="search"></input> */}
                     {/* Content for the bottom part */}
                 </div>

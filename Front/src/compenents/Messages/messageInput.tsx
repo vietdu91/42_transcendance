@@ -1,19 +1,36 @@
-import React from 'react'
-import { useState } from 'react';
-import Message from './message';
+import React, { useState } from 'react';
 
 export default function MessageInput({ send, messages }: {
-    send: (value : string) => void,
-    messages: string[]
+    send: (value: string) => void;
+    messages: string[]; // Updated prop type to expect an array of strings
 }) {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    };
+
+    const handleSendMessage = () => {
+        if (value.trim() !== '') {
+            send(value);
+            setValue(''); // Clear the input field
+        }
+    };
+
     return (
-        <>
-            <input onChange={(e) => setValue(e.target.value)}
-            placeholder="Type your message ..."
-            value={value} />
-            <button onClick={() => send(value)}>Send</button>
-            <Message message={messages}/>
-        </>
-    )
+        <div className="input-individual-conversation">
+            <input
+                type="text"
+                onChange={handleInputChange}
+                placeholder="Type your message ..."
+                value={value}
+            />
+            <button onClick={handleSendMessage}>Send</button>
+            {/* Render the list of messages using the Message component */}
+            
+        </div>
+    );
 }
+
+
+{/* J'ai ete modif  */}

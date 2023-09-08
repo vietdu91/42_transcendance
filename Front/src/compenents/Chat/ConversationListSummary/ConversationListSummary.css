@@ -26,8 +26,17 @@
     border-top-left-radius: 3%;
     background-color: #fffeff;
     margin-left: 10%;
+    overflow-y: auto;
     /* margin-bottom: 1%; */
-}  
+} 
+
+.display-list-convo li {
+    list-style: none;
+}
+
+.display-list-convo img { 
+    height: 20px;
+}
 
 .advertisement-scope {
     height:20%;

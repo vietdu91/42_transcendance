@@ -1,0 +1,27 @@
+.input-individual-conversation {
+    display: flex; /* Make the content inside the container flex */
+    justify-content: space-between; /* Space evenly between the child elements (input and button) */
+    align-items: center; /* Center the content vertically */
+    background-color: #F5F5F5;
+    padding: 10px; /* Add padding around the content */
+    border-radius: 5px;
+    border: 1px solid #E0E0E0;
+}
+
+input {
+	height: 100%;
+	width: 100%;
+}
+
+.input-individual-conversation button {
+    background-color: #007BFF;
+    color: #FFF;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.input-individual-conversation button:hover {
+    background-color: #0056b3;
+}

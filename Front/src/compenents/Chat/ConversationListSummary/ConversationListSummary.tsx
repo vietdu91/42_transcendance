@@ -3,8 +3,8 @@ import './ConversationListSummary.css';
 import Advertisement from './../../../img/chat/advertisement.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
-
-// ... (import statements)
+import regularConv from '../../../img/chat/regular-conv-icon.jpg';
+import groupConv from '../../../img/chat/group-conv.jpg';
 
 const ConversationListSummary = ({name, pfp}) => {
     const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
@@ -23,10 +23,10 @@ const ConversationListSummary = ({name, pfp}) => {
             <div className="display-list-convo">
                 {/* Content for the conversation list */}
                 <ul>
-                    <li onClick={() => toggleConvSummary(0)}>je suis une conv</li>
-                    <li onClick={() => toggleConvSummary(1)}>je suis un channel</li>
-                    <li onClick={() => toggleConvSummary(2)}>je suis une ju</li>
-                    <li onClick={() => toggleConvSummary(3)}>je suis un</li>
+                    <li onClick={() => toggleConvSummary(0)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(1)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
+                    <li onClick={() => toggleConvSummary(2)}><img src={groupConv} alt="regularConv" id="chat_regularConv" />je suis une conv de groupe</li>
+                    <li onClick={() => toggleConvSummary(3)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un</li>
                 </ul>
             </div>
             <div className="advertisement-scope">

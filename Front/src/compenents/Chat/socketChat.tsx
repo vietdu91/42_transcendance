@@ -53,7 +53,6 @@ function Chat() {
                         <ConversationListSummary name={name} pfp={pfp_url}/>
                     </div>
                 </div>
-                {/* <ChatConversationArea name={name}/> */}
             </div>
             <FooterMenu />
         </>
