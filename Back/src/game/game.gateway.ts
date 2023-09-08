@@ -96,10 +96,10 @@ export class MatchmakingGateway {
 	}
 
 	private async createMatch(): Promise<void> {
-		// if (this.queue.length >= 2) {
-		if (this.queue.length >= 1) {
+		if (this.queue.length >= 2) {
+		// if (this.queue.length >= 1) {
 			const player1 = this.queue.shift();
-			// const player2 = this.queue.shift();
+			const player2 = this.queue.shift();
 			const prisma = new PrismaService();
 			const date = new Date();
 
@@ -108,13 +108,13 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player1.user.id}, // change player1 to player2
+							{id: player2.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
-					playersName: [player1.user.name, player1.user.name], // change player1 n2 to player2
+					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+					playersName: [player1.user.name, player2.user.name], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
+					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
 					playing: true,
 					date: date,
 				}
@@ -126,7 +126,7 @@ export class MatchmakingGateway {
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
 				sockLeft: player1.id,
-				sockRight: player1.id, //change to player2
+				sockRight: player2.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
@@ -174,8 +174,8 @@ export class MatchmakingGateway {
 				data: {actualGame: game.id},
 			})
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player1.user }); // change player1 to player2
-			// this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
+			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 
@@ -290,9 +290,6 @@ export class MatchmakingGateway {
 			else if (actualGame.posRight > (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hRight))
 				actualGame.posRight = (9/16) * 100 - ((9/16) * 100 / 150) - (actualGame.hRight);
 		}
-
-		// socket.emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
-		this.server.emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockLeft).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 		this.server.to(actualGame.sockRight).emit("playerMoved", {message: "The player has been moved", posLeft: actualGame.posLeft, posRight: actualGame.posRight});
 	}
@@ -334,8 +331,6 @@ export class MatchmakingGateway {
 		}
 		else
 			return ;
-		// socket.emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
-		this.server.emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 		this.server.to(actualGame.sockLeft).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 		this.server.to(actualGame.sockRight).emit("usedPower", {message: "Power by : " + char, id: params[1], char: char, game: actualGame});
 	}
@@ -465,22 +460,13 @@ export class MatchmakingGateway {
 							},
 						})
 					}
-
-	
-					// socket.emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
-					this.server.to(socket.id).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(actualGame.sockLeft).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 					this.server.to(actualGame.sockRight).emit("endGame", {message: "Game Over !! Winner : " + winnerId, winnerId: winnerId});
 				}
-				// socket.emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
-				this.server.to(socket.id).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(actualGame.sockLeft).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 				this.server.to(actualGame.sockRight).emit("newPoint", {message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight});
 			}
 		}
-
-		// socket.emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
-		this.server.to(socket.id).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 		this.server.to(actualGame.sockLeft).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 		this.server.to(actualGame.sockRight).emit("ballMoved", {message: "The ball moved", game: actualGame, ballX: actualGame.ball.x, ballY: actualGame.ball.y, vx: actualGame.ball.vx, vy: actualGame.ball.vy, speed: actualGame.ball.speed + actualGame.ball.inertia});
 	}

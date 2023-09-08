@@ -21,38 +21,18 @@ export default function NewProfile() {
 	const navigate = useNavigate();
 
 	let [name, setName] = useState("");
-	let [nick, setNick] = useState("");
-	let [age, setAge] = useState(0);
 
 
 	useEffect (() => {
 		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
 		.then(response => {
 			setName(response.data.name);
-			setNick(response.data.nick);
-			setAge(response.data.age);
 		}).catch(error => {
 			console.error('Probleme');
 		});
-		// console.log(nick + " " + name);
 	}, [])
 
-	const handleClick = async (e) => {
-		e.preventDefault();
-		let newnick:string = "";
-		let newage:number = 0;
-
-		await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
-		.then(response => {
-			setNick(response.data.nick);
-			setAge(response.data.age);
-			newnick = response.data.nick;
-			newage = response.data.age;
-		}).catch(error => {
-			console.error('Probleme');
-		});
-
-		if (newnick && newage)
+	const handleClick = async () => {
 			navigate("/");
 	  };
 

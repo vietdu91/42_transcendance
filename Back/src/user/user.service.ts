@@ -15,6 +15,8 @@ export class UserService {
             data: {
                 name: userData.name,
                 email: userData.email,
+                nickname: userData.name,
+                age: 18,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,
             }
@@ -104,6 +106,6 @@ async deleteUser(id: number): Promise<User> {
     return this.prisma.user.findUnique({
         where: { email },
     });
-}
-    
+  }
+
 }

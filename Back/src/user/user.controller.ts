@@ -42,7 +42,7 @@ export class UserController {
       if (!user) {
         throw new UnauthorizedException();
       }
-      let percentage: number = user.looses === 0 ? 100 : Math.round(user.wins / (user.wins + user.looses) * 100);
+      let percentage: number = user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
 
       const games = await this.userService.getGamesByUserId(userId);
 
@@ -89,7 +89,7 @@ export class UserController {
       const { nickname } = body;
       if (!nickname)
         throw new UnauthorizedException();
-       const userUpdate = await this.prisma.user.update({
+      const userUpdate = await this.prisma.user.update({
          where: { id: Number(userId) },
          data: { nickname: nickname },
       });
