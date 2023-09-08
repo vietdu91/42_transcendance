@@ -75,6 +75,11 @@
 	/*faire padding*/
 }
 
+.channel-modo-mode img{
+	height: 100%;
+	width: 100%;
+}
+
 .channel-modo-mode ul {
 	display: flex;
 	flex-direction: row;

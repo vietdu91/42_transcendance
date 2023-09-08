@@ -2,6 +2,7 @@ import React from 'react';
 import './Channels.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import scam from '../../../img/chat/scam-advertisement-small.jpg';
 
 function Channel (){
 	return (
@@ -22,15 +23,7 @@ function Channel (){
 					<li>Tools</li>
 				</ul>
 			</div>
-			<div className="channel-modo-mode">
-				<ul>
-					<li>Invite</li>
-					<li>Ban</li>
-					<li>A voir</li>
-					<li>Image</li>
-					<li>Image</li>
-				</ul>
-			</div>
+			<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
 			<div className="channel-conversation">
 				<div className="channel-group-convo">
 					<div className="channel-members-presentation"> {/*add le name du channel*/}
