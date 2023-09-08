@@ -25,7 +25,7 @@ export default function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(nickname);
+    // console.log(nickname);
     await axios
     .post(process.env.REACT_APP_LOCAL_B + '/profile/setNickname', { nickname }, { withCredentials: true })
     .then((response) => {

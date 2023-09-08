@@ -77,7 +77,7 @@ export default function Profile() {
 						<button className="btn-hover color-1" onClick={() => navigate("/NewProfile")}>Changer d'image</button><br/>
 						<button className="btn-hover color-2" onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>
 						<button className="btn-hover color-3" onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/></div>
-				</div>
+					</div>
 				<button id="move_on" onClick={() => navigate("/")}></button>
 			</div>
 		</div>

@@ -64,30 +64,36 @@ export class UserController {
 
     @Post('addFriend')
     async addFriend( @Req() request, @Body() body: {id: number}) {;
+      console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
       const userId = request.cookies.id;
       if (!userId) {
         throw new UnauthorizedException();
       }
+      console.log("userId: " + userId);
+
       const { id } = body;
-      console.log(id);
+      console.log("id: " + id);
       if (!id) {
         throw new UnauthorizedException();
       }
       const user = await this.prisma.user.findUnique({
         where: {id: Number(userId) }
       })
+      console.log(userId);
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
         data: {friendList: user.friendList.push(id)},
       })
-      console.log("travail termine");
+      console.log("FRIEND ADDED: travail termine");
     }
     @Post('removeFriend')
     async removeFriend( @Req() request, @Body() body: {id: number}) {
+      console.log("Removing friend...")
       const userId = request.cookies.id;
       if (!userId) {
         throw new UnauthorizedException();
       }
+      console.log("id de l'user qui delete: " + userId)
       const { id } = body;
       if (!id) {
         throw new UnauthorizedException();
@@ -95,7 +101,13 @@ export class UserController {
       const user = await this.prisma.user.findUnique({
         where: {id: Number(userId) }
       })
+      console.log("id de l'user a delete: " + id)
       let array = user.friendList;
+      // while(array != 0)
+      // {
+      //   console.log(id);
+      //   array--;
+      // }
       const index = array.indexOf(id, 0);
       if (index > -1) {
         array.splice(index, 1);
@@ -103,6 +115,7 @@ export class UserController {
         where: { id: Number(userId) },
         data: {friendList: array},
         })
+        console.log("FRIEND REMOVED: travail termine");
       }
     }
   

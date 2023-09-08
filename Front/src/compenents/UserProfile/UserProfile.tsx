@@ -22,16 +22,26 @@ export default function UserProfile() {
 	if (!token)
 		window.location.href = "http://localhost:3000/connect";
 
+// Si on ajoute un ami, il faudrait un pop up pour accepter
+// Ajouter la fonction de check ami deja ajoute
 	const addFriend = () => {
-		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', id, {headers: {  'Authorization': `Bearer ${token}`} })
+		console.log("TRYING TO ADD FRIEND");
+		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', {id}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
 		.then(response => {})
 		.catch(error => {
 			console.log(error);
 		})
 	}
 
+// Si je remove friend, l'autre ne l'a plus en ami non plus
+// Ajouter la fonction de check ami deja supprime
 	const removeFriend = () => {
-
+		console.log("TRYING TO REMOVE FRIEND");
+		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/removeFriend', {id}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+		.then(response => {})
+		.catch(error => {
+			console.log(error);
+		})
 	}
 
 	useEffect(() => {
