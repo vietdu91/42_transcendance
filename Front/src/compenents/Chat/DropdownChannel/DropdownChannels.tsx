@@ -3,7 +3,7 @@ import './DropdownChannels.css'
 import { useContext } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
-
+import RedCross from "../../../img/chat/redcross.png"
 function DropdownChannels() {
   const socket = useContext(ChatContext);
   const [joined, setJoined] = useState(false);
@@ -103,35 +103,39 @@ function DropdownChannels() {
           <li onClick={toggleDeleteChannel}>Delete Channel</li>
         </ul>
       )}
-     {isOpenForCreateChannel && (
+      {isOpenForCreateChannel && (
         <div className="channel-creation-container">
-          {/* Add content for channel creation */}
-          <input
-            type="text"
-            placeholder="Channel Name"
-            onChange={(e) => setChannelName(e.target.value)} // Capture the channel name
-          />
-          <div className="checkboxes-tick">
-            <input type="checkbox" id="public" />
-            <label htmlFor="public">Public</label>
-            <input type="checkbox" id="private" />
-            <label htmlFor="private">Private</label>
+          <div className="channel-creation-navbar">
+            <img src={RedCross} alt="redcross" id="chat_redcross" />
           </div>
-          <input type="text" placeholder="Password" />
-          <button onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button>
+          <div className="channel-creation-form">
+            {/* <input
+              type="text"
+              placeholder="Channel Name"
+              onChange={(e) => setChannelName(e.target.value)} // Capture the channel name
+            />
+            <div className="checkboxes-tick">
+              <input type="checkbox" id="public" />
+              <label htmlFor="public">Public</label>
+              <input type="checkbox" id="private" />
+              <label htmlFor="private">Private</label>
+            </div>
+            <input type="text" placeholder="Password" />
+            <button onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button> */}
+          </div>
         </div>
       )}
       {
         isOpenForJoinChannel && (
           <div className="channel-join-container">
             {/* Add content for channel join */}
-            <input type="text" placeholder="Channel Name" 
-            onChange={(e) => setChannelName(e.target.value)} 
+            <input type="text" placeholder="Channel Name"
+              onChange={(e) => setChannelName(e.target.value)}
             />
             {/* fairee apparaitre le password que si il est prive*/}
             <input type="text" placeholder="Password" />
             {/* ajouter  */}
-            <button onClick={() =>{handleJoin(); toggleJoinChannel();}}>Join</button>
+            <button onClick={() => { handleJoin(); toggleJoinChannel(); }}>Join</button>
           </div>
         )
       }
@@ -139,11 +143,11 @@ function DropdownChannels() {
         isOpenForDeleteChannel && (
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
-            <input type="text" placeholder="Channel Name" 
-            onChange={(e) => setChannelName(e.target.value)}
+            <input type="text" placeholder="Channel Name"
+              onChange={(e) => setChannelName(e.target.value)}
             />
             <input type="text" placeholder="Password" />
-            <button onClick={() => {handleDelete();toggleDeleteChannel();}}>Delete</button>
+            <button onClick={() => { handleDelete(); toggleDeleteChannel(); }}>Delete</button>
           </div>
         )
       }

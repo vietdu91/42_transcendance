@@ -4,10 +4,15 @@
 	top: 0;
 	height: 75vh;
 	width: 20vw;
-	background-color: #0f1248;
+	/* background-color: #0f1248; */
 	display: flex;
-	opacity: 0.90;
+	/* opacity: 0.90; */
 	flex-direction: column;
+	border-radius:5px;
+	background-image: url('../../../img/chat/channel_wallpaper.png');
+	/* background-image: url('../../../img/chat/test_wallpaper.png'); */
+	background-size: cover; /* This property scales the image to cover the entire container */
+  	background-repeat: no-repeat;
 }
 
 .channel-bandeau {
@@ -75,7 +80,7 @@
 	/*faire padding*/
 }
 
-.channel-modo-mode img{
+.channel-modo-mode img {
 	height: 100%;
 	width: 100%;
 }
@@ -93,7 +98,7 @@
 .channel-conversation {
 	height: 57%;
 	width: 100;
-	background-color: #e9e9f5;
+	/* background-color: #e9e9f5; */
 	display: flex;
 	flex-direction: row;
 }
@@ -101,7 +106,6 @@
 .channel-group-convo {
 	height: 100%;
 	width: 66%;
-	background-color: red;
 	display: flex;
 	flex-direction: column;
 }
@@ -117,46 +121,122 @@
 	width: 100%;
 	height: 93%;
 	background-color: #E7E8F3;
+	overflow-y: auto;
 }
+
+.channel-conversation-messages::-webkit-scrollbar {
+	display: none;
+	cursor: pointer;
+  }
 
 .channel-conversation-messages ul {
 	display: flex;
 	flex-direction: column;
 	font-size: 10px;
 	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.channel-conversation-messages ul div {
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.channel-conversation-messages ul li {
+	padding: 5px;
+	margin: 5px 0;
+	word-wrap: break-word; /* Allow long words to break onto a new line */
+	max-width: 80%; /* Limit message width */
+	clear: both;
+	font-size: 16px; /* Adjust the font size as needed */
+	margin-left: 20px; /* Add left margin for indentation */
 }
 
 .channel-profile-pic-and-member-list {
 	height: 100%;
 	width: 34%;
-	background-color: orange;
+	/* background-color: orange; */
 }
 
-.channel-group-pic {
+.channel-group-pic-main-container {
 	height: 34%;
 	width: 100%;
-	background-color: #B9C2DD;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* Center vertically */
+	/* background-color: #B9C2DD; */
+}
+
+.channel-group-pic-cadre {
+	width: 95%;
+	height: 95%;
+	border-radius: 5px;
+	background-color: #E7E8F3;
+	display: flex;
+	justify-content: center;
+	align-items: center; /* Center vertically */
+}
+
+.channel-pik {
+	width: 75%;
+	height: 75%; 
+	background-color: white;
+	border-radius: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
 }
 
 .channel-group-member-list {
 	height: 60%;
 	width: 100%;
-	background-color: orange;
+	/* background-color: orange;e */
 	justify-content: center;
 	/* Center horizontally */
 	align-items: center;
+	border-radius: 5px;
+	overflow-y: auto;
+	cursor: pointer;
+
 	/* Center vertically */
 }
+
+.channel-group-member-list::-webkit-scrollbar {
+	display: none;
+	cursor: pointer;
+  }
+
+	/* background-color: red; */
 
 .channel-group-member-list ul {
 	list-style: none;
 	font-size: 15px;
+	margin: 0;
+	padding: 0;
+}
+
+.channel-group-member-list ul img {
+	height: 20px;
+}
+
+.channel-group-member-list ul li {
+	display: flex; /* Use flex layout to align the image and text */
+	align-items: center; /* Center align vertically */
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 5px 0;
 }
 
 .channel-send-messages-part {
 	height: 25%;
 	width: 100%;
-	background-color: #e4e7ec;
+	/* background-color: #e4e7ec; */
+	opacity: 0.90;
 	/* opacity: 45%; */
 	display: flex;
 	flex-direction: row;
@@ -165,7 +245,9 @@
 .channel-input-text {
 	width: 66%;
 	height: 100%;
-	background-color: #818eb1;
+	/* background-color: #818eb1; */
+	background-color: red;
+	opacity: 0.90;
 	border-radius: 15px;
 	display: flex;
 	flex-direction: row;
@@ -175,17 +257,11 @@
 	/* Center vertically */
 }
 
-.channel-my-profile-pic {
-	width: 34%;
-	height: 100%;
-	background-color: #a2acc6;
-	border-radius: 15px;
-}
-
 .channel-left {
 	width: 75%;
 	height: 70%;
 	background-color: #e4e7ec;
+	opacity: 0.90;
 	border-style: solid;
 	border-color: grey;
 	border-top-left-radius: 5px;
@@ -226,4 +302,39 @@
 .button:hover {
 	background-color: #005A9E;
 	/* Darker blue on hover */
+}
+
+
+.channel-my-profile-pic-main-container {
+	width: 34%;
+	height: 100%;
+	/* background-color: #a2acc6; */
+	/* background-color: orange; */
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	/* align-items: center; */
+}
+
+.channel-my-profile-pic-group-pic-cadre {
+	width: 95%;
+	height: 75%;
+	background-color: #a2acc6;
+	border-radius: 5px;
+	border-width: 1px;
+	border-style: solid;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 5px;
+}
+
+.channel-my-profile-pic-group-pic-cadre div {
+	width: 80%;
+	height: 80%;
+	border-radius: 5px;
+	background-color: white;
+	border-color: black;
+	border-style: solid;
+	border-width: 1px;
 }

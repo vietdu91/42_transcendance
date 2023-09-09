@@ -27,6 +27,7 @@
     background-color: #fffeff;
     margin-left: 10%;
     overflow-y: auto;
+    cursor: pointer;
     /* margin-bottom: 1%; */
 } 
 
