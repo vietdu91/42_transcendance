@@ -349,10 +349,10 @@ export class MatchmakingGateway {
 		actualGame.ball.y += actualGame.ball.vy;
 		if (actualGame.ball.y + actualGame.ball.rad >= (9/16) * 100 || actualGame.ball.y - actualGame.ball.rad <= 0)
 			actualGame.ball.vy *= -1;
-		if (actualGame.ball.y == 0)
-			actualGame.ball.y = 1;
-		if (actualGame.ball.y == 100)
-			actualGame.ball.y = 99;
+		if (actualGame.ball.y <= 0)
+			actualGame.ball.y = actualGame.ball.rad * 2;
+		if (actualGame.ball.y >= 100)
+			actualGame.ball.y = 100 - actualGame.ball.rad * 2;
 		
 		// MONSIEUR TOC START
 		if (actualGame.tocLeft != null) {
