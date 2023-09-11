@@ -11,13 +11,10 @@ CREATE TABLE "User" (
     "character" TEXT,
     "actualGame" INTEGER,
     "pfp_url" TEXT,
-<<<<<<<< HEAD:Back/src/prisma/migrations/20230904151932_/migration.sql
-    "friendsList" INTEGER[],
-    "blockList" INTEGER[],
-========
     "wins" INTEGER NOT NULL DEFAULT 0,
     "looses" INTEGER NOT NULL DEFAULT 0,
->>>>>>>> qujacob:Back/src/prisma/migrations/20230906125908_new/migration.sql
+    "friendsList" INTEGER[],
+    "blockList" INTEGER[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -26,6 +23,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Game" (
     "id" SERIAL NOT NULL,
     "playersId" INTEGER[],
+    "playersName" TEXT[],
     "score" INTEGER[],
     "winnerId" INTEGER,
     "characters" TEXT[],
