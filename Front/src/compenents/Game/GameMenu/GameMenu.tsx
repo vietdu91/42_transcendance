@@ -265,12 +265,12 @@ function History() {
 
 function Classement() {
 
-	function CouronneOrNot() {
+	// function CouronneOrNot() {
 
-		return (
-			<img src={Couronne} alt="couronne" id="classement-couronne"></img>
-		)
-	}
+	// 	return (
+	// 		<img src={Couronne} alt="couronne" id="classement-couronne"></img>
+	// 	)
+	// }
 	
 	function GetPlace({position, name, points}) {
 		

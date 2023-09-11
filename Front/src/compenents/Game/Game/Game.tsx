@@ -13,8 +13,9 @@ import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
 import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
-// import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
+import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
+import Tron from '../../../img/backgrounds/backgrounds-game/tron.png'
 
 // PLAYERS
 import CartmanL from "../../../img/en_cours/cartman_left.png"
@@ -34,8 +35,10 @@ import HenriettaR from "../../../img/en_cours/henrietta_right.png"
 import ServietskyL from "../../../img/en_cours/servietsky_left.png"
 import ServietskyR from "../../../img/en_cours/servietsky_right.png"
 
-// PUBS
-import FemmeMur from "../../../img/femme_mur.jpg"
+// COMMANDES
+import Touche_W from "../../../img/game/key_w.png"
+import Touche_S from "../../../img/game/key_s.png"
+import Touche_Space from "../../../img/game/space.png"
 
 
 interface IBall {
@@ -112,7 +115,7 @@ export default function Game(): JSX.Element {
 	
 	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
-	const randomImage = Chaos;
+	const randomImage = Tron;
 
 	const cookies = document.cookie.split('; ');
 	let id:number = -1;
@@ -125,7 +128,7 @@ export default function Game(): JSX.Element {
 	}
 
 	function WhatReturnButtom({randomImage}) {
-		if (randomImage === CityWok || randomImage === Chaos)
+		if (randomImage === CityWok || randomImage === Chaos || randomImage === Tron)
 			return (
 				<ReturnButtom colorHexa='#FFFFFF' path='/'/>
 			)
@@ -388,24 +391,26 @@ export default function Game(): JSX.Element {
 		);
 	}
 
-	return (
-		<div id="game-bg">
-			<GetBg randomImage={randomImage} />
-			<div id="game-player-left">
-				<GetPlayerLeft />
-			</div>
-			<div id="game-bg-score">
-				<div id="game-score">
-					{scoreLeft} - {scoreRight}
+	function FooterCommands() {
+
+		return (
+			<div id="game-commands">
+				<div id="game-inner-commands">
+					<span id="game-commands-bg"></span>
+					<img src={Touche_W} alt="W" className="game-icon"></img>
+					<span className="game-commands-font">Haut</span>
+					<img src={Touche_S} alt="S" className="game-icon"></img>
+					<span className="game-commands-font">Bas</span>
+					<img src={Touche_Space} alt="Space" className="game-icon"></img>
+					<span className="game-commands-font">Active Ton Pouvoir</span>
 				</div>
 			</div>
-			<div id="game-terrain" ref={sketchRef}></div>
-			<div id="game-return">
-				<WhatReturnButtom randomImage={randomImage} />
-			</div>
-			<div id="game-player-right">
-				<GetPlayerRight />
-			</div>
+		);
+	}
+
+	function BarresDeVie() {
+
+		return (
 			<div className="hud">
 			    <div className="health_container" id="player-1">
 			        <div className="health_meter">
@@ -420,11 +425,31 @@ export default function Game(): JSX.Element {
 			        </div>
 			    </div>
 			</div>
-			<div id="game-bg2-pub">
-				<div id="game-bg-pub">
-					<img alt="#" src={FemmeMur} id="game-pub"></img>
+		);
+	}
+
+	return (
+		<div id="game-bg">
+			<GetBg randomImage={randomImage} />
+			<div id="game-player-left">
+				<GetPlayerLeft />
+			</div>
+			<div id="game-bg-score">
+				<div id="game-score">
+					{scoreLeft} - {scoreRight}
 				</div>
 			</div>
+			<div id="game-container">
+				<div id="game-terrain" ref={sketchRef}></div>
+			</div>
+			<div id="game-return">
+				<WhatReturnButtom randomImage={randomImage} />
+			</div>
+			<div id="game-player-right">
+				<GetPlayerRight />
+			</div>
+			<BarresDeVie />
+			<FooterCommands />
 		</div>
 	);
 }

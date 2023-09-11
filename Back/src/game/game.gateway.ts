@@ -36,6 +36,8 @@ type Game = {
 	scoreRight: number;
 	charLeft: string;
 	charRight: string;
+	nameLeft: string;
+	nameRight: string;
 	posLeft: number;
 	posRight: number;
 	wLeft: number;
@@ -112,6 +114,7 @@ export class MatchmakingGateway {
 						]
 					},
 					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+					// playersName: [player1.user.name, player2.user.name],
 					score: [0, 0],
 					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
 					playing: true,
@@ -132,6 +135,8 @@ export class MatchmakingGateway {
 				charRight: game.characters[1],
 				posLeft: (9/16) * 100 / 2,
 				posRight: (9/16) * 100 / 2,
+				nameLeft: game.playersName[0],
+				nameRight: game.playersName[1],
 				wLeft: 100 / 75,
 				hLeft: (9/16) * 100 / 5,
 				wRight: 100 / 75,
