@@ -149,8 +149,8 @@ export default function Game(): JSX.Element {
 				hLeft: response.game.hLeft / 100 * window.innerWidth * 70 / 100,
 				wRight: response.game.wRight / 100 * window.innerWidth * 70 / 100,
 				hRight: response.game.hRight / 100 * window.innerWidth * 70 / 100,
-				posLeft: (response.game.posLeft / 100 * window.innerWidth * 70 / 100) - (player_height / 2),
-				posRight: (response.game.posRight / 100 * window.innerWidth * 70 / 100) - (player_height / 2),
+				posLeft: (response.game.posLeft / 100 * window.innerWidth * 70 / 100),
+				posRight: (response.game.posRight / 100 * window.innerWidth * 70 / 100),
 				ball: {
 					x: response.ball.x / 100 * window.innerWidth * 70 / 100,
 					y: response.ball.y / 100 * window.innerWidth * 70 / 100,

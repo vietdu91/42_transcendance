@@ -6,6 +6,7 @@ import { Query } from '@nestjs/common';
 import { Req } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Res } from '@nestjs/common';
+import { kMaxLength } from 'buffer';
 
 
 
@@ -41,7 +42,12 @@ export class UserController {
       if (!user) {
         throw new UnauthorizedException();
       }
-      // console.log("nick = " + user.nickname)
+      let percentage: number = user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
+
+      const games = await this.userService.getGamesByUserId(userId);
+
+      console.log(games);
+
       response.json({
         id: user.id,
         email: user.email,
@@ -51,6 +57,10 @@ export class UserController {
         age: user.age,
         character: user.character,
         pfp_url: user.pfp_url,
+        wins: user.wins,
+        looses: user.looses,
+        percentage: percentage,
+        games: games,
       });
     }
     @Get(':id')
@@ -58,8 +68,19 @@ export class UserController {
       console.log("Mon id:", id);
       return this.userService.findOne(id);
     }
+
+    @Patch('disableTwoFA')
+    async disableTwoFa( @Req() request: Request, @Body() body: {state: boolean}) {
+      const userId = parseInt(request.cookies.id);
+      console.log(userId);
+      if (!userId)
+        throw new UnauthorizedException();
+      console.log("ici")
+      this.userService.turnOffTwoFactorAuthentication(userId);
+      return {message: 'Disabled 2FA'};
+    }
   
-    @Post('setNickname')
+    @Patch('setNickname')
     async setNickname( @Req() request, @Body() body: { nickname: string }) {
       const userId = request.cookies.id;
       if (!userId) {
@@ -68,7 +89,7 @@ export class UserController {
       const { nickname } = body;
       if (!nickname)
         throw new UnauthorizedException();
-       const userUpdate = await this.prisma.user.update({
+      const userUpdate = await this.prisma.user.update({
          where: { id: Number(userId) },
          data: { nickname: nickname },
       });

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 
 // CSS
 import './Menu.css';
@@ -57,7 +57,7 @@ export default function App() {
       try {
         console.log("AXIOS LOGOUT ON")
           const res = await axios({
-            url: process.env.REACT_APP_LOCAL_B + "/Southtrans/logout",
+            url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
             method: 'POST',
             headers: {  'Authorization': `Bearer ${accessToken}` },
           })
@@ -73,30 +73,6 @@ export default function App() {
      } else {
        console.error('Access token not found in cookies.');
      }
-  }
-
-  async function twoFa() {
-    const accessToken = Cookies.get('accessToken');
-    console.log("2FA");
-    
-    if (accessToken) 
-    {
-      try {
-        const res = await axios({
-          url: process.env.REACT_APP_LOCAL_B + "/twofa/generate",
-          method: 'GET',
-          headers: {  'Authorization': `Bearer ${accessToken}` },
-        }).then(response => {
-        console.log("respond === " + response.data.code)
-        setCode(response.data.code)
-        setShow2(true);})
-      }
-      catch (err) {
-        console.log("app-front: error: ", err)
-      }
-      } else {
-        console.error('Access token not found in cookies.');
-      }
   }
 
   function toggleThanks() {
@@ -119,17 +95,6 @@ export default function App() {
         {show && <div className="menu-item" onClick={logout} onMouseEnter={() => { setHover(Hell); }}
           onMouseLeave={() => { setHover(Town); }}>Log Out</div>}
 
-        {show && <div className="menu-item" onClick={twoFa} onMouseEnter={() => { setHover(ButtersBlood); }}
-          onMouseLeave={() => { setHover(Town); }}>2FA</div>}
-
-        
-
-        {show2 && 
-        <>
-        <img src={code}></img>
-        <input placeholder='code'></input>
-        </>
-        }
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}

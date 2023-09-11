@@ -17,14 +17,14 @@ export class TwofaController {
 
   @Get('generate')
   @UseGuards(JwtAuthenticationGuard)
-  async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {           
-   const accessToken = request.headers.authorization?.split(' ')[1];
+  async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {   
+    const accessToken = request.headers.authorization?.split(' ')[1];
     console.log("Access token: " + accessToken);  
     const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
     console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
     //const expires = decodedJwtAccessToken.exp;
     const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
-    console.log("user == " + user)
+    console.log("user == " + user.name)
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
     //return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
     const code = await qrcode.toDataURL(otpauthUrl);
@@ -34,23 +34,22 @@ export class TwofaController {
     @Post('turn-on')
     @HttpCode(200)
     @UseGuards(JwtAuthenticationGuard)
-    async turnOnTwoFactorAuthentication(@Req() request: RequestWithUser,
-    @Body('twoFactorAuthenticationCode') twoFactorAuthenticationCode: string
-    )  {
-   
-      console.log("turnOnTwoFactorAuthenticationCode = " + twoFactorAuthenticationCode);
-      const userId =request.user.id;
-      const user = await this.userService.getUserById(request.user.id);
+    async turnOnTwoFactorAuthentication(@Req() request: Request, @Body() body: { code: string })
+    {
+      const { code } = body;
+      console.log("code = " + code);
+      const id = parseInt(request.cookies.id);
+      const user = await this.userService.getUserById(id);
       if (!user.twoFactorSecret) {
         throw new BadRequestException('2FA is not enabled for this user');
       }
       const isCodeValid = this.twofaService.isTwoFactorAuthenticationCodeValid(
-        twoFactorAuthenticationCode, user
+        code, user
       );
       console.log("isCodeValid = " + isCodeValid)
       if (!isCodeValid) {
         throw new UnauthorizedException('Wrong authentication code');
       }
-      await this.userService.turnOnTwoFactorAuthentication(request.user.id);
+      await this.userService.turnOnTwoFactorAuthentication(id);
     }
 }

@@ -1,10 +1,12 @@
-import { Injectable, Request, Query , HttpException, HttpStatus} from '@nestjs/common';
+import { Injectable, Request, Query , HttpException, HttpStatus, UnauthorizedException} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Response} from 'express';
 import { UserService } from '../user/user.service';
 import { Prisma, User} from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
+import { TwofaController } from 'src/twofa/twofa.controller';
+import { TwofaService } from 'src/twofa/twofa.service';
 config();
 
 
@@ -17,8 +19,9 @@ const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirect
 export class AuthService {
     constructor(private prisma: PrismaService,
                 private jwtService: JwtService,
-                private userService: UserService) {}
-
+                private userService: UserService,
+                private twoFaService: TwofaService) {}
+    
     async apiConnexion(userData: any, res: Response): Promise<User> {
         try {
             let user: User;
@@ -30,9 +33,15 @@ export class AuthService {
                 res.redirect(process.env.URL_LOCAL_F + "/newprofile");
             }
             else { 
-                const newToken = await this.generateAndSetAccessToken(user);
-                this.setAuthCookies(res, newToken, user.id);
-                res.redirect(process.env.URL_LOCAL_F);
+                if (user.twoFactorEnabled) {
+                    res.cookie('id', user.id);
+                    res.redirect(process.env.URL_LOCAL_F + '/2fa');
+                }
+                else {
+                    const newToken = await this.generateAndSetAccessToken(user);
+                    this.setAuthCookies(res, newToken, user.id);
+                    res.redirect(process.env.URL_LOCAL_F);
+                }
             }
             return user;
         }catch (error) {
@@ -40,9 +49,16 @@ export class AuthService {
             }
         }
             
-
+    async apiConnexion2fa(user: User, res: Response): Promise<void> {
+        if (!user)
+            throw new UnauthorizedException("user doesn't exist");
+        else {
+            const newToken = await this.generateAndSetAccessToken(user);
+            this.setAuthCookies(res, newToken, user.id);
+        }
+    }
             
-    private async generateAndSetAccessToken(user: User): Promise<string> {
+    async generateAndSetAccessToken(user: User): Promise<string> {
         const jwtPayload = { username: user.name, sub: user.id };
         const newToken = this.jwtService.sign(jwtPayload);
 
@@ -56,6 +72,7 @@ export class AuthService {
     private setAuthCookies(res: Response, accessToken: string, userId: number): void {
         res.cookie('accessToken', accessToken);
         res.cookie('id', userId);
+        console.log("jai vraiment set ");
     }
             
     async getAccessToken(code: string): Promise<any> {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { User, Game, Prisma } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -15,6 +15,8 @@ export class UserService {
             data: {
                 name: userData.name,
                 email: userData.email,
+                nickname: userData.name,
+                age: 18,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,
             }
@@ -48,13 +50,23 @@ async deleteUser(id: number): Promise<User> {
   }
 
   async getUserById(userId: number): Promise<User | null> {
-     console.log('getUserById: userId =', userId);
-    const user = await this.prisma.user.findUnique({
-      where: { id: parseInt(userId.toString()) }
+    const user: User = await this.prisma.user.findUnique({
+      where: { id: parseInt(userId.toString()) },
     });
-    // console.log("Mon ID :" + userId);
-    // console.log('getUserById: user =', user);
     return user;
+  }
+
+  async getGamesByUserId(userId: number) {
+    const games = await this.prisma.game.findMany({
+      where: {players: {some: {id: parseInt(userId.toString())}}},
+    });
+    return games.map(game => {
+      return {
+        names: game.playersName,
+        score: game.score,
+        date: game.date,
+      }
+    });
   }
   
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
@@ -64,11 +76,19 @@ async deleteUser(id: number): Promise<User> {
     });
   }
 
-  async turnOnTwoFactorAuthentication(userId: number) {
-    console.log("turnOnTwoFactorAuthentication = TRUE" + userId);
+  async turnOnTwoFactorAuthentication(userId: number): Promise<User> {
+    console.log("turnOnTwoFa for " + userId);
     return this.prisma.user.update({
       where: { id: userId },
       data: { twoFactorEnabled: true }
+    });
+  }
+
+  async turnOffTwoFactorAuthentication(userId: number): Promise<User> {
+    console.log("turnOffTwoFa for " + userId);
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { twoFactorEnabled: false }
     });
   }
 
@@ -86,6 +106,6 @@ async deleteUser(id: number): Promise<User> {
     return this.prisma.user.findUnique({
         where: { email },
     });
-}
-    
+  }
+
 }

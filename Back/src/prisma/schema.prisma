@@ -8,34 +8,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
-  name              String	@unique
-  twoFactorSecret   String  @unique
-  accessToken       String?  @unique
-  twoFactorEnabled  Boolean @default(false)
-  nickname		      String? 	@unique
-  age 			        Int?
-  character         String?
-  games             Game[] @relation("players")
-  actualGame        Int?
-  pfp_url           String?
-  friendsList       Int[]
-  blockList         Int[]
-  messages         Message[] @relation("MessageAuthor")
-}
+  model User {
+    id                Int       @id @default(autoincrement())
+    email             String    @unique
+    name              String	@unique
+    twoFactorSecret   String  @unique
+    accessToken       String?  @unique
+    twoFactorEnabled  Boolean @default(false)
+    nickname		      String? 	@unique
+    age 			        Int?
+    character         String?
+    games             Game[] @relation("players")
+    actualGame        Int?
+    pfp_url           String?
+    wins              Int @default(0)
+    looses            Int @default(0)
+    friendsList       Int[]
+    blockList         Int[]
+    messages          Message[] @relation("MessageAuthor")
+  }
 
-model Game {
-  id              Int     @id @default(autoincrement())
-  players         User[] @relation("players")
-  playersId       Int[]
-  score           Int[]
-  winnerId        Int?
-  characters      String[]
-  playing         Boolean
-  date            DateTime @default(now())
-}
+  model Game {
+    id              Int     @id @default(autoincrement())
+    players         User[] @relation("players")
+    playersId       Int[]
+    playersName     String[]
+    score           Int[]
+    winnerId        Int?
+    characters      String[]
+    playing         Boolean
+    date            DateTime @default(now())
+  }
 
 model Message {
   id        Int     @id @default(autoincrement())
