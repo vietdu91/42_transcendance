@@ -96,10 +96,10 @@ export class MatchmakingGateway {
 	}
 
 	private async createMatch(): Promise<void> {
-		if (this.queue.length >= 2) {
-		// if (this.queue.length >= 1) {
+		// if (this.queue.length >= 2) {
+		if (this.queue.length >= 1) {
 			const player1 = this.queue.shift();
-			const player2 = this.queue.shift();
+			// const player2 = this.queue.shift();
 			const prisma = new PrismaService();
 			const date = new Date();
 
@@ -108,13 +108,13 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player2.user.id}, // change player1 to player2
+							{id: player1.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
-					playersName: [player1.user.name, player2.user.name], // change player1 n2 to player2
+					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
+					playersName: [player1.user.name, player1.user.name], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
+					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
 					playing: true,
 					date: date,
 				}
@@ -126,7 +126,7 @@ export class MatchmakingGateway {
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
 				sockLeft: player1.id,
-				sockRight: player2.id, //change to player2
+				sockRight: player1.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
@@ -174,8 +174,8 @@ export class MatchmakingGateway {
 				data: {actualGame: game.id},
 			})
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
-			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player1.user }); // change player1 to player2
+			// this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 

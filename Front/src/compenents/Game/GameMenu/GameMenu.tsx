@@ -51,6 +51,11 @@ import StaticNoise from '../../../img/static_noise.gif';
 
 import './GameMenu.css';
 
+interface User {
+	name: string,
+	winrate: number,
+}
+
 function SpecMenu() {
 	
 	const [isBlinking, setIsBlinking] = useState(false);
