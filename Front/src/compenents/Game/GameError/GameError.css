@@ -7,6 +7,14 @@
 	align-items: center;
 }
 
+#red-cross {
+	position: absolute;
+	top: 3vh;
+	left: 3vw;
+	height: 30px;
+	width: 30px;
+}
+
 #randy-balls {
     position: absolute;
     width: 250px;

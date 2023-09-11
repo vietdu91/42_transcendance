@@ -40,16 +40,16 @@ export default function Connexion() {
 		};
 	  }, []);
 
-	// if (showImage) {
-	// 	return (
-	// 	  <div id="dislaimer">
-	// 		<div className="dislaimer_img">
-	// 			<img className="dislaimer_img" src={Dislaimer} alt="Fullscreen"/>
-	// 	  		<div id="clignote"></div>
-	// 		</div>
-	// 	  </div>
-	// 	);
-	//}
+	if (showImage) {
+		return (
+		  <div id="dislaimer">
+			<div className="dislaimer_img">
+				<img className="dislaimer_img" src={Dislaimer} alt="Fullscreen"/>
+		  		<div id="clignote"></div>
+			</div>
+		  </div>
+		);
+	}
 	
 	return (
 		<MenuConnexion />

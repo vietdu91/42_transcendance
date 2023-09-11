@@ -71,8 +71,8 @@ body {
 #move_on {
 	background-image: url("../../img/buttons/move_on.png");
 	background-size: cover;
-	width: 150px;
-	height: 150px;
+	width: 75px;
+	height: 75px;
 	font-size: 2rem;
 	position: fixed;
 	bottom: 6%;

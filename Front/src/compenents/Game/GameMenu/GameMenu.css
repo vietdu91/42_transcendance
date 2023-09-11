@@ -330,6 +330,10 @@
     opacity: 0.2;
     margin: 0 2vw;
     border-radius: 35%;
+    border-top-left-radius: 150px 100px;
+    border-top-right-radius: 150px 100px;
+    border-bottom-left-radius: 150px 100px;
+    border-bottom-right-radius: 150px 100px;
 }
 
 #match-square1::before, #match-square2::before, #match-square3::before {
@@ -488,33 +492,107 @@
     line-height: 1em;
 }
 
-.classement-table {
+.div-classement-table {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+    margin-right: 30px;
+    max-height: 450px; 
+
+    overflow-y: scroll;
+    scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
+    scrollbar-width: auto;
+}
+
+.classement-table {
+    position: relative;
     width: 70%;
     border-collapse: collapse;
     table-layout: fixed;
     color: #141a39;
     cursor: default;
-    margin-top: 200px;
-    margin-left: 30px;
-    margin-right: 30px;
 }
   
   tr {
+    opacity: 0.9;
     transition: all 0.2s ease-in-out;
     border-radius: 0.2rem;
+    color: rgb(0, 0, 0);
+    background-color: #6bb1d1;
   }
   
-  tr:not(:first-child):hover {
-    background-color: #fff;
+  tr:nth-child(odd) {
+    opacity: 0.9;
+      background-color: #e6d4ba;
+      color: rgb(39, 78, 163);
+    }
+    
+    tr:hover {
+        opacity: 1;
+      background-color: #fff;
+      transform: scale(1.1);
+      color: rgb(0, 0, 0);
+      -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+      box-shadow: 0px 5px 15px 8px #e4e7fb;
+    }
+
+    tr:nth-child(odd):hover {
+        opacity: 1;
+      background-color: #fff;
+      transform: scale(1.1);
+      color: rgb(39, 78, 163);
+      -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+      box-shadow: 0px 5px 15px 8px #e4e7fb;
+        }
+
+  tr:nth-child(1) {
+    opacity: 0.9;
+    background-color: #ffd700;
+    color: #FF240D;
+  }
+
+  tr:nth-child(1):hover {
+    opacity: 1;
+    background: url(../../../img/rainbow.gif) center;
+    color: magenta;
+    transform: scale(1.1);
+    -webkit-box-shadow: 0px 5px 15px 8px #db08e2;
+    box-shadow: 0px 5px 15px 8px #db08e2;
+  }
+
+  tr:nth-child(2) {
+    opacity: 0.9;
+    background-color: grey;
+    color: #ffffff;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+  }
+
+  tr:nth-child(2):hover {
+    opacity: 1;
+    background: url(../../../img/game/second_cartman.gif) center;
+    color: #fff;
     transform: scale(1.1);
     -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
     box-shadow: 0px 5px 15px 8px #e4e7fb;
   }
-  
-  tr:nth-child(odd) {
-    background-color: #f9f9f9;
+
+  tr:nth-child(3) {
+    opacity: 0.9;
+    background-color: rgb(202, 121, 0);
+    color: #ffffff;
   }
+
+  tr:nth-child(3):hover {
+    opacity: 1;
+    background: url(../../../img/game/kyle-schwartz.gif) 45% 65%;
+    color: #207c04;
+    transform: scale(1.1);
+    -webkit-box-shadow: 0px 5px 15px 8px #30910a;
+    box-shadow: 0px 5px 15px 8px #30910a;
+    text-shadow: -1px 1px 0 #ffffff, 1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff;
+  }
+
   
   td {
     height: 5rem;
@@ -526,37 +604,60 @@
   
   .number {
     width: 1rem;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: left;
   }
   
   .name {
     text-align: left;
-    font-size: 1.7rem;
+    font-size: 1.3rem;
   }
   
   .points {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
   }
   
-  .points:first-child {
+  /* .points:first-child {
     width: 10rem;
+  } */
+
+  .classement-photo-profil {
+    justify-content: flex-end;
+    align-items: center;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
   }
-  
-  .gold-medal {
-    height: 3rem;
-    margin-left: 1.5rem;
+
+  .classement-photo {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	object-fit: cover;
+    border: 2px solid rgb(0, 0, 0);
   }
 
+  tr:nth-child(1) .classement-photo{
+    border: 2px solid goldenrod;
+  }
 
+  tr:nth-child(2) .classement-photo{
+    border: 2px solid silver;
+  }
 
+  tr:nth-child(3) .classement-photo{
+    border: 2px solid #B36700;
+  }
 
-
+  tr:nth-child(odd) .classement-photo{
+    border: 2px solid rgb(39, 78, 163);
+  }
 
 /********* PLAY BUTTON ***********/
 

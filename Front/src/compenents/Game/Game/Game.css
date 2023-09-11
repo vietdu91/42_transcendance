@@ -24,35 +24,310 @@ body {
 .opacity {
     opacity: 0.7;
 }
-#score {
+
+#game-bg {
+	text-align: center;
+	width: 100vw;
+    height: 100vh;
+}
+
+#game-player-left {
     position: absolute;
+    left: 0;
+    top: 100px;
+    width: 14vw;
+    height: 80vh;
+	border: 2px outset rgb(134, 20, 20);
+	border-left-style : none;
+}
+
+#game-player-right {
+    position: absolute;
+    background-color: aqua;
+    left: 86vw;
+    top: 100px;
+    width: 14vw;
+    height: 80vh;
+}
+
+#game-img-player-left, #game-img-player-right{
+    display: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color:#89cede;
+}
+
+#game-bg-score {
+    position: relative;
     background-color: #343434;
     opacity: 75%;
-    font-size: 50px;
     text-align: center;
-    color: white;
-    left: 20vw;
-    top: 1.5vh;
-    width: 60vw;
-    height: 7vh;
+	top: 1.5vh;
+    width: 100vw;
+	max-width: 250px;
+    height: 65px;
+	display: inline-block;
 }
 
-#game {
-    position: absolute;
-    left: 15vw;
-    top: 10vh;
+#game-score {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 45px;
+}
+
+#game-container {
+	height: 80vh;
+}
+
+#game-terrain {
+	position: absolute;
+    top: 100px;
     width: 70vw;
     height: 60vh;
-    /* background-color: black; */
     color: white;
     z-index: 1;
+	top: 387px; left: 50%;
+	transform: translate(-50%, -50%);
 }
 
-#return {
-    position: absolute;
-    bottom: 50px;
-    left: 50px;
-    right: 0;
-    font-size: 500%;
+/* BOUTON RETOUR */
+
+#game-return {
+	position: absolute;
+    bottom: 20px;
+    left: 15px;
+    font-size: 300%;
     z-index: 2;
+}
+
+/* COMMANDES */
+
+#game-commands {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#game-inner-commands {
+	position: absolute;
+	bottom: 20px;
+	width: 50vw;
+	height: 75px;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+#game-commands-bg {
+	position: absolute;
+	width: 50vw;
+	height: 75px;
+	background-color: grey;
+	opacity: 0.5;
+	min-width: 300px;
+}
+
+.game-icon {
+	width: 30px;
+	z-index: 2;
+}
+
+.game-commands-font {
+	color: rgb(255, 255, 255);
+	font-family: south_park_font;
+	line-height: 100%;
+}
+
+/* HEALTH BAR */
+
+.health_container {
+	--health-flip: var(--true);
+	
+	--player-1: "emtran";
+	--player-2: "dyoula";
+	--player-1-health: 100%;
+	--player-2-health: 100%;
+}
+
+.health_meter {
+	--meter-bg: #0039;
+	--health-bg: linear-gradient(to right, #0b096d, rgb(11, 119, 34));
+	--damage-bg: #900;
+	
+	--health-duration: .25s;
+	--damage-duration: .5s;
+	--damage-delay: .5s;
+}
+
+
+.hud {
+	/* box-sizing: border-box; */
+	
+	padding: 16px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	width: 70vw;
+	max-width: 70vw;
+	overflow: hidden;
+}
+
+@media (max-width: 1090px) {
+
+	.hud {
+		width: 100vw;
+		max-width: 100vw;
+	}
+	
+	#game-bg-score {
+		top: 2.5vh;
+		width: 100vw;
+		max-width: 145px;
+		height: 40px;
+	}
+
+	#game-score {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: white;
+		font-size: 30px;
+	}
+	
+}
+
+/* This was a last minute addition designed to help with flipping health meters horizontally */
+.health_container {
+	/* display: inline-block; */
+	position: relative;
+	top: 20px;
+	width: 30%;
+}
+.health_container#player-1 {
+	--true: scaleX(-1);
+	transform: var(--health-flip, scaleX(1)) skew(10deg);
+	float: left;
+}
+.health_container#player-2 {
+	--true: scaleX(1);
+	float: right;
+	transform: var(--health-flip, scaleX(-1)) skew(10deg);
+}
+/* Player names */
+.health_container:after {
+	--true: scaleX(-1);
+	background: linear-gradient(to right, #0006, transparent);
+	color: white;
+	content: var(--player-1);
+	display: block;
+	font-size: 80%;
+	margin-top: 6px;
+	padding: 4px;
+	text-align: left;
+	transform: var(--health-flip, scaleX(1));
+}
+.health_container#player-2:after {
+	--true: scaleX(1);
+	background: linear-gradient(to left, #0006, transparent);
+	content: var(--player-2);
+	transform: var(--health-flip, scaleX(-1));
+	text-align: right;
+}
+.health_container#player-1 { --health: var(--player-1-health); }
+.health_container#player-2 { --health: var(--player-2-health); }
+
+/* This contains the health and damage bars. Also contains the translucent background color of the container. */
+.health_meter {
+	background: var(--meter-bg, #3009);
+	box-shadow: 0 0 0 1px #0009;
+	width: 100%;
+	height: 16px;
+	position: relative;
+}
+/* General styling for background and foreground of the health bars */
+.health_meter:before, .health_meter:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	content: "";
+}
+/* Border around the bars */
+.health_meter:before {
+	z-index: -1;
+	margin: -4px;
+	
+	background: linear-gradient(to bottom, #fff 0%, #999 50%, #666 50%, #999);
+	border: 1px solid #222;
+	border-radius: 4px;
+	box-shadow: inset 0 0 1px #fff;
+	clip-path: polygon(0% 0%, 0% 100%, 4px 100%, 4px 4px, calc(100% - 4px) 4px, calc(100% - 4px) calc(100% - 4px), 4px calc(100% - 4px), 4px 100%, 100% 100%, 100% 0%);
+}
+/* This provides lines and overlaid gradients over the bars */
+.health_meter:after {
+	background:
+		repeating-conic-gradient(from -35deg, transparent 0% 7.5%, #fff3 10% 10%, transparent 12.5% 57.5%, #fff3 60% 60%, transparent 62.5% 100%),
+		linear-gradient(to bottom, #fff9, transparent, #fff3);
+	background-position: 37% 0, top left;
+	background-size:
+		20%,
+		contain;
+}
+/* This provides general styling for both the actual health bar as well as the damage bar */
+.health_damage, .health {
+	background: var(--health-bg, linear-gradient(to right, #090, #099));
+	box-shadow: inset -1px 0 0 #fff3, 1px 0 0 #0009;
+	width: var(--health, 100%);
+	height: 100%;
+	position: relative;
+	transition: all var(--health-duration, .2s);
+}
+/* The "health damage" bar,  */
+.health_damage {
+	background: var(--damage-bg, #900);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transition-delay: var(--damage-delay, 1s);
+	transition-duration: var(--damage-duration, var(--health-duration));
+}
+
+/* Health Range Input */
+@element .health_container {
+	:self#player-1 {
+		--player-1-health: calc((100 / eval("$it.querySelector('.health_value').max")) * eval("$it.querySelector('.health_value').value") * 1%);
+	}
+	:self#player-2 {
+		--player-2-health: calc((100 / eval("$it.querySelector('.health_value').max")) * eval("$it.querySelector('.health_value').value") * 1%);
+	}
+}
+
+.health_value {
+	cursor: pointer;
+	width: 100%;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+	z-index: 1;
+	transition: all .25s;
+}
+.health_meter:hover .health_value,
+.health_meter .health_value:focus {
+	opacity: 0;
 }

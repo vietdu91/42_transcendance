@@ -9,6 +9,8 @@ import RedCross from "../../../img/buttons/red_cross.png"
 import MustWatchIt from "../../../img/must_watch_it.gif"
 import Loading from "../../utils/Loading/Loading"
 
+import Couronne from "../../../img/game/couronne.png"
+
 /* YEUX - HISTORY */
 import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
 import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
@@ -252,61 +254,49 @@ function History() {
 
 function Classement() {
 
+	// function CouronneOrNot() {
+
+	// 	return (
+	// 		<img src={Couronne} alt="couronne" id="classement-couronne"></img>
+	// 	)
+	// }
+	
+	function GetPlace({position, name, points}) {
+		
+		return (
+			<tr>
+				<td className="number">{position}</td>
+				<td className="classement-photo-profil">
+					<img className="classement-photo" src={EyesCartmanWin} alt="#"></img>
+				</td>
+				<td className="name">{name}</td>
+				<td className="points">{points}</td>
+			</tr>
+		)
+		
+	}
+	
 	return (
 		<div id="classement-menu">
 			<div id="classement-bg">
 				<div id="classement-font">
 					CLASSEMENT
 				</div>
-				<table className="classement-table">
-					<tr>
-						<td className="number">1</td>
-						<td className="name">emtran</td>
-						<td className="points">100% 
-						<img className="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
-						</td>
-					</tr>
-					<tr>
-						<td className="number">2</td>
-						<td className="name">benmoham</td>
-						<td className="points">95.4%</td>
-					</tr>
-					<tr>
-						<td className="number">3</td>
-						<td className="name">jkaruk</td>
-						<td className="points">94%</td>
-					</tr>
-					<tr>
-						<td className="number">4</td>
-						<td className="name">dyoula</td>
-						<td className="points">85%</td>
-					</tr>
-					<tr>
-						<td className="number">5</td>
-						<td className="name">qujabob</td>
-						<td className="points">13%</td>
-					</tr>
-					<tr>
-						<td className="number">5</td>
-						<td className="name">qujabob</td>
-						<td className="points">13%</td>
-					</tr>
-					<tr>
-						<td className="number">5</td>
-						<td className="name">qujabob</td>
-						<td className="points">13%</td>
-					</tr>
-					<tr>
-						<td className="number">5</td>
-						<td className="name">qujabob</td>
-						<td className="points">13%</td>
-					</tr>
-										<tr>
-						<td className="number">5</td>
-						<td className="name">qujabob</td>
-						<td className="points">13%</td>
-					</tr>
-				</table>
+				<div className="div-classement-table">
+					<table className="classement-table">
+						<GetPlace position="1" name="emtran (le KING)" points="100%"></GetPlace>
+						<GetPlace position="2" name="benmoham" points="95.4%"></GetPlace>
+						<GetPlace position="3" name="jkaruk" points="94%"></GetPlace>
+						<GetPlace position="4" name="dyoula" points="85%"></GetPlace>
+						<GetPlace position="5" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="6" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="7" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="8" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="9" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="10" name="qujabob" points="13%"></GetPlace>
+						<GetPlace position="11" name="qujabob" points="13%"></GetPlace>
+					</table>
+				</div>
 			</div>
 		</div>
 	)

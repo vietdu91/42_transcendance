@@ -36,6 +36,8 @@ type Game = {
 	scoreRight: number;
 	charLeft: string;
 	charRight: string;
+	nameLeft: string;
+	nameRight: string;
 	posLeft: number;
 	posRight: number;
 	wLeft: number;
@@ -131,8 +133,10 @@ export class MatchmakingGateway {
 				scoreRight: 0,
 				charLeft: game.characters[0],
 				charRight: game.characters[1],
-				posLeft: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
-				posRight: (9/16) * 100 / 2 - ((9/16) * 100 / 5) / 2,
+				posLeft: (9/16) * 100 / 2,
+				posRight: (9/16) * 100 / 2,
+				nameLeft: game.playersName[0],
+				nameRight: game.playersName[1],
 				wLeft: 100 / 75,
 				hLeft: (9/16) * 100 / 5,
 				wRight: 100 / 75,

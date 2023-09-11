@@ -13,8 +13,33 @@ import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
 import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
-// import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
+import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
+import Tron from '../../../img/backgrounds/backgrounds-game/tron.png'
+
+// PLAYERS
+import CartmanL from "../../../img/en_cours/cartman_left.png"
+import CartmanR from "../../../img/en_cours/cartman_right.png"
+import GarrisonL from "../../../img/en_cours/garrison_left.png"
+import GarrisonR from "../../../img/en_cours/garrison_right.png"
+import KennyL from "../../../img/en_cours/kenny_left.png"
+import KennyR from "../../../img/en_cours/kenny_right.png"
+import TimmyL from "../../../img/en_cours/timmy_left.png"
+import TimmyR from "../../../img/en_cours/timmy_right.png"
+import TP_L from "../../../img/en_cours/TP_left.png"
+import TP_R from "../../../img/en_cours/TP_right.png"
+import ButtersL from "../../../img/en_cours/butters_left.png"
+import ButtersR from "../../../img/en_cours/butters_right.png"
+import HenriettaL from "../../../img/en_cours/henrietta_left.png"
+import HenriettaR from "../../../img/en_cours/henrietta_right.png"
+import ServietskyL from "../../../img/en_cours/servietsky_left.png"
+import ServietskyR from "../../../img/en_cours/servietsky_right.png"
+
+// COMMANDES
+import Touche_W from "../../../img/game/key_w.png"
+import Touche_S from "../../../img/game/key_s.png"
+import Touche_Space from "../../../img/game/space.png"
+
 
 interface IBall {
 	x: number;
@@ -90,7 +115,7 @@ export default function Game(): JSX.Element {
 	
 	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
-	const randomImage = Chaos;
+	const randomImage = Tron;
 
 	const cookies = document.cookie.split('; ');
 	let id:number = -1;
@@ -103,7 +128,7 @@ export default function Game(): JSX.Element {
 	}
 
 	function WhatReturnButtom({randomImage}) {
-		if (randomImage === CityWok || randomImage === Chaos)
+		if (randomImage === CityWok || randomImage === Chaos || randomImage === Tron)
 			return (
 				<ReturnButtom colorHexa='#FFFFFF' path='/'/>
 			)
@@ -352,14 +377,79 @@ export default function Game(): JSX.Element {
 		};
 	}, [sketchRef, navigate, roomId, socket, id]);
 
+	function GetPlayerLeft() {
+
+		return (
+			<img alt="#" src={HenriettaL} id="game-img-player-left"></img>
+		);
+	}
+
+	function GetPlayerRight() {
+
+		return (
+			<img alt="#" src={ButtersR} id="game-img-player-left"></img>
+		);
+	}
+
+	function FooterCommands() {
+
+		return (
+			<div id="game-commands">
+				<div id="game-inner-commands">
+					<span id="game-commands-bg"></span>
+					<img src={Touche_W} alt="W" className="game-icon"></img>
+					<span className="game-commands-font">Haut</span>
+					<img src={Touche_S} alt="S" className="game-icon"></img>
+					<span className="game-commands-font">Bas</span>
+					<img src={Touche_Space} alt="Space" className="game-icon"></img>
+					<span className="game-commands-font">Active Ton Pouvoir</span>
+				</div>
+			</div>
+		);
+	}
+
+	function BarresDeVie() {
+
+		return (
+			<div className="hud">
+			    <div className="health_container" id="player-1">
+			        <div className="health_meter">
+			            <div className="health_damage"></div>
+			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" title="" />
+			        </div>
+			    </div>
+			    <div className="health_container" id="player-2">
+			        <div className="health_meter">
+			            <div className="health_damage"></div>
+			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" />
+			        </div>
+			    </div>
+			</div>
+		);
+	}
+
 	return (
-		<>
-		<GetBg randomImage={randomImage} />
-		<div id="score">{scoreLeft} - {scoreRight} </div>
-		<div id="game" ref={sketchRef}></div>
-		<div id="return">
-			<WhatReturnButtom randomImage={randomImage} />
+		<div id="game-bg">
+			<GetBg randomImage={randomImage} />
+			<div id="game-player-left">
+				<GetPlayerLeft />
+			</div>
+			<div id="game-bg-score">
+				<div id="game-score">
+					{scoreLeft} - {scoreRight}
+				</div>
+			</div>
+			<div id="game-container">
+				<div id="game-terrain" ref={sketchRef}></div>
+			</div>
+			<div id="game-return">
+				<WhatReturnButtom randomImage={randomImage} />
+			</div>
+			<div id="game-player-right">
+				<GetPlayerRight />
+			</div>
+			<BarresDeVie />
+			<FooterCommands />
 		</div>
-		</>
 	);
 }
