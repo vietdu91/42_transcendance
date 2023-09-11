@@ -68,7 +68,7 @@ function Channel() {
 			<div className="channel-send-messages-part">
 				<div className="channel-input-text">{/*Add buttons*/}
 					<div className="channel-left">
-
+						<span className="textarea" role="textbox" contentEditable ></span>
 					</div>
 					<div className="channel-right-buttons">
 						<button className="button">Send</button>

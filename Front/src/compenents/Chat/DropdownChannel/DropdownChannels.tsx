@@ -109,17 +109,20 @@ function DropdownChannels() {
             <img src={RedCross} alt="redcross" id="chat_redcross" />
           </div>
           <div className="channel-creation-form">
-            {/* <input
+            <div className="fiiiirst">
+            <input
               type="text"
               placeholder="Channel Name"
               onChange={(e) => setChannelName(e.target.value)} // Capture the channel name
             />
+            </div>
             <div className="checkboxes-tick">
               <input type="checkbox" id="public" />
               <label htmlFor="public">Public</label>
               <input type="checkbox" id="private" />
               <label htmlFor="private">Private</label>
             </div>
+            {/*
             <input type="text" placeholder="Password" />
             <button onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button> */}
           </div>

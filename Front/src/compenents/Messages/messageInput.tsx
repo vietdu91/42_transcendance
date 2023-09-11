@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
-
+import React, { useState, useRef } from 'react';
+import './MessageInput.css'
 export default function MessageInput({ send, messages }: {
     send: (value: string) => void;
-    messages: string[]; // Updated prop type to expect an array of strings
+    messages: string[];
 }) {
     const [value, setValue] = useState('');
+    const inputRef = useRef<HTMLSpanElement | null>(null);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
+    const handleInputChange = () => {
+        if (inputRef.current) {
+            setValue(inputRef.current.innerText);
+        }
     };
 
     const handleSendMessage = () => {
         if (value.trim() !== '') {
             send(value);
-            setValue(''); // Clear the input field
+            setValue('');
+            if (inputRef.current) {
+                inputRef.current.innerText = ''; // Clear the content of the span
+            }
+        }
+    };
+
+    // Handle pressing Enter key to create new lines
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent adding a new line
+            handleSendMessage();
         }
     };
 
     return (
         <div className="input-individual-conversation">
-            <input
-                type="text"
-                onChange={handleInputChange}
-                placeholder="Type your message ..."
-                value={value}
+            <span
+                ref={inputRef}
+                className="text-area-indiv"
+                role="textbox"
+                contentEditable
+                onInput={handleInputChange}
+                onBlur={handleInputChange}
+                onKeyDown={handleKeyDown}
+                style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
             />
             <button onClick={handleSendMessage}>Send</button>
             {/* Render the list of messages using the Message component */}
-            
         </div>
     );
 }
-
-
-{/* J'ai ete modif  */}

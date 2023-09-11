@@ -8,11 +8,12 @@
 	display: flex;
 	/* opacity: 0.90; */
 	flex-direction: column;
-	border-radius:5px;
+	border-radius: 5px;
 	background-image: url('../../../img/chat/channel_wallpaper.png');
 	/* background-image: url('../../../img/chat/test_wallpaper.png'); */
-	background-size: cover; /* This property scales the image to cover the entire container */
-  	background-repeat: no-repeat;
+	background-size: cover;
+	/* This property scales the image to cover the entire container */
+	background-repeat: no-repeat;
 }
 
 .channel-bandeau {
@@ -127,7 +128,7 @@
 .channel-conversation-messages::-webkit-scrollbar {
 	display: none;
 	cursor: pointer;
-  }
+}
 
 .channel-conversation-messages ul {
 	display: flex;
@@ -148,11 +149,15 @@
 .channel-conversation-messages ul li {
 	padding: 5px;
 	margin: 5px 0;
-	word-wrap: break-word; /* Allow long words to break onto a new line */
-	max-width: 80%; /* Limit message width */
+	word-wrap: break-word;
+	/* Allow long words to break onto a new line */
+	max-width: 80%;
+	/* Limit message width */
 	clear: both;
-	font-size: 16px; /* Adjust the font size as needed */
-	margin-left: 20px; /* Add left margin for indentation */
+	font-size: 16px;
+	/* Adjust the font size as needed */
+	margin-left: 20px;
+	/* Add left margin for indentation */
 }
 
 .channel-profile-pic-and-member-list {
@@ -166,7 +171,8 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	align-items: center; /* Center vertically */
+	align-items: center;
+	/* Center vertically */
 	/* background-color: #B9C2DD; */
 }
 
@@ -177,12 +183,13 @@
 	background-color: #E7E8F3;
 	display: flex;
 	justify-content: center;
-	align-items: center; /* Center vertically */
+	align-items: center;
+	/* Center vertically */
 }
 
 .channel-pik {
 	width: 75%;
-	height: 75%; 
+	height: 75%;
 	background-color: white;
 	border-radius: 5px;
 	border-width: 1px;
@@ -207,9 +214,9 @@
 .channel-group-member-list::-webkit-scrollbar {
 	display: none;
 	cursor: pointer;
-  }
+}
 
-	/* background-color: red; */
+/* background-color: red; */
 
 .channel-group-member-list ul {
 	list-style: none;
@@ -223,8 +230,10 @@
 }
 
 .channel-group-member-list ul li {
-	display: flex; /* Use flex layout to align the image and text */
-	align-items: center; /* Center align vertically */
+	display: flex;
+	/* Use flex layout to align the image and text */
+	align-items: center;
+	/* Center align vertically */
 	background-color: #fff;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -236,7 +245,6 @@
 	height: 25%;
 	width: 100%;
 	/* background-color: #e4e7ec; */
-	opacity: 0.90;
 	/* opacity: 45%; */
 	display: flex;
 	flex-direction: row;
@@ -246,8 +254,7 @@
 	width: 66%;
 	height: 100%;
 	/* background-color: #818eb1; */
-	background-color: red;
-	opacity: 0.90;
+	/* background-color: red; */
 	border-radius: 15px;
 	display: flex;
 	flex-direction: row;
@@ -257,17 +264,50 @@
 	/* Center vertically */
 }
 
+/* Style the channel container */
 .channel-left {
-	width: 75%;
+	position: relative;
 	height: 70%;
-	background-color: #e4e7ec;
-	opacity: 0.90;
-	border-style: solid;
-	border-color: grey;
+	width: 75%;
+	/* background-color: #f2f5f8; */
+	/* background-image: url('../../../img/chat/channel_wallpaper.png'); */
+
+	border: 1px solid #ccc;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	border-width: 1px;
-	/* background-color: red; */
+	display: flex;
+	flex-direction: column-reverse;
+	/* Reverse the direction for messages */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	opacity: 0.7;
+
+	/* Subtle shadow */
+}
+
+/* Style the textarea */
+
+.textarea {
+	display: block;
+	width: 100%;
+	min-height: 7%;
+	overflow: auto;
+	resize: none;
+	line-height: 20px;
+	max-height: 200px;
+	border: none;
+	/* Remove textarea border */
+	background-color: #fff;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	opacity: 0.7;
+}
+
+/* Hide scrollbars */
+textarea::-webkit-scrollbar {
+	display: none;
+	cursor: pointer;
 }
 
 .channel-right-buttons {
@@ -296,6 +336,13 @@
 	text-align: center;
 	text-decoration: none;
 	transition: background-color 0.3s ease;
+	cursor: text;
+}
+
+span.textarea[contenteditable]:empty::before {
+    content: 'Anything to say ?';
+    display: inline-block;
+	cursor: text;
 }
 
 /* Hover effect */
