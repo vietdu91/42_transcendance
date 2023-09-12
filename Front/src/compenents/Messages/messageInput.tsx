@@ -7,6 +7,7 @@ export default function MessageInput({ send, messages }: {
     messages: string[]
 }) {
     const [value, setValue] = useState("");
+    console.log("send messg");
     return (
         <>
             <input onChange={(e) => setValue(e.target.value)}

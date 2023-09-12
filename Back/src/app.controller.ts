@@ -20,7 +20,7 @@ export class AppController {
 
   @Get('42') 
   @Redirect(process.env.URL_REDIRECT)
-  getConnected() {
+  getConnected() {  
     console.log("process.env.URL_REDIRECT = " + process.env.URL_REDIRECT)
     console.log("42 route");
     return {url: process.env.URL_42REDIRECT};

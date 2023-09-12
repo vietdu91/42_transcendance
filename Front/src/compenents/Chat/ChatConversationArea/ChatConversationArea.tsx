@@ -18,7 +18,7 @@ function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProp
             {/* Content for the navbar */}
           </div>
           <ConversationContainer />
-          <TextComposerContainer name={name} pfp={pfp} />
+          {/*<TextComposerContainer name={name} pfp={pfp} />*/}
         </div>
       )}
     </div>
