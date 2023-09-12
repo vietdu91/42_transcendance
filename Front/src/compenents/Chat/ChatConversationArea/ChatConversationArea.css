@@ -9,10 +9,14 @@
     z-index: 1000;
     /* Adjust the z-index value as needed */
     overflow-y: auto;
+    border-width: 5px;
+    border-style: solid;
+    border-color: blue;
     /* Enable vertical scrolling if content exceeds height */
     transform: translateX(${props => (props.isVisible ? '0' : '100%')});
     transition: transform 0.3s ease-in-out;
     background-image: url('../../../img/chat/channel_wallpaper.png');
+    /* background-image: url('../../../img/chat/msn-indiv.jpg'); */
 
 }
 

@@ -2,17 +2,15 @@
     height: 37%;
     width: 100%;
     /* background-color: green; */
-    display: grid;
-    grid-template-columns: repeat(50, 2%);
-    grid-template-rows: repeat(50, 2%);
+    display: flex;
+    flex-direction: row;
 }
 
 .container-write-text {
-    grid-row-start: 3;
-    grid-row-end: 49;
-    grid-column-start: 2;
-    grid-column-end: 33;
-    background-color: blue;
+    height: 97%;
+    width: 64%;
+    margin-left: 2%;
+    margin-bottom: 3%;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -23,12 +21,12 @@
     height: 20%;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: #E1EAF3;
+	background-color: #a2acc6;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border: solid;
     border-width: 1px;
-    /* border-color: #7483af; */
+    border-color: black;
 }
 
 .upper-part-write-text img {
@@ -54,49 +52,50 @@
 .middle-part-write-text {
     width: 100%;
     height: 60%;
-    background-color: #F9FAFD;
+    background-color: white;
+    opacity: 0.7;
     border: solid;
     border-width: 1px;
-    border-color: #7483af;
+    border-color: black;
 }
 
 .bottom-part-write-text {
     width: 100%;
     height: 20%;
     border-bottom-left-radius: 5px;
-    ;
     border-bottom-right-radius: 5px;
-    ;
-    background-color: #E6EEFB;
+    /* background-color: #E6EEFB; */
+	background-color: #a2acc6;
     border: solid;
     border-width: 1px;
-    border-color: #7483af;
+    border-color: black;
 }
 
 .profile-pic-container-emitter {
-    grid-row-start: 3;
-    grid-row-end: 48;
-    grid-column-start: 35;
-    grid-column-end: 49;
-    background-color: #e8f2fd;
+    height: 97%;
+    width: 25%;
+    margin-left: 6%;
+    margin-right: 3%;
+    margin-bottom: 3%;;
+	background-color: #a2acc6;
     border: solid;
     border-width: 1px;
     border-radius: 5px;
     border-color: #7483af;
-    display: grid;
-    grid-template-columns: repeat(50, 2%);
-    grid-template-rows: repeat(50, 2%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-pic-last-block {
-    grid-row-start: 2;
-    grid-row-end: 40;
-    grid-column-start: 5;
-    grid-column-end: 45;
-    background-color: forestgreen;
     border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .individual-conv-pfp {
@@ -106,7 +105,8 @@
 }
 
 .My-name-in-conv {
-    font-family: 'Your Nice Font', sans-serif;
+/* Define a font stack similar to MSN Messenger */
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
     /* Replace 'Your Nice Font' with the desired font name */
     font-size: 16px;
     /* Adjust the font size as needed */

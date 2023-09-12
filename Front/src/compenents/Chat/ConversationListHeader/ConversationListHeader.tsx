@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
+
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
@@ -15,6 +16,7 @@ const ConversationListHeader = ({ name, pfp }) => {
         name: 'React',
         showHideDemo1: false,
     });
+
 
     const hideComponent = (name) => {
         setState((prevState) => ({
@@ -36,6 +38,7 @@ const ConversationListHeader = ({ name, pfp }) => {
             <hr />
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
+
                 <DropdownChannel />{/*Create Join Delete*/}
                 <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
                 <li>Actions</li> { /*  */}

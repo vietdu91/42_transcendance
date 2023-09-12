@@ -7,6 +7,7 @@ import InviteGame from '../../../img/chat/game-gimp.jpg';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
+
 type ChatConversationAreaProps = {
   name: string;
   isVisible: boolean;
@@ -23,6 +24,11 @@ function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProp
       const id = Cookies.get('id');
       socket?.emit('message', value, id);
   }
+
+
+
+
+
 
   const messageListener = (newMessage: string) => {
     const authorId = Cookies.get('id');

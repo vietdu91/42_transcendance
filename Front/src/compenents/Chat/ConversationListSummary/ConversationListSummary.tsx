@@ -5,6 +5,9 @@ import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import groupConv from '../../../img/chat/group-conv.jpg';
+import groups from '../../../img/chat/group-channel-icon.png'
+import SearchBar from '../../searchBar/searchBar';
+
 
 const ConversationListSummary = ({name, pfp}) => {
     const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
@@ -15,10 +18,19 @@ const ConversationListSummary = ({name, pfp}) => {
         setVisibleItems(newVisibleItems);
     };
 
+    const handleSearch = (query: string) => {
+        // Effectuez votre logique de recherche ici avec la valeur 'query'
+        console.log(`Recherche en cours avec la requête : ${query}`);
+      };
+
     return (
         <div className="conversation-list-summary">
             <div className="info-conversation-list">
-                {/* Content for the conversation info */}
+                <ul>
+                    <li><img src={regularConv} alt="regularConv" id="chat_regularConv" /></li> 
+                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" /></li> 
+                </ul>
+                <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
             <div className="display-list-convo">
                 {/* Content for the conversation list */}

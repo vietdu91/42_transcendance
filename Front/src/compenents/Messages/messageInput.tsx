@@ -1,30 +1,32 @@
 import React, { useState, useRef } from 'react';
-import './MessageInput.css'
+
 export default function MessageInput({ send, messages }: {
     send: (value: string) => void;
     messages: string[];
 }) {
     const [value, setValue] = useState('');
-    const inputRef = useRef<HTMLSpanElement | null>(null);
+    const inputRef = useRef<HTMLDivElement | null>(null);
 
     const handleInputChange = () => {
         if (inputRef.current) {
+            // Use innerText to capture text content with newlines
             setValue(inputRef.current.innerText);
         }
     };
 
     const handleSendMessage = () => {
         if (value.trim() !== '') {
+            // Use the raw value without modification
             send(value);
             setValue('');
             if (inputRef.current) {
-                inputRef.current.innerText = ''; // Clear the content of the span
+                inputRef.current.innerText = ''; // Clear the content of the div
             }
         }
     };
 
     // Handle pressing Enter key to create new lines
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault(); // Prevent adding a new line
             handleSendMessage();
@@ -33,7 +35,7 @@ export default function MessageInput({ send, messages }: {
 
     return (
         <div className="input-individual-conversation">
-            <span
+            <div
                 ref={inputRef}
                 className="text-area-indiv"
                 role="textbox"
@@ -44,7 +46,6 @@ export default function MessageInput({ send, messages }: {
                 style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
             />
             <button onClick={handleSendMessage}>Send</button>
-            {/* Render the list of messages using the Message component */}
         </div>
     );
 }
