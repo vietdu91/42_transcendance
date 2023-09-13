@@ -15,9 +15,10 @@ export class UserController {
     constructor(private readonly userService: UserService,
                 private readonly prisma: PrismaService) {}
 
-    @Get('getUserById')
-    async getUserById(@Query('userId') userId: number, @Req() request: Request, @Res() response: Response) {
-      const user = await this.userService.getUserById(userId);
+    @Get('getUserByName')
+    async getUserByName(@Query('username') username: string, @Req() request: Request, @Res() response: Response) {
+      console.log(username + " ICICIICCIICIC");
+      const user = await this.userService.getUserByName(username);
       if (!user) {
         throw new UnauthorizedException();
       }
@@ -28,7 +29,9 @@ export class UserController {
         twoFA: user.twoFactorEnabled,
         nick: user.nickname,
         age: user.age,
-        character: user.character,});
+        character: user.character,
+        pfp_url: user.pfp_url,
+      });
     }
   
     @Get('getUser')
@@ -69,18 +72,64 @@ export class UserController {
       return this.userService.findOne(id);
     }
 
-    @Patch('disableTwoFA')
-    async disableTwoFa( @Req() request: Request, @Body() body: {state: boolean}) {
-      const userId = parseInt(request.cookies.id);
-      console.log(userId);
-      if (!userId)
+    @Post('addFriend')
+    async addFriend( @Req() request, @Body() body: {id: number}) {;
+      console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
+      const userId = request.cookies.id;
+      if (!userId) {
         throw new UnauthorizedException();
-      console.log("ici")
-      this.userService.turnOffTwoFactorAuthentication(userId);
-      return {message: 'Disabled 2FA'};
+      }
+      console.log("userId: " + userId);
+
+      const { id } = body;
+      console.log("id: " + id);
+      if (!id) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {id: Number(userId) }
+      })
+      console.log(userId);
+      const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: {friendList: user.friendList.push(id)},
+      })
+      console.log("FRIEND ADDED: travail termine");
+    }
+    @Post('removeFriend')
+    async removeFriend( @Req() request, @Body() body: {id: number}) {
+      console.log("Removing friend...")
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      console.log("id de l'user qui delete: " + userId)
+      const { id } = body;
+      if (!id) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {id: Number(userId) }
+      })
+      console.log("id de l'user a delete: " + id)
+      let array = user.friendList;
+      // while(array != 0)
+      // {
+      //   console.log(id);
+      //   array--;
+      // }
+      const index = array.indexOf(id, 0);
+      if (index > -1) {
+        array.splice(index, 1);
+        const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: {friendList: array},
+        })
+        console.log("FRIEND REMOVED: travail termine");
+      }
     }
   
-    @Patch('setNickname')
+    @Post('setNickname')
     async setNickname( @Req() request, @Body() body: { nickname: string }) {
       const userId = request.cookies.id;
       if (!userId) {
@@ -132,6 +181,4 @@ export class UserController {
       // }
       return { message: 'Personnage modifié avec succès' };
     }
-
-
 }

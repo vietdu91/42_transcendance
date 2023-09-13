@@ -26,6 +26,7 @@ import GameError from "./compenents/Game/GameError/GameError"
 import Matchmaking from "./compenents/Game/Matchmaking/Matchmaking"
 import NewProfile from "./compenents/NewProfile/NewProfile"
 import Profile from "./compenents/Profile/Profile"
+import UserProfile from "./compenents/UserProfile/UserProfile"
 import Chat from './compenents/Chat/socketChat';
 
 import MusicPlayer from './compenents/utils/MusicPlayer/MusicPlayer';
@@ -91,6 +92,7 @@ export default function App() {
 				<Route path="/connect" element={<ConnexionWithMusic />}/>
 				<Route path="/newprofile" element={<NewProfile />}/>
 				<Route path="/profile" element={<Profile />}/>
+				<Route path="/user/:username" element={<UserProfile />}/>
 				<Route path="/chat" element={<Chat />}/>
 				<Route path="/credits" element={<CreditsWithMusic />}/>
 				<Route path="/thanks" element={<ThanksWithMusic />}/>

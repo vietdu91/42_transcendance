@@ -104,6 +104,7 @@ export class AuthService {
                 name: userResponse.data.login,
                 email: userResponse.data.email,
                 code: userResponse.data.code,
+                pfp: userResponse.data.image.link,
             };
         } catch (error) {
             console.error(error);

@@ -19,6 +19,7 @@ export class UserService {
                 age: 18,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,
+                pfp_url: userData.pfp,
             }
         });
         console.log('User created');
@@ -45,6 +46,14 @@ async deleteUser(id: number): Promise<User> {
   findOne(id: string){
     const user = this.prisma.user.findUnique({
       where: {id: parseInt(id.toString())}
+    });
+    return user;
+  }
+
+  async getUserByName(username: string): Promise<User | null> {
+    console.log(username);
+    const user = await this.prisma.user.findUnique({
+      where: {name: username},
     });
     return user;
   }
