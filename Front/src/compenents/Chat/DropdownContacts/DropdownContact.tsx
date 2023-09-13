@@ -30,6 +30,7 @@ function DropdownContact() {
   const toggleSendMp = async () => {
     const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: name }, { withCredentials: true })
     .then((response) => {
+      console.log("id === " + response.data.id);
       const receivId = response.data.id;
     }
     )
