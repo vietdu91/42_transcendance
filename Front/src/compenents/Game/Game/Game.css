@@ -148,8 +148,8 @@ body {
 .health_container {
 	--health-flip: var(--true);
 	
-	--player-1: "emtran";
-	--player-2: "dyoula";
+	/* --player-1: "emtran";
+	--player-2: "dyoula"; */
 	--player-1-health: 100%;
 	--player-2-health: 100%;
 }
@@ -211,17 +211,19 @@ body {
 	width: 30%;
 }
 .health_container#player-1 {
+	color: white;
 	--true: scaleX(-1);
 	transform: var(--health-flip, scaleX(1)) skew(10deg);
 	float: left;
 }
 .health_container#player-2 {
+	color: white;
 	--true: scaleX(1);
 	float: right;
 	transform: var(--health-flip, scaleX(-1)) skew(10deg);
 }
-/* Player names */
-.health_container:after {
+
+/* .health_container:after {
 	--true: scaleX(-1);
 	background: linear-gradient(to right, #0006, transparent);
 	color: white;
@@ -239,7 +241,7 @@ body {
 	content: var(--player-2);
 	transform: var(--health-flip, scaleX(-1));
 	text-align: right;
-}
+} */
 .health_container#player-1 { --health: var(--player-1-health); }
 .health_container#player-2 { --health: var(--player-2-health); }
 

@@ -105,6 +105,10 @@ export default function Game(): JSX.Element {
 	const socket = useContext(GameContext);
 	const [scoreLeft, setScoreLeft] = useState(0);
 	const [scoreRight, setScoreRight] = useState(0);
+	const [charLeft, setCharLeft] = useState("");
+	const [charRight, setCharRight] = useState("");
+	const [nameLeft, setNameLeft] = useState("");
+	const [nameRight, setNameRight] = useState("");
 	const location = useLocation();
 	if (location.state === null)
 		window.location.href = "/";
@@ -158,7 +162,6 @@ export default function Game(): JSX.Element {
 		let toc: boolean = false;
 
 		socket.on('roundStarted', (response) => {
-			console.log("message === " + response.message);
 
 			let player_height: number = (9/16) * window.innerWidth * 70 / 100 / 5;
 			const updatedGame:IGame = {
@@ -186,6 +189,10 @@ export default function Game(): JSX.Element {
 				},
 			}
 			game.current = updatedGame;
+			setCharLeft(game.current.charLeft);
+			setCharRight(game.current.charRight);
+			setNameLeft(response.game.nameLeft);
+			setNameRight(response.game.nameRight);
 			powLeft = powRight = weed = timmy = fart = toc = false;
 		})
 		
@@ -306,7 +313,7 @@ export default function Game(): JSX.Element {
 						if (p.keyIsDown(83))
 							socket?.emit("movePlayer", roomId, id, 0);
 					}
-					socket?.emit("moveBall", roomId);
+					// socket?.emit("moveBall", roomId);
 
 					if (fart)
 						p.fill(p.color(21, 79, 48));
@@ -377,17 +384,41 @@ export default function Game(): JSX.Element {
 		};
 	}, [sketchRef, navigate, roomId, socket, id]);
 
-	function GetPlayerLeft() {
+	function GetPlayerLeft(props) {
+
+		let image;
+		switch (props.char) {
+			case "Cartman": image = CartmanL; break;
+			case "Servietsky": image = ServietskyL; break;
+			case "Kenny": image = KennyL; break;
+			case "Timmy": image = TimmyL; break;
+			case "TerrancePhilip": image = TP_L; break;
+			case "Garrison": image = GarrisonL; break;
+			case "Henrietta": image = HenriettaL; break;
+			case "Butters": image = ButtersL; break;
+		}
 
 		return (
-			<img alt="#" src={HenriettaL} id="game-img-player-left"></img>
+			<img alt="#" src={image} id="game-img-player-left"></img>
 		);
 	}
 
-	function GetPlayerRight() {
+	function GetPlayerRight(props) {
+
+		let image;
+		switch (props.char) {
+			case "Cartman": image = CartmanR; break;
+			case "Servietsky": image = ServietskyR; break;
+			case "Kenny": image = KennyR; break;
+			case "Timmy": image = TimmyR; break;
+			case "TerrancePhilip": image = TP_R; break;
+			case "Garrison": image = GarrisonR; break;
+			case "Henrietta": image = HenriettaR; break;
+			case "Butters": image = ButtersR; break;
+		}
 
 		return (
-			<img alt="#" src={ButtersR} id="game-img-player-left"></img>
+			<img alt="#" src={image} id="game-img-player-left"></img>
 		);
 	}
 
@@ -408,7 +439,7 @@ export default function Game(): JSX.Element {
 		);
 	}
 
-	function BarresDeVie() {
+	function BarresDeVie(props) {
 
 		return (
 			<div className="hud">
@@ -417,12 +448,14 @@ export default function Game(): JSX.Element {
 			            <div className="health_damage"></div>
 			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" title="" />
 			        </div>
+					{props.nameLeft}
 			    </div>
 			    <div className="health_container" id="player-2">
 			        <div className="health_meter">
 			            <div className="health_damage"></div>
 			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" />
 			        </div>
+					{props.nameRight}
 			    </div>
 			</div>
 		);
@@ -432,7 +465,7 @@ export default function Game(): JSX.Element {
 		<div id="game-bg">
 			<GetBg randomImage={randomImage} />
 			<div id="game-player-left">
-				<GetPlayerLeft />
+				<GetPlayerLeft char={charLeft}/>
 			</div>
 			<div id="game-bg-score">
 				<div id="game-score">
@@ -446,9 +479,9 @@ export default function Game(): JSX.Element {
 				<WhatReturnButtom randomImage={randomImage} />
 			</div>
 			<div id="game-player-right">
-				<GetPlayerRight />
+				<GetPlayerRight char={charRight}/>
 			</div>
-			<BarresDeVie />
+			<BarresDeVie nameLeft={nameLeft} nameRight={nameRight} />
 			<FooterCommands />
 		</div>
 	);
