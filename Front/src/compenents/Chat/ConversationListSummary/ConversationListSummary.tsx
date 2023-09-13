@@ -3,8 +3,11 @@ import './ConversationListSummary.css';
 import Advertisement from './../../../img/chat/advertisement.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
+import regularConv from '../../../img/chat/regular-conv-icon.jpg';
+import groupConv from '../../../img/chat/group-conv.jpg';
+import groups from '../../../img/chat/group-channel-icon.png'
+import SearchBar from '../../searchBar/searchBar';
 
-// ... (import statements)
 
 const ConversationListSummary = ({name, pfp}) => {
     const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
@@ -15,18 +18,27 @@ const ConversationListSummary = ({name, pfp}) => {
         setVisibleItems(newVisibleItems);
     };
 
+    const handleSearch = (query: string) => {
+        // Effectuez votre logique de recherche ici avec la valeur 'query'
+        console.log(`Recherche en cours avec la requête : ${query}`);
+      };
+
     return (
         <div className="conversation-list-summary">
             <div className="info-conversation-list">
-                {/* Content for the conversation info */}
+                <ul>
+                    <li><img src={regularConv} alt="regularConv" id="chat_regularConv" /></li> 
+                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" /></li> 
+                </ul>
+                <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
             <div className="display-list-convo">
                 {/* Content for the conversation list */}
                 <ul>
-                    <li onClick={() => toggleConvSummary(0)}>je suis une conv</li>
-                    <li onClick={() => toggleConvSummary(1)}>je suis un channel</li>
-                    <li onClick={() => toggleConvSummary(2)}>je suis une ju</li>
-                    <li onClick={() => toggleConvSummary(3)}>je suis un</li>
+                    <li onClick={() => toggleConvSummary(0)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
+                    <li onClick={() => toggleConvSummary(1)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
+                    <li onClick={() => toggleConvSummary(2)}><img src={groupConv} alt="regularConv" id="chat_regularConv" />je suis une conv de groupe</li>
+                    <li onClick={() => toggleConvSummary(3)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un</li>
                 </ul>
             </div>
             <div className="advertisement-scope">

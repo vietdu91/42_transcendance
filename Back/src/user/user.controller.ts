@@ -181,4 +181,31 @@ export class UserController {
       // }
       return { message: 'Personnage modifié avec succès' };
     }
+
+
+    @Post('searchUser')
+    async searchByName(@Body() body: { name: string }, @Req() request: Request, @Res() response: Response) {
+      try {
+        const { name } = body;
+        if (!name) {
+          response.status(400).json({ error: 'Le nom est manquant' });
+          return;
+        }
+        const user = await this.prisma.user.findUnique({
+          where: {
+            name: name,
+          },
+        });
+        if (!user) {
+          response.status(404).json({ error: 'Aucun utilisateur trouvé' });
+          return;
+        }
+        const id = user.id;
+        response.status(200).json({ id });
+      } catch (error) {
+        console.error('Erreur lors de la recherche d\'utilisateur :', error);
+        response.status(500).json({ error: 'Erreur interne du serveur' });
+      }
+    }
+
 }

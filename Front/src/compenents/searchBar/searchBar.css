@@ -1,0 +1,28 @@
+.searchBar {
+	display: flex;
+	align-items: center;
+}
+
+input[type="text"] {
+	font-size: 16px;
+	border: 1px solid #ccc;
+}
+
+button {
+	width: 10%;
+	height: 100%;
+	font-size: 16px;
+	background-color: #84adda;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+
+.error {
+	color: red;
+	font-size: 14px;
+}

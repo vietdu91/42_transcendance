@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
+
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
@@ -10,15 +11,12 @@ import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
 const ConversationListHeader = ({ name, pfp }) => {
-    const socket = useContext(ChatContext);
-    const [joined, setJoined] = useState(false);
-    const [channelName, setChannelName] = useState('');
-    const [isRoomCreated, setIsRoomCreated] = useState(false);
-    const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
+// État pour définir si la room est privée
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
     });
+
 
     const hideComponent = (name) => {
         setState((prevState) => ({
@@ -26,66 +24,6 @@ const ConversationListHeader = ({ name, pfp }) => {
             [name]: !prevState[name]
         }));
     }
-
-    const handleJoin = () => {
-        const id = Cookies.get('id');
-        socket?.emit('joinRoom', {name: 'test', userId: id});
-        setJoined(true);
-    };
-
-
-  const handleCreate = ()=> {
-    console.log("Created room:", 'test');
-    setChannelName('test');
-    setIsRoomCreated(true);
-    const id = Cookies.get('id');
-    // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
-    if (isPrivate) {
-      socket?.emit('channelName', { name: 'test', ownerId: id, isPrivate });
-    } else {
-      // Si la room n'est pas privée, n'envoyer que le nom de la room
-      socket?.emit('channelName', { name: 'test', ownerId: id });
-    }
-  };
-
-  const handleDelete = () => {
-    console.log("Deleted room:", {name: 'test'});
-    setChannelName('');
-    setIsRoomCreated(false);
-    setIsPrivate(false);
-    setJoined(false);
-    socket?.emit('deleteRoom', {name: 'test'});
-    }
-
-
-    const handleLeave = () => {
-            const id = Cookies.get('id');
-            console.log("Left room:", channelName);
-            setChannelName('');
-            setIsRoomCreated(false);
-            setIsPrivate(false);
-            setJoined(false);
-            socket?.emit('leaveRoom', {name: 'test', userId: id});
-    }
-
-    const handleBan = () => {
-            const id = Cookies.get('id');
-            console.log("Banned user:", id);
-            socket?.emit('banRoom', {name: 'test', userId: id});
-    }
-
-    const handleKik = () => {
-            const id = Cookies.get('id');
-            console.log("Kicked user:", id);
-            socket?.emit('kickUser', {name: 'test', userId: id});
-    }
-
-    const handleSetAdmin = () => {
-            const id = Cookies.get('id');
-            console.log("Set admin:", id);
-            socket?.emit('setAdmin', {name: 'test', userId: id});
-    }
-
 
     return (
         <div className="conversations-list-header">
@@ -99,14 +37,8 @@ const ConversationListHeader = ({ name, pfp }) => {
             </ul>
             <hr />
             <ul className="option-conversation-list">
-                <li onClick={handleJoin}>Join</li>
-                <li onClick={handleCreate}>Create</li>
-                <li onClick={handleDelete}>Delete</li>
-                <li onClick={handleLeave}>Leave</li>
-                <li onClick={handleBan}>Ban</li>
-                <li onClick={handleKik}>Kick</li>
-                <li onClick={handleSetAdmin}>Set Admin</li>
                 {/* <li onClick={() => showContact("First")}></li> */}
+
                 <DropdownChannel />{/*Create Join Delete*/}
                 <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
                 <li>Actions</li> { /*  */}
