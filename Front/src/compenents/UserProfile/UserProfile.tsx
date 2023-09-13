@@ -76,11 +76,12 @@ export default function UserProfile() {
 							Age: ({age})<br/><br/>
 						</div>
 				</div>
-				<div className ="pfp">
+				<div className ="pfp_resized">
 					<img src={pfp_url} alt="PPdeMORT"></img>
 					<div className="buttons">
 						<button className="btn-hover color-1" onClick={() => addFriend()}>Add Friend !!!!!!!!</button><br/>
 						<button className="btn-hover color-2" onClick={() => removeFriend()}>Remove Friend :(</button><br/>
+						{/* <button className="btn-hover color-2" onClick={() => ...}>Block Friend :(</button><br/> */}
 					</div>
 				</div>
 				<button id="move_on" onClick={() => navigate("/")}></button>

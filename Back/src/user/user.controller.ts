@@ -74,7 +74,9 @@ export class UserController {
 
     @Post('addFriend')
     async addFriend( @Req() request, @Body() body: {id: number}) {;
-      console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
+      console.log("           ");
+      console.log("=========================");
+      console.log("Adding friend...")
       const userId = request.cookies.id;
       if (!userId) {
         throw new UnauthorizedException();
@@ -89,15 +91,27 @@ export class UserController {
       const user = await this.prisma.user.findUnique({
         where: {id: Number(userId) }
       })
-      console.log(userId);
-      const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: {friendList: user.friendList.push(id)},
-      })
+      console.log("Friends list FIND:" + user.friendsList)
+      let array = user.friendsList;
+      const index = array.indexOf(id, 0);
+      if(!(index > -1))
+      {
+        const userUpdate = await this.prisma.user.update({
+          where: { id: Number(userId) },
+          data: {friendsList: user.friendsList.push(id)},
+        })
+        console.log("NOK");
+      }
+      console.log("Friends list UPDATE:" + user.friendsList)
+      // console.log("Friends list  :" + user.friendsList)
       console.log("FRIEND ADDED: travail termine");
     }
+
     @Post('removeFriend')
     async removeFriend( @Req() request, @Body() body: {id: number}) {
+
+      console.log("           ");
+      console.log("=========================");
       console.log("Removing friend...")
       const userId = request.cookies.id;
       if (!userId) {
@@ -111,22 +125,23 @@ export class UserController {
       const user = await this.prisma.user.findUnique({
         where: {id: Number(userId) }
       })
+      console.log("Friends list  :" + user.friendsList)
+
       console.log("id de l'user a delete: " + id)
-      let array = user.friendList;
-      // while(array != 0)
-      // {
-      //   console.log(id);
-      //   array--;
-      // }
+      let array = user.friendsList;
       const index = array.indexOf(id, 0);
-      if (index > -1) {
-        array.splice(index, 1);
-        const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: {friendList: array},
-        })
+      console.log("INDEX: " + index);
+      console.log("Friends list  :" + user.friendsList)
+      array.splice(index, 1);
+      const userUpdate = await this.prisma.user.update({
+      where: { id: Number(userId) },
+      data: {friendsList: array},
+      })
+
+      // if (index > -1) {
+        // console.log("index > -1")
         console.log("FRIEND REMOVED: travail termine");
-      }
+      // }
     }
   
     @Post('setNickname')
