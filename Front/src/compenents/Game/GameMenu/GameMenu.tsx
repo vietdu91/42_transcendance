@@ -55,6 +55,7 @@ import './GameMenu.css';
 
 interface User {
 	name: string,
+	pfp: string,
 	winrate: number,
 }
 
@@ -261,14 +262,14 @@ function Classement() {
 	// 	)
 	// }
 	
-	function GetPlace({position, name, points}) {
-		console.log(position, name, points);
+	function GetPlace({position, name, points, pfp}) {
+		// console.log(position, name, points);
 
 		return (
 			<tr key={Number(position) - 1}>
 				<td className="number">{position}</td>
 				<td className="classement-photo-profil">
-					<img className="classement-photo" src={EyesCartmanWin} alt="#"></img>
+					<img className="classement-photo" src={pfp} alt="#"></img>
 				</td>
 				<td className="name">{name}</td>
 				<td className="points">{points}</td>
@@ -305,7 +306,7 @@ function Classement() {
 					<table className="classement-table">
 						<tbody>
 							{users.current.map((user, i) => (
-								<GetPlace key={i} position={String(i + 1)} name={user.name} points={String(user.winrate + "%")}></GetPlace>
+								<GetPlace key={i} position={String(i + 1)} name={user.name} points={String(user.winrate + "%")} pfp={user.pfp}></GetPlace>
 							))}
 						</tbody>
 					</table>

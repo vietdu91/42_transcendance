@@ -48,6 +48,7 @@ async deleteUser(id: number): Promise<User> {
     return users.map(user => {
       return {
         name: user.name,
+        pfp: user.pfp_url,
         winrate: user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100),
       }
     });
