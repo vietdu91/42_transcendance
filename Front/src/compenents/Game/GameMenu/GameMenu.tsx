@@ -55,6 +55,7 @@ import './GameMenu.css';
 
 interface User {
 	name: string,
+	pfp: string,
 	winrate: number,
 }
 
@@ -144,14 +145,12 @@ function History() {
 
 	const changeMatchMenuLeave = () => {
 		setHoverMatchMenu(false);
-		console.log("prout");
 		const opacitySquare1 = document.getElementById('match-square-1');
 		if (!opacitySquare1) return
 		opacitySquare1.style.opacity = '0.2';
 		const opacitySquare2 = document.getElementById('match-square-2');
 		if (!opacitySquare2) return
 		opacitySquare2.style.opacity = '0.2';
-		console.log(opacitySquare2.style.opacity);
 		const opacitySquare3 = document.getElementById('match-square-3');
 		if (!opacitySquare3) return
 		opacitySquare3.style.opacity = '0.2';
@@ -253,6 +252,8 @@ function History() {
 }
 
 function Classement() {
+	let users = useRef<User[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	// function CouronneOrNot() {
 
@@ -261,19 +262,38 @@ function Classement() {
 	// 	)
 	// }
 	
-	function GetPlace({position, name, points}) {
-		
+	function GetPlace({position, name, points, pfp}) {
+		// console.log(position, name, points);
+
 		return (
-			<tr>
+			<tr key={Number(position) - 1}>
 				<td className="number">{position}</td>
 				<td className="classement-photo-profil">
-					<img className="classement-photo" src={EyesCartmanWin} alt="#"></img>
+					<img className="classement-photo" src={pfp} alt="#"></img>
 				</td>
 				<td className="name">{name}</td>
 				<td className="points">{points}</td>
 			</tr>
 		)
-		
+	}
+
+	useEffect(() => {
+		async function leaderboard() {
+		  try {
+				const response = await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getLeaderboard");
+				const updatedUsers: User[] = response.data.users;
+				users.current = updatedUsers;
+				setIsLoading(false);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des données de classement:", error);
+				setIsLoading(false);
+			}
+		}
+		leaderboard();
+	}, []);
+
+	if (isLoading) {
+		return (<div>Ca arrive</div>)
 	}
 	
 	return (
@@ -284,17 +304,11 @@ function Classement() {
 				</div>
 				<div className="div-classement-table">
 					<table className="classement-table">
-						<GetPlace position="1" name="emtran (le KING)" points="100%"></GetPlace>
-						<GetPlace position="2" name="benmoham" points="95.4%"></GetPlace>
-						<GetPlace position="3" name="jkaruk" points="94%"></GetPlace>
-						<GetPlace position="4" name="dyoula" points="85%"></GetPlace>
-						<GetPlace position="5" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="6" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="7" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="8" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="9" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="10" name="qujabob" points="13%"></GetPlace>
-						<GetPlace position="11" name="qujabob" points="13%"></GetPlace>
+						<tbody>
+							{users.current.map((user, i) => (
+								<GetPlace key={i} position={String(i + 1)} name={user.name} points={String(user.winrate + "%")} pfp={user.pfp}></GetPlace>
+							))}
+						</tbody>
 					</table>
 				</div>
 			</div>
