@@ -16,7 +16,6 @@ export class ChatGateway {
         authorId: parseInt(message[1]),
       },
     });
-
     this.server.emit('message', message[0]);
     }
     

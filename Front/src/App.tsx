@@ -38,6 +38,7 @@ import southparkSound from './sounds/theme_song.mp3'
 import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
+import TextComposerContainer from './compenents/Chat/TextComposerContainer/TextComposerContainer';
 
 
 const ConnexionWithMusic = () => (

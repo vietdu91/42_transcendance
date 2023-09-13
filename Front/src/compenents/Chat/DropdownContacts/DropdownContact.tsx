@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './DropdownContact.css';
+import axios from 'axios';
 import { useContext } from 'react';
+import { ChatContext } from '../../utils/ChatContext';
+import Cookies from 'js-cookie';
 
 function DropdownContact() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +16,13 @@ function DropdownContact() {
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
+    setIsOpenFriends(!isOpenFriends);
   }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setName(event.target.value);
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -46,6 +55,8 @@ function DropdownContact() {
         Friends
       </div>
       {isOpen && ( /*Friends list  */
+        /* du coup map de la liste d'amis et on click sur le le */
+        /*utiliser le toggle friends list */
         /* du coup map de la liste d'amis et on click sur le le */
         /*utiliser le toggle friends list */
         <ul className="dropdown-contact-menu">
