@@ -45,7 +45,7 @@ export class UserController {
       if (!user) {
         throw new UnauthorizedException();
       }
-      let percentage: number = user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
+      let percentage: number = user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
 
       const games = await this.userService.getGamesByUserId(userId);
 
@@ -66,10 +66,12 @@ export class UserController {
         games: games,
       });
     }
-    @Get(':id')
-    findOne(@Param('id') id: string){
-      console.log("Mon id:", id);
-      return this.userService.findOne(id);
+
+    @Get('getLeaderboard')
+    async getLeaderboard(@Req() request: Request, @Res() response: Response) {
+      const users = await this.userService.getLeaderboard();
+      users.sort((a, b) => b.winrate - a.winrate);
+      response.json({users: users});
     }
 
     @Post('addFriend')
@@ -92,10 +94,11 @@ export class UserController {
       console.log(userId);
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: {friendList: user.friendList.push(id)},
+        data: {friendsList: user.friendsList.push(id)},
       })
       console.log("FRIEND ADDED: travail termine");
     }
+
     @Post('removeFriend')
     async removeFriend( @Req() request, @Body() body: {id: number}) {
       console.log("Removing friend...")
@@ -112,7 +115,7 @@ export class UserController {
         where: {id: Number(userId) }
       })
       console.log("id de l'user a delete: " + id)
-      let array = user.friendList;
+      let array = user.friendsList;
       // while(array != 0)
       // {
       //   console.log(id);
@@ -123,7 +126,7 @@ export class UserController {
         array.splice(index, 1);
         const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: {friendList: array},
+        data: {friendsList: array},
         })
         console.log("FRIEND REMOVED: travail termine");
       }

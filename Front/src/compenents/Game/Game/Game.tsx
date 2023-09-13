@@ -313,7 +313,7 @@ export default function Game(): JSX.Element {
 						if (p.keyIsDown(83))
 							socket?.emit("movePlayer", roomId, id, 0);
 					}
-					// socket?.emit("moveBall", roomId);
+					socket?.emit("moveBall", roomId);
 
 					if (fart)
 						p.fill(p.color(21, 79, 48));

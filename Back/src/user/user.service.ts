@@ -43,11 +43,14 @@ async deleteUser(id: number): Promise<User> {
     }
 }
 
-  findOne(id: string){
-    const user = this.prisma.user.findUnique({
-      where: {id: parseInt(id.toString())}
+  async getLeaderboard() {
+    const users = await this.prisma.user.findMany();
+    return users.map(user => {
+      return {
+        name: user.name,
+        winrate: user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100),
+      }
     });
-    return user;
   }
 
   async getUserByName(username: string): Promise<User | null> {
