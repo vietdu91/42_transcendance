@@ -46,10 +46,16 @@ body {
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 
 	z-index: 15;
-	display: flex;
+	/* display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 5%;
+	gap: 5%; */
+	display: grid;
+	grid-template-rows: 20% 30% 25% 25%;
+	grid-template-columns: auto;
+	grid-template-areas:
+		"titre"
+		""
 }
 
 #welcome {

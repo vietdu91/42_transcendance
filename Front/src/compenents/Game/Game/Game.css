@@ -37,7 +37,7 @@ body {
     top: 100px;
     width: 14vw;
     height: 80vh;
-	border: 2px outset rgb(134, 20, 20);
+	border: 2px outset blue;
 	border-left-style : none;
 }
 
@@ -47,6 +47,7 @@ body {
     left: 86vw;
     top: 100px;
     width: 14vw;
+	border: 2px outset rgb(134, 20, 20);
     height: 80vh;
 }
 
@@ -90,6 +91,18 @@ body {
     color: white;
     z-index: 1;
 	top: 387px; left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/* Generique Butters */
+
+.generique_butters {
+	position: absolute;
+	width: 700px;
+	height: 300px;
+	z-index: 8;
+	top: 50%;
+	left: 50%;
 	transform: translate(-50%, -50%);
 }
 

@@ -28,7 +28,7 @@ export default function TwoFa() {
 	}
 
 	const leavePage = () => {
-		navigate(`/gamemenu`);
+		navigate(`/connect`);
 	}
 
 	return (
