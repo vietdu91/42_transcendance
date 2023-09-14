@@ -1,10 +1,11 @@
 import React from 'react';
 import './FooterMenu.css'
-
+import xpLogo from '../../../img/chat/xp-logo-removebg-preview.png';
 const FooterMenu = () => {
     return (
         <ul className="menu-footer">
-            <li className="footer-first-element">Demarrer</li>
+            <li className="footer-first-element"><img src={xpLogo
+            } alt="redcross" id="chat_redcross" />Demarrer</li>
             {/* <ConversationInFooter Messages={true}/> */}
             <li className="footer-element">Conv avec une keh</li>
             <li className="footer-element">Une autre kehba</li>
