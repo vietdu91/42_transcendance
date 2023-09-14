@@ -12,6 +12,7 @@ function DropdownContact() {
   const [isOpenForAddFriend, setIsOpenForAddFriend] = useState(false);
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
+  const [name, setName] = useState("");
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
 
   const toggleFriendsList = () => {

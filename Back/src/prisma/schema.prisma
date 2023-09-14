@@ -9,25 +9,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-  model User {
-    id                Int       @id @default(autoincrement())
-    email             String    @unique
-    name              String	@unique
-    twoFactorSecret   String  @unique
-    accessToken       String?  @unique
-    twoFactorEnabled  Boolean @default(false)
-    nickname		      String? 	@unique
-    age 			        Int?
-    character         String?
-    games             Game[] @relation("players")
-    actualGame        Int?
-    pfp_url           String?
-    wins              Int @default(0)
-    looses            Int @default(0)
-    friendsList       Int[]
-    blockList         Int[]
-    messages          Message[] @relation("MessageAuthor")
-  }
+enum UserState {
+  OFFLINE
+  ONLINE
+  INGAME
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  name              String	@unique
+  twoFactorSecret   String  @unique
+  accessToken       String?  @unique
+  twoFactorEnabled  Boolean @default(false)
+  nickname		      String? 	@unique
+  state             UserState
+  age 			        Int?
+  character         String?
+  games             Game[] @relation("players")
+  actualGame        Int?
+  pfp_url           String?
+  wins              Int @default(0)
+  looses            Int @default(0)
+  friendsList       Int[]
+  blockList         Int[]
+  messages          Message[] @relation("MessageAuthor")
+}
 
 model Message {
   id        Int     @id @default(autoincrement())

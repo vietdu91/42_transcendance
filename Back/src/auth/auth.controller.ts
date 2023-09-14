@@ -37,8 +37,12 @@ export class AuthController {
     if (!isCodeValid)
       throw new UnauthorizedException('Wrong authentication code');
     await this.AuthService.apiConnexion2fa(user, res);
+    await this.prisma.user.update({
+      where: {id: userId},
+      data: {state: 'ONLINE'},
+    })
     console.log(process.env.URL_LOCAL_F);
-    res.status(200).json({ message: 'Déconnexion réussie' });
+    res.status(200).json({ message: 'Connexion réussie' });
   }
 
   @Post('logout')
@@ -54,7 +58,10 @@ export class AuthController {
       }
       await this.prisma.user.update({
         where: { id: user.id },
-        data: { accessToken: null },
+        data: { 
+          accessToken: null,
+          state: 'OFFLINE',
+        },
       });
       response.status(200).json({ message: 'Déconnexion réussie' });
     }

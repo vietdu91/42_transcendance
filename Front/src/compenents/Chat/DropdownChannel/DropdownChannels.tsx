@@ -2,16 +2,12 @@ import React, { useState, useContext } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import './DropdownChannels.css'
-import { useContext } from 'react';
-import Cookies from 'js-cookie';
-import { ChatContext } from '../../utils/ChatContext';
 import RedCross from "../../../img/chat/redcross.png"
 function DropdownChannels() {
   const socket = useContext(ChatContext);
   const [joined, setJoined] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [isRoomCreated, setIsRoomCreated] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);

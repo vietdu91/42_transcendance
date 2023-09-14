@@ -16,6 +16,7 @@ export class UserService {
                 name: userData.name,
                 email: userData.email,
                 nickname: userData.name,
+                state: 'ONLINE',
                 age: 18,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,

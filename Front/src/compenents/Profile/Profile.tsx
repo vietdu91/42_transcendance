@@ -65,7 +65,8 @@ export default function Profile() {
 		const state:boolean = false;
 		await axios.patch(process.env.REACT_APP_LOCAL_B + '/profile/disableTwoFA', {state}, {withCredentials: true})
 		.then(response => {
-
+			setTwoFa(false);
+			setShowFa(false);
 		})
 		.catch(err => {
 			console.log(err);
@@ -138,7 +139,7 @@ export default function Profile() {
 					<div id="profile_font">HISTORIQUE</div>
 					<div>
 						{games.current.map((game, i) => (
-    						<><div key={i}>{game.names[0]} {game.score[0]} - {game.score[1]} {game.names[1]}</div><br/><br/></>
+    						<div key={i}><div>{game.names[0]} {game.score[0]} - {game.score[1]} {game.names[1]}</div><br/><br/></div>
   						))}
 					</div>
 				</div>
