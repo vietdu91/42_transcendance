@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import './DropdownContact.css';
 import axios from 'axios';
-import { useContext } from 'react';
-import { ChatContext } from '../../utils/ChatContext';
-import Cookies from 'js-cookie';
+
 
 function DropdownContact() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +11,10 @@ function DropdownContact() {
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
+  const [friendName, setFriendName] = useState('');
+  const [notFound, setNotFound] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
@@ -21,7 +23,7 @@ function DropdownContact() {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
-    setName(event.target.value);
+    setFriendName(event.target.value);
   };
 
   const toggleMenu = () => {
@@ -45,10 +47,28 @@ function DropdownContact() {
     setIsOpenForBlock(!isOpenForBlock);
   };
 
-  const toggleSendMp = () => {
+  const toggleSendMp = async () => {
     setIsOpenForSendMp(!isOpenForSendMp);
+    const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: friendName }, { withCredentials: true })
+    .then((response) => {
+      const receivId = response.data.id;
+      console.log("id === " + receivId);
+      console.log(response.data.id);
+      setNotFound(false);
+      setIsVisible(true);
+      console.log("friendName === " + friendName);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+      setNotFound(true);
+    // Gérer les erreurs de requête
+    });
   };
-
+  const handleSendMpClick = () => {
+    setIsOpenForSendMp(!isOpenForSendMp); // Affiche la div avec l'input lorsque vous cliquez sur "Send Mp"
+  };
+  
   return (
     <div className="dropdown-contact">
       <div className="dropdown-contact-toggle" onClick={toggleMenu}>
@@ -64,7 +84,7 @@ function DropdownContact() {
           <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={toggleSendMp}>Send Mp</li>
+          <li onClick={handleSendMpClick}>Send Mp</li>
         </ul>
       )}
       {
@@ -111,9 +131,12 @@ function DropdownContact() {
         isOpenForSendMp && (
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
-            <input type="text" placeholder="Who do you want to delete "
+            <input type="text" placeholder="Friend's Name"
+             value={friendName}
+             onChange={handleInputChange}
+              // Mettez à jour l'état friendName lorsque l'utilisateur saisit
             />
-            <button onClick={() => { toggleDelete(); }}>ENTER</button>
+            <button onClick={() => toggleSendMp()}>ENTER</button>
           </div>
         )
       }

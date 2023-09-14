@@ -26,10 +26,6 @@ function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProp
   }
 
 
-
-
-
-
   const messageListener = (newMessage: string) => {
     const authorId = Cookies.get('id');
 
