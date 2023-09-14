@@ -55,8 +55,8 @@ export default function Range() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<div className="range">
+		<form className="range" onSubmit={handleSubmit}>
+			<div className="range-container">
 				<img src={emoji} id="emoji" alt="Character"></img>
 				<div className="range-slider-wrapper">
 					<input type="range" 
@@ -67,8 +67,8 @@ export default function Range() {
 					onChange={handleChange}/>
 				</div>
 				<h1>J'ai {age} {age <= 1 ? 'an' : 'ans'}</h1>
+				<button type="submit" className="range-buttom">Enregistrer</button>
 			</div>
-			<button type="submit">Enregistrer</button>
 		</form>
 	);
 }

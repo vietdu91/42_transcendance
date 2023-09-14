@@ -2,6 +2,7 @@ import React, { useEffect, useState }  from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import "../utils/Wizz/Wizz.css"
 
 import './NewProfile.css'
 
@@ -39,13 +40,13 @@ export default function NewProfile() {
 	return (
 		<div id="menu">
 			<img id="bg-menu" src={Bar} alt={'Bar'}></img>
-			<div className="box">
+			<div className="box shakeme">
 				<div id="welcome">WELCOME {name}</div>
 				<img id="skeeter" alt="skeeter" src={Skeeter}></img>
 				<Import/>
 				<Form />
 				<Range />
-				<button id="move_on" onClick={handleClick}></button>
+				<button id="np_move_on" onClick={handleClick}></button>
 			</div>
 		</div>
 	)

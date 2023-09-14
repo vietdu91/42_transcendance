@@ -1,22 +1,33 @@
 .range {
-	position: relative;
+	/* margin-top: 1vh; */
+	grid-row-start: infos;
+	grid-column: 3 / 4;
+	place-self: center;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.range-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	/* margin-top: 1vh; */
 }
 
+.range-buttom {
+
+	margin-top: 10px;
+}
 #emoji {
-	/* display: flex;
-	align-items: center;
-	justify-content: center; */
+	width: 75px;
+	height: 75px;
 }
 
 #age {
-	display: flex;
+	/* display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: center; */
 	/* margin-top: 10%; */
 }
 

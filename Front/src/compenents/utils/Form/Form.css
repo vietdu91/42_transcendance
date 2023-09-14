@@ -7,24 +7,26 @@ form {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	grid-row-start: infos;
+	grid-column: column-1 / column-2;
 }
 
-/* .hello{
+.hello{
 	position: absolute;
-	left: 28%;
+	left: 31%;
 	font-size: 25px;
 	font-weight: 200;
 	color: #cecece;
 	font-family: south_park_font;
 	transition: all 0.5s ease;
 	pointer-events: none;
-  } */
+  }
 
   #barre[type=text]:focus~.hello {
 	  display: block;
 	  color: black;
 	  margin-top: -85px;
-	  margin-left: -3%;
+	  margin-left: -1%;
 	  font-size: 16px;
 	}
 
@@ -35,18 +37,17 @@ form {
   #barre[type=text]:focus~.enter {
 	background-color: rgb(71, 37, 5);
 	position: absolute;
-	 content: ' '; 
+	content: ' '; 
 	height: 1px;
-	right: 45%; 
-	margin-top: 52px; 
-	transform: scaleX(5);
+	right: 46%; 
+	margin-top: 50px; 
+	transform: scaleX(4.8);
   }
 
   .enter{
 	transition: all ease 0.5s;
-	width: 9.9%;
-	transform: scaleX(1)
-
+	width: 8.3%;
+	transform: scaleX(1);
   }
 
   #barre[type="text"]
@@ -61,9 +62,9 @@ form {
 	border: 0;
 	border-bottom: 1px solid #cecece;
 	height: 50px;
-	width: 50%; 
+	width: 40%; 
 	/* font-family: south_park_font; */
-	max-width: 500px;
+	max-width: 40%;
   }
 
   #barre:focus{

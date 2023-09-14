@@ -503,7 +503,10 @@
     overflow-y: scroll;
     scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
     scrollbar-width: auto;
+    -webkit-scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
+    -webkit-scrollbar-width: auto;
 }
+
 
 .classement-table {
     position: relative;
@@ -629,10 +632,9 @@
   .classement-photo-profil {
     justify-content: flex-end;
     align-items: center;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	cursor: pointer;
+	  width: 50px;
+	  height: 50px;
+	  cursor: pointer;
   }
 
   .classement-photo {
