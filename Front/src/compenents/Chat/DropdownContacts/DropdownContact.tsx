@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './DropdownContact.css';
 import { useContext } from 'react';
+import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 
 function DropdownContact() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,38 @@ function DropdownContact() {
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
+
+  {/* Integration pop up  */}
+  const [messageToSend, setMessageToSend] = useState('');
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
+  const inputRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
+  const handleSearchUser = () => {
+    if (searchQuery.trim() !== '') {
+      // Implement your user search logic here, e.g., make an API request
+      // and update the user list or take the appropriate action.
+      // For now, we'll just log the search query.
+      console.log(`Searching for user: ${searchQuery}`);
+
+      // Clear the input field
+      setSearchQuery('');
+      
+      // Close the dropdown
+      toggleSendMp(); // You may need to adjust this to match your UI logic.
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchUser();
+    }
+  };
+
+  const handleConversationSelect = (conversationId) => {
+    setSelectedConversationId(conversationId);
+  };
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
@@ -53,7 +86,7 @@ function DropdownContact() {
           <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={toggleSendMp}>Send Mp</li>
+          <li onClick={() => { toggleSendMp(); handleSearchUser(); }}>Send Mp</li>
         </ul>
       )}
       {
@@ -100,9 +133,14 @@ function DropdownContact() {
         isOpenForSendMp && (
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
-            <input type="text" placeholder="Who do you want to delete "
+            <input               type="text"
+              placeholder="Search for a user..."
+              ref={inputRef}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
-            <button onClick={() => { toggleDelete(); }}>ENTER</button>
+              <button onClick={() => handleSearchUser()}>ENTER</button>
           </div>
         )
       }

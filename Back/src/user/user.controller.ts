@@ -92,7 +92,7 @@ export class UserController {
       console.log(userId);
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: {friendList: user.friendList.push(id)},
+        data: {friendsList: user.friendsList.push(id)},
       })
       console.log("FRIEND ADDED: travail termine");
     }
@@ -112,7 +112,7 @@ export class UserController {
         where: {id: Number(userId) }
       })
       console.log("id de l'user a delete: " + id)
-      let array = user.friendList;
+      let array = user.friendsList;
       // while(array != 0)
       // {
       //   console.log(id);
@@ -123,7 +123,7 @@ export class UserController {
         array.splice(index, 1);
         const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: {friendList: array},
+        data: {friendsList: array},
         })
         console.log("FRIEND REMOVED: travail termine");
       }

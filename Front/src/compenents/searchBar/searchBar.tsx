@@ -36,12 +36,15 @@ function SearchBar ({ onSearch }: SearchBarProps) {
   return (
     <div className="searchBar">
       <input
+        className="searchBar-input"
         type="text"
         placeholder="Rechercher..."
         value={searchQuery}
         onChange={handleInputChange}
       />
-      <button onClick={() => handleSearch(searchQuery)}>Rechercher</button>
+      <button
+        className="searchBar-button"
+       onClick={() => handleSearch(searchQuery)}>Rechercher</button>
       {notFound && <div>Utilisateur non trouvé</div>}
     </div>
   );
