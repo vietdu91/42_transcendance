@@ -6,7 +6,7 @@ import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
 
-function Channel() {
+function Channel({pfp}) {
 	return (
 		<div className="channel-main-container">
 			<div className="channel-bandeau">
@@ -78,9 +78,7 @@ function Channel() {
 				</div>
 				<div className="channel-my-profile-pic-main-container">
 					<div className="channel-my-profile-pic-group-pic-cadre">
-						<div>
-							{/* Insert image du chat */}
-						</div>
+							<img className="channel-conv-pfp" src={pfp}/>
 					</div>
 				</div>
 			</div>

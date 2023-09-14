@@ -128,6 +128,9 @@ export default function Game(): JSX.Element {
 	const p5SketchRef = useRef<p5 | null>(null);
 	
 	const sketchRef = useRef<HTMLDivElement>(null);
+
+	console.log(p5SketchRef.current);
+	console.log(game);
 	const randomImage = Tron;
 
 	const cookies = document.cookie.split('; ');
@@ -202,7 +205,9 @@ export default function Game(): JSX.Element {
 		let toc: boolean = false;
 
 		socket.on('roundStarted', (response) => {
-
+			if (response.game.isActive === false) {
+				navigate("/")
+			}
 			let player_height: number = (9/16) * window.innerWidth * 70 / 100 / 5;
 			const updatedGame:IGame = {
 				...game.current,
@@ -323,7 +328,7 @@ export default function Game(): JSX.Element {
 		})
 
 		socket?.emit("roundStart", roomId);
-		
+
 		if (!p5SketchRef.current) {
 			p5SketchRef.current = new p5((p: p5) => {
 				let canvas: p5.Renderer | null = null;
@@ -357,7 +362,7 @@ export default function Game(): JSX.Element {
 						if (p.keyIsDown(83))
 							socket?.emit("movePlayer", roomId, id, 0);
 					}
-					socket?.emit("moveBall", roomId);
+					// socket?.emit("moveBall", roomId);
 
 					if (fart)
 						p.fill(p.color(21, 79, 48));
@@ -421,7 +426,9 @@ export default function Game(): JSX.Element {
     	}
 
 		return () => {
+			console.log("quitte la page de jeu")
 			if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
+					console.log("entre dans le giveup");
 					socket?.emit("giveUp", roomId, id);
 			}
 			p5SketchRef.current?.remove();

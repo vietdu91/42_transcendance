@@ -51,6 +51,7 @@ type Game = {
 	tocLeft: number;
 	tocRight: number;
 	ball: Ball;
+	gaveUp: Boolean;
 }
 
 @WebSocketGateway()
@@ -61,8 +62,6 @@ export class MatchmakingGateway {
 	private queue: Player[] = [];
 
 	private games: Game[] = [];
-
-	private gaveUp: Boolean = false;
 
 	private lTocSpeed: number = (9/16) * 100 / 160;
 	private rTocSpeed: number = (9/16) * 100 / 160;
@@ -155,7 +154,8 @@ export class MatchmakingGateway {
 					inertia: 0,
 					vx: 0,
 					vy: 0,
-				}
+				},
+				gaveUp: false,
 			}
 
 			const gameIdIndex = game.id;
@@ -221,7 +221,7 @@ export class MatchmakingGateway {
 			return;
 		const prisma = new PrismaService();
 
-		if (this.gaveUp)
+		if (actualGame.gaveUp)
 			return ;
 
 		const winnerId:number = params[1] === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
@@ -276,7 +276,7 @@ export class MatchmakingGateway {
 			})
 		}
 
-		this.gaveUp = true;
+		actualGame.gaveUp = true;
 		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
 		this.server.to(sendTo).emit("gaveUp", {message: "The other player gave up ! Boooo !", id: params[1]});
