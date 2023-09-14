@@ -38,6 +38,9 @@ import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
 
+import YeahYeah from './sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All Of Them).mp3'
+import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
+
 
 const ConnexionWithMusic = () => (
   <>
@@ -68,12 +71,33 @@ const ThanksWithMusic = () => (
 );
 
 const ChampSelectWithMusic = () => (
-  <>
+	<>
 	<MusicPlayer audioSrc={choose_your_fighter} />
 	<ChampSelect />
   </>
-
 );
+
+const WinWithMusic = () => {
+
+	return (
+	<>
+		<MusicPlayer audioSrc={YeahYeah} />
+		<Win />
+	  </>
+	);
+};
+
+const GameOverWithMusic = () => {
+
+	return (
+	<>
+		<MusicPlayer audioSrc={CulbuterTaMere} />
+		<GameOver />
+	</>
+	
+	)
+}
+
 
 export default function App() {
 	
@@ -81,6 +105,7 @@ export default function App() {
 		<GameContext.Provider value={gameSocket}>
 			<div className="App">
 				<Routes>
+        		<Route path="/win" element={<WinWithMusic />}/>
 				<Route path="/" element={<MenuWithMusic />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
 				<Route path="/2fa" element={<TwoFa />}/>
@@ -98,9 +123,8 @@ export default function App() {
 				<Route path="/achievement" element={<Achievement />}/>
 				<Route path="/decompte" element={<Decompte />}/>
 				<Route path="/partiesencours" element={<EnCours />}/>
-				<Route path="/gameover" element={<GameOver />}/>
+				<Route path="/gameover" element={<GameOverWithMusic />}/>
 				<Route path="/errorgame" element={<GameError />}/>
-        		<Route path="/win" element={<Win />}/>
 				<Route path="/404" element={<PageNotFound />}/>
 				<Route path="*" element={<Navigate to="/404" />}/>
 				</Routes>
@@ -108,4 +132,3 @@ export default function App() {
 		</GameContext.Provider>
 	)
 }
-//<Route path="*" element={<Navigate to="/404" />}/>

@@ -374,6 +374,17 @@
   z-index: 5;
 }
 
+#img_win_butters {
+  width: 400px;
+  height: 400px;
+  margin-top: 20px;
+  opacity: 1;
+  transform: translateY(50px);
+  transition: opacity 1s, transform 1s;
+  z-index: 5;
+}
+
+
 #bg-win.show-image #img_win {
 opacity: 1;
 transform: translateY(0);
@@ -388,6 +399,7 @@ transform: translateY(0);
 	transform: translateY(50px) translateX(100%);
   transition: opacity 1s, transform 1s;
 	animation: moveFromRight 1s ease;
+  z-index: 100;
 }
 
 #bg-win.show-image #button-randy-win {

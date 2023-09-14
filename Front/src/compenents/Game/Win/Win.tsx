@@ -27,6 +27,7 @@ export default function Win() {
   const [showButtonRandy, setShowButtonRandy] = useState(false);
 	const [showAgainRandy, setShowAgainRandy] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
+	const [isButters, setIsButters] = useState(false);
 	const navigate = useNavigate();
 	const location = useLocation();
 	if (location.state == null) {
@@ -35,6 +36,7 @@ export default function Win() {
 	const { char } = location.state;
 
 	const whoCharacter = (char:string): string => {
+
 		switch (char) {
 			case "Cartman" : return (CartmanWin);
 			case "Servietsky" : return (ServietskyWin);
@@ -43,7 +45,7 @@ export default function Win() {
 			case "TerrancePhilip" : return (TPWin);
 			case "Garrison" : return (GarrisonWin);
 			case "Henrietta" : return (HenriettaWin);
-			case "Butters" : return (ButtersWin);
+			case "Butters" :  return (ButtersWin);
 		}
 		return "";
 	}
@@ -68,6 +70,11 @@ export default function Win() {
 	  }, []);
 
 	  useEffect(() => {
+		if (char == "Butters")
+			setIsButters(true);
+	  }, []);
+
+	  useEffect(() => {
 		const showRandyAgainDelay = 4000;
 		setTimeout(() => {
 		  setShowAgainRandy(true);
@@ -89,7 +96,7 @@ export default function Win() {
 		bgWin?.classList.add('show-image');
 	  }, showImageDelay);
 	}, []);
-
+		
 	return (
 		<div id="bg-win">
 	  		<div className="stars">
@@ -136,7 +143,8 @@ export default function Win() {
 				/>
 			)}
 	  		<div id="victoire">T'ES UN WINNER !</div>
-		<img id="img_win" alt="win" src={whoCharacter(char)} />
+		{!isButters && (<img id="img_win" alt="win" src={whoCharacter(char)}></img>)}
+		{isButters && (<img id="img_win_butters" alt="win" src={whoCharacter(char)}></img>)}
 	</div>
   )
 }

@@ -64,6 +64,7 @@
 	transform: rotate(0);
 	animation: swing-back 0.4s 1 ease-in-out;
 }
+
 @keyframes swing {
 	0% {
 		transform: rotate(0);

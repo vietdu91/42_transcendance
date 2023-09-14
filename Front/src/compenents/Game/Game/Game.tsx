@@ -9,6 +9,7 @@ import './Game.css'
 
 // COMPONENTS
 import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
+import MusicPlayer from '../../../compenents/utils/MusicPlayer/MusicPlayer';
 
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
@@ -39,6 +40,11 @@ import ServietskyR from "../../../img/en_cours/servietsky_right.png"
 import Touche_W from "../../../img/game/key_w.png"
 import Touche_S from "../../../img/game/key_s.png"
 import Touche_Space from "../../../img/game/space.png"
+
+// GAME EFFECTS
+import GeneriqueButters from "../../../img/game/videos/generique_butters.mp4"
+import Gothique from "../../../img/game/videos/gothique.mp4"
+import Prout from "../../../img/game/videos/prout.mp4"
 
 
 interface IBall {
@@ -105,6 +111,11 @@ export default function Game(): JSX.Element {
 	const socket = useContext(GameContext);
 	const [scoreLeft, setScoreLeft] = useState(0);
 	const [scoreRight, setScoreRight] = useState(0);
+
+	const [OnGeneriqueButters, setOnGeneriqueButters] = useState(false);
+	const [OnGothique, setOnGothique] = useState(false);
+	const [OnProut, setOnProut] = useState(false);
+
 	const location = useLocation();
 	if (location.state === null)
 		window.location.href = "/";
@@ -112,8 +123,6 @@ export default function Game(): JSX.Element {
 	const navigate = useNavigate();
 	const p5SketchRef = useRef<p5 | null>(null);
 	
-	
-	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
 	const randomImage = Tron;
 
@@ -147,6 +156,37 @@ export default function Game(): JSX.Element {
 			return (
 				<img className="bg" src={randomImage} alt={'bg'}></img>
 			)
+	}
+
+	function ActiveGeneriqueButters() {
+
+		setOnGeneriqueButters(true);
+		setTimeout(() => {setOnGeneriqueButters(false)
+		}, 43000);
+	}
+
+	function DesactiveGothique() {
+
+		setOnGothique(false);
+	}
+	
+	function ActiveGothique() {
+
+		setOnGothique(true);
+		setTimeout(() => {setOnGothique(false)
+		}, 12000);
+	}
+	
+	function DesactiveProut() {
+		
+		setOnProut(false);
+	}
+	
+	function ActiveProut() {
+		
+		setOnProut(true);
+		setTimeout(() => {setOnProut(false)
+		}, 42000);
 	}
 
 	useEffect(() => {
@@ -187,6 +227,8 @@ export default function Game(): JSX.Element {
 			}
 			game.current = updatedGame;
 			powLeft = powRight = weed = timmy = fart = toc = false;
+			DesactiveGothique();
+			DesactiveProut();
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -228,9 +270,10 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; break;
+					case "TerrancePhilip" : fart = true; ActiveProut(); break;
 					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; break;
-					case "Henrietta" : game.current.scoreRight--; setScoreRight(game.current.scoreRight); break;
+					case "Henrietta" : game.current.scoreRight--; ActiveGothique(); setScoreRight(game.current.scoreRight); break;
+					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
 			else {
@@ -239,9 +282,10 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; break;
+					case "TerrancePhilip" : fart = true; ActiveProut(); break;
 					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; break;
 					case "Henrietta" : game.current.scoreLeft--; setScoreLeft(game.current.scoreLeft); break;
+					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
 		})
@@ -379,16 +423,34 @@ export default function Game(): JSX.Element {
 
 	function GetPlayerLeft() {
 
-		return (
-			<img alt="#" src={HenriettaL} id="game-img-player-left"></img>
-		);
+		if (OnGothique)
+			return (
+				<video autoPlay src={Gothique} id="game-img-player-left"></video>
+			);
+		else if (OnProut)
+			return (
+				<video autoPlay src={Prout} id="game-img-player-left"></video>
+			);			
+		else
+			return (
+				<img alt="#" src={HenriettaL} id="game-img-player-left"></img>
+			);
 	}
 
 	function GetPlayerRight() {
 
-		return (
-			<img alt="#" src={ButtersR} id="game-img-player-left"></img>
-		);
+		// if (OnGothique)
+		// 	return (
+		// 		<video autoPlay src={Gothique} id="game-img-player-right"></video>
+		// 	);
+		// else if (OnProut)
+		// 	return (
+		// 		<video autoPlay src={Prout} id="game-img-player-right"></video>
+		// 	);	
+		// else
+			return (
+				<img alt="#" src={ButtersR} id="game-img-player-right"></img>
+			);
 	}
 
 	function FooterCommands() {
@@ -441,6 +503,7 @@ export default function Game(): JSX.Element {
 			</div>
 			<div id="game-container">
 				<div id="game-terrain" ref={sketchRef}></div>
+				{OnGeneriqueButters && (<video autoPlay className="generique_butters" src={GeneriqueButters}></video>)}
 			</div>
 			<div id="game-return">
 				<WhatReturnButtom randomImage={randomImage} />
