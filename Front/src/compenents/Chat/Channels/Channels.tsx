@@ -2,6 +2,7 @@ import React from 'react';
 import './Channels.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import Minimize from '../../../img/chat/minimized.jpg'
 import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
@@ -12,7 +13,7 @@ function Channel() {
 			<div className="channel-bandeau">
 				<ul className="reduce-maximize-quit">
 					<li className="channel-name">Channel Name</li>
-					<li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
+					<li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
 					<li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
 					<li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
 				</ul>

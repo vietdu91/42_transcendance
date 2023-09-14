@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ConversationListSummary.css';
-import Advertisement from './../../../img/chat/advertisement.jpg';
+import Advertisement from './../../../img/chat/thicker.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
@@ -21,17 +21,22 @@ const ConversationListSummary = ({ name, pfp }) => {
         newVisibleItems[index] = !newVisibleItems[index];
         setVisibleItems(newVisibleItems);
     };
-
     const handleImageClick = () => {
-        setindivConv(!indivConv); // Toggle the value of indivConv
+        setindivConv(true);
+        setChannelsConv(false); // Turn off the channelsConv
+        setListFriends(false); // Turn off the listFriends
     };
-
+    
     const handleImageClickChannels = () => {
-        setChannelsConv(!channelsConv); // Toggle the value of indivConv
+        setChannelsConv(true);
+        setindivConv(false); // Turn off the indivConv
+        setListFriends(false); // Turn off the listFriends
     };
-
+    
     const handleImageClickListFriends = () => {
-        setListFriends(!listFriends); // Toggle the value of indivConv
+        setListFriends(true);
+        setindivConv(false); // Turn off the indivConv
+        setChannelsConv(false); // Turn off the channelsConv
     };
 
 
