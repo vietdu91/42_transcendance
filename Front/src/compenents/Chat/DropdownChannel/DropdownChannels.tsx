@@ -3,6 +3,8 @@ import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"
+
+
 function DropdownChannels() {
   const socket = useContext(ChatContext);
   const [joined, setJoined] = useState(false);
@@ -13,7 +15,6 @@ function DropdownChannels() {
   const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);
   const [isOpenForJoinChannel, setIsOpenForJoinChannel] = useState(false);
   const [isOpenForDeleteChannel, setIsOpenForDeleteChannel] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
 
   const toggleChannels = () => {
     setIsOpen(!isOpen);

@@ -15,6 +15,10 @@ function DropdownContact() {
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
   const [name, setName] = useState("");
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
+  const [friendName, setFriendName] = useState('');
+  const [notFound, setNotFound] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
 
   {/* Integration pop up  */}
   const [messageToSend, setMessageToSend] = useState('');
@@ -55,7 +59,7 @@ function DropdownContact() {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
-    setName(event.target.value);
+    setFriendName(event.target.value);
   };
 
   const toggleMenu = () => {
@@ -79,10 +83,28 @@ function DropdownContact() {
     setIsOpenForBlock(!isOpenForBlock);
   };
 
-  const toggleSendMp = () => {
+  const toggleSendMp = async () => {
     setIsOpenForSendMp(!isOpenForSendMp);
+    const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: friendName }, { withCredentials: true })
+    .then((response) => {
+      const receivId = response.data.id;
+      console.log("id === " + receivId);
+      console.log(response.data.id);
+      setNotFound(false);
+      setIsVisible(true);
+      console.log("friendName === " + friendName);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+      setNotFound(true);
+    // Gérer les erreurs de requête
+    });
   };
-
+  const handleSendMpClick = () => {
+    setIsOpenForSendMp(!isOpenForSendMp); // Affiche la div avec l'input lorsque vous cliquez sur "Send Mp"
+  };
+  
   return (
     <div className="dropdown-contact">
       <div className="dropdown-contact-toggle" onClick={toggleMenu}>
@@ -98,7 +120,7 @@ function DropdownContact() {
           <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={() => { toggleSendMp(); handleSearchUser(); }}>Send Mp</li>
+          <li onClick={handleSendMpClick(); handleSearchUser();}>Send Mp</li>
         </ul>
       )}
       {
@@ -145,14 +167,12 @@ function DropdownContact() {
         isOpenForSendMp && (
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
-            <input               type="text"
-              placeholder="Search for a user..."
-              ref={inputRef}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
+            <input type="text" placeholder="Friend's Name"
+             value={friendName}
+             onChange={handleInputChange}
+              // Mettez à jour l'état friendName lorsque l'utilisateur saisit
             />
-              <button onClick={() => handleSearchUser()}>ENTER</button>
+            <button onClick={() => toggleSendMp()}>ENTER</button>
           </div>
         )
       }

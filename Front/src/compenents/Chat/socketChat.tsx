@@ -1,15 +1,5 @@
 import { useState, useEffect } from 'react';
-import io, { Socket } from "socket.io-client";
-import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
-import MessageInput from '../Messages/messageInput';
-import Room from '../Room/room';
 import Cookies from 'js-cookie';
-
-import SearchBar from './SearchBar/searchBar';
-
-import ConversationContainer from './ConversationContainer/ConversationContainer'; 
-import TextComposerContainer from './TextComposerContainer/TextComposerContainer';
-import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
 import FooterMenu from './FooterMenu/FooterMenu';
 import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
 import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
