@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './DropdownContact.css';
 import axios from 'axios';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import ConversationListSummary from '../ConversationListSummary/ConversationListSummary';
 import ConversationList from '../ConversationListSummary/ConversationList';
 
+import { useContext } from 'react';
+import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+import { ChatContext } from '../../utils/ChatContext';
+import Cookies from 'js-cookie';
 
 function DropdownContact(pfp: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,11 +17,44 @@ function DropdownContact(pfp: any) {
   const [isOpenForAddFriend, setIsOpenForAddFriend] = useState(false);
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
+  const [name, setName] = useState("");
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
   const [friendName, setFriendName] = useState('');
   const [notFound, setNotFound] = useState<boolean>(false);
-  const [visibleItems, setVisibleItems] = useState<boolean>(false);
-  const [conversations, setConversations] = useState([]);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+
+  {/* Integration pop up  */}
+  const [messageToSend, setMessageToSend] = useState('');
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
+  const inputRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
+  const handleSearchUser = () => {
+    if (searchQuery.trim() !== '') {
+      // Implement your user search logic here, e.g., make an API request
+      // and update the user list or take the appropriate action.
+      // For now, we'll just log the search query.
+      console.log(`Searching for user: ${searchQuery}`);
+
+      // Clear the input field
+      setSearchQuery('');
+      
+      // Close the dropdown
+      toggleSendMp(); // You may need to adjust this to match your UI logic.
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchUser();
+    }
+  };
+
+  const handleConversationSelect = (conversationId) => {
+    setSelectedConversationId(conversationId);
+  };
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
@@ -91,7 +128,7 @@ function DropdownContact(pfp: any) {
           <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={handleSendMpClick}>Send Mp</li>
+          <li onClick={handleSendMpClick(); handleSearchUser();}>Send Mp</li>
         </ul>
       )}
       {

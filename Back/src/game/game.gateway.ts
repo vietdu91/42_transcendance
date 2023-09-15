@@ -171,11 +171,17 @@ export class MatchmakingGateway {
 
 			await prisma.user.update({
 				where: {id: game.playersId[0]},
-				data: {actualGame: game.id},
+				data: {
+					actualGame: game.id,
+					state: 'INGAME',
+				},
 			})
 			await prisma.user.update({
 				where: {id: game.playersId[1]},
-				data: {actualGame: game.id},
+				data: {
+					actualGame: game.id,
+					state: 'INGAME',
+				},
 			})
 
 			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
@@ -239,6 +245,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					wins: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 			await prisma.user.update({
@@ -246,6 +253,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					looses: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 		}
@@ -255,6 +263,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					looses: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 			await prisma.user.update({
@@ -262,6 +271,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					wins: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 		}
@@ -438,6 +448,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								wins: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 						await prisma.user.update({
@@ -445,6 +456,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								looses: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 					}
@@ -454,6 +466,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								looses: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 						await prisma.user.update({
@@ -461,6 +474,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								wins: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 					}

@@ -10,7 +10,6 @@ function DropdownChannels() {
   const [joined, setJoined] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [isRoomCreated, setIsRoomCreated] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);

@@ -211,4 +211,15 @@ export class UserController {
       }
     }
 
+    @Patch('disableTwoFA')
+    async disableTwoFa( @Req() request: Request, @Body() body: {state: boolean}) {
+      const userId = parseInt(request.cookies.id);
+      console.log(userId);
+      if (!userId)
+        throw new UnauthorizedException();
+      console.log("ici")
+      this.userService.turnOffTwoFactorAuthentication(userId);
+      return {message: 'Disabled 2FA'};
+    }
+
 }
