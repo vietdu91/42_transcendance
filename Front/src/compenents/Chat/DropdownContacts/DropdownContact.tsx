@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import './DropdownContact.css';
 import axios from 'axios';
+import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+import ConversationListSummary from '../ConversationListSummary/ConversationListSummary';
+import ConversationList from '../ConversationListSummary/ConversationList';
 
 
-function DropdownContact() {
+function DropdownContact(pfp: any) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFriends, setIsOpenFriends] = useState(false);
   const [isOpenForSendMp, setIsOpenForSendMp] = useState(false);
@@ -13,8 +16,8 @@ function DropdownContact() {
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
   const [friendName, setFriendName] = useState('');
   const [notFound, setNotFound] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
+  const [visibleItems, setVisibleItems] = useState<boolean>(false);
+  const [conversations, setConversations] = useState([]);
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
@@ -48,14 +51,16 @@ function DropdownContact() {
   };
 
   const toggleSendMp = async () => {
-    setIsOpenForSendMp(!isOpenForSendMp);
     const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: friendName }, { withCredentials: true })
     .then((response) => {
       const receivId = response.data.id;
       console.log("id === " + receivId);
       console.log(response.data.id);
+      setIsOpenForSendMp(isOpenForSendMp);
       setNotFound(false);
-      setIsVisible(true);
+      //setVisibleItems( prev => !prev);
+      setVisibleItems(true);
+      
       console.log("friendName === " + friendName);
     }
     )
@@ -65,8 +70,10 @@ function DropdownContact() {
     // Gérer les erreurs de requête
     });
   };
+
   const handleSendMpClick = () => {
-    setIsOpenForSendMp(!isOpenForSendMp); // Affiche la div avec l'input lorsque vous cliquez sur "Send Mp"
+    setIsOpenForSendMp(!isOpenForSendMp);
+    setVisibleItems(false); // Affiche la div avec l'input lorsque vous cliquez sur "Send Mp"
   };
   
   return (
@@ -137,9 +144,11 @@ function DropdownContact() {
               // Mettez à jour l'état friendName lorsque l'utilisateur saisit
             />
             <button onClick={() => toggleSendMp()}>ENTER</button>
+            {visibleItems && <ConversationList name={friendName} isVisible={visibleItems} pfp={pfp} />}
+
           </div>
         )
-      }
+      }   
     </div>
   );
 }

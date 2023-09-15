@@ -7,9 +7,11 @@ import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import groupConv from '../../../img/chat/group-conv.jpg';
 import groups from '../../../img/chat/group-channel-icon.png'
 import SearchBar from '../../searchBar/searchBar';
+import ConversationList from './ConversationList';
 
 
-const ConversationListSummary = ({name, pfp}) => {
+
+const dockConversationListSummary = ({name, pfp }) => {
     const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
 
     const toggleConvSummary = (index: number) => {
@@ -32,15 +34,7 @@ const ConversationListSummary = ({name, pfp}) => {
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
-            <div className="display-list-convo">
-                {/* Content for the conversation list */}
-                <ul>
-                    <li onClick={() => toggleConvSummary(0)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
-                    <li onClick={() => toggleConvSummary(1)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
-                    <li onClick={() => toggleConvSummary(2)}><img src={groupConv} alt="regularConv" id="chat_regularConv" />je suis une conv de groupe</li>
-                    <li onClick={() => toggleConvSummary(3)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un</li>
-                </ul>
-            </div>
+            <ConversationList name={name} isVisible={visibleItems} pfp={pfp} />
             <div className="advertisement-scope">
                 <div className="advertisement">
                     <img src={Advertisement} alt="advertisement" id="chat_advertisement" />
@@ -50,7 +44,7 @@ const ConversationListSummary = ({name, pfp}) => {
             {visibleItems.map((isVisible, index) => (
                 <ChatConversationArea  name={name} isVisible={isVisible} pfp={pfp} />
             ))}
-            <Channel />
+            {/* <Channel /> */}
         </div>
     );
 }
