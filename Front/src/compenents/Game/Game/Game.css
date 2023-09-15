@@ -226,14 +226,27 @@ body {
 .health_container#player-1 {
 	color: white;
 	--true: scaleX(-1);
-	transform: var(--health-flip, scaleX(1)) skew(10deg);
+	transform: /*var(--health-flip, scaleX(-1))*/ skew(10deg);
 	float: left;
 }
 .health_container#player-2 {
 	color: white;
 	--true: scaleX(1);
 	float: right;
-	transform: var(--health-flip, scaleX(-1)) skew(10deg);
+	transform: /*var(--health-flip, scaleX(-1))*/ skew(10deg);
+}
+
+.health_pseudo#player-1 {
+	text-align: left;
+	font-size: 80%;
+	padding: 4px;
+}
+
+.health_pseudo#player-2 {
+	text-align: right;
+	font-size: 80%;
+	padding: 4px;
+
 }
 
 /* .health_container:after {

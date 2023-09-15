@@ -120,6 +120,11 @@ export default function Game(): JSX.Element {
 	const [charRight, setCharRight] = useState("");
 	const [nameLeft, setNameLeft] = useState("");
 	const [nameRight, setNameRight] = useState("");
+
+	// BARRE DE VIE 
+	let [healthLeft, setHealthLeft] = useState(5);
+	let [healthRight, setHealthRight] = useState(5);
+
 	const location = useLocation();
 	if (location.state === null)
 		window.location.href = "/";
@@ -265,6 +270,8 @@ export default function Game(): JSX.Element {
 				}
 			}
 			game.current = updatedGame;
+			setHealthLeft(updatedGame.scoreLeft);
+			setHealthRight(updatedGame.scoreRight);
 			setScoreLeft(game.current.scoreLeft);
 			setScoreRight(game.current.scoreRight);
 		})
@@ -366,11 +373,16 @@ export default function Game(): JSX.Element {
 					p.stroke(255);
 					p.strokeWeight(1);
 					p.ellipse(game.current.ball.x, game.current.ball.y, game.current.ball.rad * 2);
-					p.fill(255);
 					p.noStroke();
+					p.fill(102, 102, 205);
+					p.stroke(0, 0, 204);
+					p.strokeWeight(2);
 					p.rect(cDiv.clientWidth / 75, game.current.posLeft, game.current.wLeft, game.current.hLeft);
+					p.fill(204, 0, 0);
+					p.stroke(153, 0, 0);
+					p.strokeWeight(2);
 					p.rect(cDiv.clientWidth - ((cDiv.clientWidth / 75) * 2), game.current.posRight, game.current.wRight, game.current.hRight);
-					
+
 					if (toc) {
 						p.fill(255);
 						p.noStroke();
@@ -503,23 +515,62 @@ export default function Game(): JSX.Element {
 
 	function BarresDeVie(props) {
 
+		const { nameLeft, nameRight } = props;
+
+		const maxHealth = 5; // La santé maximale, ajustez-la si nécessaire
+
+		if (healthLeft <= 0)
+			healthLeft = 0;
+		if (healthRight <= 0)
+			healthRight = 0;
+
+		const leftHealthPercent = 100 - (healthLeft / maxHealth) * 100; // Définissez leftHealthPercent ici
+		const rightHealthPercent = 100 - (healthRight / maxHealth) * 100;
+
 		return (
 			<div className="hud">
-			    <div className="health_container" id="player-1">
-			        <div className="health_meter">
-			            <div className="health_damage"></div>
-			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" title="" />
-			        </div>
-					{props.nameLeft}
-			    </div>
-			    <div className="health_container" id="player-2">
-			        <div className="health_meter">
-			            <div className="health_damage"></div>
-			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" />
-			        </div>
-					{props.nameRight}
-			    </div>
+			<div className="health_container" id="player-1">
+			  <div className="health_meter">
+				<div className="health_damage"></div>
+				<div
+				  className="health"
+				  style={{ width: `${rightHealthPercent}%` }}
+				></div>
+				<input
+				  className="health_value"
+				  type="range"
+				  min="0"
+				  max={maxHealth}
+				  value={healthLeft}
+				  step="1"
+				  title=""
+				/>
+			  </div>
+			  <div className="health_pseudo" id="player-1">
+				{nameLeft}
+			  </div>
 			</div>
+			<div className="health_container" id="player-2">
+			  <div className="health_meter">
+				<div className="health_damage"></div>
+				<div
+				  className="health"
+				  style={{ width: `${leftHealthPercent}%` }}
+				></div>
+				<input
+				  className="health_value"
+				  type="range"
+				  min="0"
+				  max={maxHealth}
+				  value={healthRight}
+				  step="1"
+				/>
+			  </div>
+			  <div className="health_pseudo" id="player-2">
+			  {nameRight}
+			  </div>
+			</div>
+		  </div>
 		);
 	}
 
