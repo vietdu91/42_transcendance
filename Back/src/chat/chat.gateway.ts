@@ -1,5 +1,6 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer} from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway({ cors : '*'})
 export class ChatGateway {
@@ -237,21 +238,15 @@ export class ChatGateway {
 
   @SubscribeMessage('unsetAdmin')
   async handleUnsetAdmin(@MessageBody() data: { name: string, userId: number}): Promise<void> {
-    
     const { name, userId } = data;
-
     console.log('Unset admin with id:', userId, 'from room:', name);
-
     const userIdNumber = parseInt(userId.toString());
-
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: name // Assurez-vous que "name" est correctement défini
       }
     });
-
     const updatedAdminList = chann.adminList.filter((id) => id !== userIdNumber);
-    
     try {
       await this.prisma.channel.update({
         where: { name: name },
@@ -266,7 +261,42 @@ export class ChatGateway {
   }
 
 
-      
+  @SubscribeMessage('createConversation')
+  async handleCreateConversation(client: Socket, @MessageBody() data: {id: number, otherName: string}): Promise<void> {
+    const {id, otherName} = data;
+    const userId = parseInt(String(id));
+    const user = await this.prisma.user.findUnique({
+      where: {id: userId},
+    });
+    if (!user || user.name === otherName)
+      return ;
+    const otherUser = await this.prisma.user.findUnique({
+      where: {name: otherName},
+    });
+    if (!otherUser || otherUser.id === id) {
+      return ; 
+    };
+    // verifier que l'id existe dans la bdd 
+    const convs = await this.prisma.conversation.findMany();
+    for (let i = 0; i < convs.length; convs) {
+      if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
+        return ;
+      }
+    }
+    await this.prisma.conversation.create({
+      data: {
+        users: {
+          connect: [
+            {id: userId},
+            {id: otherUser.id},
+          ]
+        },
+        usersID: [userId, otherUser.id],
+        names: [user.name, otherName],
+      }
+    });
+    // client.emit('conversationCreated', {message: "CA MARCHE", otherUser: otherUser, conversation: conversation});
+  }
 
 
   // @SubscribeMessage('messageToRoom') // Écoutez l'événement 'messageToRoom'

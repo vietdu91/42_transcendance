@@ -12,200 +12,218 @@ import { kMaxLength } from 'buffer';
 
 @Controller('profile')
 export class UserController {
-    constructor(private readonly userService: UserService,
-                private readonly prisma: PrismaService) {}
+  constructor(private readonly userService: UserService,
+    private readonly prisma: PrismaService) { }
 
-    @Get('getUserByName')
-    async getUserByName(@Query('username') username: string, @Req() request: Request, @Res() response: Response) {
-      console.log(username + " ICICIICCIICIC");
-      const user = await this.userService.getUserByName(username);
-      if (!user) {
-        throw new UnauthorizedException();
-      }
-      response.json({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        twoFA: user.twoFactorEnabled,
-        nick: user.nickname,
-        age: user.age,
-        character: user.character,
-        pfp_url: user.pfp_url,
-      });
+  @Get('getUserByName')
+  async getUserByName(@Query('username') username: string, @Req() request: Request, @Res() response: Response) {
+    const user = await this.userService.getUserByName(username);
+    if (!user) {
+      throw new UnauthorizedException();
     }
-  
-    @Get('getUser')
-    async getUser(@Req() request: Request, @Res() response: Response) {
-      // console.log(request.cookies)
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
-      const user = await this.userService.getUserById(userId);
-      if (!user) {
-        throw new UnauthorizedException();
-      }
-      let percentage: number = user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,
+      pfp_url: user.pfp_url,
+    });
+  }
 
-      const games = await this.userService.getGamesByUserId(userId);
-
-      console.log(games);
-
-      response.json({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        twoFA: user.twoFactorEnabled,
-        nick: user.nickname,
-        age: user.age,
-        character: user.character,
-        pfp_url: user.pfp_url,
-        wins: user.wins,
-        looses: user.looses,
-        percentage: percentage,
-        games: games,
-      });
+  @Get('getUser')
+  async getUser(@Req() request: Request, @Res() response: Response) {
+    // console.log(request.cookies)
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
     }
-    @Get(':id')
-    findOne(@Param('id') id: string){
-      console.log("Mon id:", id);
-      return this.userService.findOne(id);
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
     }
+    let percentage: number = user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
 
-    @Post('addFriend')
-    async addFriend( @Req() request, @Body() body: {id: number}) {;
-      console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
-      console.log("userId: " + userId);
+    const games = await this.userService.getGamesByUserId(userId);
 
-      const { id } = body;
-      console.log("id: " + id);
-      if (!id) {
-        throw new UnauthorizedException();
-      }
-      const user = await this.prisma.user.findUnique({
-        where: {id: Number(userId) }
-      })
-      console.log(userId);
+    console.log(games);
+
+    response.json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      twoFA: user.twoFactorEnabled,
+      nick: user.nickname,
+      age: user.age,
+      character: user.character,
+      pfp_url: user.pfp_url,
+      wins: user.wins,
+      looses: user.looses,
+      percentage: percentage,
+      games: games,
+    });
+  }
+
+  @Post('addFriend')
+  async addFriend(@Req() request, @Body() body: { id: number }) {
+    ;
+    console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    console.log("userId: " + userId);
+
+    const { id } = body;
+    console.log("id: " + id);
+    if (!id) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.prisma.user.findUnique({
+      where: { id: Number(userId) }
+    })
+    console.log(userId);
+    const userUpdate = await this.prisma.user.update({
+      where: { id: Number(userId) },
+      data: { friendsList: user.friendsList.push(id) },
+    })
+    console.log("FRIEND ADDED: travail termine");
+  }
+  @Post('removeFriend')
+  async removeFriend(@Req() request, @Body() body: { id: number }) {
+    console.log("Removing friend...")
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    console.log("id de l'user qui delete: " + userId)
+    const { id } = body;
+    if (!id) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.prisma.user.findUnique({
+      where: { id: Number(userId) }
+    })
+    console.log("id de l'user a delete: " + id)
+    let array = user.friendsList;
+    // while(array != 0)
+    // {
+    //   console.log(id);
+    //   array--;
+    // }
+    const index = array.indexOf(id, 0);
+    if (index > -1) {
+      array.splice(index, 1);
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: {friendsList: user.friendsList.push(id)},
+        data: { friendsList: array },
       })
-      console.log("FRIEND ADDED: travail termine");
+      console.log("FRIEND REMOVED: travail termine");
     }
-    @Post('removeFriend')
-    async removeFriend( @Req() request, @Body() body: {id: number}) {
-      console.log("Removing friend...")
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
-      console.log("id de l'user qui delete: " + userId)
-      const { id } = body;
-      if (!id) {
-        throw new UnauthorizedException();
+  }
+
+  @Post('setNickname')
+  async setNickname(@Req() request, @Body() body: { nickname: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { nickname } = body;
+    if (!nickname)
+      throw new UnauthorizedException();
+    const userUpdate = await this.prisma.user.update({
+      where: { id: Number(userId) },
+      data: { nickname: nickname },
+    });
+    console.log("nickname == " + nickname);
+    return { message: 'Surnom enregistré avec succès' };
+  }
+
+  @Post('setAge')
+  async setAge(@Req() request, @Body() body: { age: number }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { age } = body;
+    if (!age)
+      throw new UnauthorizedException();
+    const userUpdate = await this.prisma.user.update({
+      where: { id: Number(userId) },
+      data: { age: Number(age) },
+    });
+    // if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Age enregistré avec succès' };
+  }
+
+  @Post('setCharacter')
+  async setCharacter(@Req() request, @Body() body: { character: string }) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const { character } = body;
+    const userUpdate = await this.prisma.user.update({
+      where: { id: Number(userId) },
+      data: { character: character },
+    });
+    //   if (!userUpdate) {
+    //   throw new BadRequestException('Impossible de mettre à jour le surnom');
+    // }
+    return { message: 'Personnage modifié avec succès' };
+  }
+
+  @Get('getUserChat')
+  async getUserChat(@Req() request: Request, @Res() response: Response) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    
+    response.json({
+      id: user.id,
+      name: user.name,
+      nickname: user.nickname,
+      age: user.age,
+      pfp_url: user.pfp_url,
+      friends: user.friendsList,
+      blocks: user.blockList,
+      conversations: user.conversations,
+    })
+  }
+
+
+  @Post('searchUser')
+  async searchByName(@Body() body: { name: string }, @Req() request: Request, @Res() response: Response) {
+    try {
+      const { name } = body;
+      if (!name) {
+        response.status(400).json({ error: 'Le nom est manquant' });
+        return;
       }
       const user = await this.prisma.user.findUnique({
-        where: {id: Number(userId) }
-      })
-      console.log("id de l'user a delete: " + id)
-      let array = user.friendsList;
-      // while(array != 0)
-      // {
-      //   console.log(id);
-      //   array--;
-      // }
-      const index = array.indexOf(id, 0);
-      if (index > -1) {
-        array.splice(index, 1);
-        const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: {friendsList: array},
-        })
-        console.log("FRIEND REMOVED: travail termine");
-      }
-    }
-  
-    @Post('setNickname')
-    async setNickname( @Req() request, @Body() body: { nickname: string }) {
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
-      const { nickname } = body;
-      if (!nickname)
-        throw new UnauthorizedException();
-      const userUpdate = await this.prisma.user.update({
-         where: { id: Number(userId) },
-         data: { nickname: nickname },
+        where: {
+          name: name,
+        },
       });
-      console.log("nickname == " + nickname);
-      return { message: 'Surnom enregistré avec succès' };
-    }
-  
-    @Post('setAge')
-    async setAge( @Req() request, @Body() body: { age: number }) {
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
+      if (!user) {
+        response.status(404).json({ error: 'Aucun utilisateur trouvé' });
+        return;
       }
-      const { age } = body;
-      if (!age)
-        throw new UnauthorizedException();
-      const userUpdate = await this.prisma.user.update({
-          where: { id: Number(userId) },
-          data: { age: Number(age) },
-      });
-        // if (!userUpdate) {
-      //   throw new BadRequestException('Impossible de mettre à jour le surnom');
-      // }
-      return { message: 'Age enregistré avec succès' };
+      const id = user.id;
+      response.status(200).json({ id });
+    } catch (error) {
+      console.error('Erreur lors de la recherche d\'utilisateur :', error);
+      response.status(500).json({ error: 'Erreur interne du serveur' });
     }
-  
-    @Post('setCharacter')
-    async setCharacter( @Req() request, @Body() body: { character: string }) {
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
-      const { character } = body;
-      const userUpdate = await this.prisma.user.update({
-          where: { id: Number(userId) },
-          data: { character: character },
-      });
-      //   if (!userUpdate) {
-      //   throw new BadRequestException('Impossible de mettre à jour le surnom');
-      // }
-      return { message: 'Personnage modifié avec succès' };
-    }
-
-
-    @Post('searchUser')
-    async searchByName(@Body() body: { name: string }, @Req() request: Request, @Res() response: Response) {
-      try {
-        const { name } = body;
-        if (!name) {
-          response.status(400).json({ error: 'Le nom est manquant' });
-          return;
-        }
-        const user = await this.prisma.user.findUnique({
-          where: {
-            name: name,
-          },
-        });
-        if (!user) {
-          response.status(404).json({ error: 'Aucun utilisateur trouvé' });
-          return;
-        }
-        const id = user.id;
-        response.status(200).json({ id });
-      } catch (error) {
-        console.error('Erreur lors de la recherche d\'utilisateur :', error);
-        response.status(500).json({ error: 'Erreur interne du serveur' });
-      }
-    }
+  }
 
 }

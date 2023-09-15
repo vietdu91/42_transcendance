@@ -1,49 +1,118 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import './ConversationListSummary.css';
 import Advertisement from './../../../img/chat/thicker.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
-import regularConv from '../../../img/chat/regular-conv-icon.jpg';
-import groupConv from '../../../img/chat/group-conv.jpg';
+import regularConv from '../../../img/chat/solo-conv.png';
+import groupConv from '../../../img/chat/group-conv.png';
 import groups from '../../../img/chat/group-channel-icon.png'
-import friends from '../../../img/chat/groups3d.jpg'
+import friends from '../../../img/chat/groups3d.png'
 import SearchBar from '../../searchBar/searchBar';
 
 
-const ConversationListSummary = ({ name, pfp }) => {
+const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
+    isConvListVisible, setIsConvListVisible, conversations }) => {
+    // if (!isConvListVisible)
+    //     return null;
     const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
-    const [indivConv, setindivConv] = useState(false);
+    // const [indivConv, setindivConv] = useState(false);
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
+
+    function printNames(names: String[]): String {
+        return (name === names[0] ? names[1] : names[0])
+    }
 
     const toggleConvSummary = (index: number) => {
         const newVisibleItems = [...visibleItems];
         newVisibleItems[index] = !newVisibleItems[index];
         setVisibleItems(newVisibleItems);
     };
+
     const handleImageClick = () => {
-        setindivConv(true);
+        handleVisibility(true);
         setChannelsConv(false); // Turn off the channelsConv
         setListFriends(false); // Turn off the listFriends
-    };
-    
-    const handleImageClickChannels = () => {
-        setChannelsConv(true);
-        setindivConv(false); // Turn off the indivConv
-        setListFriends(false); // Turn off the listFriends
-    };
-    
-    const handleImageClickListFriends = () => {
-        setListFriends(true);
-        setindivConv(false); // Turn off the indivConv
-        setChannelsConv(false); // Turn off the channelsConv
     };
 
+    const handleImageClickChannels = () => {
+        setChannelsConv(true);
+        handleVisibility(false); // Turn off the indivConv
+        setListFriends(false); // Turn off the listFriends
+    };
+
+    const handleImageClickListFriends = () => {
+        setListFriends(true);
+        handleVisibility(false); // Turn off the indivConv
+        setChannelsConv(false); // Turn off the channelsConv
+    };
 
     const handleSearch = (query: string) => {
         // Effectuez votre logique de recherche ici avec la valeur 'query'
         console.log(`Recherche en cours avec la requête : ${query}`);
     };
+
+    {/* modif benda */ }
+    const handleIndivConvVisibility = (visibility) => {
+        handleVisibility(visibility);
+    };
+    {/* modif benda */ }
+
+    const channelData = [
+        {
+            id: 0,
+            imageSrc: regularConv,
+            altText: "regularConv",
+            text: "je suis un channel 0"
+        },
+        {
+            id: 1,
+            imageSrc: regularConv,
+            altText: "regularConv",
+            text: "je suis un channel 1"
+        },
+        {
+            id: 2,
+            imageSrc: regularConv,
+            altText: "regularConv",
+            text: "je suis un channel 2"
+        },
+        {
+            id: 3,
+            imageSrc: regularConv,
+            altText: "regularConv",
+            text: "je suis un channel 3"
+        }
+    ];
+
+    const friendsData = [
+        {
+            id: 0,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 0"
+        },
+        {
+            id: 1,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 1"
+        },
+        {
+            id: 2,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 2"
+        },
+        {
+            id: 3,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 3"
+        }
+    ];
 
     return (
         <div className="conversation-list-summary">
@@ -51,8 +120,8 @@ const ConversationListSummary = ({ name, pfp }) => {
             <div className="info-conversation-list">
                 <ul>
                     <li><img src={regularConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClick} /></li>
-                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels}/></li>
-                    <li><img src={friends} alt="friends" id="chat_friends" onClick={handleImageClickListFriends}/></li>
+                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} /></li>
+                    <li><img src={friends} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
@@ -61,28 +130,35 @@ const ConversationListSummary = ({ name, pfp }) => {
                 {/* Content for the conversation list */}
                 {indivConv && (
                     <ul>
-                        <li onClick={() => toggleConvSummary(0)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
-                        <li onClick={() => toggleConvSummary(1)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
-                        <li onClick={() => toggleConvSummary(2)}><img src={groupConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
-                        <li onClick={() => toggleConvSummary(3)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis une conv</li>
+                        {conversations.map((item) => (
+                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
+                                {/* <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} /> */}
+                                {printNames(item.names)}
+                            </li>
+                        ))}
                     </ul>
                 )
                 }
                 {channelsConv && (
                     <ul>
-                        <li onClick={() => toggleConvSummary(0)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
-                        <li onClick={() => toggleConvSummary(1)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
-                        <li onClick={() => toggleConvSummary(2)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
-                        <li onClick={() => toggleConvSummary(3)}><img src={regularConv} alt="regularConv" id="chat_regularConv" />je suis un channel</li>
+                        {channelData.map((item) => (
+                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
+                                <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} />
+                                {item.text}
+                            </li>
+                        ))}
                     </ul>
+
                 )
                 }
                 {listFriends && (
                     <ul>
-                        <li onClick={() => toggleConvSummary(0)}><img src={friends} alt="friends" id="chat_friends" />{"friends name"}</li>
-                        <li onClick={() => toggleConvSummary(1)}><img src={friends} alt="friends" id="chat_friends" />{"friends name"}</li>
-                        <li onClick={() => toggleConvSummary(2)}><img src={friends} alt="friends" id="chat_friends" />{"friends name"}</li>
-                        <li onClick={() => toggleConvSummary(3)}><img src={friends} alt="friends" id="chat_friends" />{"friends name"}</li>
+                        {friendsData.map((item) => (
+                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
+                                <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} />
+                                {item.text}
+                            </li>
+                        ))}
                     </ul>
                 )
                 }

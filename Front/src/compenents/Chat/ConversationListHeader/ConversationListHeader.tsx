@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
@@ -11,13 +11,34 @@ import Minimize from '../../../img/chat/minimized.jpg'
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
-const ConversationListHeader = ({ name, pfp }) => {
-// État pour définir si la room est privée
+// interface ConversationListHeaderProps {
+//     name: string;
+//     pfp: string;
+//     handleVisibility: (visibility: any) => void;
+//     isConvListVisible: boolean;
+//     setIsConvListVisible: React.Dispatch<React.SetStateAction<boolean>>;
+//     addConversation: (newConversation: string) => void;
+// }
+
+// const ConversationListHeader: React.FC<ConversationListHeaderProps> = ({
+//     name,
+//     pfp,
+//     handleVisibility,
+//     addConversation,
+//     isConvListVisible,
+//     setIsConvListVisible,
+// }) => {
+
+
+const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, isConvListVisible, setIsConvListVisible}) => {
+    // État pour définir si la room est privée
+
+    const socket = useContext(ChatContext);
+
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
     });
-
 
     const hideComponent = (name) => {
         setState((prevState) => ({
@@ -25,6 +46,19 @@ const ConversationListHeader = ({ name, pfp }) => {
             [name]: !prevState[name]
         }));
     }
+
+    {/** Modifs */ }
+    const [newConversation, setNewConversation] = useState('');
+
+    const handleAddConversation = () => {
+        if (newConversation.trim() !== '') {
+            addConversation(newConversation);
+            setNewConversation('');
+        }
+    };
+    {/** Modifs */ }
+
+    // MODIFS KIKI
 
     return (
         <div className="conversations-list-header">
@@ -39,9 +73,15 @@ const ConversationListHeader = ({ name, pfp }) => {
             <hr />
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
-
                 <DropdownChannel />{/*Create Join Delete*/}
-                <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
+                <DropdownContact
+                    pfp={pfp}
+                /*handleIndivConvVisibility={handleVisibility}
+                isConvListVisible={isConvListVisible}
+                setIsConvListVisible={setIsConvListVisible}
+                addConversation={addConversation}
+                handleAddConversation={handleAddConversation}*/
+                />{/* Add Block Delete MP Liste D'amis*/}
                 <li>Actions</li> { /*  */}
                 <li>Tools</li> { /* */}
                 <li>Help</li>

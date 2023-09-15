@@ -43,13 +43,6 @@ async deleteUser(id: number): Promise<User> {
     }
 }
 
-  findOne(id: string){
-    const user = this.prisma.user.findUnique({
-      where: {id: parseInt(id.toString())}
-    });
-    return user;
-  }
-
   async getUserByName(username: string): Promise<User | null> {
     console.log(username);
     const user = await this.prisma.user.findUnique({
@@ -58,9 +51,12 @@ async deleteUser(id: number): Promise<User> {
     return user;
   }
 
-  async getUserById(userId: number): Promise<User | null> {
-    const user: User = await this.prisma.user.findUnique({
+  async getUserById(userId: number): Promise<any | null> {
+    const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) },
+      include: {
+        conversations: true,
+      },
     });
     return user;
   }
