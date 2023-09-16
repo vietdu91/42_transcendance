@@ -26,6 +26,9 @@ function DropdownContact() {
   const inputRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const token = Cookies.get('accessToken');
+  const userId = Cookies.get('id');
+
 
   const handleSearchUser = () => {
     if (searchQuery.trim() !== '') {
@@ -67,16 +70,45 @@ function DropdownContact() {
   };
 
 
-  const toggleAddFriend = () => {
+  const toggleAddFriend = async () => {
     setIsOpenForAddFriend(!isOpenForAddFriend);
+    if (friendName)
+    {
+      const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', { name: friendName }, { withCredentials: true })
+      .then((response) => {
+        const receivId = response.data.id;
+        console.log("id === " + receivId);
+        console.log(response.data.id);
+        setNotFound(false);
+        setIsVisible(true);
+        console.log("friendName === " + friendName);
+        setFriendName('');
+      }
+      )
+    }
+    else
+    {
+      setNotFound(true);
+    }
+
   };
 
   const toggleInvite = () => {
     setIsOpenForInvite(!isOpenForInvite);
   };
 
-  const toggleDelete = () => {
+  const toggleDelete = async () => {
+    
     setIsOpenForDelete(!isOpenForDelete);
+    console.log("TRYING TO REMOVE FRIEND");
+    if (friendName)
+    {
+      const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/removeFriend', {name:friendName}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+      .then(response => {})
+      .catch(error => {
+        console.log(error);
+      })
+    }
   };
 
   const toggleBlock = () => {
@@ -93,6 +125,7 @@ function DropdownContact() {
       setNotFound(false);
       setIsVisible(true);
       console.log("friendName === " + friendName);
+      setFriendName('');
     }
     )
     .catch((error) => {
@@ -117,10 +150,10 @@ function DropdownContact() {
         /*utiliser le toggle friends list */
         <ul className="dropdown-contact-menu">
           <li onClick={toggleAddFriend}>Add friend request</li>
-          <li onClick={toggleInvite}>Invite</li>
+          <li onClick={toggleInvite}>Invite</li>  
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={handleSendMpClick(); handleSearchUser();}>Send Mp</li>
+          <li onClick={() => {handleSendMpClick(); handleSearchUser();}}>Send Mp</li>
         </ul>
       )}
       {
@@ -138,6 +171,8 @@ function DropdownContact() {
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
             <input type="text" placeholder="Friend's Name"
+              value={friendName}
+              onChange={handleInputChange}
             />
             <button onClick={() => { toggleAddFriend(); }}>ENTER</button>
           </div>
@@ -148,6 +183,8 @@ function DropdownContact() {
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
             <input type="text" placeholder="Who do you want to delete "
+              value={friendName}
+              onChange={handleInputChange}
             />
             <button onClick={() => { toggleDelete(); }}>ENTER</button>
           </div>

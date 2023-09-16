@@ -26,7 +26,7 @@ export default function UserProfile() {
 // Ajouter la fonction de check ami deja ajoute
 	const addFriend = () => {
 		console.log("TRYING TO ADD FRIEND");
-		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', {id}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', {name}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
 		.then(response => {})
 		.catch(error => {
 			console.log(error);
