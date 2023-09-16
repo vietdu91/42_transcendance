@@ -1,0 +1,325 @@
+@font-face {
+	font-family: south_park_font;
+	src: url(../../fonts/south\ park.ttf)
+  }
+
+  @font-face {
+	font-family: south_park_font_perso;
+	src: url(../../fonts/southbats.ttf)
+  }
+
+@font-face {
+	font-family: texas_font;
+	src: url(../../fonts/TEXAT_BOLD.otf)
+}
+
+@font-face {
+	font-family: heavitas_font;
+	src: url(../../fonts/Heavitas.ttf)
+}
+
+#user-menu {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+#user-bg-menu {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  background-color:#89cede;
+
+	opacity: 0.2;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.user-box2 .button{
+	display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.user-box2 {
+	min-width: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	position: fixed;
+	top: 5%;
+	left: 10%;
+	right: 10%;
+	bottom: 5%;
+	padding: 10px;
+
+	background-color: #ffffffa6;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+	z-index: 15;
+	gap: 5%;
+}
+
+.user_pfp{
+	display: flex;
+    justify-content: center;
+    flex-direction: column;
+	align-items: center;
+}
+
+#user_pic {
+	width: 250px;
+	height: 250px;
+	border: 15px solid black;
+}
+
+.user_pfp button{
+	max-width: 250px;
+}
+
+#user-text {
+    display: flex;
+    flex-direction: column;
+	position: relative;
+	height: 80vh;
+	width: 50vw;
+	gap: 20px;
+}
+
+#user-hardly-brothers {
+	background-image: url("../../img/Hardly-boys.png");
+	background-size: cover;
+	height: 12vh;
+	width: 10vw;
+
+	position: absolute;
+	top: 10px;
+	left: 30px;
+}
+
+.user-title {
+	margin-top: 35px;
+}
+
+.user-title h1 {
+	text-align:center; 
+	font-size: 60px; 
+	text-transform:uppercase; 
+	color:#222;
+	letter-spacing:1px;
+	font-family: heavitas_font;
+}
+
+  .user-title h1 .user-barre {
+	  font-size: 10px;
+	  color:#444; 
+	  word-spacing: 1px; 
+	  font-weight: normal; 
+	  letter-spacing: 2px;
+	  text-transform: uppercase; 
+	  font-family: south_park_font;
+	  font-weight: 500;
+  
+	  display: grid;
+	  grid-template-columns: 1fr max-content 1fr;
+	  grid-template-rows: 27px 0;
+	  grid-gap: 20px;
+	  align-items: center;
+  }
+  
+  .user-title h1 .user-barre:after, .user-title h1 .user-barre:before {
+	  content: " ";
+	  display: block;
+	  border-bottom: 1px solid #ccc;
+	  border-top: 1px solid #ccc;
+	  height: 5px;
+	background-color:#f8f8f8;
+  }
+
+  .user-infos {
+	font-family: heavitas_font;
+	padding-top: 30px;
+
+	display: grid;
+	grid-template-rows: [row1-start] 33% [row1-end row2-start] 33% [row2-end] 33% [row-end];
+	grid-template-columns: [column1-start] 50% [column1-end column2-start] 50% [column2-end] ;
+  }
+
+  #user-info-2 {
+	text-align: end;
+  }
+
+  #user-info-3 {
+	text-align: center;
+  }
+  #user-info-4 {
+	text-align: center;
+  }
+	  #user-info-5 {
+		  text-align: center;
+		  grid-column: column1-start / column2-end;
+		}
+		
+	#user-titre-info-5 {
+		text-shadow: 0 4px 0 orange, 0 -4px 0 brown;
+	}
+
+  .user-titre-infos {
+	font-family: heavitas_font;
+	font-size: 200%;
+	text-shadow: 0 4px 0 green, 0 -4px 0 brown;
+}
+
+.user-info {
+	font-family: heavitas_font;
+	font-size: 150%;
+}
+#user-south {
+	font-family: south_park_font_perso;
+	font-size: 60px;
+	text-align: center;
+}
+
+/* NEXT BUTTON */
+
+#going_home {
+	background-image: url("../../img/buttons/going_home.png");
+	background-size: cover;
+	width: 120px;
+	height: 120px;
+	font-size: 2rem;
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+	z-index: 50;
+
+    background-color: rgba(0, 0, 255, 0);
+    border: 1px solid rgba(0, 0, 255, 0);
+}
+
+#going_home:hover {
+	transform: rotate(15deg);
+	transition: all 0.25s ease-in-out;
+}
+
+@media (max-width: 850px) {
+	#welcome2 {
+		font-size: 50px;
+	}
+}
+
+@media (max-width: 1400px) {
+	#move_on {
+		width: 80px;
+		height: 80px;
+	}
+}
+
+/******   HISTORIQUE   *********/
+
+#user-jimbo {
+	height: 150px;
+	width: 140px;
+
+	position: absolute;
+	top: 375px;
+	left: 30px;
+}
+
+#user-historique {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.user-match {
+	font-family: heavitas_font;
+	font-size: 150%;
+}
+
+
+
+
+/******   BOUTONS   *********/
+
+.user-buttons {
+
+    margin: 10%;
+
+	display: flex;
+    justify-content: center;
+    flex-direction: column;
+	align-items: center;
+	gap: 8px;
+}
+
+.user-btn-1 {
+
+	width: 250px;
+	height: 50px;
+
+	text-decoration: none;
+	border: 2px solid #010100;
+	padding: 15px;
+	color: #000000;
+	background-color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	position: relative;
+	display: inline-block;
+}
+
+.user-btn-1:hover {
+
+	background-color: rgb(231, 229, 229);
+
+}
+
+.user-btn-1::before {
+
+	content: "";
+	position: absolute;
+	top: 5px;
+	left: -2px;
+	width: calc(100% + 6px);
+	/*100% plus double the times left values*/
+	height: calc(100% - 10px);
+	background-color: #ffffff;
+	transition: all 0.5s ease-in-out;
+	transform: scaleY(1);
+}
+
+.user-btn-1:hover::before {
+
+	transform: scaleY(0);
+}
+
+.user-btn-1::after {
+
+	content: "";
+	position: absolute;
+	left: 5px;
+	top: -5px;
+	width: calc(100% - 10px);
+	/*100% plus double the times left values*/
+	height: calc(100% + 10px);
+	background-color: #ffffff;
+	transition: all 0.5s ease-in-out;
+	transform: scaleX(1);
+}
+
+  .user-btn-1:hover::after {
+
+	transform: scaleX(0);
+}
+
+.user-text-buttom {
+
+	z-index: 3;
+	position: relative;
+}

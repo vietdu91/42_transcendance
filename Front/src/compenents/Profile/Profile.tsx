@@ -5,7 +5,8 @@ import Cookies from 'js-cookie';
 
 import './Profile.css'
 
-import Bar from "../../img/backgrounds/skeeters-bar.jpg"
+import Missing from "../../img/backgrounds/missing_profile.jpg"
+import Jimbo from "../../img/characters/shoot-jimbo.gif"
 
 interface Game {
 	names: string[],
@@ -73,6 +74,49 @@ export default function Profile() {
 		})
 	}
 
+	const LetterChanger2 = () => {
+		const [currentLetter, setCurrentLetter] = useState('A');
+		
+		useEffect(() => {
+		  	const interval = setInterval(() => {
+			const alphabet = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+			const currentIndex = alphabet.indexOf(currentLetter);
+			const nextIndex = (currentIndex + 1) % alphabet.length;
+			const nextLetter = alphabet[nextIndex];
+			
+			setCurrentLetter(nextLetter);
+		  }, 1000);
+	  
+		  return () => clearInterval(interval);
+		}, [currentLetter]);
+	  
+		return (
+		  <span id="profile-south">{currentLetter}</span>
+		);
+	  }
+
+	const LetterChanger = () => {
+		const [currentLetter, setCurrentLetter] = useState('A');
+		
+		useEffect(() => {
+		  	const interval = setInterval(() => {
+			const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			const currentIndex = alphabet.indexOf(currentLetter);
+			const nextIndex = (currentIndex + 1) % alphabet.length;
+			const nextLetter = alphabet[nextIndex];
+			
+			setCurrentLetter(nextLetter);
+		  }, 1000);
+	  
+		  return () => clearInterval(interval);
+		}, [currentLetter]);
+	  
+		return (
+		  <span id="profile-south">{currentLetter}</span>
+		);
+	  }
+
+
 	useEffect (() => {
 		// axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
 		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
@@ -85,7 +129,7 @@ export default function Profile() {
 			getWins(response.data.wins);
 			getLooses(response.data.looses);
 			getPercentage(response.data.percentage);
-			const updatedGames:Game[] = [...games.current];
+			const updatedGames:Game[] = [];
 			const limit = response.data.games.length > 3 ? response.data.games.length - 3 : 0;
 			for (let i = response.data.games.length - 1; i >= limit; i--) {
 				updatedGames.push(response.data.games[i]);
@@ -101,69 +145,66 @@ export default function Profile() {
 	console.log(games.current);
 
 	return (
-		<div id="menu">
-			<img id="bg-menu" src={Bar} alt={'Bar'}></img>
-
-			<div className
-			="box2">
-				<p>CONTENT</p>
-
-				<div id="welcome2">
-					{/* <div id="eric">
-						<div className="face">
-							<div className="hat"></div>
-							<div className="eye-left"></div>
-							<div className="eye-right"></div>
-							<div className="smile"></div>
+		<div id="profile-menu">
+			<img id="profile-bg-menu" src={Missing} alt={'Missing'}></img>
+			<div className="box2">
+				<div id="profile-text">
+					<div id="profile-hardly-brothers"></div>
+					<div className="profile-title">
+						<h1>PR<LetterChanger />FIL<span className="barre">Moi j'ai un indice colossal</span></h1></div>
+					<div className="profile-infos">	
+						<div id="profile-info-1">
+							<span className="profile-titre-infos">Pseudo </span>
+							<span className="profile-info">: {nick}</span><br/><br/> 
 						</div>
-						<div className="body">
-							<div className="zipper"></div>
-							<div className="button-1"></div>
-							<div className="button-2"></div>
-							<div className="button-3"></div>
-							<div className="hand-left"></div>
-							<div className="hand-right"></div>
+						<div id="profile-info-2">
+							<span className="profile-titre-infos">Nom </span>
+							<span className="profile-info">: {name}</span><br/><br/> 
 						</div>
-						<div className="legs">
-							<div className="foot-left"></div>
-							<div className="foot-right"></div>
+						<div id="profile-info-3">
+							<span className="profile-titre-infos">Win / Lose </span>
+							<span className="profile-info">: {wins} / {looses}</span><br/><br/>
 						</div>
-					</div> */}
-					<div id="profile_font">PROFIL</div>
-					<div>	
-							Nick : ({nick})<br/><br/> 
-							Name : ({name})<br/><br/> 
-							Age: ({age})<br/><br/>
-							W/L : {wins} / {looses} ({percentage}%)<br/><br/>
+						<div id="profile-info-4">
+							<span className="profile-titre-infos" id="profile-titre-info-5">Votre Score </span>
+							<span className="profile-info">: {percentage}%</span><br/><br/>
+						</div>
+						<div id="profile-info-5">
+							<span className="profile-titre-infos">Age </span>
+							<span className="profile-info">: {age} ans</span><br/><br/> 
+						</div>
 					</div>
-					<div id="profile_font">HISTORIQUE</div>
-					<div>
+						<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
+						<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
+						<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
+					<div id="profile-historique">
 						{games.current.map((game, i) => (
-    						<div key={i}><div>{game.names[0]} {game.score[0]} - {game.score[1]} {game.names[1]}</div><br/><br/></div>
-  						))}
+							<div className="profile-match" key={i}><div>
+							<span>{game.names[0]} </span> 
+							<span>{game.score[0]}</span> - 
+							<span> {game.score[1]} </span> 
+							<span>{game.names[1]}</span></div><br/><br/></div>
+							))}
 					</div>
 				</div>
-					<p>CONTENT</p>	
 				<div className ="pfp">
 					<img id="profile_pic" src={pfp_url} alt="PPdeMORT"></img>
-					<div className="buttons">
-						<button className="btn-hover color-1" onClick={() => navigate("/NewProfile")}>Changer d'image</button><br/>
-						<button className="btn-hover color-2" onClick={() => navigate("/NewProfile")}>Changer de pseudo</button><br/>
-						<button className="btn-hover color-3" onClick={() => navigate("/NewProfile")}>Changer d'age</button><br/>
-						{twoFa && <><button className="twofa_on" onClick={handleDisable}>Disable 2FA</button><br/></>}
-						{!showFa && !twoFa && <><button className="twofa_off" onClick={generateTwoFa}>Enable 2FA</button><br/></>}
+					<div className="profile-buttons">
+						<button className="profile-btn-1" onClick={() => navigate("/NewProfile")}><span className="profile-text-buttom">Modifier le profil 📝</span></button><br/>
+						{twoFa && <><button className="twofa_off" onClick={handleDisable}>Disable 2FA 📷</button><br/></>}
+						{!showFa && !twoFa && <><button className="twofa_off" onClick={generateTwoFa}>Activer le 2FA 📸</button><br/></>}
 						{showFa && 
 							<>
 								<br/>
 								<img src={qrCode}></img>
 								<form onSubmit={handleEnable}>
-									<input placeholder='code' value={code} onChange={handleChange}></input>
+									<input placeholder='Show Me Your HALLPASS' value={code} onChange={handleChange}></input>
 								</form>
 							</>
 						}
 					</div>
 				</div>
-				<button id="move_on" onClick={() => navigate("/")}></button>
+				<button id="going_home" onClick={() => navigate("/")}></button>
 			</div>
 		</div>
 	)

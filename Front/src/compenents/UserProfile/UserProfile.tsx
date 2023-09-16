@@ -5,17 +5,22 @@ import Cookies from 'js-cookie';
 
 import './UserProfile.css'
 
-import Bar from "../../img/backgrounds/skeeters-bar.jpg"
+import Missing from "../../img/backgrounds/missing_profile.jpg"
+import Jimbo from "../../img/characters/shoot-jimbo.gif"
 
 export default function UserProfile() {
 
 	const navigate = useNavigate();
-	let { username } = useParams();
-	let [id, getId] = useState(0);
-	let [nick, getNick] = useState("");
-	let [name, getName] = useState("");
-	let [age, getAge] = useState(0);
-	let [pfp_url, getPfpUrl] = useState("");
+
+	const { username } = useParams();
+	const [id, getId] = useState(0);
+	const [nick, getNick] = useState("");
+	const [name, getName] = useState("");
+	const [age, getAge] = useState(0);
+	const [pfp_url, getPfpUrl] = useState("");
+	const [wins, getWins] = useState(0);
+	const [looses, getLooses] = useState(0);
+	const [percentage, getPercentage] = useState(0);
 	
 	const token = Cookies.get('accessToken');
     const userId = Cookies.get('id');
@@ -62,28 +67,101 @@ export default function UserProfile() {
 		})
 	}, []);
 
-	return (
-		<div id="menu">
-			<img id="bg-menu" src={Bar} alt={'Bar'}></img>
+	const LetterChanger2 = () => {
+		const [currentLetter, setCurrentLetter] = useState('A');
+		
+		useEffect(() => {
+		  	const interval = setInterval(() => {
+			const alphabet = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+			const currentIndex = alphabet.indexOf(currentLetter);
+			const nextIndex = (currentIndex + 1) % alphabet.length;
+			const nextLetter = alphabet[nextIndex];
+			
+			setCurrentLetter(nextLetter);
+		  }, 1000);
+	  
+		  return () => clearInterval(interval);
+		}, [currentLetter]);
+	  
+		return (
+		  <span id="profile-south">{currentLetter}</span>
+		);
+	  }
 
-			<div className
-			="box2">
-				<div id="welcome2">
-					<div id="profile_font">PROFIL</div>
-						<div>	
-							Nick : ({nick})<br/><br/> 
-							Name : ({name})<br/><br/> 
-							Age: ({age})<br/><br/>
+	const LetterChanger = () => {
+		const [currentLetter, setCurrentLetter] = useState('A');
+		
+		useEffect(() => {
+		  	const interval = setInterval(() => {
+			const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			const currentIndex = alphabet.indexOf(currentLetter);
+			const nextIndex = (currentIndex + 1) % alphabet.length;
+			const nextLetter = alphabet[nextIndex];
+			
+			setCurrentLetter(nextLetter);
+		  }, 1000);
+	  
+		  return () => clearInterval(interval);
+		}, [currentLetter]);
+	  
+		return (
+		  <span id="profile-south">{currentLetter}</span>
+		);
+	  }
+
+	return (
+		<div id="user-menu">
+			<img id="user-bg-menu" src={Missing} alt={'Missing'}></img>
+			<div className="user-box2">
+				<div id="user-text">
+					<div id="user-hardly-brothers"></div>
+					<div className="user-title">
+						<h1>PR<LetterChanger />FIL<span className="user-barre">Moi j'ai un indice colossal</span></h1></div>
+					<div className="user-infos">	
+						<div id="user-info-1">
+							<span className="user-titre-infos">Pseudo </span>
+							<span className="user-info">: {nick}</span><br/><br/> 
 						</div>
+						<div id="user-info-2">
+							<span className="user-titre-infos">Nom </span>
+							<span className="user-info">: {name}</span><br/><br/> 
+						</div>
+						<div id="user-info-3">
+							<span className="user-titre-infos">Win / Lose </span>
+							<span className="user-info">: {wins} / {looses}</span><br/><br/>
+						</div>
+						<div id="user-info-4">
+							<span className="user-titre-infos" id="profile-titre-info-5">Son Score </span>
+							<span className="user-info">: {percentage}%</span><br/><br/>
+						</div>
+						<div id="user-info-5">
+							<span className="user-titre-infos">Age </span>
+							<span className="user-info">: {age} ans</span><br/><br/> 
+						</div>
+					</div>
+						<img id="user-jimbo" src={Jimbo} alt="jimbo"></img>
+						<div className="user-title"><h1>HIST<LetterChanger2 />RIQUE
+						<span className="user-barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
+					{/* <div id="user-historique">
+						{games.current.map((game, i) => (
+							<div className="user-match" key={i}><div>
+							<span>{game.names[0]} </span> 
+							<span>{game.score[0]}</span> - 
+							<span> {game.score[1]} </span> 
+							<span>{game.names[1]}</span></div><br/><br/></div>
+							))}
+					</div> */}
 				</div>
-				<div className ="pfp">
-					<img src={pfp_url} alt="PPdeMORT"></img>
-					<div className="buttons">
-						<button className="btn-hover color-1" onClick={() => addFriend()}>Add Friend !!!!!!!!</button><br/>
-						<button className="btn-hover color-2" onClick={() => removeFriend()}>Remove Friend :(</button><br/>
+				<div className ="user_pfp">
+					<img id="user_pic" src={pfp_url} alt="PPdeMORT"></img>
+					<div className="user-buttons">
+						<button className="user-btn-1" onClick={() => addFriend()}><span className="profile-text-buttom">Ajouter cet ami 💕</span></button><br/>
+						{/* <button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Supprimer cet ami 😞</span></button><br/> */}
+						<button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Bloquer ce gueu 🚫</span></button><br/>
+						{/* <button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Debloquer ce gueu ✅</span></button><br/> */}
 					</div>
 				</div>
-				<button id="move_on" onClick={() => navigate("/")}></button>
+				<button id="going_home" onClick={() => navigate("/")}></button>
 			</div>
 		</div>
 	)

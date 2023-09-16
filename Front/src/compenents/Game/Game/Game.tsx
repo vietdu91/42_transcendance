@@ -113,8 +113,11 @@ export default function Game(): JSX.Element {
 	const [scoreRight, setScoreRight] = useState(0);
 
 	const [OnGeneriqueButters, setOnGeneriqueButters] = useState(false);
-	const [OnGothique, setOnGothique] = useState(false);
-	const [OnProut, setOnProut] = useState(false);
+	const [OnGothiqueLeft, setOnGothiqueLeft] = useState(false);
+	const [OnGothiqueRight, setOnGothiqueRight] = useState(false);
+
+	const [OnProutLeft, setOnProutLeft] = useState(false);
+	const [OnProutRight, setOnProutRight] = useState(false);
 
 	const [charLeft, setCharLeft] = useState("");
 	const [charRight, setCharRight] = useState("");
@@ -174,27 +177,51 @@ export default function Game(): JSX.Element {
 		}, 43000);
 	}
 
-	function DesactiveGothique() {
+	function DesactiveGothiqueLeft() {
 
-		setOnGothique(false);
+		setOnGothiqueLeft(false);
 	}
 	
-	function ActiveGothique() {
+	function ActiveGothiqueLeft() {
 
-		setOnGothique(true);
-		setTimeout(() => {setOnGothique(false)
+		setOnGothiqueLeft(true);
+		setTimeout(() => {setOnGothiqueLeft(false)
 		}, 12000);
 	}
 	
-	function DesactiveProut() {
-		
-		setOnProut(false);
+	function DesactiveGothiqueRight() {
+
+		setOnGothiqueRight(false);
 	}
 	
-	function ActiveProut() {
+	function ActiveGothiqueRight() {
+
+		setOnGothiqueRight(true);
+		setTimeout(() => {setOnGothiqueRight(false)
+		}, 12000);
+	}
+
+	function DesactiveProutLeft() {
 		
-		setOnProut(true);
-		setTimeout(() => {setOnProut(false)
+		setOnProutLeft(false);
+	}
+	
+	function ActiveProutLeft() {
+		
+		setOnProutLeft(true);
+		setTimeout(() => {setOnProutLeft(false)
+		}, 42000);
+	}
+
+	function DesactiveProutRight() {
+		
+		setOnProutRight(false);
+	}
+	
+	function ActiveProutRight() {
+		
+		setOnProutRight(true);
+		setTimeout(() => {setOnProutRight(false)
 		}, 42000);
 	}
 
@@ -239,8 +266,10 @@ export default function Game(): JSX.Element {
 			setNameLeft(response.game.nameLeft);
 			setNameRight(response.game.nameRight);
 			powLeft = powRight = weed = timmy = fart = toc = false;
-			DesactiveGothique();
-			DesactiveProut();
+			DesactiveGothiqueLeft();
+			DesactiveGothiqueRight();
+			DesactiveProutLeft();
+			DesactiveProutRight();
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -284,9 +313,9 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; ActiveProut(); break;
+					case "TerrancePhilip" : fart = true; ActiveProutLeft(); break;
 					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; break;
-					case "Henrietta" : game.current.scoreRight--; ActiveGothique(); setScoreRight(game.current.scoreRight); break;
+					case "Henrietta" : game.current.scoreRight--; ActiveGothiqueLeft(); setScoreRight(game.current.scoreRight); break;
 					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
@@ -296,9 +325,9 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; ActiveProut(); break;
+					case "TerrancePhilip" : fart = true; ActiveProutRight(); break;
 					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; break;
-					case "Henrietta" : game.current.scoreLeft--; setScoreLeft(game.current.scoreLeft); break;
+					case "Henrietta" : game.current.scoreLeft--; ActiveGothiqueRight(); setScoreLeft(game.current.scoreLeft); break;
 					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
@@ -454,11 +483,11 @@ export default function Game(): JSX.Element {
 			case "Butters": image = ButtersL; break;
 		}
 
-		if (OnGothique)
+		if (OnGothiqueLeft)
 			return (
 				<video autoPlay src={Gothique} id="game-img-player-left"></video>
 			);
-		else if (OnProut)
+		else if (OnProutLeft)
 			return (
 				<video autoPlay src={Prout} id="game-img-player-left"></video>
 			);			

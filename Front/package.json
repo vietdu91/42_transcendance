@@ -30,6 +30,8 @@
     "react-router-dom": "^6.14.1",
     "react-scripts": "^5.0.1",
     "redirect": "^0.2.0",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.4",
     "socket.io-client": "^4.6.1",
     "typekit": "^0.1.1",
     "typescript": "^5.0.4",
