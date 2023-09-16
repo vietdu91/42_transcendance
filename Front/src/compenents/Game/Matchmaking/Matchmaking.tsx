@@ -87,6 +87,11 @@ export default function Matchmaking() {
 				console.log('Disconnected');
 		})
 
+		socket.on('wrongUser', (response) => {
+			alert(response.message);
+			navigate("/gamemenu");
+		})
+
 		return () => {
 			if (inQueue)
 				leaveQueue();

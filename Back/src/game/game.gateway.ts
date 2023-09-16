@@ -70,9 +70,15 @@ export class MatchmakingGateway {
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
 		const userService = new UserService(new PrismaService());
 		const user = await userService.getUserById(userId);
+		console.log(user);
+		if (!user) {
+			client.emit('wrongUser', {message: 'Who are you ?'});
+			return ;
+		}
 
 		for (let players of this.queue) {
-			if (players.user.id === userId) {
+			console.log(typeof(userId), userId, typeof(players.user.id), players.user.id)
+			if (players.user.id == userId) {
 				client.emit('alreadyJoined', { message: 'You already joined the matchmaking' });
 				return ;
 			}

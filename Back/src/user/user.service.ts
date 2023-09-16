@@ -64,10 +64,14 @@ async deleteUser(id: number): Promise<User> {
   }
 
   async getUserById(userId: number): Promise<User | null> {
-    const user: User = await this.prisma.user.findUnique({
-      where: { id: parseInt(userId.toString()) },
-    });
-    return user;
+    try {
+      const user: User = await this.prisma.user.findUnique({
+        where: { id: parseInt(userId.toString()) },
+      });
+      return user;
+    } catch {
+      return null;
+    }
   }
 
   async getGamesByUserId(userId: number) {
