@@ -132,7 +132,7 @@ export class UserController {
       }
     }
   
-    @Post('setNickname')
+    @Patch('setNickname')
     async setNickname( @Req() request, @Body() body: { nickname: string }) {
       const userId = request.cookies.id;
       if (!userId) {
@@ -149,7 +149,7 @@ export class UserController {
       return { message: 'Surnom enregistré avec succès' };
     }
   
-    @Post('setAge')
+    @Patch('setAge')
     async setAge( @Req() request, @Body() body: { age: number }) {
       const userId = request.cookies.id;
       if (!userId) {
@@ -168,7 +168,7 @@ export class UserController {
       return { message: 'Age enregistré avec succès' };
     }
   
-    @Post('setCharacter')
+    @Patch('setCharacter')
     async setCharacter( @Req() request, @Body() body: { character: string }) {
       const userId = request.cookies.id;
       if (!userId) {

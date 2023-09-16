@@ -67,7 +67,7 @@ export default function ChampSelect() {
 
 	const handleClick = async (character:String) => {
 		await axios
-			.post(process.env.REACT_APP_LOCAL_B + '/profile/setCharacter', { character }, { withCredentials: true })
+			.patch(process.env.REACT_APP_LOCAL_B + '/profile/setCharacter', { character }, { withCredentials: true })
 			.then((response) => {
 				console.log(response.data.message);
 			})
