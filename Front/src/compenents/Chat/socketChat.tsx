@@ -36,6 +36,7 @@ interface Conversation {
     id: number;
     users: User[];
     usersID: number[];
+    names: string[];
     messages: Message[];
     date: Date;
 }
@@ -45,7 +46,7 @@ interface User {
     name: string;
     nickname: string | null;
     age: number | null;
-    pfp_url: string | null;
+    pfp: string | null;
     friendsList: number[];
     blockList: number[];
     conversations: Conversation[];
@@ -56,7 +57,7 @@ const initUser: User = {
     name: "",
     nickname: "",
     age: -1,
-    pfp_url: "",
+    pfp: "",
     friendsList: [],
     blockList: [],
     conversations: [],
@@ -73,6 +74,7 @@ function Chat() {
         const getUserData = async () => {
             await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChat", {withCredentials: true})
                 .then(res => {
+                    console.log(res.data.conversations)
                     setUser(res.data);
                 })
                 .catch(error => {
@@ -83,7 +85,7 @@ function Chat() {
     }, []);
 
     {/** modif Benda */ }
-    const [indivConv, setIndivConv] = useState(false);
+    const [indivConv, setIndivConv] = useState(true);
     const [isConvListVisible, setIsConvListVisible] = useState(false);
 
     const handleIndivConvVisibility = (visibility) => {
@@ -106,21 +108,22 @@ function Chat() {
                     <div className="conversations-list">
                         <ConversationListHeader
                             name={user.name}
-                            pfp={user.pfp_url}
-                            // pfp="salut"
+                            pfp={user.pfp}
                             handleVisibility={handleIndivConvVisibility}
                             isConvListVisible={isConvListVisible}
                             setIsConvListVisible={setIsConvListVisible}
                             addConversation={addConversation}
+                            user={user}
                         />
                         <ConversationListSummary
                             name={user.name}
-                            pfp={user.pfp_url}
+                            pfp={user.pfp}
                             indivConv={indivConv}
                             handleVisibility={handleIndivConvVisibility}
                             isConvListVisible={isConvListVisible}
                             setIsConvListVisible={setIsConvListVisible}
-                            conversations={user.conversations}
+                            user={user}
+                            convs={user.conversations}
                         />
                     </div>
                 </div>

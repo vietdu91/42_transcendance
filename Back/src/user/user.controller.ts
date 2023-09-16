@@ -193,7 +193,7 @@ export class UserController {
       name: user.name,
       nickname: user.nickname,
       age: user.age,
-      pfp_url: user.pfp_url,
+      pfp: user.pfp_url,
       friends: user.friendsList,
       blocks: user.blockList,
       conversations: user.conversations,
@@ -224,6 +224,19 @@ export class UserController {
       console.error('Erreur lors de la recherche d\'utilisateur :', error);
       response.status(500).json({ error: 'Erreur interne du serveur' });
     }
+  }
+
+  @Get('getUserChatById')
+  async getUserChatById(@Query('id') id: number, @Req() request: Request, @Res() response: Response) {
+    const user = await this.userService.getUserById(id);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.json({
+      name: user.name,
+      nickname: user.nickname,
+      pfp: user.pfp_url,
+    });
   }
 
 }

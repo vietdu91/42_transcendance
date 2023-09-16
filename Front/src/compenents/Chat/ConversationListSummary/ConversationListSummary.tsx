@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Cookie from 'js-cookie';
 import axios from 'axios';
 
 import './ConversationListSummary.css';
@@ -10,20 +11,18 @@ import groupConv from '../../../img/chat/group-conv.png';
 import groups from '../../../img/chat/group-channel-icon.png'
 import friends from '../../../img/chat/groups3d.png'
 import SearchBar from '../../searchBar/searchBar';
-
+import Conversation from "../socketChat"
+import User from "../socketChat"
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
-    isConvListVisible, setIsConvListVisible, conversations }) => {
+    isConvListVisible, setIsConvListVisible, convs, user }) => {
     // if (!isConvListVisible)
     //     return null;
-    const [visibleItems, setVisibleItems] = useState<boolean[]>([false, false, false, false]);
+    const id = Cookie.get('id');
+    const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     // const [indivConv, setindivConv] = useState(false);
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
-
-    function printNames(names: String[]): String {
-        return (name === names[0] ? names[1] : names[0])
-    }
 
     const toggleConvSummary = (index: number) => {
         const newVisibleItems = [...visibleItems];
@@ -60,6 +59,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
     };
     {/* modif benda */ }
 
+    useEffect(() => {
+        setVisibleItems(Array.from({ length: convs.length }, () => false));
+    }, [setVisibleItems]);
+    
     const channelData = [
         {
             id: 0,
@@ -114,6 +117,8 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
         }
     ];
 
+    
+
     return (
         <div className="conversation-list-summary">
 
@@ -130,10 +135,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                 {/* Content for the conversation list */}
                 {indivConv && (
                     <ul>
-                        {conversations.map((item) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
-                                {/* <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} /> */}
-                                {printNames(item.names)}
+                        {convs.map((item, index) => (
+                            <li key={item.id} onClick={() => toggleConvSummary(index)}>
+                                <img src={regularConv} alt={regularConv} id={regularConv} />
+                                {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
                         ))}
                     </ul>
@@ -170,7 +175,11 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
             </div>
             {/* Render conversation summaries based on visibility */}
             {visibleItems.map((isVisible, index) => (
-                <ChatConversationArea name={name} isVisible={isVisible} pfp={pfp} />
+                    convs[index] && <ChatConversationArea
+                        user={user}
+                        conv={convs[index]}
+                        isVisible={isVisible}
+                    />
             ))}
             <Channel />
         </div>

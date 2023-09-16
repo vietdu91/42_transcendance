@@ -1,11 +1,11 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer} from '@nestjs/websockets';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({ cors : '*'})
 export class ChatGateway {
   @WebSocketServer()
-  server: any;
+  server: Server;
 
   constructor(private readonly prisma: PrismaService) {} // Injectez PrismaService via le constructeur
 
@@ -40,7 +40,7 @@ export class ChatGateway {
       });
     
       // Émettre un événement pour informer que la room a été créée
-      this.server.emit({ message: 'channelCreated', name });
+      this.server.emit('channelCreated', { message: 'channelCreated', name });
     }
 
     
@@ -262,8 +262,9 @@ export class ChatGateway {
 
 
   @SubscribeMessage('createConversation')
-  async handleCreateConversation(client: Socket, @MessageBody() data: {id: number, otherName: string}): Promise<void> {
-    const {id, otherName} = data;
+  async handleCreateConversation(client: Socket, params: any): Promise<void> {
+    const id = params.id;
+    const otherName = params.otherName;
     const userId = parseInt(String(id));
     const user = await this.prisma.user.findUnique({
       where: {id: userId},
@@ -283,7 +284,7 @@ export class ChatGateway {
         return ;
       }
     }
-    await this.prisma.conversation.create({
+    const conversation = await this.prisma.conversation.create({
       data: {
         users: {
           connect: [
@@ -295,7 +296,13 @@ export class ChatGateway {
         names: [user.name, otherName],
       }
     });
-    // client.emit('conversationCreated', {message: "CA MARCHE", otherUser: otherUser, conversation: conversation});
+    const shortUser = {
+      name: otherName,
+      nickname: otherUser.nickname,
+      pfp: otherUser.pfp_url,
+      // state: otherUser.state,
+    }
+    client.emit('conversationCreated', {message: "CA MARCHE", otherUser: shortUser, conversation: conversation});
   }
 
 

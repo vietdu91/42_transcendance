@@ -30,7 +30,7 @@ import DropdownContact from '../DropdownContacts/DropdownContact';
 // }) => {
 
 
-const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, isConvListVisible, setIsConvListVisible}) => {
+const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, isConvListVisible, setIsConvListVisible, user}) => {
     // État pour définir si la room est privée
 
     const socket = useContext(ChatContext);
@@ -59,6 +59,7 @@ const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, i
     {/** Modifs */ }
 
     // MODIFS KIKI
+    
 
     return (
         <div className="conversations-list-header">
@@ -75,7 +76,7 @@ const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, i
                 {/* <li onClick={() => showContact("First")}></li> */}
                 <DropdownChannel />{/*Create Join Delete*/}
                 <DropdownContact
-                    pfp={pfp}
+                    user={user}
                 /*handleIndivConvVisibility={handleVisibility}
                 isConvListVisible={isConvListVisible}
                 setIsConvListVisible={setIsConvListVisible}

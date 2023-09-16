@@ -6,7 +6,20 @@ import { ChatContext } from '../../utils/ChatContext';
 
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 
-function DropdownContact({ pfp }) {
+interface OtherUser {
+  name: string,
+  nickname: string,
+  pfp: string,
+  // state: number,
+}
+
+const initUser: OtherUser = {
+  name: "",
+  nickname: "",
+  pfp: "",
+}
+
+function DropdownContact({ user }) {
   const userId = Cookie.get('id');
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +32,8 @@ function DropdownContact({ pfp }) {
   const [friendName, setFriendName] = useState('');
   const [notFound, setNotFound] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [otherUser, setOtherUser] = useState<OtherUser>(initUser)
+  const [conv, setConv] = useState()
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
@@ -54,19 +69,21 @@ function DropdownContact({ pfp }) {
 
 
   const searchUser = async () => {
-    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', {params: {username: friendName}})
-    .then (response => {
-      console.log(response.data)
-      socket?.emit('createConversation', {id: userId, otherName: response.data.name})
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName } })
+      .then(response => {
+        console.log(response.data)
+        socket?.emit('createConversation', { id: userId, otherName: response.data.name })
+      })
+      .catch(error => {
+        console.log(error);
+      })
   };
 
   useEffect(() => {
     socket.on('conversationCreated', (response) => {
-        console.log(response.message);
+      console.log(response);
+      setOtherUser(response.otherUser);
+      setConv(response.conversation);
     })
   }, []);
 
@@ -81,7 +98,7 @@ function DropdownContact({ pfp }) {
           <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={() => {toggleSendMp()}}>Send Mp</li>
+          <li onClick={() => { toggleSendMp() }}>Send Mp</li>
         </ul>
       )}
       {isOpenForInvite && (
@@ -116,10 +133,15 @@ function DropdownContact({ pfp }) {
             value={friendName}
             onChange={handleInputChange}
           />
-          <button onClick={()=> {searchUser(); toggleSendMp()}}>ENTER</button>
-          {/* {visibleItems && (
-            <ChatConversationArea name={friendName} isVisible={visibleItems} pfp={pfp} />
-          )} */}
+          <button onClick={() => { searchUser(); toggleSendMp() }}>ENTER</button>
+          {isVisible && (
+            <ChatConversationArea 
+              user={user}
+              conv={conv}
+              isVisible={isVisible}
+              
+            />
+          )}
         </div>
       )}
     </div>

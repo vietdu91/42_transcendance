@@ -119,7 +119,10 @@
 }
 
 .channel-conversation-messages {
-	width: 100%;
+	width: 94%;
+	margin-left: 3%;
+	margin-right: 3%;
+	margin-top: 5%;
 	height: 93%;
 	background-color: #E7E8F3;
 	overflow-y: auto;
