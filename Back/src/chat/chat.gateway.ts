@@ -279,7 +279,7 @@ export class ChatGateway {
     };
     // verifier que l'id existe dans la bdd 
     const convs = await this.prisma.conversation.findMany();
-    for (let i = 0; i < convs.length; convs) {
+    for (let i = 0; i < convs.length; i++) {
       if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
         return ;
       }

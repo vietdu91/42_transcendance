@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io , { Socket } from "socket.io-client";
 import MessageInput from '../Messages/messageInput';
 import Cookies from 'js-cookie';
+import { ChatContext } from '../utils/ChatContext';
 import './Room.css'; // Assurez-vous d'avoir le fichier styles.css dans le même répertoire
 
 interface RoomProps {
@@ -10,19 +11,14 @@ interface RoomProps {
 }
 
 const Room: React.FC<RoomProps> = ({ room }) => {
+  const socket = useContext(ChatContext);
   const [channelName, setChannelName] = useState('');
   const [joined, setJoined] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
-  const [socket, setSocket] = useState<Socket>();
   const [isRoomCreated, setIsRoomCreated] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
   const [password, setPassword] = useState(''); // État pour stocker le mot de passe de la room
 
-  useEffect(() => {
-    const apiEndpoint = 'http://localhost:3001';
-    const newSocket = io(apiEndpoint);
-    setSocket(newSocket);
-  }, [setSocket]);  
 
   const send = (value: string) => {
     const id = Cookies.get('id');

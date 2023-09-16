@@ -56,11 +56,11 @@ function Channel() {
 					</div>
 					<div className="channel-group-member-list">
 						<ul>
-							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El racisto</li>
+							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El racista</li>
 							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El inutil</li>
 							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El solo mira a los mensajes</li>
-							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El creador del group</li>
-							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El creador del group</li>
+							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El obsesionado</li>
+							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El que ya no va a la escuela </li>
 							<li><img src={regularConv} alt="regularConv" id="chat_regularConv" />El creador del group</li>
 						</ul>
 					</div>

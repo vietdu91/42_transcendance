@@ -137,10 +137,14 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                     <ul>
                         {convs.map((item, index) => (
                             <li key={item.id} onClick={() => toggleConvSummary(index)}>
-                                <img src={regularConv} alt={regularConv} id={regularConv} />
-                                {name === item.names[0] ? item.names[1] : item.names[0]}
+                                <img src={regularConv} alt={regularConv} id={"icon-conv"} />
+                                {name === item.names[0] ? item.names[1] : item.names[0]} (nickname)
                             </li>
                         ))}
+                        <li>
+                            <img src={regularConv} alt={regularConv} id={regularConv} />
+                            test
+                        </li>
                     </ul>
                 )
                 }
