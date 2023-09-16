@@ -22,6 +22,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
 
   const send = (value: string) => {
     const id = Cookies.get('id');
+    console.log("hihihiha")
     socket?.emit('message', value, id);
   }
 
@@ -108,7 +109,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
         <div className="chat-container">
           <div className="chat-input">
             {/* Utilisez le composant MessageInput ici */}
-            <MessageInput send={send} messages={messages} />
+            <MessageInput send={send} />
             {/* Fin du composant MessageInput */}
           </div>
         </div>

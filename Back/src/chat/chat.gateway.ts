@@ -9,16 +9,27 @@ export class ChatGateway {
 
   constructor(private readonly prisma: PrismaService) {} // Injectez PrismaService via le constructeur
 
-  @SubscribeMessage('message')
-  async handleMessage(@MessageBody() message: string): Promise<void> {
-    await this.prisma.message.create({
+  @SubscribeMessage('sendMessageConv')
+  async handleMessage(client: Socket, params: any): Promise<void> {
+    const value = params.value;
+    const userId = parseInt(String(params.userId));
+    const convId = params.convId;
+    const message = await this.prisma.message.create({
       data: {
-        content: message[0],
-        authorId: parseInt(message[1]),
-      },
+        content: value,
+        authorId: userId,
+        conversationId: convId,
+      }
     });
 
-    this.server.emit('message', message[0]);
+    const conv = await this.prisma.conversation.findUnique({
+      where: {id: convId},
+      include: {
+        messages: true,
+      }
+    })
+
+    client.emit('messageSent', {message: "message sent to conversation", value: value, messages: conv.messages});
     }
     
     @SubscribeMessage('channelName')

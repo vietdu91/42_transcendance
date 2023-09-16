@@ -63,6 +63,7 @@ CREATE TABLE "Channel" (
 CREATE TABLE "Conversation" (
     "id" SERIAL NOT NULL,
     "usersID" INTEGER[],
+    "names" TEXT[],
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Conversation_pkey" PRIMARY KEY ("id")

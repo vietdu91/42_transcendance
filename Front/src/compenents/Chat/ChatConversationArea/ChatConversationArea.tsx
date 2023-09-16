@@ -14,6 +14,12 @@ interface User {
   pfp: string,
 }
 
+interface Message {
+  content: string,
+  date: Date,
+  authorId: number,
+}
+
 const initUser: User = {
   name: "",
   nickname: "",
@@ -24,17 +30,13 @@ function ChatConversationArea({ user, conv, isVisible }) {
   const socket = useContext(ChatContext);
   const userId = Cookies.get('id');
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
   const send = (value: string) => {
-    socket?.emit('message', value, userId);
-  }
-
-  const messageListener = (newMessage: string) => {
-    const authorId = Cookies.get('id');
-
-    setMessages(prevMessages => [...prevMessages, newMessage]);
+    const convId = conv.id;
+    console.log("hihihiha")
+    socket?.emit('sendMessageConv', {value, userId, convId});
   }
 
   useEffect(() => {
@@ -49,11 +51,23 @@ function ChatConversationArea({ user, conv, isVisible }) {
       })
     }
     getUserData();
-    socket?.on('message', messageListener);
+    socket?.on('messageSent', (res => {
+      console.log(res.message);
+      console.log(res.messages);
+      let newMessages: Message[] = [];
+      for (let i = 0; i < res.messages.length; i++) {
+        newMessages.push({
+          content: res.messages[i].content,
+          date: res.messages[i].createdAt,
+          authorId: res.messages[i].authorId,
+        })
+      }
+      setMessages(newMessages);
+    }));
     return () => {
-      socket?.off('message', messageListener);
+      socket?.off('message');
     }
-  }, [messageListener]);
+  }, []);
 
   if (isVisible == false)
     return null;
@@ -71,8 +85,8 @@ function ChatConversationArea({ user, conv, isVisible }) {
               <li></li> */}
             </ul>
           </div>
-          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
-          <TextComposerContainer name={user.name} pfp={user.pfp} send={send} messages={messages} />
+          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages}/>
+          <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
         </div>
       )}
     </div>

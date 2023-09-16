@@ -49,7 +49,7 @@ model Message {
   updatedAt      DateTime      @updatedAt
   author         User?         @relation(name: "MessageAuthor", fields: [authorId], references: [id])
   authorId       Int?
-  Conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
   conversationId Int?
 }
 

@@ -9,11 +9,12 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
                     <div className="to-who">To: {name} AKA "{nickname}"</div>
                     <div className="receiver-status">This guy is online if he doesn't answer ask youself the right questions</div>
                     <div className="text-already-sent">
-                        <div>
                             {messages?.map((message, index) => (
-                                <div key={index}>{message}</div>
+                                <ul key={index}>
+                                    <li>{nickname}{message.date}</li>
+                                    <li >{message.content}</li>
+                                </ul>
                             ))}
-                        </div>
                     </div>
                 </div>
             </div>
