@@ -129,6 +129,7 @@ export class ChatGateway {
         name: name,
         ownerId: ownerId,
         isPrivate: isPrivate,
+        image: 'test',
         password: isPrivate ? password : null,
         usersList: {
           connect: [
@@ -325,7 +326,7 @@ export class ChatGateway {
       where: { name: name },
     });
 
-    if (room.ownerId == userId) {
+    if (room.ownerId == parseInt(userId)) {
       // Supprimez la room en utilisant son ID (si vous en avez un).
       await this.prisma.channel.delete({
         where: { id: room.id },

@@ -68,12 +68,12 @@ model Message {
 }
 
 model Channel {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
   owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   Int
   image     String
-  isPrivate Boolean @default(false)
+  isPrivate Boolean
   password  String?
   usersList User[]   @relation("channels")
   banList   User[]   @relation("banList")

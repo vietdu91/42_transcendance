@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "UserState" AS ENUM ('OFFLINE', 'ONLINE', 'INGAME');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -7,6 +10,7 @@ CREATE TABLE "User" (
     "accessToken" TEXT,
     "twoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
     "nickname" TEXT,
+    "state" "UserState" NOT NULL,
     "age" INTEGER,
     "character" TEXT,
     "actualGame" INTEGER,
@@ -52,9 +56,9 @@ CREATE TABLE "Channel" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "ownerId" INTEGER NOT NULL,
+    "image" TEXT NOT NULL,
     "isPrivate" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT,
-    "usersId" INTEGER[],
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );
