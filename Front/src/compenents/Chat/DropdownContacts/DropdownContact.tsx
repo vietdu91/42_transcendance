@@ -113,6 +113,15 @@ function DropdownContact() {
 
   const toggleBlock = () => {
     setIsOpenForBlock(!isOpenForBlock);
+    if (friendName)
+    {
+      console.log("TRYING TO BLOCK FRIEND");
+      const response = axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addBlocked', {name:friendName}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+      .then(response => {})
+      .catch(error => {
+        console.log(error);
+      })
+    }
   };
 
   const toggleSendMp = async () => {
@@ -195,6 +204,8 @@ function DropdownContact() {
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
             <input type="text" placeholder="Friend's Name"
+             value={friendName}
+             onChange={handleInputChange}
             />
             <button onClick={() => { toggleBlock(); }}>ENTER</button>
           </div>

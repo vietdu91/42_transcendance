@@ -117,6 +117,11 @@ export class UserController {
       if (!name) {
         throw new UnauthorizedException();
       }
+
+      const mainUser = await this.prisma.user.findUnique({
+        where: {id: Number(userId)}
+      })
+
       const user = await this.prisma.user.findUnique({
         where: {name: name }
       })
@@ -124,7 +129,14 @@ export class UserController {
         console.log("user.id === userId");
         throw new UnauthorizedException();
       }
-
+      console.log(userId + " user.id==" + user.id + "name ===  " + name);
+      if (mainUser.friendsList.includes(user.id)) {
+        const updatedFriendList = mainUser.friendsList.filter((id) => id !== user.id);
+        const userUpdate = await this.prisma.user.update({
+          where: { id:  Number(userId)},
+          data: {friendsList: updatedFriendList},
+        })
+      }
       const userUpdate = await this.prisma.user.update({
         where: { id:  Number(userId)},
         data: {blockList: user.blockList.push(user.id)}
@@ -153,6 +165,7 @@ export class UserController {
       }
       const updatedBlockList = user.blockList.filter((id) => id !== user.id);
       console.log("updatedBlockList: " + updatedBlockList)
+      
 
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
@@ -183,6 +196,7 @@ export class UserController {
         throw new UnauthorizedException();
       }
       const updatedFriendList = user.friendsList.filter((id) => id !== user.id);
+
       console.log("updatedFriendList: " + updatedFriendList)
         const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
