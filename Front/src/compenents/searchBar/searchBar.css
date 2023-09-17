@@ -21,7 +21,7 @@
 	overflow: hidden;
 }
 
-button:hover {
+.searchBar-button:hover {
 	background-color: #0056b3;
 }
 

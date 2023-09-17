@@ -45,7 +45,7 @@ export default function NewProfile() {
 				<Import/>
 				<Form />
 				<Range />
-				<button id="move_on" onClick={handleClick}></button>
+				<button id="np_move_on" onClick={handleClick}></button>
 			</div>
 		</div>
 	)

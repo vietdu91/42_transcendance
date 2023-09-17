@@ -16,8 +16,6 @@ body {
 
 #menu {
 	height: 100vh;
-	display: flex;
-	align-items: center;
 }
 
 #bg-menu {
@@ -51,53 +49,56 @@ body {
 	align-items: center;
 	gap: 5%; */
 	display: grid;
-	grid-template-rows: 20% 30% 25% 25%;
-	grid-template-columns: auto;
-	grid-template-areas:
-		"titre"
-		""
+	grid-template-rows: [titre] 20% [image] 35% [infos] 30% [bouton] 15% [fin];
+	grid-template-columns: [column-start] 25% [column-1] 50% [column-2] 25% [column-end];
+
 }
 
 #welcome {
-	font-size: 100px;
+	grid-row-start: titre;
+	grid-column: column-start / column-end;
+	place-self: center;
+	text-align: center;
+	font-size: 5em;
 	margin-top: 30px;
 	font-family: south_park_font;
-	text-align: center;
+	white-space: nowrap;
+	/* text-align: center; */
 	/* position: relative; */
 }
 
 #skeeter {
-	max-width: 100%;
-	height: auto;
-	max-height: 40%;
-	display: block;
-	margin: 0 auto;
+	height: 20vh;
+	position: absolute;
+	justify-self: center;
+	grid-row-start: 2;
+	grid-column: column-start / column-end;
 }
 
-#move_on {
+#np_move_on {
 	background-image: url("../../img/buttons/move_on.png");
 	background-size: cover;
-	width: 75px;
-	height: 75px;
-	font-size: 2rem;
-	position: fixed;
-	bottom: 6%;
-	right: 15%;
-	z-index: 50;
+
+	width: 100px;
+	height: 100px;
+
+	grid-row-start: bouton;
+	grid-column: column-start / column-end;
+	place-self: center;
 
     background-color: rgba(0, 0, 255, 0);
     border: 1px solid rgba(0, 0, 255, 0);
 }
 
-@media (max-width: 850px) {
-	#welcome {
-		font-size: 50px;
-	}
+#np_move_on:hover {
+	transform: rotate(-15deg);
+	transition: all 0.25s ease-in-out;
 }
 
-@media (max-width: 1400px) {
-	#move_on {
-		width: 80px;
-		height: 80px;
+@media (max-width: 920px) {
+	#welcome {
+		white-space: normal;
+		font-size: 3.5em;
+		line-height: 1em;
 	}
 }
