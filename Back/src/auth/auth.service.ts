@@ -76,7 +76,6 @@ export class AuthService {
     private setAuthCookies(res: Response, accessToken: string, userId: number): void {
         res.cookie('accessToken', accessToken);
         res.cookie('id', userId);
-        console.log("jai vraiment set ");
     }
             
     async getAccessToken(code: string): Promise<any> {

@@ -62,6 +62,7 @@ model Channel {
   id        Int     @id @default(autoincrement())
   ownerId   String   
   name      String  @unique
+  image     String
   isPrivate Boolean @default(false)
   password  String?
   usersList Int[]

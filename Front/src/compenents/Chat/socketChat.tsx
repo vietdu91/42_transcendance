@@ -29,7 +29,11 @@ function Chat() {
 
     const handleSearch = async (query: string) => {
 
-        const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: query }, { withCredentials: true })
+        const response = await axios.post(
+            process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
+            { name: query },
+            { withCredentials: true, headers: {Authorization: `Bearer ${token}`} },
+            )
         .then((response) => {
           const receivId = response.data.id;
           console.log("id === " + receivId);
@@ -46,7 +50,9 @@ function Chat() {
     
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
+        axios.get(
+            process.env.REACT_APP_LOCAL_B + '/profile/getUser',
+            { withCredentials: true , headers: {Authorization: `Bearer ${token}`}})
         .then(response => {
             getNick(response.data.nick);
             getName(response.data.name);

@@ -17,6 +17,8 @@ export default function Decompte() {
     const location = useLocation();
 	const { roomId } = location.state;
     const navigate = useNavigate();
+    
+    console.log(location.pathname)
 
     useEffect(() => {
         const interval = setInterval(() => {

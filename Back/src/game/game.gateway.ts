@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import {v4} from 'uuid';
@@ -7,6 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 // import { subscribe } from 'diagnostics_channel';
 import p5 from 'p5';
+import JwtAuthenticationGuard from '../jwt-guard/jwt-guard.guard';
 
 let PI = Math.PI;
 
@@ -51,6 +52,7 @@ type Game = {
 	tocLeft: number;
 	tocRight: number;
 	ball: Ball;
+	gaveUp: Boolean;
 }
 
 @WebSocketGateway()
@@ -62,18 +64,21 @@ export class MatchmakingGateway {
 
 	private games: Game[] = [];
 
-	private gaveUp: Boolean = false;
-
 	private lTocSpeed: number = (9/16) * 100 / 160;
 	private rTocSpeed: number = (9/16) * 100 / 160;
 
 	@SubscribeMessage('joinQueue')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
 		const userService = new UserService(new PrismaService());
 		const user = await userService.getUserById(userId);
+		if (!user) {
+			client.emit('wrongUser', {message: 'Who are you ?'});
+			return ;
+		}
 
 		for (let players of this.queue) {
-			if (players.user.id === userId) {
+			if (players.user.id == userId) {
 				client.emit('alreadyJoined', { message: 'You already joined the matchmaking' });
 				return ;
 			}
@@ -91,6 +96,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('leaveQueue')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleLeaveQueue(client: Socket, userId: number): Promise<void> {
     	this.queue = this.queue.filter((player) => {
 			player.user.id !== userId;
@@ -155,7 +161,8 @@ export class MatchmakingGateway {
 					inertia: 0,
 					vx: 0,
 					vy: 0,
-				}
+				},
+				gaveUp: false,
 			}
 
 			const gameIdIndex = game.id;
@@ -190,6 +197,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('roundStart')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleGameStart(socket: Socket, roomId: number): Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)
@@ -215,13 +223,14 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('giveUp')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleGiveUp(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
 			return;
 		const prisma = new PrismaService();
 
-		if (this.gaveUp)
+		if (actualGame.gaveUp)
 			return ;
 
 		const winnerId:number = params[1] === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
@@ -276,13 +285,14 @@ export class MatchmakingGateway {
 			})
 		}
 
-		this.gaveUp = true;
+		actualGame.gaveUp = true;
 		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
 		this.server.to(sendTo).emit("gaveUp", {message: "The other player gave up ! Boooo !", id: params[1]});
 	}
 
 	@SubscribeMessage('movePlayer')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -309,6 +319,7 @@ export class MatchmakingGateway {
 	}
 	
 	@SubscribeMessage('usePower')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleUsePower(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -350,6 +361,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('moveBall')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleMoveBall(socket: Socket, roomId: number) : Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)

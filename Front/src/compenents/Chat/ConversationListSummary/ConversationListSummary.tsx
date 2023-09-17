@@ -91,7 +91,7 @@ const ConversationListSummary = ({ name, pfp }) => {
             {visibleItems.map((isVisible, index) => (
                 <ChatConversationArea name={name} isVisible={isVisible} pfp={pfp} />
             ))}
-            <Channel />
+            <Channel pfp={pfp}/>
         </div>
     );
 }

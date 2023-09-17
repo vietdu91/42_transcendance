@@ -29,6 +29,7 @@ export class ChatGateway {
       const channelData = {
         name,
         ownerId,
+        image: "https://res.cloudinary.com/dsvw15bam/image/upload/v1694703850/avatars-ubXQyNB9MhoSHi6Q-2bLbtw-t500x500_tiff9c.jpg",
         isPrivate: !!isPrivate, // Convertir en booléen
         //password: isPrivate ? password : null, // Stocker le mot de passe si la room est privée, sinon null
       };

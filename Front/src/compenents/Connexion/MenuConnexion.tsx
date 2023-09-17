@@ -18,25 +18,7 @@ export default function MenuConnexion() {
 	
 
 	async function CookieStorage() {
-
 		window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
-		// console.log("app-front: CookieStorage: ");
-		// try {
-		// 	console.log("app-front: CookieStorage: try: ");
-		// 	const res = await axios({
-		// 		url: process.env.REACT_APP_LOCAL_B + "/Auth/conexion",
-		// 		method: 'GET',
-		// 	}).then(response => {
-		// 		console.log("app-front: res.data.accessToken: ", response.data.accessToken 
-		// 		, "res.data.user.id: ", response.data.user.id);
-		// 		localStorage.setItem('accessToken', response.data.accessToken);
-		// 		localStorage.setItem('id', response.data.user.id.toString());
-		// 		//window.location.href = 'http://localhost:3000/newprofile';
-		// 	})
-		// }
-		// catch (err) {
-		// 	console.log("app-front: error: ", err)
-		// }
 	}
 
 	const [hover, setHover] = useState(Town);

@@ -18,7 +18,9 @@ export default function TwoFa() {
 	const handleEnable = async (e) => {
 		e.preventDefault();
 		console.log(code);
-		await axios.get(process.env.REACT_APP_LOCAL_B + `/auth/connect2fa?code=${code}`, {withCredentials: true})
+		await axios.get(
+			process.env.REACT_APP_LOCAL_B + `/auth/connect2fa?code=${code}`,
+			{withCredentials: true})
 		.then(response => {
 			navigate('/');
 		})

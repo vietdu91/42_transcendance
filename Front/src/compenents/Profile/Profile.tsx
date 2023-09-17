@@ -36,7 +36,9 @@ export default function Profile() {
 	let games = useRef<Game[]>([]);
 	
 	async function generateTwoFa() {
-		await axios.get(process.env.REACT_APP_LOCAL_B + '/twofa/generate', {headers: {  'Authorization': `Bearer ${token}` }},)
+		await axios.get(
+			process.env.REACT_APP_LOCAL_B + '/twofa/generate',
+			{headers: {  'Authorization': `Bearer ${token}` }})
 		.then(response => {
 			console.log("respond === " + response.data.code);
 			setShowFa(true);
@@ -54,7 +56,10 @@ export default function Profile() {
 	const handleEnable = async (e) => {
 		console.log(code);
 		// e.preventDefault();
-		await axios.post(process.env.REACT_APP_LOCAL_B + '/twofa/turn-on', { code }, { withCredentials: true, headers: {  'Authorization': `Bearer ${token}` } })
+		await axios.post(
+			process.env.REACT_APP_LOCAL_B + '/twofa/turn-on',
+			{ code },
+			{ withCredentials: true, headers: {  'Authorization': `Bearer ${token}` } })
 		.then(response => {
 		})
 		.catch(err => {
@@ -64,7 +69,10 @@ export default function Profile() {
 
 	async function handleDisable() {
 		const state:boolean = false;
-		await axios.patch(process.env.REACT_APP_LOCAL_B + '/profile/disableTwoFA', {state}, {withCredentials: true})
+		await axios.patch(
+			process.env.REACT_APP_LOCAL_B + '/profile/disableTwoFA',
+			{state},
+			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
 		.then(response => {
 			setTwoFa(false);
 			setShowFa(false);
@@ -119,7 +127,9 @@ export default function Profile() {
 
 	useEffect (() => {
 		// axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
-		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
+		axios.get(
+			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
+			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
 		.then(response => {
 			getNick(response.data.nick);
 			getName(response.data.name);

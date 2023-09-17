@@ -28,7 +28,6 @@ export class AuthController {
 
   @Get('connect2fa')
   async connect2fa(@Query('code') code: string, @Req() req: Request, @Res() res: Response) {
-    console.log(code);
     const userId = parseInt(req.cookies.id);
     const user = await this.userService.getUserById(userId);
     if (!user.twoFactorSecret || !user.twoFactorEnabled)
@@ -41,7 +40,6 @@ export class AuthController {
       where: {id: userId},
       data: {state: 'ONLINE'},
     })
-    console.log(process.env.URL_LOCAL_F);
     res.status(200).json({ message: 'Connexion réussie' });
   }
 

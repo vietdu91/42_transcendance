@@ -2,6 +2,7 @@ import React from 'react';
 import { useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
+import { useNavigate } from "react-router-dom";
 
 
 import './ConversationListHeader.css';
@@ -11,12 +12,16 @@ import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
 const ConversationListHeader = ({ name, pfp }) => {
+    const navigate = useNavigate();
 // État pour définir si la room est privée
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
     });
 
+    function goToProfile() {
+        window.open(process.env.REACT_APP_LOCAL_F + "/profile");
+    }
 
     const hideComponent = (name) => {
         setState((prevState) => ({
@@ -47,7 +52,7 @@ const ConversationListHeader = ({ name, pfp }) => {
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger">
-                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" /> {/* Add the profile picture */}
+                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile}/> {/* Add the profile picture */}
                 </div>                <div className="user-informations">
                     <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
                     <h4 className="status-edit">status to Edit</h4>
