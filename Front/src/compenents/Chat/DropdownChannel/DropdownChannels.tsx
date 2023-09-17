@@ -10,67 +10,68 @@ function DropdownChannels() {
   const [joined, setJoined] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [isRoomCreated, setIsRoomCreated] = useState(false);
-
+  const [isPrivate, setIsPrivate] = useState(false);  
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);
   const [isOpenForJoinChannel, setIsOpenForJoinChannel] = useState(false);
   const [isOpenForDeleteChannel, setIsOpenForDeleteChannel] = useState(false);
+  const [ownerId, setOwnerId] = useState('');
+   
 
   const toggleChannels = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleCreateChannel = () => {
-    const id = Cookies.get('id');
-    // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
-     if (isPrivate) {
-       socket?.emit('channelName', { name: 'test', ownerId: id, isPrivate });
-    } else {
-      // Si la room n'est pas privée, n'envoyer que le nom de la room
-      socket?.emit('channelName', { name: 'test', ownerId: id });
-    }
-      setIsOpenForCreateChannel(!isOpenForCreateChannel);
+    setIsOpenForCreateChannel(!isOpenForCreateChannel);
   };
 
   const toggleJoinChannel = () => {
     const id = Cookies.get('id');
-    socket?.emit('joinRoom', {name: 'test', userId: id});
-    setIsOpenForJoinChannel(true);
+    socket?.emit('joinRoom', {name: channelName, userId: id});
+    //setIsOpenForJoinChannel(true);
   };
 
   const toggleDeleteChannel = () => {
-     socket?.emit('deleteRoom', {name: 'test'});
     setIsOpenForDeleteChannel(!isOpenForDeleteChannel);
   };
 
   const handleJoin = () => {
     const id = Cookies.get('id');
-    socket?.emit('joinRoom', { name: 'test', userId: id });
+    socket?.emit('joinRoom', { name: channelName, userId: id });
     setJoined(true);
   };
 
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setChannelName(event.target.value);
+  };
+
+
+
   const handleCreate = () => {
-    console.log("Created room:", 'test');
-    setChannelName('test');
+    console.log("Created room:", channelName);
     setIsRoomCreated(true);
     const id = Cookies.get('id');
     // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
     if (isPrivate) {
-      socket?.emit('channelName', { name: 'test', ownerId: id, isPrivate });
+      socket?.emit('channelName', { name: channelName, ownerId: id, isPrivate });
     } else {
       // Si la room n'est pas privée, n'envoyer que le nom de la room
-      socket?.emit('channelName', { name: 'test', ownerId: id });
+      socket?.emit('channelName', { name: channelName, ownerId: id });
     }
   };
 
   const handleDelete = () => {
-    console.log("Deleted room:", { name: 'test' });
-    setChannelName('');
-    setIsRoomCreated(false);
+
+    const id = Cookies.get('id');
+    console.log("Deleted room:", { name: channelName });
+    socket?.emit('deleteRoom', { name: channelName , userId: id});
     setIsPrivate(false);
     setJoined(false);
-    socket?.emit('deleteRoom', { name: 'test' });
+    setIsRoomCreated(false);
+    setChannelName('');
   }
 
 
@@ -81,25 +82,25 @@ function DropdownChannels() {
     setIsRoomCreated(false);
     setIsPrivate(false);
     setJoined(false);
-    socket?.emit('leaveRoom', { name: 'test', userId: id });
+    socket?.emit('leaveRoom', { name: channelName, userId: id });
   }
 
   const handleBan = () => {
     const id = Cookies.get('id');
     console.log("Banned user:", id);
-    socket?.emit('banRoom', { name: 'test', userId: id });
+    socket?.emit('banRoom', { name: channelName, userId: id });
   }
 
   const handleKik = () => {
     const id = Cookies.get('id');
     console.log("Kicked user:", id);
-    socket?.emit('kickUser', { name: 'test', userId: id });
+    socket?.emit('kickUser', { name: channelName, userId: id });
   }
 
   const handleSetAdmin = () => {
     const id = Cookies.get('id');
     console.log("Set admin:", id);
-    socket?.emit('setAdmin', { name: 'test', userId: id });
+    socket?.emit('setAdmin', { name: channelName, userId: id });
   }
 
   return (
@@ -124,7 +125,8 @@ function DropdownChannels() {
             <input
               type="text"
               placeholder="Channel Name"
-              onChange={(e) => setChannelName(e.target.value)} // Capture the channel name
+              value={channelName}
+              onChange={handleInputChange} // Capture the channel name
             />
             </div>
             <div className="checkboxes-tick">
@@ -132,6 +134,7 @@ function DropdownChannels() {
               <label htmlFor="public">Public</label>
               <input type="checkbox" id="private" />
               <label htmlFor="private">Private</label>
+              <button onClick={() => handleCreate()} >ENTER</button>
             </div>
             {/*
             <input type="text" placeholder="Password" />
@@ -158,10 +161,11 @@ function DropdownChannels() {
           <div className="channel-delete-container">
             {/* Add content for channel delete */}
             <input type="text" placeholder="Channel Name"
-              onChange={(e) => setChannelName(e.target.value)}
+              value={channelName}
+              onChange={handleInputChange}
             />
             <input type="text" placeholder="Password" />
-            <button onClick={() => { handleDelete(); toggleDeleteChannel(); }}>Delete</button>
+            <button onClick={() => { handleDelete()}}>Delete</button>
           </div>
         )
       }

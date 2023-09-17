@@ -149,18 +149,19 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('deleteRoom')
-  async handleDeleteRoom(@MessageBody() data: { name: string }): Promise<void> {
+  async handleDeleteRoom(@MessageBody() data: { name: string, userId: string}): Promise<void> {
     {
-    const { name } = data;
+    const { name , userId} = data;
   
     console.log('Deleted room with name:', name);
   
+
     // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
     const room = await this.prisma.channel.findUnique({
       where: { name: name },
     });
-  
-    if (room) {
+
+    if (room.ownerId == userId) {
       // Supprimez la room en utilisant son ID (si vous en avez un).
       await this.prisma.channel.delete({
         where: { id: room.id },

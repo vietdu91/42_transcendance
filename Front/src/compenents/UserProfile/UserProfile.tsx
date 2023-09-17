@@ -33,7 +33,7 @@ export default function UserProfile() {
 		console.log("TRYING TO ADD FRIEND");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/addFriend',
-			{id},
+			{name},
 			{headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true })
 		.then(response => {})
 		.catch(error => {
@@ -47,7 +47,7 @@ export default function UserProfile() {
 		console.log("TRYING TO REMOVE FRIEND");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/removeFriend',
-			{id},
+			{name},
 			{headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true })
 		.then(response => {})
 		.catch(error => {

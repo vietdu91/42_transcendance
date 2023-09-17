@@ -75,51 +75,139 @@ export class UserController {
     response.json({ users: users });
   }
 
-  @Post('addFriend')
-  @UseGuards(JwtAuthenticationGuard)
-  async addFriend(@Req() request, @Body() body: { id: number }) {
-    ;
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const { id } = body;
-    if (!id) {
-      throw new UnauthorizedException();
-    }
-    const user = await this.prisma.user.findUnique({
-      where: { id: Number(userId) }
-    })
-    const userUpdate = await this.prisma.user.update({
-      where: { id: Number(userId) },
-      data: { friendsList: user.friendsList.push(id) },
-    })
-  }
+    @Post('addFriend')
+    @UseGuards(JwtAuthenticationGuard)
+    async addFriend( @Req() request, @Body() body: {name: string}) {;
+      console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      console.log("userId: " + userId);
 
-  @Post('removeFriend')
-  @UseGuards(JwtAuthenticationGuard)
-  async removeFriend(@Req() request, @Body() body: { id: number }) {
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
+      const { name } = body;
+      console.log("name: " + name);
+      if (!name) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {name: name }
+      })
+      if(user.id == userId){
+        console.log("user.id === userId");
+        throw new UnauthorizedException();
+      }
+      console.log(userId + " " + user.id + " " + name);
+      const userUpdate = await this.prisma.user.update({
+        where: { id:  Number(userId)},
+        data: {friendsList: user.friendsList.push(user.id)},
+      })
+      console.log("FRIEND ADDED: travail termine");
     }
-    const { id } = body;
-    if (!id) {
-      throw new UnauthorizedException();
+
+    @Post('addBlocked')
+    @UseGuards(JwtAuthenticationGuard)
+    async addBlocked( @Req() request, @Body() body: {name: string}) {;
+      console.log("On y arrive pour addBlocked jusqu'ici ouuuuuu");
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      console.log("userId: " + userId);
+
+      const { name } = body;
+      console.log("name: " + name);
+      if (!name) {
+        throw new UnauthorizedException();
+      }
+
+      const mainUser = await this.prisma.user.findUnique({
+        where: {id: Number(userId)}
+      })
+
+      const user = await this.prisma.user.findUnique({
+        where: {name: name }
+      })
+      if(user.id == userId){
+        console.log("user.id === userId");
+        throw new UnauthorizedException();
+      }
+      console.log(userId + " user.id==" + user.id + "name ===  " + name);
+      if (mainUser.friendsList.includes(user.id)) {
+        const updatedFriendList = mainUser.friendsList.filter((id) => id !== user.id);
+        const userUpdate = await this.prisma.user.update({
+          where: { id:  Number(userId)},
+          data: {friendsList: updatedFriendList},
+        })
+      }
+      const userUpdate = await this.prisma.user.update({
+        where: { id:  Number(userId)},
+        data: {blockList: user.blockList.push(user.id)}
+      })
+      console.log("BLOCKED ADDED: travail termine");
     }
-    const user = await this.prisma.user.findUnique({
-      where: { id: Number(userId) }
-    })
-    let array = user.friendsList;
-    const index = array.indexOf(id, 0);
-    if (index > -1) {
-      array.splice(index, 1);
+
+    @Post('removeBlocked')
+    @UseGuards(JwtAuthenticationGuard)
+    async removeBlocked( @Req() request, @Body() body: {name: string}) {
+      console.log("Removing blocked..." + body.name)
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      console.log("id de l'user qui delete: " + userId)
+      const { name } = body;
+      if (!name) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {name: name }
+      })
+      console.log("id de l'user a delete: " + user.id)
+      if (user.id == userId) {
+        throw new UnauthorizedException();
+      }
+      const updatedBlockList = user.blockList.filter((id) => id !== user.id);
+      console.log("updatedBlockList: " + updatedBlockList)
+      
+
       const userUpdate = await this.prisma.user.update({
         where: { id: Number(userId) },
-        data: { friendsList: array },
+        data: {blockList: updatedBlockList},
+        })
+        console.log("BLOCKED REMOVED: travail termine");
+      }
+
+
+
+    @Post('removeFriend')
+    @UseGuards(JwtAuthenticationGuard)
+    async removeFriend( @Req() request, @Body() body: {name: string}) {
+      console.log("Removing friend..." + body.name)
+      const userId = request.cookies.id;
+      if (!userId) {
+        throw new UnauthorizedException();
+      }
+      console.log("id de l'user qui delete: " + userId)
+      const { name } = body;
+      if (!name) {
+        throw new UnauthorizedException();
+      }
+      const user = await this.prisma.user.findUnique({
+        where: {name: name }
+      })
+      console.log("id de l'user a delete: " + user.id)
+      if (user.id == userId) {
+        throw new UnauthorizedException();
+      }
+      const updatedFriendList = user.friendsList.filter((id) => id !== user.id);
+
+      console.log("updatedFriendList: " + updatedFriendList)
+        const userUpdate = await this.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { friendsList: updatedFriendList },
       })
     }
-  }
 
   @Patch('setNickname')
   @UseGuards(JwtAuthenticationGuard)
