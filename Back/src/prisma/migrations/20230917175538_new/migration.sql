@@ -53,6 +53,7 @@ CREATE TABLE "Channel" (
     "id" SERIAL NOT NULL,
     "ownerId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
     "isPrivate" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT,
     "usersList" INTEGER[],
