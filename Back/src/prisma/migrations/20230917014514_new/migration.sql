@@ -39,8 +39,10 @@ CREATE TABLE "Message" (
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "authorId" INTEGER,
+    "authorId" INTEGER NOT NULL,
+    "authorName" TEXT NOT NULL,
     "conversationId" INTEGER,
+    "channelId" INTEGER,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
 );
@@ -48,13 +50,11 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "Channel" (
     "id" SERIAL NOT NULL,
-    "ownerId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "ownerId" INTEGER NOT NULL,
     "isPrivate" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT,
-    "usersList" INTEGER[],
-    "banList" INTEGER[],
-    "adminList" INTEGER[],
+    "usersId" INTEGER[],
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")
 );
@@ -71,6 +71,24 @@ CREATE TABLE "Conversation" (
 
 -- CreateTable
 CREATE TABLE "_players" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_channels" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_banList" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_adminList" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -106,22 +124,64 @@ CREATE UNIQUE INDEX "_players_AB_unique" ON "_players"("A", "B");
 CREATE INDEX "_players_B_index" ON "_players"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_channels_AB_unique" ON "_channels"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_channels_B_index" ON "_channels"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_banList_AB_unique" ON "_banList"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_banList_B_index" ON "_banList"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_adminList_AB_unique" ON "_adminList"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_adminList_B_index" ON "_adminList"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_conversations_AB_unique" ON "_conversations"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_conversations_B_index" ON "_conversations"("B");
 
 -- AddForeignKey
-ALTER TABLE "Message" ADD CONSTRAINT "Message_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Message" ADD CONSTRAINT "Message_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Message" ADD CONSTRAINT "Message_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "Conversation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Message" ADD CONSTRAINT "Message_channelId_fkey" FOREIGN KEY ("channelId") REFERENCES "Channel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Channel" ADD CONSTRAINT "Channel_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_players" ADD CONSTRAINT "_players_A_fkey" FOREIGN KEY ("A") REFERENCES "Game"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_players" ADD CONSTRAINT "_players_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_channels" ADD CONSTRAINT "_channels_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_channels" ADD CONSTRAINT "_channels_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_banList" ADD CONSTRAINT "_banList_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_banList" ADD CONSTRAINT "_banList_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_adminList" ADD CONSTRAINT "_adminList_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_adminList" ADD CONSTRAINT "_adminList_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_conversations" ADD CONSTRAINT "_conversations_A_fkey" FOREIGN KEY ("A") REFERENCES "Conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;

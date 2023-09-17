@@ -55,7 +55,19 @@ async deleteUser(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) },
       include: {
-        conversations: true,
+        conversations: {
+          include: {
+            messages: true,
+          }
+        },
+        channels: {
+          include: {
+            usersList: true,
+            banList: true,
+            adminList: true,
+            messages: true,
+          },
+        },
       },
     });
     return user;

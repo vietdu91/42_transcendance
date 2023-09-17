@@ -56,11 +56,6 @@ const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, i
             setNewConversation('');
         }
     };
-    {/** Modifs */ }
-
-    // MODIFS KIKI
-    
-
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
@@ -74,7 +69,7 @@ const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, i
             <hr />
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
-                <DropdownChannel />{/*Create Join Delete*/}
+                <DropdownChannel user={user} />{/*Create Join Delete*/}
                 <DropdownContact
                     user={user}
                 /*handleIndivConvVisibility={handleVisibility}

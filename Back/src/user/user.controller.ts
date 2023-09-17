@@ -197,6 +197,7 @@ export class UserController {
       friends: user.friendsList,
       blocks: user.blockList,
       conversations: user.conversations,
+      channels: user.channels,
     })
   }
 

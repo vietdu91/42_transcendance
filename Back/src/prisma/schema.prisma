@@ -28,6 +28,10 @@ model User {
   blockList        Int[]
   messages         Message[]      @relation("MessageAuthor")
   conversations    Conversation[] @relation("conversations")
+  channels         Channel[]      @relation("channels")
+  whereBan         Channel[]      @relation("banList")
+  whereAdmin       Channel[]      @relation("adminList")
+  whereOwner       Channel[]
 }
 
 model Game {
@@ -48,23 +52,26 @@ model Message {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   author         User?         @relation(name: "MessageAuthor", fields: [authorId], references: [id])
-  authorId       Int?
+  authorId       Int
+  authorName     String
   conversation   Conversation? @relation(fields: [conversationId], references: [id])
   conversationId Int?
+  channel        Channel?      @relation(fields: [channelId], references: [id])
+  channelId      Int?
 }
 
 model Channel {
   id        Int     @id @default(autoincrement())
-  ownerId   String
   name      String  @unique
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   Int
   isPrivate Boolean @default(false)
   password  String?
-  usersList Int[]
-  banList   Int[]
-  adminList Int[]
-  //messages  Message[] @relation("ChannelMessages")
-  // Ajoutez d'autres champs de modèle si nécessaire
-  // ...
+  usersList User[]   @relation("channels")
+  banList   User[]   @relation("banList")
+  adminList User[]   @relation("adminList")
+  messages  Message[] 
+
 }
 
 model Conversation {

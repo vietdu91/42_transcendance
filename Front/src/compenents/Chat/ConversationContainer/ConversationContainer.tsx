@@ -11,8 +11,9 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
                     <div className="text-already-sent">
                             {messages?.map((message, index) => (
                                 <ul key={index}>
-                                    <li>{nickname}{message.date}</li>
-                                    <li >{message.content}</li>
+                                    <li className="conv-sender-info">{message.authorName}:</li>
+                                    <li className="conv-message-content">{message.content}</li>
+                                    <li className="conv-message-date">{message.createdAt}</li>
                                 </ul>
                             ))}
                     </div>

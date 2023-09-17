@@ -17,7 +17,7 @@ interface User {
 interface Message {
   content: string,
   date: Date,
-  authorId: number,
+  authorName: number,
 }
 
 const initUser: User = {
@@ -30,12 +30,11 @@ function ChatConversationArea({ user, conv, isVisible }) {
   const socket = useContext(ChatContext);
   const userId = Cookies.get('id');
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState(conv.messages);
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
-  const send = (value: string) => {
+  const send = async (value: string) => {
     const convId = conv.id;
-    console.log("hihihiha")
     socket?.emit('sendMessageConv', {value, userId, convId});
   }
 
@@ -48,24 +47,14 @@ function ChatConversationArea({ user, conv, isVisible }) {
       })
       .catch(error => {
         console.log(error);
-      })
+      });
+      socket.on('messageSentConv', (res => {
+        setMessages(res.messages);
+      }));
     }
     getUserData();
-    socket?.on('messageSent', (res => {
-      console.log(res.message);
-      console.log(res.messages);
-      let newMessages: Message[] = [];
-      for (let i = 0; i < res.messages.length; i++) {
-        newMessages.push({
-          content: res.messages[i].content,
-          date: res.messages[i].createdAt,
-          authorId: res.messages[i].authorId,
-        })
-      }
-      setMessages(newMessages);
-    }));
     return () => {
-      socket?.off('message');
+      socket.off('messageSentConv');
     }
   }, []);
 

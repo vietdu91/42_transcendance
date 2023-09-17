@@ -15,11 +15,41 @@ import Conversation from "../socketChat"
 import User from "../socketChat"
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
-    isConvListVisible, setIsConvListVisible, convs, user }) => {
+    isConvListVisible, setIsConvListVisible, channels, convs, user, handleChannelsConvVisibility,
+    isChannelsListVisible, setIsChannelsListVisible }) => {
     // if (!isConvListVisible)
     //     return null;
+
+    const friendsData = [
+        {
+            id: 0,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 0"
+        },
+        {
+            id: 1,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 1"
+        },
+        {
+            id: 2,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 2"
+        },
+        {
+            id: 3,
+            imageSrc: friends,
+            altText: "friends",
+            text: "Friends Name 3"
+        }
+    ];
+
     const id = Cookie.get('id');
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
+    const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     // const [indivConv, setindivConv] = useState(false);
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
@@ -28,6 +58,12 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
         const newVisibleItems = [...visibleItems];
         newVisibleItems[index] = !newVisibleItems[index];
         setVisibleItems(newVisibleItems);
+    };
+
+    const toggleChannelSummary = (index: number) => {
+        const newVisibleChannels = [...visibleChannels];
+        newVisibleChannels[index] = !newVisibleChannels[index];
+        setVisibleChannels(newVisibleChannels);
     };
 
     const handleImageClick = () => {
@@ -61,62 +97,9 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
 
     useEffect(() => {
         setVisibleItems(Array.from({ length: convs.length }, () => false));
-    }, [setVisibleItems]);
+        setVisibleChannels(Array.from({ length: convs.length }, () => false));
+    }, [setVisibleItems, setVisibleChannels]);
     
-    const channelData = [
-        {
-            id: 0,
-            imageSrc: regularConv,
-            altText: "regularConv",
-            text: "je suis un channel 0"
-        },
-        {
-            id: 1,
-            imageSrc: regularConv,
-            altText: "regularConv",
-            text: "je suis un channel 1"
-        },
-        {
-            id: 2,
-            imageSrc: regularConv,
-            altText: "regularConv",
-            text: "je suis un channel 2"
-        },
-        {
-            id: 3,
-            imageSrc: regularConv,
-            altText: "regularConv",
-            text: "je suis un channel 3"
-        }
-    ];
-
-    const friendsData = [
-        {
-            id: 0,
-            imageSrc: friends,
-            altText: "friends",
-            text: "Friends Name 0"
-        },
-        {
-            id: 1,
-            imageSrc: friends,
-            altText: "friends",
-            text: "Friends Name 1"
-        },
-        {
-            id: 2,
-            imageSrc: friends,
-            altText: "friends",
-            text: "Friends Name 2"
-        },
-        {
-            id: 3,
-            imageSrc: friends,
-            altText: "friends",
-            text: "Friends Name 3"
-        }
-    ];
-
     
 
     return (
@@ -143,21 +126,19 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                         ))}
                         <li>
                             <img src={regularConv} alt={regularConv} id={regularConv} />
-                            test
                         </li>
                     </ul>
                 )
                 }
                 {channelsConv && (
                     <ul>
-                        {channelData.map((item) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
-                                <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} />
-                                {item.text}
+                        {channels.map((item, index) => (
+                            <li key={item.id} onClick={() => {console.log(item);toggleChannelSummary(index)}}>
+                                {/* <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} /> */}
+                                {item.name}
                             </li>
                         ))}
                     </ul>
-
                 )
                 }
                 {listFriends && (
@@ -185,7 +166,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                         isVisible={isVisible}
                     />
             ))}
-            <Channel />
+            {visibleChannels.map((isVisible, index) => (
+                channels[index] && <Channel user={user} channel={channels[index]} isVisible={isVisible}/>
+            ))}
+            
         </div>
     );
 }

@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import io, { Socket } from "socket.io-client";
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
 import Cookies from 'js-cookie';
+import { ChatContext } from '../utils/ChatContext';
 
 
 import ConversationContainer from './ConversationContainer/ConversationContainer';
@@ -18,7 +19,15 @@ import './Chat.css';
 import axios from "axios"
 
 interface Channel {
-
+    id: number;
+    name: string;
+    owner: User;
+    ownerId: number;
+    isPrivate: boolean;
+    usersList: User[];
+    banList: User[];
+    adminList: User[];
+    messages: Message[];
 }
 
 interface Message {
@@ -28,8 +37,10 @@ interface Message {
     updatedAt: Date;
     author: User | null;
     authorId: number | null;
-    Conversation: Conversation | null;
+    conversation: Conversation | null;
     conversationId: number | null;
+    channel: Channel | null;
+    channelId: number | null;
 }
 
 interface Conversation {
@@ -50,6 +61,7 @@ interface User {
     friendsList: number[];
     blockList: number[];
     conversations: Conversation[];
+    channels: Channel[];
 }
 
 const initUser: User = {
@@ -61,6 +73,7 @@ const initUser: User = {
     friendsList: [],
     blockList: [],
     conversations: [],
+    channels: [],
 }
 
 function Chat() {
@@ -68,13 +81,16 @@ function Chat() {
     const token = Cookies.get('accessToken');
     if (!token)
         window.location.href = "http://localhost:3000/connect";
+    const socket = useContext(ChatContext);
     const [user, setUser] = useState<User>(initUser);
+    const userId = Cookies.get('id');
 
+    socket.emit('joinChat', {userId})
     useEffect(() => {
         const getUserData = async () => {
-            await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChat", {withCredentials: true})
+            await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChat", { withCredentials: true })
                 .then(res => {
-                    console.log(res.data.conversations)
+                    // console.log(res.data.conversations)
                     setUser(res.data);
                 })
                 .catch(error => {
@@ -86,10 +102,18 @@ function Chat() {
 
     {/** modif Benda */ }
     const [indivConv, setIndivConv] = useState(true);
+    const [channelsConv, setChannelsConv] = useState(true);
+
+
     const [isConvListVisible, setIsConvListVisible] = useState(false);
+    const [isChannelsListVisible, setIsChannelsListVisible] = useState(false);
 
     const handleIndivConvVisibility = (visibility) => {
         setIndivConv(visibility);
+    };
+
+    const handleChannelsConvVisibility = (visibility) => {
+        setChannelsConv(visibility);
     };
 
 
@@ -114,6 +138,7 @@ function Chat() {
                             setIsConvListVisible={setIsConvListVisible}
                             addConversation={addConversation}
                             user={user}
+                        /*Channels */
                         />
                         <ConversationListSummary
                             name={user.name}
@@ -124,6 +149,11 @@ function Chat() {
                             setIsConvListVisible={setIsConvListVisible}
                             user={user}
                             convs={user.conversations}
+                            /*CHannels */
+                            channels={user.channels}
+                            handleChannelsConvVisibility={handleChannelsConvVisibility}
+                            isChannelsListVisible={isChannelsListVisible}
+                            setIsChannelsListVisible={setIsChannelsListVisible}
                         />
                     </div>
                 </div>

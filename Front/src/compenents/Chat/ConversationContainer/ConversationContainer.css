@@ -88,7 +88,37 @@
     overflow-y: auto;
 }
 
-.text-already-sent::-webkit-scrollbar {
+.text-already-sent ul {
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 10px;
+}
+
+.conv-message {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .conv-sender-info {
+    font-weight: bold;
+    margin-right: 5px;
+    margin-left: 0px;
+    color: #216ec0; /* Blue color for the sender's name */
+  }
+  
+  .conv-message-content {
+    background-color: #f1f0f0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-left: 8%;
+  }
+  
+  .conv-message-date {
+    font-size: 12px;
+    color: #888; 
+  }
+
+/* .text-already-sent::-webkit-scrollbar {
     display: none !important;
     cursor: pointer;
-}
+} */
