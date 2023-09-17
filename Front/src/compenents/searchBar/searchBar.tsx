@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookie from 'js-cookie'
 import axios from "axios"
 import './searchBar.css'
 
@@ -7,6 +8,7 @@ interface SearchBarProps {
 }
 
 function SearchBar ({ onSearch }: SearchBarProps) {
+  const token = Cookie.get('accessToken')
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [notFound, setNotFound] = useState<boolean>(false);
 
@@ -17,7 +19,10 @@ function SearchBar ({ onSearch }: SearchBarProps) {
 
   const handleSearch = async (query: string) => {
 
-    const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: query }, { withCredentials: true })
+    const response = await axios.post(
+      process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
+      { name: query },
+      { withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
     .then((response) => {
       const receivId = response.data.id;
       console.log("id === " + receivId);

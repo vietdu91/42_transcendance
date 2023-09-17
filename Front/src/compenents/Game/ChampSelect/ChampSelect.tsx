@@ -66,8 +66,10 @@ export default function ChampSelect() {
 	};
 
 	const handleClick = async (character:String) => {
-		await axios
-			.patch(process.env.REACT_APP_LOCAL_B + '/profile/setCharacter', { character }, { withCredentials: true })
+		await axios.patch(
+			process.env.REACT_APP_LOCAL_B + '/profile/setCharacter',
+			{ character },
+			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
 			.then((response) => {
 				console.log(response.data.message);
 			})

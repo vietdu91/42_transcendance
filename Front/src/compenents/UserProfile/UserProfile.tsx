@@ -26,7 +26,10 @@ export default function UserProfile() {
 // Ajouter la fonction de check ami deja ajoute
 	const addFriend = () => {
 		console.log("TRYING TO ADD FRIEND");
-		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', {id}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+		axios.post(
+			process.env.REACT_APP_LOCAL_B + '/profile/addFriend',
+			{id},
+			{headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true })
 		.then(response => {})
 		.catch(error => {
 			console.log(error);
@@ -37,7 +40,10 @@ export default function UserProfile() {
 // Ajouter la fonction de check ami deja supprime
 	const removeFriend = () => {
 		console.log("TRYING TO REMOVE FRIEND");
-		axios.post(process.env.REACT_APP_LOCAL_B + '/profile/removeFriend', {id}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
+		axios.post(
+			process.env.REACT_APP_LOCAL_B + '/profile/removeFriend',
+			{id},
+			{headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true })
 		.then(response => {})
 		.catch(error => {
 			console.log(error);
@@ -45,7 +51,9 @@ export default function UserProfile() {
 	}
 
 	useEffect(() => {
-		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', {params: {username: username}})
+		axios.get(
+			process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
+			{params: {username: username}, headers: {  'Authorization': `Bearer ${token}`}})
 		.then(response => {
 			if (userId == response.data.id) {
 				navigate("/profile");

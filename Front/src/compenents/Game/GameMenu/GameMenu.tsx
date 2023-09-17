@@ -252,6 +252,7 @@ function History() {
 }
 
 function Classement() {
+	const token = Cookies.get('accessToken');
 	let users = useRef<User[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -280,7 +281,9 @@ function Classement() {
 	useEffect(() => {
 		async function leaderboard() {
 		  try {
-				const response = await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getLeaderboard");
+				const response = await axios.get(
+					process.env.REACT_APP_LOCAL_B + "/profile/getLeaderboard",
+					{ headers: {Authorization: `Bearer ${token}`} });
 				const updatedUsers: User[] = response.data.users;
 				users.current = updatedUsers;
 				setIsLoading(false);

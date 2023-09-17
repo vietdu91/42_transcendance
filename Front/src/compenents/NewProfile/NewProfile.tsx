@@ -24,7 +24,9 @@ export default function NewProfile() {
 
 
 	useEffect (() => {
-		axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUser', { withCredentials: true })
+		axios.get(
+			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
+			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
 		.then(response => {
 			setName(response.data.name);
 		}).catch(error => {
