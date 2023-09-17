@@ -1,6 +1,6 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native"]
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
@@ -9,57 +9,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-  model User {
-    id                Int       @id @default(autoincrement())
-    email             String    @unique
-    name              String	@unique
-    twoFactorSecret   String  @unique
-    accessToken       String?  @unique
-    twoFactorEnabled  Boolean @default(false)
-    nickname		      String? 	@unique
-    age 			        Int?
-    character         String?
-    games             Game[] @relation("players")
-    actualGame        Int?
-    pfp_url           String?
-    wins              Int @default(0)
-    looses            Int @default(0)
-    friendsList       Int[]
-    blockList         Int[]
-    messages          Message[] @relation("MessageAuthor")
-  }
+enum UserState {
+  OFFLINE
+  ONLINE
+  INGAME
+}
 
-  model Game {
-    id              Int     @id @default(autoincrement())
-    players         User[] @relation("players")
-    playersId       Int[]
-    playersName     String[]
-    score           Int[]
-    winnerId        Int?
-    characters      String[]
-    playing         Boolean
-    date            DateTime @default(now())
-  }
+model User {
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
+  name             String         @unique
+  twoFactorSecret  String         @unique
+  accessToken      String?        @unique
+  twoFactorEnabled Boolean        @default(false)
+  nickname         String?        @unique
+  state             UserState
+  age              Int?
+  character        String?
+  games            Game[]         @relation("players")
+  actualGame       Int?
+  pfp_url          String?
+  wins             Int            @default(0)
+  looses           Int            @default(0)
+  friendsList      Int[]
+  blockList        Int[]
+  messages         Message[]      @relation("MessageAuthor")
+  conversations    Conversation[] @relation("conversations")
+  channels         Channel[]      @relation("channels")
+  whereBan         Channel[]      @relation("banList")
+  whereAdmin       Channel[]      @relation("adminList")
+  whereOwner       Channel[]
+}
+
+model Game {
+  id          Int      @id @default(autoincrement())
+  players     User[]   @relation("players")
+  playersId   Int[]
+  playersName String[]
+  score       Int[]
+  winnerId    Int?
+  characters  String[]
+  playing     Boolean
+  date        DateTime @default(now())
+}
 
 model Message {
-  id        Int     @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime  @updatedAt
-  author    User?     @relation(name: "MessageAuthor", fields: [authorId], references: [id])
-  authorId  Int?
+  id             Int           @id @default(autoincrement())
+  content        String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  author         User?         @relation(name: "MessageAuthor", fields: [authorId], references: [id])
+  authorId       Int
+  authorName     String
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  conversationId Int?
+  channel        Channel?      @relation(fields: [channelId], references: [id])
+  channelId      Int?
 }
 
 model Channel {
-  id        Int     @id @default(autoincrement())
-  ownerId   String   
-  name      String  @unique
-  isPrivate Boolean @default(false)
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  image     String
+  isPrivate Boolean
   password  String?
-  usersList Int[]
-  banList   Int[]
-  adminList Int[]
-  //messages  Message[] @relation("ChannelMessages")
-  // Ajoutez d'autres champs de modèle si nécessaire
-  // ...
+  usersList User[]   @relation("channels")
+  banList   User[]   @relation("banList")
+  adminList User[]   @relation("adminList")
+  messages  Message[] 
+
+}
+
+model Conversation {
+  id       Int       @id @default(autoincrement())
+  users    User[]    @relation("conversations")
+  usersID  Int[]
+  names    String[]
+  messages Message[]
+  date     DateTime  @default(now())
 }

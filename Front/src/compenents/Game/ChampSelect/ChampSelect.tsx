@@ -32,9 +32,15 @@ import HenriettaSuper from "../../../img/characters/henrietta_2.png"
 import ButtersNormal from "../../../img/characters/butters_1.png"
 import ButtersSuper from "../../../img/characters/butters_2.jpg"
 
+// SOUNDS
 import RespectezMonAutorite from "../../../sounds/phrases/Cartman_Respectez_mon_autorité.mp3"
 import OnSFumeUnPetard from "../../../sounds/phrases/Servietsky On sfume un pétard .mp3"
 import EwwlibleauTimmay from "../../../sounds/phrases/EwwlibleauTimmay.mp3"
+import AucuneConfiance from "../../../sounds/phrases/Garrison_regles.mp3"
+import JsuispastonPote from "../../../sounds/phrases/TP_je suis pas ton pote mec.mp3"
+import BonjourMonsieurZizi from "../../../sounds/phrases/Butters_Bonjour monsieur zizi.mp3"
+import KennyBague from "../../../sounds/phrases/Kenny La bague.mp3"
+import TropConformiste from "../../../sounds/phrases/Henrietta_Danse des gothiques.mp3"
 
 import ChooseYourFighter from "../../../img/choose_your_fighter.gif"
 
@@ -52,7 +58,7 @@ export default function ChampSelect() {
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = "http://localhost:2000/connect";
 
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);
@@ -60,8 +66,10 @@ export default function ChampSelect() {
 	};
 
 	const handleClick = async (character:String) => {
-		await axios
-			.post(process.env.REACT_APP_LOCAL_B + '/profile/setCharacter', { character }, { withCredentials: true })
+		await axios.patch(
+			process.env.REACT_APP_LOCAL_B + '/profile/setCharacter',
+			{ character },
+			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
 			.then((response) => {
 				console.log(response.data.message);
 			})
@@ -81,35 +89,35 @@ export default function ChampSelect() {
 				<img className="card" src={cartman} alt={'Cartman'}
 				onMouseEnter={() => {setCartman(CartmanSuper);}}
 				onMouseLeave={() => {setCartman(CartmanNormal);}}
-				onClick={() => {playSound(RespectezMonAutorite); setTimeout(() => {handleClick('Cartman')}, 1000);}}></img>
+				onClick={() => {playSound(RespectezMonAutorite); setTimeout(() => {handleClick('Cartman')}, 2000);}}></img>
 				<img className="card" src={servietsky} alt={'Servietsky'}
 				onMouseEnter={() => {setServietsky(ServietskySuper);}}
 				onMouseLeave={() => {setServietsky(ServietskyNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Servietsky')}, 1000);}}></img>
+				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Servietsky')}, 2000);}}></img>
 				<img className="card" src={kenny} alt={'Kenny'}
 				onMouseEnter={() => {setKenny(KennySuper);}}
 				onMouseLeave={() => {setKenny(KennyNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Kenny')}, 1000);}}></img>
+				onClick={() => {playSound(KennyBague); setTimeout(() => {handleClick('Kenny')}, 2000);}}></img>
 				<img className="card" src={timmy} alt={'Timmy'}
 				onMouseEnter={() => {setTimmy(TimmySuper);}}
 				onMouseLeave={() => {setTimmy(TimmyNormal);}}
-				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick('Timmy')}, 1000);}}></img>
+				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick('Timmy')}, 2000);}}></img>
 				<img className="card" src={terrancePhilip} alt={'TerrancePhilip'}
 				onMouseEnter={() => {setTerrancePhilip(TerrancePhilipSuper);}}
 				onMouseLeave={() => {setTerrancePhilip(TerrancePhilipNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('TerrancePhilip')}, 1000);}}></img>
+				onClick={() => {playSound(JsuispastonPote); setTimeout(() => {handleClick('TerrancePhilip')}, 2000);}}></img>
 				<img className="card" src={garrison} alt={'Garrison'}
 				onMouseEnter={() => {setGarrison(GarrisonSuper);}}
 				onMouseLeave={() => {setGarrison(GarrisonNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Garrison')}, 1000);}}></img>
+				onClick={() => {playSound(AucuneConfiance); setTimeout(() => {handleClick('Garrison')}, 2000);}}></img>
 				<img className="card" src={henrietta} alt={'Henrietta'}
 				onMouseEnter={() => {setHenrietta(HenriettaSuper);}}
 				onMouseLeave={() => {setHenrietta(HenriettaNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Henrietta')}, 1000);}}></img>
+				onClick={() => {playSound(TropConformiste); setTimeout(() => {handleClick('Henrietta')}, 2000);}}></img>
 				<img className="card" src={butters} alt={'Butters'}
 				onMouseEnter={() => {setButters(ButtersSuper);}}
 				onMouseLeave={() => {setButters(ButtersNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Butters')}, 1000);}}></img>
+				onClick={() => {playSound(BonjourMonsieurZizi); setTimeout(() => {handleClick('Butters')}, 2000);}}></img>
 			</div>
 		</div>
 	);

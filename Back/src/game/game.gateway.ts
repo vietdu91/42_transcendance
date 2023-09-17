@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import {v4} from 'uuid';
@@ -7,6 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 // import { subscribe } from 'diagnostics_channel';
 import p5 from 'p5';
+import JwtAuthenticationGuard from '../jwt-guard/jwt-guard.guard';
 
 let PI = Math.PI;
 
@@ -51,6 +52,7 @@ type Game = {
 	tocLeft: number;
 	tocRight: number;
 	ball: Ball;
+	gaveUp: Boolean;
 }
 
 @WebSocketGateway()
@@ -62,18 +64,21 @@ export class MatchmakingGateway {
 
 	private games: Game[] = [];
 
-	private gaveUp: Boolean = false;
-
 	private lTocSpeed: number = (9/16) * 100 / 160;
 	private rTocSpeed: number = (9/16) * 100 / 160;
 
 	@SubscribeMessage('joinQueue')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
 		const userService = new UserService(new PrismaService());
 		const user = await userService.getUserById(userId);
+		if (!user) {
+			client.emit('wrongUser', {message: 'Who are you ?'});
+			return ;
+		}
 
 		for (let players of this.queue) {
-			if (players.user.id === userId) {
+			if (players.user.id == userId) {
 				client.emit('alreadyJoined', { message: 'You already joined the matchmaking' });
 				return ;
 			}
@@ -91,6 +96,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('leaveQueue')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleLeaveQueue(client: Socket, userId: number): Promise<void> {
     	this.queue = this.queue.filter((player) => {
 			player.user.id !== userId;
@@ -98,10 +104,10 @@ export class MatchmakingGateway {
 	}
 
 	private async createMatch(): Promise<void> {
-		// if (this.queue.length >= 2) {
-		if (this.queue.length >= 1) {
+		if (this.queue.length >= 2) {
+		// if (this.queue.length >= 1) {
 			const player1 = this.queue.shift();
-			// const player2 = this.queue.shift();
+			const player2 = this.queue.shift();
 			const prisma = new PrismaService();
 			const date = new Date();
 
@@ -110,13 +116,13 @@ export class MatchmakingGateway {
 					players: {
 						connect: [
 							{id: player1.user.id},
-							{id: player1.user.id}, // change player1 to player2
+							{id: player2.user.id}, // change player1 to player2
 						]
 					},
-					playersId: [player1.user.id, player1.user.id], // change player1 n2 to player2
-					playersName: [player1.user.name, player1.user.name], // change player1 n2 to player2
+					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+					playersName: [player1.user.name, player2.user.name], // change player1 n2 to player2
 					score: [0, 0],
-					characters: [player1.user.character, player1.user.character], // change player1 n2 to player2
+					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
 					playing: true,
 					date: date,
 				}
@@ -128,7 +134,7 @@ export class MatchmakingGateway {
 				idLeft: game.playersId[0],
 				idRight: game.playersId[1],
 				sockLeft: player1.id,
-				sockRight: player1.id, //change to player2
+				sockRight: player2.id, //change to player2
 				scoreLeft: 0,
 				scoreRight: 0,
 				charLeft: game.characters[0],
@@ -155,7 +161,8 @@ export class MatchmakingGateway {
 					inertia: 0,
 					vx: 0,
 					vy: 0,
-				}
+				},
+				gaveUp: false,
 			}
 
 			const gameIdIndex = game.id;
@@ -171,19 +178,26 @@ export class MatchmakingGateway {
 
 			await prisma.user.update({
 				where: {id: game.playersId[0]},
-				data: {actualGame: game.id},
+				data: {
+					actualGame: game.id,
+					state: 'INGAME',
+				},
 			})
 			await prisma.user.update({
 				where: {id: game.playersId[1]},
-				data: {actualGame: game.id},
+				data: {
+					actualGame: game.id,
+					state: 'INGAME',
+				},
 			})
 
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player1.user }); // change player1 to player2
-			// this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
+			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
 	}
 
 	@SubscribeMessage('roundStart')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleGameStart(socket: Socket, roomId: number): Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)
@@ -209,13 +223,14 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('giveUp')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleGiveUp(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
 			return;
 		const prisma = new PrismaService();
 
-		if (this.gaveUp)
+		if (actualGame.gaveUp)
 			return ;
 
 		const winnerId:number = params[1] === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
@@ -239,6 +254,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					wins: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 			await prisma.user.update({
@@ -246,6 +262,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					looses: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 		}
@@ -255,6 +272,7 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					looses: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 			await prisma.user.update({
@@ -262,17 +280,19 @@ export class MatchmakingGateway {
 				data: {
 					actualGame: null,
 					wins: {increment: 1},
+					state: 'ONLINE',
 				},
 			})
 		}
 
-		this.gaveUp = true;
+		actualGame.gaveUp = true;
 		const sendTo:string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
 		this.server.to(sendTo).emit("gaveUp", {message: "The other player gave up ! Boooo !", id: params[1]});
 	}
 
 	@SubscribeMessage('movePlayer')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -299,6 +319,7 @@ export class MatchmakingGateway {
 	}
 	
 	@SubscribeMessage('usePower')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleUsePower(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -340,6 +361,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('moveBall')
+	@UseGuards(JwtAuthenticationGuard)
 	async handleMoveBall(socket: Socket, roomId: number) : Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)
@@ -349,10 +371,10 @@ export class MatchmakingGateway {
 		actualGame.ball.y += actualGame.ball.vy;
 		if (actualGame.ball.y + actualGame.ball.rad >= (9/16) * 100 || actualGame.ball.y - actualGame.ball.rad <= 0)
 			actualGame.ball.vy *= -1;
-		if (actualGame.ball.y == 0)
-			actualGame.ball.y = 1;
-		if (actualGame.ball.y == 100)
-			actualGame.ball.y = 99;
+		if (actualGame.ball.y <= 0)
+			actualGame.ball.y = actualGame.ball.rad * 2;
+		if (actualGame.ball.y >= 100)
+			actualGame.ball.y = 100 - actualGame.ball.rad * 2;
 		
 		// MONSIEUR TOC START
 		if (actualGame.tocLeft != null) {
@@ -438,6 +460,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								wins: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 						await prisma.user.update({
@@ -445,6 +468,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								looses: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 					}
@@ -454,6 +478,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								looses: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 						await prisma.user.update({
@@ -461,6 +486,7 @@ export class MatchmakingGateway {
 							data: {
 								actualGame: null,
 								wins: {increment: 1},
+								state: 'ONLINE',
 							},
 						})
 					}

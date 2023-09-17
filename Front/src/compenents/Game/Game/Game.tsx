@@ -9,6 +9,7 @@ import './Game.css'
 
 // COMPONENTS
 import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
+import MusicPlayer from '../../../compenents/utils/MusicPlayer/MusicPlayer';
 
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
@@ -39,6 +40,11 @@ import ServietskyR from "../../../img/en_cours/servietsky_right.png"
 import Touche_W from "../../../img/game/key_w.png"
 import Touche_S from "../../../img/game/key_s.png"
 import Touche_Space from "../../../img/game/space.png"
+
+// GAME EFFECTS
+import GeneriqueButters from "../../../img/game/videos/generique_butters.mp4"
+import Gothique from "../../../img/game/videos/gothique.mp4"
+import Prout from "../../../img/game/videos/prout.mp4"
 
 
 interface IBall {
@@ -105,6 +111,23 @@ export default function Game(): JSX.Element {
 	const socket = useContext(GameContext);
 	const [scoreLeft, setScoreLeft] = useState(0);
 	const [scoreRight, setScoreRight] = useState(0);
+
+	const [OnGeneriqueButters, setOnGeneriqueButters] = useState(false);
+	const [OnGothiqueLeft, setOnGothiqueLeft] = useState(false);
+	const [OnGothiqueRight, setOnGothiqueRight] = useState(false);
+
+	const [OnProutLeft, setOnProutLeft] = useState(false);
+	const [OnProutRight, setOnProutRight] = useState(false);
+
+	const [charLeft, setCharLeft] = useState("");
+	const [charRight, setCharRight] = useState("");
+	const [nameLeft, setNameLeft] = useState("");
+	const [nameRight, setNameRight] = useState("");
+
+	// BARRE DE VIE 
+	let [healthLeft, setHealthLeft] = useState(5);
+	let [healthRight, setHealthRight] = useState(5);
+
 	const location = useLocation();
 	if (location.state === null)
 		window.location.href = "/";
@@ -112,9 +135,10 @@ export default function Game(): JSX.Element {
 	const navigate = useNavigate();
 	const p5SketchRef = useRef<p5 | null>(null);
 	
-	
-	// const images = [Chaos, CityWok, WallMart, TimmyVSJimmy];
 	const sketchRef = useRef<HTMLDivElement>(null);
+
+	console.log(p5SketchRef.current);
+	console.log(game);
 	const randomImage = Tron;
 
 	const cookies = document.cookie.split('; ');
@@ -149,6 +173,61 @@ export default function Game(): JSX.Element {
 			)
 	}
 
+	function ActiveGeneriqueButters() {
+
+		setOnGeneriqueButters(true);
+		setTimeout(() => {setOnGeneriqueButters(false)
+		}, 43000);
+	}
+
+	function DesactiveGothiqueLeft() {
+
+		setOnGothiqueLeft(false);
+	}
+	
+	function ActiveGothiqueLeft() {
+
+		setOnGothiqueLeft(true);
+		setTimeout(() => {setOnGothiqueLeft(false)
+		}, 12000);
+	}
+	
+	function DesactiveGothiqueRight() {
+
+		setOnGothiqueRight(false);
+	}
+	
+	function ActiveGothiqueRight() {
+
+		setOnGothiqueRight(true);
+		setTimeout(() => {setOnGothiqueRight(false)
+		}, 12000);
+	}
+
+	function DesactiveProutLeft() {
+		
+		setOnProutLeft(false);
+	}
+	
+	function ActiveProutLeft() {
+		
+		setOnProutLeft(true);
+		setTimeout(() => {setOnProutLeft(false)
+		}, 42000);
+	}
+
+	function DesactiveProutRight() {
+		
+		setOnProutRight(false);
+	}
+	
+	function ActiveProutRight() {
+		
+		setOnProutRight(true);
+		setTimeout(() => {setOnProutRight(false)
+		}, 42000);
+	}
+
 	useEffect(() => {
 		let powLeft: boolean = false;
 		let powRight: boolean = false;
@@ -158,8 +237,9 @@ export default function Game(): JSX.Element {
 		let toc: boolean = false;
 
 		socket.on('roundStarted', (response) => {
-			console.log("message === " + response.message);
-
+			if (response.game.isActive === false) {
+				navigate("/")
+			}
 			let player_height: number = (9/16) * window.innerWidth * 70 / 100 / 5;
 			const updatedGame:IGame = {
 				...game.current,
@@ -186,7 +266,15 @@ export default function Game(): JSX.Element {
 				},
 			}
 			game.current = updatedGame;
+			setCharLeft(game.current.charLeft);
+			setCharRight(game.current.charRight);
+			setNameLeft(response.game.nameLeft);
+			setNameRight(response.game.nameRight);
 			powLeft = powRight = weed = timmy = fart = toc = false;
+			DesactiveGothiqueLeft();
+			DesactiveGothiqueRight();
+			DesactiveProutLeft();
+			DesactiveProutRight();
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -216,6 +304,8 @@ export default function Game(): JSX.Element {
 				}
 			}
 			game.current = updatedGame;
+			setHealthLeft(updatedGame.scoreLeft);
+			setHealthRight(updatedGame.scoreRight);
 			setScoreLeft(game.current.scoreLeft);
 			setScoreRight(game.current.scoreRight);
 		})
@@ -228,9 +318,10 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; break;
+					case "TerrancePhilip" : fart = true; ActiveProutLeft(); break;
 					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; break;
-					case "Henrietta" : game.current.scoreRight--; setScoreRight(game.current.scoreRight); break;
+					case "Henrietta" : game.current.scoreRight--; ActiveGothiqueLeft(); setScoreRight(game.current.scoreRight); break;
+					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
 			else {
@@ -239,9 +330,10 @@ export default function Game(): JSX.Element {
 					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
 					case "Servietsky" : weed = true; break;
 					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; break;
+					case "TerrancePhilip" : fart = true; ActiveProutRight(); break;
 					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; break;
-					case "Henrietta" : game.current.scoreLeft--; setScoreLeft(game.current.scoreLeft); break;
+					case "Henrietta" : game.current.scoreLeft--; ActiveGothiqueRight(); setScoreLeft(game.current.scoreLeft); break;
+					case "Butters" : ActiveGeneriqueButters(); break;
 				}
 			}
 		})
@@ -272,7 +364,7 @@ export default function Game(): JSX.Element {
 		})
 
 		socket?.emit("roundStart", roomId);
-		
+
 		if (!p5SketchRef.current) {
 			p5SketchRef.current = new p5((p: p5) => {
 				let canvas: p5.Renderer | null = null;
@@ -306,7 +398,7 @@ export default function Game(): JSX.Element {
 						if (p.keyIsDown(83))
 							socket?.emit("movePlayer", roomId, id, 0);
 					}
-					socket?.emit("moveBall", roomId);
+					// socket?.emit("moveBall", roomId);
 
 					if (fart)
 						p.fill(p.color(21, 79, 48));
@@ -315,11 +407,16 @@ export default function Game(): JSX.Element {
 					p.stroke(255);
 					p.strokeWeight(1);
 					p.ellipse(game.current.ball.x, game.current.ball.y, game.current.ball.rad * 2);
-					p.fill(255);
 					p.noStroke();
+					p.fill(102, 102, 205);
+					p.stroke(0, 0, 204);
+					p.strokeWeight(2);
 					p.rect(cDiv.clientWidth / 75, game.current.posLeft, game.current.wLeft, game.current.hLeft);
+					p.fill(204, 0, 0);
+					p.stroke(153, 0, 0);
+					p.strokeWeight(2);
 					p.rect(cDiv.clientWidth - ((cDiv.clientWidth / 75) * 2), game.current.posRight, game.current.wRight, game.current.hRight);
-					
+
 					if (toc) {
 						p.fill(255);
 						p.noStroke();
@@ -370,25 +467,69 @@ export default function Game(): JSX.Element {
     	}
 
 		return () => {
+			console.log("quitte la page de jeu")
 			if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
+					console.log("entre dans le giveup");
 					socket?.emit("giveUp", roomId, id);
 			}
 			p5SketchRef.current?.remove();
 		};
 	}, [sketchRef, navigate, roomId, socket, id]);
 
-	function GetPlayerLeft() {
+	function GetPlayerLeft(props) {
 
-		return (
-			<img alt="#" src={HenriettaL} id="game-img-player-left"></img>
-		);
+		let image;
+		switch (props.char) {
+			case "Cartman": image = CartmanL; break;
+			case "Servietsky": image = ServietskyL; break;
+			case "Kenny": image = KennyL; break;
+			case "Timmy": image = TimmyL; break;
+			case "TerrancePhilip": image = TP_L; break;
+			case "Garrison": image = GarrisonL; break;
+			case "Henrietta": image = HenriettaL; break;
+			case "Butters": image = ButtersL; break;
+		}
+
+		if (OnGothiqueLeft)
+			return (
+				<video autoPlay src={Gothique} id="game-img-player-left"></video>
+			);
+		else if (OnProutLeft)
+			return (
+				<video autoPlay src={Prout} id="game-img-player-left"></video>
+			);			
+		else
+			return (
+				<img alt="#" src={image} id="game-img-player-left"></img>
+			);
 	}
 
-	function GetPlayerRight() {
+	function GetPlayerRight(props) {
 
-		return (
-			<img alt="#" src={ButtersR} id="game-img-player-left"></img>
-		);
+		let image;
+		switch (props.char) {
+			case "Cartman": image = CartmanR; break;
+			case "Servietsky": image = ServietskyR; break;
+			case "Kenny": image = KennyR; break;
+			case "Timmy": image = TimmyR; break;
+			case "TerrancePhilip": image = TP_R; break;
+			case "Garrison": image = GarrisonR; break;
+			case "Henrietta": image = HenriettaR; break;
+			case "Butters": image = ButtersR; break;
+		}
+
+		// if (OnGothique)
+		// 	return (
+		// 		<video autoPlay src={Gothique} id="game-img-player-right"></video>
+		// 	);
+		// else if (OnProut)
+		// 	return (
+		// 		<video autoPlay src={Prout} id="game-img-player-right"></video>
+		// 	);	
+		// else
+			return (
+				<img alt="#" src={image} id="game-img-player-right"></img>
+			);
 	}
 
 	function FooterCommands() {
@@ -408,23 +549,64 @@ export default function Game(): JSX.Element {
 		);
 	}
 
-	function BarresDeVie() {
+	function BarresDeVie(props) {
+
+		const { nameLeft, nameRight } = props;
+
+		const maxHealth = 5; // La santé maximale, ajustez-la si nécessaire
+
+		if (healthLeft <= 0)
+			healthLeft = 0;
+		if (healthRight <= 0)
+			healthRight = 0;
+
+		const leftHealthPercent = 100 - (healthLeft / maxHealth) * 100; // Définissez leftHealthPercent ici
+		const rightHealthPercent = 100 - (healthRight / maxHealth) * 100;
 
 		return (
 			<div className="hud">
-			    <div className="health_container" id="player-1">
-			        <div className="health_meter">
-			            <div className="health_damage"></div>
-			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" title="" />
-			        </div>
-			    </div>
-			    <div className="health_container" id="player-2">
-			        <div className="health_meter">
-			            <div className="health_damage"></div>
-			            <div className="health"></div><input className="health_value" type="range" min="0" max="1000" value="1000" step="1" />
-			        </div>
-			    </div>
+			<div className="health_container" id="player-1">
+			  <div className="health_meter">
+				<div className="health_damage"></div>
+				<div
+				  className="health"
+				  style={{ width: `${rightHealthPercent}%` }}
+				></div>
+				<input
+				  className="health_value"
+				  type="range"
+				  min="0"
+				  max={maxHealth}
+				  value={healthLeft}
+				  step="1"
+				  title=""
+				/>
+			  </div>
+			  <div className="health_pseudo" id="player-1">
+				{nameLeft}
+			  </div>
 			</div>
+			<div className="health_container" id="player-2">
+			  <div className="health_meter">
+				<div className="health_damage"></div>
+				<div
+				  className="health"
+				  style={{ width: `${leftHealthPercent}%` }}
+				></div>
+				<input
+				  className="health_value"
+				  type="range"
+				  min="0"
+				  max={maxHealth}
+				  value={healthRight}
+				  step="1"
+				/>
+			  </div>
+			  <div className="health_pseudo" id="player-2">
+			  {nameRight}
+			  </div>
+			</div>
+		  </div>
 		);
 	}
 
@@ -432,7 +614,7 @@ export default function Game(): JSX.Element {
 		<div id="game-bg">
 			<GetBg randomImage={randomImage} />
 			<div id="game-player-left">
-				<GetPlayerLeft />
+				<GetPlayerLeft char={charLeft}/>
 			</div>
 			<div id="game-bg-score">
 				<div id="game-score">
@@ -441,14 +623,15 @@ export default function Game(): JSX.Element {
 			</div>
 			<div id="game-container">
 				<div id="game-terrain" ref={sketchRef}></div>
+				{OnGeneriqueButters && (<video autoPlay className="generique_butters" src={GeneriqueButters}></video>)}
 			</div>
 			<div id="game-return">
 				<WhatReturnButtom randomImage={randomImage} />
 			</div>
 			<div id="game-player-right">
-				<GetPlayerRight />
+				<GetPlayerRight char={charRight}/>
 			</div>
-			<BarresDeVie />
+			<BarresDeVie nameLeft={nameLeft} nameRight={nameRight} />
 			<FooterCommands />
 		</div>
 	);

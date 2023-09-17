@@ -32,12 +32,16 @@ export class AuthService {
                 this.setAuthCookies(res, newToken, user.id);
                 res.redirect(process.env.URL_LOCAL_F + "/newprofile");
             }
-            else { 
+            else {
                 if (user.twoFactorEnabled) {
                     res.cookie('id', user.id);
                     res.redirect(process.env.URL_LOCAL_F + '/2fa');
                 }
                 else {
+                    await this.prisma.user.update({
+                        where: {id: user.id},
+                        data: {state: 'ONLINE'},
+                    })
                     const newToken = await this.generateAndSetAccessToken(user);
                     this.setAuthCookies(res, newToken, user.id);
                     res.redirect(process.env.URL_LOCAL_F);
@@ -72,7 +76,6 @@ export class AuthService {
     private setAuthCookies(res: Response, accessToken: string, userId: number): void {
         res.cookie('accessToken', accessToken);
         res.cookie('id', userId);
-        console.log("jai vraiment set ");
     }
             
     async getAccessToken(code: string): Promise<any> {

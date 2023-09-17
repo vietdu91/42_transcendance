@@ -119,29 +119,31 @@ export default function Import() {
 		// 		});
 		// 	}
 
-	  function IconOrImage() {
-		// if (!imageURL)
-			return (
-				<img id="new-img" src={KennyPhoto} alt={'kenny_school'}></img>
+function IconOrImage() {
+	
+	if (!imageURL)
+		return (
+			<img id="new-img" src={KennyPhoto} alt={'kenny_school'}></img>
+		);
+	else
+	{
+		console.log("Prout");
+		return (
+			<img id="new-img" src={imageURL} alt={'imageURL'}></img>
 			);
-		/* else
-			return (
-				// <img id="new-img" src={imageURL} alt={'imageURL'}></img>
-			);*/
-	  }
+		}
+}
 
   return (
     <div className="import">
       <div className="upload-container">
         <label htmlFor="file-input">
-          	<div className="circle">
-				<IconOrImage />
-			</div>
+			<IconOrImage />
         </label>
         <input
           type="file"
-        //   id="file-input"
-        //   style={{ display: "none" }}
+          id="file-input"
+          style={{ display: "none" }}
           onChange={handleFileChange}
           accept="image/*"
         />

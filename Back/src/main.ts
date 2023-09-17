@@ -18,17 +18,5 @@ async function bootstrap() {
 
   const prisma = new PrismaClient();
 
-  const app2 = express();
-  app2.use(express.static(__dirname + "/static"));
-  try{
-    app2.get('/feed', async (req, res) => {
-      // get and return all todos
-      const todos = await prisma.todo.findMany();
-      res.json(todos);
-     });
-  }
-  catch{
-
-  }
 }
 bootstrap();

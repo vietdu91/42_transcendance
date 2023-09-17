@@ -1,24 +1,49 @@
 import React from 'react';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
+import { useNavigate } from "react-router-dom";
+
 
 import './ConversationListHeader.css';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import Minimize from '../../../img/chat/minimized.jpg'
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
 
-const ConversationListHeader = ({ name, pfp }) => {
+// interface ConversationListHeaderProps {
+//     name: string;
+//     pfp: string;
+//     handleVisibility: (visibility: any) => void;
+//     isConvListVisible: boolean;
+//     setIsConvListVisible: React.Dispatch<React.SetStateAction<boolean>>;
+//     addConversation: (newConversation: string) => void;
+// }
+
+// const ConversationListHeader: React.FC<ConversationListHeaderProps> = ({
+//     name,
+//     pfp,
+//     handleVisibility,
+//     addConversation,
+//     isConvListVisible,
+//     setIsConvListVisible,
+// }) => {
+
+
+const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, isConvListVisible, setIsConvListVisible, user}) => {
+    // État pour définir si la room est privée
+
     const socket = useContext(ChatContext);
-    const [joined, setJoined] = useState(false);
-    const [channelName, setChannelName] = useState('');
-    const [isRoomCreated, setIsRoomCreated] = useState(false);
-    const [isPrivate, setIsPrivate] = useState(false); // État pour définir si la room est privée
+
     const [state, setState] = useState({
         name: 'React',
         showHideDemo1: false,
     });
+
+    function goToProfile() {
+        window.open(process.env.REACT_APP_LOCAL_F + "/profile");
+    }
 
     const hideComponent = (name) => {
         setState((prevState) => ({
@@ -27,95 +52,44 @@ const ConversationListHeader = ({ name, pfp }) => {
         }));
     }
 
-    const handleJoin = () => {
-        const id = Cookies.get('id');
-        socket?.emit('joinRoom', {name: 'test', userId: id});
-        setJoined(true);
+    {/** Modifs */ }
+    const [newConversation, setNewConversation] = useState('');
+
+    const handleAddConversation = () => {
+        if (newConversation.trim() !== '') {
+            addConversation(newConversation);
+            setNewConversation('');
+        }
     };
-
-
-  const handleCreate = ()=> {
-    console.log("Created room:", 'test');
-    setChannelName('test');
-    setIsRoomCreated(true);
-    const id = Cookies.get('id');
-    // Émettre le nom de la room, l'indicateur si elle est privée et le mot de passe
-    if (isPrivate) {
-      socket?.emit('channelName', { name: 'test', ownerId: id, isPrivate });
-    } else {
-      // Si la room n'est pas privée, n'envoyer que le nom de la room
-      socket?.emit('channelName', { name: 'test', ownerId: id });
-    }
-  };
-
-  const handleDelete = () => {
-    console.log("Deleted room:", {name: 'test'});
-    setChannelName('');
-    setIsRoomCreated(false);
-    setIsPrivate(false);
-    setJoined(false);
-    socket?.emit('deleteRoom', {name: 'test'});
-    }
-
-
-    const handleLeave = () => {
-            const id = Cookies.get('id');
-            console.log("Left room:", channelName);
-            setChannelName('');
-            setIsRoomCreated(false);
-            setIsPrivate(false);
-            setJoined(false);
-            socket?.emit('leaveRoom', {name: 'test', userId: id});
-    }
-
-    const handleBan = () => {
-            const id = Cookies.get('id');
-            console.log("Banned user:", id);
-            socket?.emit('banRoom', {name: 'test', userId: id});
-    }
-
-    const handleKik = () => {
-            const id = Cookies.get('id');
-            console.log("Kicked user:", id);
-            socket?.emit('kickUser', {name: 'test', userId: id});
-    }
-
-    const handleSetAdmin = () => {
-            const id = Cookies.get('id');
-            console.log("Set admin:", id);
-            socket?.emit('setAdmin', {name: 'test', userId: id});
-    }
-
-
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
                 <li className="transcendance-messenger">Transcendance Messenger</li>
                 <div className="right-icons">
-                    <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
+                    <li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
                     <li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
                     <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
                 </div>
             </ul>
             <hr />
             <ul className="option-conversation-list">
-                <li onClick={handleJoin}>Join</li>
-                <li onClick={handleCreate}>Create</li>
-                <li onClick={handleDelete}>Delete</li>
-                <li onClick={handleLeave}>Leave</li>
-                <li onClick={handleBan}>Ban</li>
-                <li onClick={handleKik}>Kick</li>
-                <li onClick={handleSetAdmin}>Set Admin</li>
                 {/* <li onClick={() => showContact("First")}></li> */}
-                <DropdownChannel />{/*Create Join Delete*/}
-                <DropdownContact /> {/* Add Block Delete MP Liste D'amis*/}
+                <DropdownChannel user={user} />{/*Create Join Delete*/}
+                <DropdownContact
+                    user={user}
+                /*handleIndivConvVisibility={handleVisibility}
+                isConvListVisible={isConvListVisible}
+                setIsConvListVisible={setIsConvListVisible}
+                addConversation={addConversation}
+                handleAddConversation={handleAddConversation}*/
+                />{/* Add Block Delete MP Liste D'amis*/}
                 <li>Actions</li> { /*  */}
                 <li>Tools</li> { /* */}
                 <li>Help</li>
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger">
-                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" /> {/* Add the profile picture */}
+                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile}/> {/* Add the profile picture */}
                 </div>                <div className="user-informations">
                     <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
                     <h4 className="status-edit">status to Edit</h4>

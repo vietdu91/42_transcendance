@@ -16,6 +16,7 @@ export class UserService {
                 name: userData.name,
                 email: userData.email,
                 nickname: userData.name,
+                state: 'ONLINE',
                 age: 18,
                 twoFactorSecret: authenticator.generateSecret(),
                 accessToken: userData.accessToken,
@@ -43,11 +44,15 @@ async deleteUser(id: number): Promise<User> {
     }
 }
 
-  findOne(id: string){
-    const user = this.prisma.user.findUnique({
-      where: {id: parseInt(id.toString())}
+  async getLeaderboard() {
+    const users = await this.prisma.user.findMany();
+    return users.map(user => {
+      return {
+        name: user.name,
+        pfp: user.pfp_url,
+        winrate: user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100),
+      }
     });
-    return user;
   }
 
   async getUserByName(username: string): Promise<User | null> {
@@ -58,9 +63,24 @@ async deleteUser(id: number): Promise<User> {
     return user;
   }
 
-  async getUserById(userId: number): Promise<User | null> {
-    const user: User = await this.prisma.user.findUnique({
+  async getUserById(userId: number): Promise<any | null> {
+    const user = await this.prisma.user.findUnique({
       where: { id: parseInt(userId.toString()) },
+      include: {
+        conversations: {
+          include: {
+            messages: true,
+          }
+        },
+        channels: {
+          include: {
+            usersList: true,
+            banList: true,
+            adminList: true,
+            messages: true,
+          },
+        },
+      },
     });
     return user;
   }

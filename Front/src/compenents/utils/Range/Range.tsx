@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import Cookie from 'js-cookie';
 import axios from 'axios';
 import "./Range.css";
 
@@ -13,13 +14,13 @@ import Marvin from '../../../img/age/60_marvin_marsh-0.png'
 import Death from '../../../img/age/80_death-0.png'
 
 export default function Range() {
-
+	const token = Cookie.get('accessToken');
 	const [age, setAge] = useState(0);
 	const [emoji, setEmoji] = useState(Baby);
 
 
 	useEffect(() => {
-		if(age <= 6)
+		if (age <= 6)
 			setEmoji(Baby)
 		else if (age <= 14)
 			setEmoji(Stan)
@@ -35,17 +36,20 @@ export default function Range() {
 			setEmoji(Marvin)
 		else
 			setEmoji(Death)
-	},[age])
+	}, [age])
 
 	const handleChange = (event) => {
 		setAge(event.target.value);
 	};
-	
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log(age);
 		await axios
-			.post(process.env.REACT_APP_LOCAL_B + '/profile/setAge', { age }, { withCredentials: true })
+			.patch(
+				process.env.REACT_APP_LOCAL_B + '/profile/setAge',
+				{ age },
+				{ withCredentials: true, headers: { 'Authorization': `Bearer ${token}` } })
 			.then((response) => {
 				console.log(response.data.message);
 			})
@@ -55,20 +59,20 @@ export default function Range() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<div className="range">
+		<form className="range" onSubmit={handleSubmit}>
+			<div className="range-container">
 				<img src={emoji} id="emoji" alt="Character"></img>
 				<div className="range-slider-wrapper">
-					<input type="range" 
-					className={age > 50?'heigh':'less'}
-					min='0' max='100' 
-					step="1" 
-					value={age}
-					onChange={handleChange}/>
+					<input type="range"
+						className={age > 50 ? 'heigh' : 'less'}
+						min='0' max='100'
+						step="1"
+						value={age}
+						onChange={handleChange} />
 				</div>
 				<h1>J'ai {age} {age <= 1 ? 'an' : 'ans'}</h1>
+				<button type="submit" className="range-buttom">Enregistrer</button>
 			</div>
-			<button type="submit">Enregistrer</button>
 		</form>
 	);
 }

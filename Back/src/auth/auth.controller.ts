@@ -28,7 +28,6 @@ export class AuthController {
 
   @Get('connect2fa')
   async connect2fa(@Query('code') code: string, @Req() req: Request, @Res() res: Response) {
-    console.log(code);
     const userId = parseInt(req.cookies.id);
     const user = await this.userService.getUserById(userId);
     if (!user.twoFactorSecret || !user.twoFactorEnabled)
@@ -37,8 +36,11 @@ export class AuthController {
     if (!isCodeValid)
       throw new UnauthorizedException('Wrong authentication code');
     await this.AuthService.apiConnexion2fa(user, res);
-    console.log(process.env.URL_LOCAL_F);
-    res.status(200).json({ message: 'Déconnexion réussie' });
+    await this.prisma.user.update({
+      where: {id: userId},
+      data: {state: 'ONLINE'},
+    })
+    res.status(200).json({ message: 'Connexion réussie' });
   }
 
   @Post('logout')
@@ -54,7 +56,10 @@ export class AuthController {
       }
       await this.prisma.user.update({
         where: { id: user.id },
-        data: { accessToken: null },
+        data: { 
+          accessToken: null,
+          state: 'OFFLINE',
+        },
       });
       response.status(200).json({ message: 'Déconnexion réussie' });
     }
