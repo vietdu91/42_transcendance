@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 
-export default function MessageInput({ send, messages }: {
+export default function MessageInput({ send }: {
     send: (value: string) => void;
-    messages: string[];
 }) {
     const [value, setValue] = useState('');
     const inputRef = useRef<HTMLDivElement | null>(null);

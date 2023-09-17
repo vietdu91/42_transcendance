@@ -63,15 +63,26 @@ async deleteUser(id: number): Promise<User> {
     return user;
   }
 
-  async getUserById(userId: number): Promise<User | null> {
-    try {
-      const user: User = await this.prisma.user.findUnique({
-        where: { id: parseInt(userId.toString()) },
-      });
-      return user;
-    } catch {
-      return null;
-    }
+  async getUserById(userId: number): Promise<any | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: parseInt(userId.toString()) },
+      include: {
+        conversations: {
+          include: {
+            messages: true,
+          }
+        },
+        channels: {
+          include: {
+            usersList: true,
+            banList: true,
+            adminList: true,
+            messages: true,
+          },
+        },
+      },
+    });
+    return user;
   }
 
   async getGamesByUserId(userId: number) {

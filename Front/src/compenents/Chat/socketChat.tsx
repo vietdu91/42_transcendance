@@ -1,5 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import io, { Socket } from "socket.io-client";
+import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
+import MessageInput from '../Messages/messageInput';
+import Room from '../Room/room';
 import Cookies from 'js-cookie';
+import { ChatContext } from '../utils/ChatContext';
+
+
+import ConversationContainer from './ConversationContainer/ConversationContainer';
+import TextComposerContainer from './TextComposerContainer/TextComposerContainer';
+import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
 import FooterMenu from './FooterMenu/FooterMenu';
 import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
 import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
@@ -8,72 +18,143 @@ import ConversationListHeader from './ConversationListHeader/ConversationListHea
 import './Chat.css';
 import axios from "axios"
 
+interface Channel {
+    id: number;
+    name: string;
+    owner: User;
+    ownerId: number;
+    isPrivate: boolean;
+    usersList: User[];
+    banList: User[];
+    adminList: User[];
+    messages: Message[];
+}
+
+interface Message {
+    id: number;
+    content: string;
+    createdAt: Date;
+    updatedAt: Date;
+    author: User | null;
+    authorId: number | null;
+    conversation: Conversation | null;
+    conversationId: number | null;
+    channel: Channel | null;
+    channelId: number | null;
+}
+
+interface Conversation {
+    id: number;
+    users: User[];
+    usersID: number[];
+    names: string[];
+    messages: Message[];
+    date: Date;
+}
+
+interface User {
+    id: number;
+    name: string;
+    nickname: string | null;
+    age: number | null;
+    pfp: string | null;
+    friendsList: number[];
+    blockList: number[];
+    conversations: Conversation[];
+    channels: Channel[];
+}
+
+const initUser: User = {
+    id: -1,
+    name: "",
+    nickname: "",
+    age: -1,
+    pfp: "",
+    friendsList: [],
+    blockList: [],
+    conversations: [],
+    channels: [],
+}
+
 function Chat() {
 
     const token = Cookies.get('accessToken');
     if (!token)
         window.location.href = "http://localhost:3000/connect";
-    let [nick, getNick] = useState("");
-	let [name, getName] = useState("");
-	let [age, getAge] = useState(0);
-	let [pfp_url, getPfpUrl] = useState("");
+    const socket = useContext(ChatContext);
+    const [user, setUser] = useState<User>(initUser);
+    const userId = Cookies.get('id');
 
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [notFound, setNotFound] = useState<boolean>(false);
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value);
-        setSearchQuery(event.target.value);
-      };
-    
-
-    const handleSearch = async (query: string) => {
-
-        const response = await axios.post(
-            process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
-            { name: query },
-            { withCredentials: true, headers: {Authorization: `Bearer ${token}`} },
-            )
-        .then((response) => {
-          const receivId = response.data.id;
-          console.log("id === " + receivId);
-          console.log(response.data.id);
-        }
-        )
-        .catch((error) => {
-          console.log(error);
-          setNotFound(true);
-        // Gérer les erreurs de requête
-        });
-        // Traitez les données de réponse ici
-      };
-    
-
+    socket.emit('joinChat', {userId})
     useEffect(() => {
-        axios.get(
-            process.env.REACT_APP_LOCAL_B + '/profile/getUser',
-            { withCredentials: true , headers: {Authorization: `Bearer ${token}`}})
-        .then(response => {
-            getNick(response.data.nick);
-            getName(response.data.name);
-            getAge(response.data.age);
-            getPfpUrl(response.data.pfp_url)
-        }).catch(error => {
-            console.error('Probleme');
-        });
-       // console.log('react api ==== ' + process.env.REACT_APP_ENDPOINT);
+        const getUserData = async () => {
+            await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChat", { withCredentials: true })
+                .then(res => {
+                    // console.log(res.data.conversations)
+                    setUser(res.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
+        getUserData();
+    }, []);
 
-    },[]);
+    {/** modif Benda */ }
+    const [indivConv, setIndivConv] = useState(true);
+    const [channelsConv, setChannelsConv] = useState(true);
 
-  
 
+    const [isConvListVisible, setIsConvListVisible] = useState(false);
+    const [isChannelsListVisible, setIsChannelsListVisible] = useState(false);
+
+    const handleIndivConvVisibility = (visibility) => {
+        setIndivConv(visibility);
+    };
+
+    const handleChannelsConvVisibility = (visibility) => {
+        setChannelsConv(visibility);
+    };
+
+
+    const [conversations, setConversations] = useState<string[]>([]); // Add type annotation string[]
+
+    const addConversation = (newConversation: string) => {
+        setConversations([...conversations, newConversation]);
+    };
+
+
+    {/* Modif  */ }
     return (
         <>
             <div className="truc">
                 <div className="left-part-chat">
                     <div className="conversations-list">
-                        <ConversationListHeader name={name} pfp={pfp_url}/>
-                        <ConversationListSummary name={name} pfp={pfp_url}/>
+                        <ConversationListHeader
+                            name={user.name}
+                            pfp={user.pfp}
+                            handleVisibility={handleIndivConvVisibility}
+                            isConvListVisible={isConvListVisible}
+                            setIsConvListVisible={setIsConvListVisible}
+                            addConversation={addConversation}
+                            user={user}
+                        /*Channels */
+                        />
+                        <ConversationListSummary
+                            name={user.name}
+                            pfp={user.pfp}
+                            indivConv={indivConv}
+                            handleVisibility={handleIndivConvVisibility}
+                            isConvListVisible={isConvListVisible}
+                            setIsConvListVisible={setIsConvListVisible}
+                            user={user}
+                            convs={user.conversations}
+                            /*CHannels */
+                            channels={user.channels}
+                            handleChannelsConvVisibility={handleChannelsConvVisibility}
+                            isChannelsListVisible={isChannelsListVisible}
+                            setIsChannelsListVisible={setIsChannelsListVisible}
+                        />
                     </div>
                 </div>
             </div>

@@ -47,8 +47,17 @@
     /* margin-bottom: 1%; */
 } 
 
+.display-list-convo ul {
+    margin-top: 2%;
+}
+
 .display-list-convo li {
     list-style: none;
+    font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
+}
+
+#icon-conv {
+    margin-right: 2%;
 }
 
 .display-list-convo img { 

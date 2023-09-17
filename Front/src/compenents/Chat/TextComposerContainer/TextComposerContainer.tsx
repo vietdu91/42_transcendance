@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
 
-const TextComposerContainer = ({ name, pfp, send, messages }) => {
+const TextComposerContainer = ({ name, pfp, send }) => {
 
     return (
         <div className="text-composer-container">
@@ -19,7 +19,7 @@ const TextComposerContainer = ({ name, pfp, send, messages }) => {
                     {/* Content for the upper part */}
                 </div>
                 <div className="middle-part-write-text">
-                    <MessageInput send={send} messages={messages}/>
+                    <MessageInput send={send}/>
                     {/* Content for the middle part */}
                 </div>
                 <div className="bottom-part-write-text">

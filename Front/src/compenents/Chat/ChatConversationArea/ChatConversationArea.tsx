@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './ChatConversationArea.css'; // Import your CSS styles
 import ConversationContainer from '../ConversationContainer/ConversationContainer'; // Import the ConversationContainer component
 import TextComposerContainer from '../TextComposerContainer/TextComposerContainer'; // Import the TextComposerContainer component
@@ -6,40 +6,59 @@ import Invite from '../../../img/chat/invite-gimp.jpg';
 import InviteGame from '../../../img/chat/game-gimp.jpg';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
+import axios from 'axios';
 
+interface User {
+  name: string,
+  nickname: string,
+  pfp: string,
+}
 
-type ChatConversationAreaProps = {
-  name: string;
-  isVisible: boolean;
-  pfp: any; // Add the `pfp` prop with the appropriate type
-};
+interface Message {
+  content: string,
+  date: Date,
+  authorName: number,
+}
 
+const initUser: User = {
+  name: "",
+  nickname: "",
+  pfp: "",
+}
 
-function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProps) {
+function ChatConversationArea({ user, conv, isVisible }) {
   const socket = useContext(ChatContext);
-  
-  const [messages, setMessages] = useState<string[]>([]);
+  const userId = Cookies.get('id');
 
-  const send = (value: string) => {
-      const id = Cookies.get('id');
-      socket?.emit('message', value, id);
+  const [messages, setMessages] = useState(conv.messages);
+  const [otherUser, getOtherUser] = useState<User>(initUser);
+
+  const send = async (value: string) => {
+    const convId = conv.id;
+    socket?.emit('sendMessageConv', {value, userId, convId});
   }
 
-
-  const messageListener = (newMessage: string) => {
-    const authorId = Cookies.get('id');
-
-    setMessages(prevMessages => [...prevMessages, newMessage]);
-}
-  
   useEffect(() => {
-    socket?.on('message', messageListener);
-    return () => {
-        socket?.off('message', messageListener);
+    const getUserData = async () => {
+      const id = userId == conv.usersID[0] ? conv.usersID[1] : conv.usersID[0];
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", {params: {id: id}})
+      .then(response => {
+        getOtherUser(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      socket.on('messageSentConv', (res => {
+        setMessages(res.messages);
+      }));
     }
-}, [messageListener]);
+    getUserData();
+    return () => {
+      socket.off('messageSentConv');
+    }
+  }, []);
 
-  if (isVisible == false) 
+  if (isVisible == false)
     return null;
   return (
     <div className='chat-conversation-area'>
@@ -55,8 +74,8 @@ function ChatConversationArea({ name, isVisible, pfp }: ChatConversationAreaProp
               <li></li> */}
             </ul>
           </div>
-          <ConversationContainer messages={messages} />
-          <TextComposerContainer name={name} pfp={pfp} send={send} messages={messages} />
+          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages}/>
+          <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
         </div>
       )}
     </div>

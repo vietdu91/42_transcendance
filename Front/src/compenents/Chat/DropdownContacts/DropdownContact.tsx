@@ -1,67 +1,45 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './DropdownContact.css';
 import axios from 'axios';
-import { useContext } from 'react';
-import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
-import Cookies from 'js-cookie';
 
-function DropdownContact() {
+import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+
+interface OtherUser {
+  name: string,
+  nickname: string,
+  pfp: string,
+  // state: number,
+}
+
+const initUser: OtherUser = {
+  name: "",
+  nickname: "",
+  pfp: "",
+}
+
+function DropdownContact({ user }) {
+  const userId = Cookie.get('id');
+  const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFriends, setIsOpenFriends] = useState(false);
   const [isOpenForSendMp, setIsOpenForSendMp] = useState(false);
   const [isOpenForAddFriend, setIsOpenForAddFriend] = useState(false);
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
-  const [name, setName] = useState("");
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
   const [friendName, setFriendName] = useState('');
-  const [notFound, setNotFound] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-
-  {/* Integration pop up  */}
-  const [messageToSend, setMessageToSend] = useState('');
-  const [selectedConversationId, setSelectedConversationId] = useState(null);
-  const inputRef = useRef(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const token = Cookies.get('accessToken');
-  const userId = Cookies.get('id');
-
-
-  const handleSearchUser = () => {
-    if (searchQuery.trim() !== '') {
-      // Implement your user search logic here, e.g., make an API request
-      // and update the user list or take the appropriate action.
-      // For now, we'll just log the search query.
-      console.log(`Searching for user: ${searchQuery}`);
-
-      // Clear the input field
-      setSearchQuery('');
-      
-      // Close the dropdown
-      toggleSendMp(); // You may need to adjust this to match your UI logic.
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSearchUser();
-    }
-  };
-
-  const handleConversationSelect = (conversationId) => {
-    setSelectedConversationId(conversationId);
-  };
+  const [notFound, setNotFound] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [otherUser, setOtherUser] = useState<OtherUser>(initUser)
+  const [conv, setConv] = useState()
 
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
-    setIsOpenFriends(!isOpenFriends);
-  }
+  };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
+  const handleInputChange = (event) => {
     setFriendName(event.target.value);
   };
 
@@ -69,161 +47,103 @@ function DropdownContact() {
     setIsOpen(!isOpen);
   };
 
-
-  const toggleAddFriend = async () => {
+  const toggleAddFriend = () => {
     setIsOpenForAddFriend(!isOpenForAddFriend);
-    if (friendName)
-    {
-      const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addFriend', { name: friendName }, { withCredentials: true })
-      .then((response) => {
-        const receivId = response.data.id;
-        console.log("id === " + receivId);
-        console.log(response.data.id);
-        setNotFound(false);
-        setIsVisible(true);
-        console.log("friendName === " + friendName);
-        setFriendName('');
-      }
-      )
-    }
-    else
-    {
-      setNotFound(true);
-    }
-
   };
 
   const toggleInvite = () => {
     setIsOpenForInvite(!isOpenForInvite);
   };
 
-  const toggleDelete = async () => {
-    
+  const toggleDelete = () => {
     setIsOpenForDelete(!isOpenForDelete);
-    console.log("TRYING TO REMOVE FRIEND");
-    if (friendName)
-    {
-      const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/removeFriend', {name:friendName}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
-      .then(response => {})
-      .catch(error => {
-        console.log(error);
-      })
-    }
   };
 
   const toggleBlock = () => {
     setIsOpenForBlock(!isOpenForBlock);
-    if (friendName)
-    {
-      console.log("TRYING TO BLOCK FRIEND");
-      const response = axios.post(process.env.REACT_APP_LOCAL_B + '/profile/addBlocked', {name:friendName}, {headers: {  'Authorization': `Bearer ${token}`}, withCredentials: true  })
-      .then(response => {})
+  };
+
+  const toggleSendMp = () => {
+    setIsOpenForSendMp(!isOpenForSendMp);
+  };
+
+
+  const searchUser = async () => {
+    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName } })
+      .then(response => {
+        console.log(response.data)
+        socket?.emit('createConversation', { id: userId, otherName: response.data.name })
+      })
       .catch(error => {
         console.log(error);
       })
-    }
   };
 
-  const toggleSendMp = async () => {
-    setIsOpenForSendMp(!isOpenForSendMp);
-    const response = await axios.post(process.env.REACT_APP_LOCAL_B + '/profile/searchUser', { name: friendName }, { withCredentials: true })
-    .then((response) => {
-      const receivId = response.data.id;
-      console.log("id === " + receivId);
-      console.log(response.data.id);
-      setNotFound(false);
-      setIsVisible(true);
-      console.log("friendName === " + friendName);
-      setFriendName('');
-    }
-    )
-    .catch((error) => {
-      console.log(error);
-      setNotFound(true);
-    // Gérer les erreurs de requête
-    });
-  };
-  const handleSendMpClick = () => {
-    setIsOpenForSendMp(!isOpenForSendMp); // Affiche la div avec l'input lorsque vous cliquez sur "Send Mp"
-  };
-  
+  useEffect(() => {
+    socket.on('conversationCreated', (response) => {
+      console.log(response);
+      setOtherUser(response.otherUser);
+      setConv(response.conversation);
+    })
+  }, []);
+
   return (
     <div className="dropdown-contact">
       <div className="dropdown-contact-toggle" onClick={toggleMenu}>
         Friends
       </div>
-      {isOpen && ( /*Friends list  */
-        /* du coup map de la liste d'amis et on click sur le le */
-        /*utiliser le toggle friends list */
-        /* du coup map de la liste d'amis et on click sur le le */
-        /*utiliser le toggle friends list */
+      {isOpen && (
         <ul className="dropdown-contact-menu">
           <li onClick={toggleAddFriend}>Add friend request</li>
-          <li onClick={toggleInvite}>Invite</li>  
+          <li onClick={toggleInvite}>Invite</li>
           <li onClick={toggleDelete}>Delete</li>
           <li onClick={toggleBlock}>Block</li>
-          <li onClick={() => {handleSendMpClick(); handleSearchUser();}}>Send Mp</li>
+          <li onClick={() => { toggleSendMp() }}>Send Mp</li>
         </ul>
       )}
-      {
-        isOpenForInvite && (
-          <div className="channel-delete-container">
-            {/* Add content for channel delete */}
-            <input type="text" placeholder="Friend's Name"
+      {isOpenForInvite && (
+        <div className="channel-delete-container">
+          <input type="text" placeholder="Friend's Name" />
+          <button onClick={() => toggleInvite()}>ENTER</button>
+        </div>
+      )}
+      {isOpenForAddFriend && (
+        <div className="channel-delete-container">
+          <input type="text" placeholder="Friend's Name" />
+          <button onClick={() => toggleAddFriend()}>ENTER</button>
+        </div>
+      )}
+      {isOpenForDelete && (
+        <div className="channel-delete-container">
+          <input type="text" placeholder="Who do you want to delete" />
+          <button onClick={() => toggleDelete()}>ENTER</button>
+        </div>
+      )}
+      {isOpenForBlock && (
+        <div className="channel-delete-container">
+          <input type="text" placeholder="Friend's Name" />
+          <button onClick={() => toggleBlock()}>ENTER</button>
+        </div>
+      )}
+      {isOpenForSendMp && (
+        <div className="channel-delete-container">
+          <input
+            type="text"
+            placeholder="Friend's Name"
+            value={friendName}
+            onChange={handleInputChange}
+          />
+          <button onClick={() => { searchUser(); toggleSendMp() }}>ENTER</button>
+          {isVisible && (
+            <ChatConversationArea 
+              user={user}
+              conv={conv}
+              isVisible={isVisible}
+              
             />
-            <button onClick={() => { toggleInvite(); }}>ENTER</button>
-          </div>
-        )
-      }
-      {
-        isOpenForAddFriend && (
-          <div className="channel-delete-container">
-            {/* Add content for channel delete */}
-            <input type="text" placeholder="Friend's Name"
-              value={friendName}
-              onChange={handleInputChange}
-            />
-            <button onClick={() => { toggleAddFriend(); }}>ENTER</button>
-          </div>
-        )
-      }
-      {
-        isOpenForDelete && (
-          <div className="channel-delete-container">
-            {/* Add content for channel delete */}
-            <input type="text" placeholder="Who do you want to delete "
-              value={friendName}
-              onChange={handleInputChange}
-            />
-            <button onClick={() => { toggleDelete(); }}>ENTER</button>
-          </div>
-        )
-      }
-      {
-        isOpenForBlock && (
-          <div className="channel-delete-container">
-            {/* Add content for channel delete */}
-            <input type="text" placeholder="Friend's Name"
-             value={friendName}
-             onChange={handleInputChange}
-            />
-            <button onClick={() => { toggleBlock(); }}>ENTER</button>
-          </div>
-        )
-      }
-      {
-        isOpenForSendMp && (
-          <div className="channel-delete-container">
-            {/* Add content for channel delete */}
-            <input type="text" placeholder="Friend's Name"
-             value={friendName}
-             onChange={handleInputChange}
-              // Mettez à jour l'état friendName lorsque l'utilisateur saisit
-            />
-            <button onClick={() => toggleSendMp()}>ENTER</button>
-          </div>
-        )
-      }
+          )}
+        </div>
+      )}
     </div>
   );
 }

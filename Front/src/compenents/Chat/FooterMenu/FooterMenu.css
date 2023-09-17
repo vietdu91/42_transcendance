@@ -2,28 +2,34 @@
     position: fixed;
     height: 3vh;
     width: 100vw;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    display:   flex;
+    flex-direction: row;
+    align-items: center;
     background-color: #0256ef;
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
+.menu-footer li {
+    height: 100%;
+}
+
 .footer-first-element {
     background: linear-gradient(180deg, rgba(0, 235, 67, 1) 0%, rgba(0, 157, 44, 1) 32%, rgba(0, 185, 53, 1) 100%);
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 8px;
-    grid-row: 1 / span 2;
-    grid-column: 1 / span 2;
-    font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 0.9rem;
+    font-style: italic;
     font-weight: bold;
     color: white;
     display: block;
+    display:flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     align-items: center;
-    padding-left: 10px;
+    padding-right: 10px;
+    width: 6%;
 }
 
 .footer-element {
@@ -32,7 +38,7 @@
     text-align: center;
     padding: 10px;
     cursor: pointer;
-    display: block;
+    display: flex;
     align-items: center;
     text-align: center;
     font-size: 15px;
@@ -41,4 +47,10 @@
 
 .footer-element:hover {
     background-color: #003b81;
+}
+
+#window {
+    height: 30px;
+    width: 30px;
+    margin-right: 4px;
 }

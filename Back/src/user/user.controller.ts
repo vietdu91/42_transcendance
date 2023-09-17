@@ -265,6 +265,30 @@ export class UserController {
     return { message: 'Personnage modifié avec succès' };
   }
 
+  @Get('getUserChat')
+  async getUserChat(@Req() request: Request, @Res() response: Response) {
+    const userId = request.cookies.id;
+    if (!userId) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    
+    response.json({
+      id: user.id,
+      name: user.name,
+      nickname: user.nickname,
+      age: user.age,
+      pfp: user.pfp_url,
+      friends: user.friendsList,
+      blocks: user.blockList,
+      conversations: user.conversations,
+      channels: user.channels,
+    })
+  }
+
 
   @Post('searchUser')
   @UseGuards(JwtAuthenticationGuard)
@@ -299,6 +323,19 @@ export class UserController {
       throw new UnauthorizedException();
     this.userService.turnOffTwoFactorAuthentication(userId);
     return { message: 'Disabled 2FA' };
+  }
+
+  @Get('getUserChatById')
+  async getUserChatById(@Query('id') id: number, @Req() request: Request, @Res() response: Response) {
+    const user = await this.userService.getUserById(id);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    response.json({
+      name: user.name,
+      nickname: user.nickname,
+      pfp: user.pfp_url,
+    });
   }
 
 }
