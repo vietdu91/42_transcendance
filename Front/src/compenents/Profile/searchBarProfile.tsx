@@ -30,12 +30,9 @@ function SearchBar2({ onSearch }: SearchBarProps) {
             .then((response) => {
                 const receivId = response.data.id;
                 console.log("id === " + receivId);
-                onSearch(query);
+                onSearch(response.data.name);
                 // console.log(response.data.name);
-                if (location.pathname === "/chat")
-                    window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
-                else
-                    navigate(`/user/${response.data.name}`)
+                navigate(`/user/${response.data.name}`)
             }
             )
             .catch((error) => {
