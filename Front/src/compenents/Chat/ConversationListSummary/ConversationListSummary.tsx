@@ -86,6 +86,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
 
     const handleSearch = (query: string) => {
         // Effectuez votre logique de recherche ici avec la valeur 'query'
+        console.log("Good SB");
         console.log(`Recherche en cours avec la requête : ${query}`);
     };
 

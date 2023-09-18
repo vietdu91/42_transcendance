@@ -309,7 +309,7 @@ export class UserController {
         return;
       }
       const id = user.id;
-      response.status(200).json({ id });
+      response.status(200).json({ id, name });
     } catch (error) {
       response.status(500).json({ error: 'Erreur interne du serveur' });
     }

@@ -13,7 +13,7 @@ function SearchBar ({ onSearch }: SearchBarProps) {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setSearchQuery(event.target.value);
   };
 
@@ -23,17 +23,23 @@ function SearchBar ({ onSearch }: SearchBarProps) {
       process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
       { name: query },
       { withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
-    .then((response) => {
+    
+      .then((response) => {
       const receivId = response.data.id;
       console.log("id === " + receivId);
       onSearch(query);
-      console.log(response.data.id);
+      // console.log(response.data.name);
+      window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
     }
     )
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       setNotFound(true);
     // Gérer les erreurs de requête
+    if(notFound === true)
+    {
+      console.log("Utilisateur not found");
+    }
     });
     // Traitez les données de réponse ici
   };
