@@ -183,6 +183,11 @@ export class ChatGateway {
         return;
       }
     }
+    if (chann.isPrivate == true && chann.password != params.password) {
+      console.log("Mauvais mot de passe");
+      return;
+      }
+      
     try {
       await this.prisma.channel.update({
         where: { name: name },
