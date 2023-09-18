@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
+import SearchBar2 from '../Profile/searchBarProfile';
 import './UserProfile.css'
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
@@ -161,6 +162,7 @@ export default function UserProfile() {
 					</div> */}
 				</div>
 				<div className ="user_pfp">
+				{/* <SearchBar2 onSearch={handleSearch}></SearchBar2> */}
 					<img id="user_pic" src={pfp_url} alt="PPdeMORT"></img>
 					<div className="user-buttons">
 						<button className="user-btn-1" onClick={() => addFriend()}><span className="profile-text-buttom">Ajouter cet ami 💕</span></button><br/>

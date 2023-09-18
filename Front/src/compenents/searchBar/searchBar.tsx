@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Cookie from 'js-cookie'
 import axios from "axios"
+import { useLocation, useNavigate } from "react-router-dom"
 import './searchBar.css'
 
 interface SearchBarProps {
@@ -8,6 +9,8 @@ interface SearchBarProps {
 }
 
 function SearchBar ({ onSearch }: SearchBarProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const token = Cookie.get('accessToken')
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [notFound, setNotFound] = useState<boolean>(false);
@@ -29,7 +32,10 @@ function SearchBar ({ onSearch }: SearchBarProps) {
       console.log("id === " + receivId);
       onSearch(query);
       // console.log(response.data.name);
-      window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
+      if (location.pathname === "/chat")
+        window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
+      else
+        navigate(`/user/${response.data.name}`)
     }
     )
     .catch((error) => {
