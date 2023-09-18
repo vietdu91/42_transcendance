@@ -19,7 +19,8 @@ const initUser: OtherUser = {
   pfp: "",
 }
 
-function DropdownContact({ user }) {
+function DropdownContact({ user, setConvs }) {
+  const token = Cookie.get('accessToken')
   const userId = Cookie.get('id');
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
@@ -69,7 +70,7 @@ function DropdownContact({ user }) {
 
 
   const searchUser = async () => {
-    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName } })
+    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName }, headers: {  'Authorization': `Bearer ${token}`} })
       .then(response => {
         console.log(response.data)
         socket?.emit('createConversation', { id: userId, otherName: response.data.name })
@@ -83,7 +84,7 @@ function DropdownContact({ user }) {
     socket.on('conversationCreated', (response) => {
       console.log(response);
       setOtherUser(response.otherUser);
-      setConv(response.conversation);
+      setConvs(response.conversations);
     })
   }, []);
 

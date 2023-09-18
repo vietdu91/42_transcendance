@@ -7,11 +7,11 @@ import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
-function DropdownChannels({user}) {
+function DropdownChannels({user, setChannels}) {
 	const socket = useContext(ChatContext);
+	const id = Cookies.get('id');
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
-	const [isRoomCreated, setIsRoomCreated] = useState(false);
 	const [isPrivate, setIsPrivate] = useState(false);
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -36,29 +36,21 @@ function DropdownChannels({user}) {
 	};
 
 	const handleCreate = () => {
-		console.log("Created room:", channelName);
-		setIsRoomCreated(true);
-		const id = Cookies.get('id');
-		if (isPrivate) {
-			socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate });
-		} else {
-			socket?.emit('createChannel', { name: channelName, ownerId: id });
-		}
+		console.log("Creating room:", channelName);
+		socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate });
 	};
 
 	const handleJoin = () => {
-		const id = Cookies.get('id');
-		socket?.emit('joinRoom', { name: channelName, userId: id });
+		socket?.emit('joinChannel', { name: channelName, userId: id });
 		setJoined(true);
 	};
 
 	const handleDelete = () => {
 		console.log("Deleted room:", { name: channelName });
 		setChannelName('');
-		setIsRoomCreated(false);
 		setIsPrivate(false);
 		setJoined(false);
-		socket?.emit('deleteRoom', { name: channelName });
+		socket?.emit('deleteRoom', { name: channelName, userId: id });
 	}
 
 
@@ -66,7 +58,6 @@ function DropdownChannels({user}) {
 		const id = Cookies.get('id');
 		console.log("Left room:", channelName);
 		setChannelName('');
-		setIsRoomCreated(false);
 		setIsPrivate(false);
 		setJoined(false);
 		socket?.emit('leaveRoom', { name: channelName, userId: id });
@@ -92,7 +83,11 @@ function DropdownChannels({user}) {
 
 	useEffect(() => {
 		socket.on('channelCreated', (response) => {
-			console.log(response.message);
+			console.log(response);
+			setChannels(response.channels);
+		})
+		socket.on('channelJoined', (response) => {
+			setChannels(response.channels);
 		})
 	})
 

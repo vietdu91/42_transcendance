@@ -48,6 +48,7 @@ function ChatConversationArea({ user, conv, isVisible }) {
       .catch(error => {
         console.log(error);
       });
+      console.log("ici");
       socket.on('messageSentConv', (res => {
         setMessages(res.messages);
       }));

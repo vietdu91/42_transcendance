@@ -56,7 +56,6 @@ async deleteUser(id: number): Promise<User> {
   }
 
   async getUserByName(username: string): Promise<User | null> {
-    console.log(username);
     const user = await this.prisma.user.findUnique({
       where: {name: username},
     });

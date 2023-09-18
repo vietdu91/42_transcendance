@@ -94,7 +94,7 @@ export class AuthService {
             throw new HttpException('Failed to retrieve access token', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     async getUserData(accessToken: string): Promise<any> {
         try {
             const userResponse = await axios.get(process.env.URL_42ME, {

@@ -14,11 +14,7 @@ import SearchBar from '../../searchBar/searchBar';
 import Conversation from "../socketChat"
 import User from "../socketChat"
 
-const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
-    isConvListVisible, setIsConvListVisible, channels, convs, user, handleChannelsConvVisibility,
-    isChannelsListVisible, setIsChannelsListVisible }) => {
-    // if (!isConvListVisible)
-    //     return null;
+const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, user }) => {
 
     const friendsData = [
         {
@@ -48,6 +44,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
     ];
 
     const id = Cookie.get('id');
+    const token = Cookie.get('accessToken');
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     // const [indivConv, setindivConv] = useState(false);
@@ -94,14 +91,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
         handleVisibility(visibility);
     };
     {/* modif benda */ }
-
-    useEffect(() => {
-        setVisibleItems(Array.from({ length: convs.length }, () => false));
-        setVisibleChannels(Array.from({ length: convs.length }, () => false));
-    }, [setVisibleItems, setVisibleChannels]);
     
-    
-
     return (
         <div className="conversation-list-summary">
 
@@ -133,7 +123,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                 {channelsConv && (
                     <ul>
                         {channels.map((item, index) => (
-                            <li key={item.id} onClick={() => {console.log(item);toggleChannelSummary(index)}}>
+                            <li key={item.id} onClick={() => {toggleChannelSummary(index)}}>
                                 {/* <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} /> */}
                                 {item.name}
                             </li>
@@ -158,7 +148,6 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility,
                     <img src={Advertisement} alt="advertisement" id="chat_advertisement" />
                 </div>
             </div>
-            {/* Render conversation summaries based on visibility */}
             {visibleItems.map((isVisible, index) => (
                     convs[index] && <ChatConversationArea
                         user={user}

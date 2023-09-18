@@ -262,12 +262,14 @@ function Classement() {
 	// 		<img src={Couronne} alt="couronne" id="classement-couronne"></img>
 	// 	)
 	// }
+
+	function goToProfile(name: string) {
+		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
+	}
 	
 	function GetPlace({position, name, points, pfp}) {
-		// console.log(position, name, points);
-
 		return (
-			<tr key={Number(position) - 1}>
+			<tr key={Number(position) - 1} onClick={() => {goToProfile(name)}}>
 				<td className="number">{position}</td>
 				<td className="classement-photo-profil">
 					<img className="classement-photo" src={pfp} alt="#"></img>

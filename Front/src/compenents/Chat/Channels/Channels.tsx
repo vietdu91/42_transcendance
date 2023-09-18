@@ -24,6 +24,10 @@ function Channel({ user, channel, isVisible }) {
 		}
 	};
 
+	function goToProfile(name: string) {
+		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
+	}
+
 	const handleSendMessage = async () => {
 		if (value.trim() !== '') {
 			const channId = channel.id;
@@ -88,14 +92,14 @@ function Channel({ user, channel, isVisible }) {
 							<div className="channel-group-pic-main-container">
 								<div className="channel-group-pic-cadre">
 									<div className="channel-pik">
-										{/* Insert image du chat */}
+										<img src={channel.image}/>
 									</div>
 								</div>
 							</div>
 							<div className="channel-group-member-list">
 								<ul>
-									{channel.usersList.map((user, index) => (
-										<li key={index}><img src={regularConv} />{user.nickname} ({user.name})</li>
+									{channel.usersList?.map((user, index) => (
+										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} />{user.nickname} ({user.name})</li>
 									))}
 								</ul>
 							</div>

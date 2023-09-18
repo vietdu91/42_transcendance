@@ -56,6 +56,7 @@ type Game = {
 }
 
 @WebSocketGateway()
+// @UseGuards(JwtAuthenticationGuard)
 export class MatchmakingGateway {
 	@WebSocketServer()
 	server: Server;
@@ -68,12 +69,14 @@ export class MatchmakingGateway {
 	private rTocSpeed: number = (9/16) * 100 / 160;
 
 	@SubscribeMessage('joinQueue')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
 		const userService = new UserService(new PrismaService());
 		const user = await userService.getUserById(userId);
 		if (!user) {
 			client.emit('wrongUser', {message: 'Who are you ?'});
+			return ;
+		}
+		if (!user.character) {
 			return ;
 		}
 
@@ -96,7 +99,6 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('leaveQueue')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleLeaveQueue(client: Socket, userId: number): Promise<void> {
     	this.queue = this.queue.filter((player) => {
 			player.user.id !== userId;
@@ -197,7 +199,6 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('roundStart')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleGameStart(socket: Socket, roomId: number): Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)
@@ -223,7 +224,6 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('giveUp')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleGiveUp(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -292,7 +292,6 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('movePlayer')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleMovePlayer(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -319,7 +318,6 @@ export class MatchmakingGateway {
 	}
 	
 	@SubscribeMessage('usePower')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleUsePower(socket: Socket, params: number): Promise<void> {
 		const actualGame:Game = this.games[params[0]];
 		if (actualGame == null)
@@ -361,7 +359,6 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('moveBall')
-	@UseGuards(JwtAuthenticationGuard)
 	async handleMoveBall(socket: Socket, roomId: number) : Promise<void> {
 		const actualGame:Game = this.games[roomId];
 		if (actualGame == null)

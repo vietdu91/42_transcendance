@@ -57,7 +57,7 @@ CREATE TABLE "Channel" (
     "name" TEXT NOT NULL,
     "ownerId" INTEGER NOT NULL,
     "image" TEXT NOT NULL,
-    "isPrivate" BOOLEAN NOT NULL DEFAULT false,
+    "isPrivate" BOOLEAN NOT NULL,
     "password" TEXT,
 
     CONSTRAINT "Channel_pkey" PRIMARY KEY ("id")

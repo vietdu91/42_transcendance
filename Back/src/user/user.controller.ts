@@ -254,7 +254,7 @@ export class UserController {
       throw new UnauthorizedException();
     }
     const { character } = body;
-    if (character != "Cartman" && character != "Servietsy" && character != "Kenny" && character != "Timmy"
+    if (character != "Cartman" && character != "Servietsky" && character != "Kenny" && character != "Timmy"
       && character != "TerrancePhilip" && character != "Garrison" && character != "Henrietta" && character != "Butters") {
       throw new UnauthorizedException();
     }
@@ -266,6 +266,7 @@ export class UserController {
   }
 
   @Get('getUserChat')
+  @UseGuards(JwtAuthenticationGuard)
   async getUserChat(@Req() request: Request, @Res() response: Response) {
     const userId = request.cookies.id;
     if (!userId) {

@@ -83,48 +83,33 @@ function Chat() {
         window.location.href = "http://localhost:3000/connect";
     const socket = useContext(ChatContext);
     const [user, setUser] = useState<User>(initUser);
+    const [convs, setConvs] = useState([]);
+    const [channels, setChannels] = useState([]);
     const userId = Cookies.get('id');
 
     socket.emit('joinChat', {userId})
+    
+    const [indivConv, setIndivConv] = useState(true);
+    
+    const handleIndivConvVisibility = (visibility) => {
+        setIndivConv(visibility);
+    };
+    
     useEffect(() => {
         const getUserData = async () => {
-            await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChat", { withCredentials: true })
-                .then(res => {
-                    // console.log(res.data.conversations)
-                    setUser(res.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+            await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', {withCredentials: true, headers: {Authorization: `Bearer ${token}`}})
+            .then(res => {
+                setUser(res.data);
+                setConvs(res.data.conversations);
+                setChannels(res.data.channels);
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
         getUserData();
     }, []);
 
-    {/** modif Benda */ }
-    const [indivConv, setIndivConv] = useState(true);
-    const [channelsConv, setChannelsConv] = useState(true);
-
-
-    const [isConvListVisible, setIsConvListVisible] = useState(false);
-    const [isChannelsListVisible, setIsChannelsListVisible] = useState(false);
-
-    const handleIndivConvVisibility = (visibility) => {
-        setIndivConv(visibility);
-    };
-
-    const handleChannelsConvVisibility = (visibility) => {
-        setChannelsConv(visibility);
-    };
-
-
-    const [conversations, setConversations] = useState<string[]>([]); // Add type annotation string[]
-
-    const addConversation = (newConversation: string) => {
-        setConversations([...conversations, newConversation]);
-    };
-
-
-    {/* Modif  */ }
     return (
         <>
             <div className="truc">
@@ -133,11 +118,9 @@ function Chat() {
                         <ConversationListHeader
                             name={user.name}
                             pfp={user.pfp}
-                            handleVisibility={handleIndivConvVisibility}
-                            isConvListVisible={isConvListVisible}
-                            setIsConvListVisible={setIsConvListVisible}
-                            addConversation={addConversation}
                             user={user}
+                            setConvs={setConvs}
+                            setChannels={setChannels}
                         /*Channels */
                         />
                         <ConversationListSummary
@@ -145,15 +128,10 @@ function Chat() {
                             pfp={user.pfp}
                             indivConv={indivConv}
                             handleVisibility={handleIndivConvVisibility}
-                            isConvListVisible={isConvListVisible}
-                            setIsConvListVisible={setIsConvListVisible}
                             user={user}
-                            convs={user.conversations}
+                            convs={convs}
                             /*CHannels */
-                            channels={user.channels}
-                            handleChannelsConvVisibility={handleChannelsConvVisibility}
-                            isChannelsListVisible={isChannelsListVisible}
-                            setIsChannelsListVisible={setIsChannelsListVisible}
+                            channels={channels}
                         />
                     </div>
                 </div>

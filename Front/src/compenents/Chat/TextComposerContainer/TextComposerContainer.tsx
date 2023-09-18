@@ -10,6 +10,10 @@ import { ChatContext } from '../../utils/ChatContext';
 
 const TextComposerContainer = ({ name, pfp, send }) => {
 
+    function goToProfile() {
+        window.open(process.env.REACT_APP_LOCAL_F + `/profile`);
+    }
+
     return (
         <div className="text-composer-container">
             <div className="container-write-text">
@@ -27,7 +31,7 @@ const TextComposerContainer = ({ name, pfp, send }) => {
                     {/* Content for the bottom part */}
                 </div>
             </div>
-            <div className="profile-pic-container-emitter">
+            <div className="profile-pic-container-emitter" onClick={goToProfile}>
                 <div className="profile-pic-last-block">
                     <img className="individual-conv-pfp" src={pfp} alt="individual-conv-pfp"></img>
                     {/* You can add content or image for the profile picture */}
