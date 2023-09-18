@@ -14,8 +14,6 @@ export class TwofaService {
   ) {}
     
   public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: User) {
-    console.log("isTwoFactorAuthenticationCodeValid = " + twoFactorAuthenticationCode);
-    console.log("isTwoFactorSecret = " + user.twoFactorSecret);
     return authenticator.verify({
       token: twoFactorAuthenticationCode,
       secret: user.twoFactorSecret
@@ -24,7 +22,6 @@ export class TwofaService {
 
   public async generateTwoFactorAuthenticationSecret(user: User) {
     const secret = authenticator.generateSecret(); 
-    console.log("generateTwoFactorAuthenticationSecret = " + secret)
     const otpauthUrl = authenticator.keyuri(user.email, this.configService.get('APP_NAME'), secret);
     await this.prismaService.user.update({
        where: { id: user.id },
@@ -37,7 +34,6 @@ export class TwofaService {
   }
 
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
-    console.log('pipeQrCodeStream = ' + otpauthUrl);
     return toFileStream(stream, otpauthUrl);
   }
 }

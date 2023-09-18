@@ -19,14 +19,10 @@ export class TwofaController {
   @UseGuards(JwtAuthenticationGuard)
   async generateTwoFactorAuthenticatio(@Req() request: Request, @Res() response: Response)  {   
     const accessToken = request.headers.authorization?.split(' ')[1];
-    console.log("Access token: " + accessToken);  
     const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
     console.log("decodedJwtAccessToken: " + decodedJwtAccessToken.sub);
-    //const expires = decodedJwtAccessToken.exp;
     const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
-    console.log("user == " + user.name)
     const { otpauthUrl } = await this.twofaService.generateTwoFactorAuthenticationSecret(user);
-    //return this.twofaService.pipeQrCodeStream(response, otpauthUrl);
     const code = await qrcode.toDataURL(otpauthUrl);
     response.json({code: code});
   }
@@ -37,7 +33,6 @@ export class TwofaController {
     async turnOnTwoFactorAuthentication(@Req() request: Request, @Body() body: { code: string })
     {
       const { code } = body;
-      console.log("code = " + code);
       const id = parseInt(request.cookies.id);
       const user = await this.userService.getUserById(id);
       if (!user.twoFactorSecret) {
@@ -46,7 +41,6 @@ export class TwofaController {
       const isCodeValid = this.twofaService.isTwoFactorAuthenticationCodeValid(
         code, user
       );
-      console.log("isCodeValid = " + isCodeValid)
       if (!isCodeValid) {
         throw new UnauthorizedException('Wrong authentication code');
       }

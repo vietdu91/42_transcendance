@@ -22,7 +22,6 @@ export class AppController {
   @Redirect(process.env.URL_REDIRECT)
   getConnected() {  
     console.log("process.env.URL_REDIRECT = " + process.env.URL_REDIRECT)
-    console.log("42 route");
     return {url: process.env.URL_42REDIRECT};
   }
 
@@ -31,7 +30,6 @@ export class AppController {
   @UseInterceptors(FileInterceptor('file'))
   async online(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
     const accessToken = request.headers.authorization?.split(' ')[1];
-    console.log("Access token: " + accessToken);
     const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
     return await this.cloudinary
       .uploadImage(file)

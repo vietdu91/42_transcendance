@@ -23,7 +23,6 @@ export class UserService {
                 pfp_url: userData.pfp,
             }
         });
-        console.log('User created');
         return user;
     } catch (error) {
         console.error(error);
@@ -36,7 +35,6 @@ async deleteUser(id: number): Promise<User> {
         const user = await this.prisma.user.delete({
             where: { id: id }
         });
-        console.log('User deleted');
         return user;
     } catch (error) {
         console.error(error);
@@ -100,33 +98,30 @@ async deleteUser(id: number): Promise<User> {
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
     return this.prisma.user.update({
       where: { id: userId },
-      data: { twoFactorSecret: secret }
+      data: { twoFactorSecret: secret },
     });
   }
 
   async turnOnTwoFactorAuthentication(userId: number): Promise<User> {
-    console.log("turnOnTwoFa for " + userId);
     return this.prisma.user.update({
       where: { id: userId },
-      data: { twoFactorEnabled: true }
+      data: { twoFactorEnabled: true },
     });
   }
 
   async turnOffTwoFactorAuthentication(userId: number): Promise<User> {
-    console.log("turnOffTwoFa for " + userId);
     return this.prisma.user.update({
       where: { id: userId },
-      data: { twoFactorEnabled: false }
+      data: { twoFactorEnabled: false },
     });
   }
 
   async verifyUserId(id: number): Promise<boolean> {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: id
+        id: id,
       }
     });
-    console.log(Boolean(user));
     return Boolean(user);
   }
 

@@ -10,13 +10,14 @@ interface OtherUser {
   name: string,
   nickname: string,
   pfp: string,
-  // state: number,
+  state: number,
 }
 
 const initUser: OtherUser = {
   name: "",
   nickname: "",
   pfp: "",
+  state: 0,
 }
 
 function DropdownContact({ user, setConvs }) {
