@@ -172,7 +172,7 @@ export default function Profile() {
 							<span className="profile-info">: {name}</span><br/><br/> 
 						</div>
 						<div id="profile-info-3">
-							<span className="profile-titre-infos">Win / Lose </span>
+							<span className="profile-titre-infos" id="profile-titre-info-5">Win / Lose </span>
 							<span className="profile-info">: {wins} / {looses}</span><br/><br/>
 						</div>
 						<div id="profile-info-4">

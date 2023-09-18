@@ -44,12 +44,15 @@ export default function Form() {
           value={nickname}
           // onChange={(e) => setNickname(e.target.value)}
 					onChange={handleChange}
+          required
         />
-        <label className="hello">Ton petit surnom 👶</label>
+        <label className={`hello ${nickname ? 'hidden' : ''}`}>Ton petit surnom 👶</label>
         <span className="enter"></span>
       </form>
-      {valid && <div>Nickname valide !</div>}
-      {invalid && <div>Nickname invalide ! Min: 2, Max: 20, lettres, chiffres, espace, -, _</div>}
+      <div className="good_nickname_or_not">
+        {valid && <div>Nickname valide !</div>}
+        {invalid && <div>Nickname invalide ! Min: 2 - Max: 20, lettres, chiffres, espace, tiret, _</div>}
+      </div>
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function Import() {
 		if (event.target.files && event.target.files[0]) 
 		{
 			setSelectedFile(event.target.files[0]);
-			// setImageURL(URL.createObjectURL(event.target.files[0]));
+			setImageURL(URL.createObjectURL(event.target.files[0]));
 			// getImg();
 		}
 		try{

@@ -37,6 +37,8 @@ import queer_eye from './sounds/queer_eye.mp3'
 import southparkSound from './sounds/theme_song.mp3'
 import end_credit from './sounds/end_credit.mp3'
 import choose_your_fighter from './sounds/choose_your_fighter.mp3'
+import Baleze from './sounds/baleze.mp3'
+
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
 import TextComposerContainer from './compenents/Chat/TextComposerContainer/TextComposerContainer';
 
@@ -46,7 +48,6 @@ import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
 
 const ConnexionWithMusic = () => (
   <>
-	<MusicPlayer audioSrc={southparkSound} delay={5000}/>
 	<Connexion />
   </>
 );
@@ -96,8 +97,17 @@ const GameOverWithMusic = () => {
 		<MusicPlayer audioSrc={CulbuterTaMere} />
 		<GameOver />
 	</>
-	
-	)
+	);
+}
+
+const GameMenuWithMusic = () => {
+
+	return (
+		<>
+			<MusicPlayer audioSrc={Baleze} delay={1500}/>
+			<GameMenu />
+		  </>
+		);
 }
 
 
@@ -109,7 +119,7 @@ export default function App() {
 				<Routes>
         		<Route path="/win" element={<WinWithMusic />}/>
 				<Route path="/" element={<MenuWithMusic />}/>
-				<Route path="/gamemenu" element={<GameMenu />}/>
+				<Route path="/gamemenu" element={<GameMenuWithMusic />}/>
 				<Route path="/2fa" element={<TwoFa />}/>
 				<Route path="/champselect" element={<ChampSelectWithMusic />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>

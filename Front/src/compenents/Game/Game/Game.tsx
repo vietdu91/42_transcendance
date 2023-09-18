@@ -45,6 +45,10 @@ import Touche_Space from "../../../img/game/space.png"
 import GeneriqueButters from "../../../img/game/videos/generique_butters.mp4"
 import Gothique from "../../../img/game/videos/gothique.mp4"
 import Prout from "../../../img/game/videos/prout.mp4"
+import Infirme from "../../../img/game/videos/infirme.mp4"
+import Sucer_une_serviette from "../../../img/game/videos/sucer_une_serviette.mp4"
+import Princess_Kenny from "../../../img/game/videos/princess_kenny.mp4"
+import Mr_Toc from "../../../img/game/videos/mr_toc.mp4"
 
 
 interface IBall {
@@ -113,11 +117,24 @@ export default function Game(): JSX.Element {
 	const [scoreRight, setScoreRight] = useState(0);
 
 	const [OnGeneriqueButters, setOnGeneriqueButters] = useState(false);
+
 	const [OnGothiqueLeft, setOnGothiqueLeft] = useState(false);
 	const [OnGothiqueRight, setOnGothiqueRight] = useState(false);
+	
+	const [OnInfirmeLeft, setOnInfirmeLeft] = useState(false);
+	const [OnInfirmeRight, setOnInfirmeRight] = useState(false);
 
 	const [OnProutLeft, setOnProutLeft] = useState(false);
 	const [OnProutRight, setOnProutRight] = useState(false);
+
+	const [OnSucerLeft, setOnSucerLeft] = useState(false);
+	const [OnSucerRight, setOnSucerRight] = useState(false);
+
+	const [OnPrincessLeft, setOnPrincessLeft] = useState(false);
+	const [OnPrincessRight, setOnPrincessRight] = useState(false);
+
+	const [OnTocLeft, setOnTocLeft] = useState(false);
+	const [OnTocRight, setOnTocRight] = useState(false);
 
 	const [charLeft, setCharLeft] = useState("");
 	const [charRight, setCharRight] = useState("");
@@ -179,53 +196,16 @@ export default function Game(): JSX.Element {
 		setTimeout(() => {setOnGeneriqueButters(false)
 		}, 43000);
 	}
-
-	function DesactiveGothiqueLeft() {
-
-		setOnGothiqueLeft(false);
-	}
 	
-	function ActiveGothiqueLeft() {
+	function ActivePower(setter, delay) {
 
-		setOnGothiqueLeft(true);
-		setTimeout(() => {setOnGothiqueLeft(false)
-		}, 12000);
-	}
-	
-	function DesactiveGothiqueRight() {
-
-		setOnGothiqueRight(false);
-	}
-	
-	function ActiveGothiqueRight() {
-
-		setOnGothiqueRight(true);
-		setTimeout(() => {setOnGothiqueRight(false)
-		}, 12000);
+		setter(true);
+		setTimeout(() => {setter(false)}, delay);
 	}
 
-	function DesactiveProutLeft() {
-		
-		setOnProutLeft(false);
-	}
-	
-	function ActiveProutLeft() {
-		
-		setOnProutLeft(true);
-		setTimeout(() => {setOnProutLeft(false)
-		}, 42000);
-	}
+	function DesactivePower(setter) {
 
-	function DesactiveProutRight() {
-		
-		setOnProutRight(false);
-	}
-	
-	function ActiveProutRight() {
-		
-		setOnProutRight(true);
-		setTimeout(() => {setOnProutRight(false)
-		}, 42000);
+		setter(false);
 	}
 
 	useEffect(() => {
@@ -271,10 +251,18 @@ export default function Game(): JSX.Element {
 			setNameLeft(response.game.nameLeft);
 			setNameRight(response.game.nameRight);
 			powLeft = powRight = weed = timmy = fart = toc = false;
-			DesactiveGothiqueLeft();
-			DesactiveGothiqueRight();
-			DesactiveProutLeft();
-			DesactiveProutRight();
+			DesactivePower(setOnGothiqueLeft);
+			DesactivePower(setOnGothiqueRight);
+			DesactivePower(setOnProutLeft);
+			DesactivePower(setOnProutRight);
+			DesactivePower(setOnInfirmeLeft);
+			DesactivePower(setOnInfirmeRight);
+			DesactivePower(setOnSucerLeft);
+			DesactivePower(setOnSucerRight);
+			DesactivePower(setOnPrincessLeft);
+			DesactivePower(setOnPrincessRight);
+			DesactivePower(setOnTocLeft);
+			DesactivePower(setOnTocRight);
 		})
 		
 		socket.on('playerMoved', (response) => {
@@ -316,24 +304,26 @@ export default function Game(): JSX.Element {
 				powLeft = true;
 				switch (response.char) {
 					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
-					case "Servietsky" : weed = true; break;
-					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; ActiveProutLeft(); break;
-					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; break;
-					case "Henrietta" : game.current.scoreRight--; ActiveGothiqueLeft(); setScoreRight(game.current.scoreRight); break;
+					case "Servietsky" : weed = true; ActivePower(setOnSucerLeft, 14000); break;
+					case "Timmy" : timmy = true; ActivePower(setOnInfirmeLeft, 19000); break;
+					case "TerrancePhilip" : fart = true; ActivePower(setOnProutLeft, 42000); break;
+					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; ActivePower(setOnTocLeft, 29000); break;
+					case "Henrietta" : game.current.scoreRight--; ActivePower(setOnGothiqueLeft, 12000); setScoreRight(game.current.scoreRight); break;
 					case "Butters" : ActiveGeneriqueButters(); break;
+					case "Kenny" : ActivePower(setOnPrincessLeft, 51000); break;
 				}
 			}
 			else {
 				powRight = true;
 				switch (response.char) {
 					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
-					case "Servietsky" : weed = true; break;
-					case "Timmy" : timmy = true; break;
-					case "TerrancePhilip" : fart = true; ActiveProutRight(); break;
-					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; break;
-					case "Henrietta" : game.current.scoreLeft--; ActiveGothiqueRight(); setScoreLeft(game.current.scoreLeft); break;
+					case "Servietsky" : weed = true; ActivePower(setOnSucerRight, 14000); break;
+					case "Timmy" : timmy = true; ActivePower(setOnInfirmeRight, 19000); break;
+					case "TerrancePhilip" : fart = true; ActivePower(setOnProutRight, 42000); break;
+					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; ActivePower(setOnTocRight, 29000); break;
+					case "Henrietta" : game.current.scoreLeft--; ActivePower(setOnGothiqueRight, 12000); setScoreLeft(game.current.scoreLeft); break;
 					case "Butters" : ActiveGeneriqueButters(); break;
+					case "Kenny" : ActivePower(setOnPrincessRight, 51000); break;
 				}
 			}
 		})
@@ -398,7 +388,7 @@ export default function Game(): JSX.Element {
 						if (p.keyIsDown(83))
 							socket?.emit("movePlayer", roomId, id, 0);
 					}
-					// socket?.emit("moveBall", roomId);
+					socket?.emit("moveBall", roomId);
 
 					if (fart)
 						p.fill(p.color(21, 79, 48));
@@ -491,17 +481,19 @@ export default function Game(): JSX.Element {
 		}
 
 		if (OnGothiqueLeft)
-			return (
-				<video autoPlay src={Gothique} id="game-img-player-left"></video>
-			);
+			return (<video autoPlay src={Gothique} id="game-img-player-left"></video>);
 		else if (OnProutLeft)
-			return (
-				<video autoPlay src={Prout} id="game-img-player-left"></video>
-			);			
+			return (<video autoPlay src={Prout} id="game-img-player-left"></video>);
+		else if (OnInfirmeLeft)
+			return (<video autoPlay src={Infirme} id="game-img-player-left"></video>);
+		else if (OnSucerLeft)
+			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-left"></video>);	
+		else if (OnPrincessLeft)
+			return (<video autoPlay src={Princess_Kenny} id="game-img-player-left"></video>);
+		else if (OnTocLeft)
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-left"></video>);	
 		else
-			return (
-				<img alt="#" src={image} id="game-img-player-left"></img>
-			);
+			return (<img alt="#" src={image} id="game-img-player-left"></img>);
 	}
 
 	function GetPlayerRight(props) {
@@ -518,18 +510,20 @@ export default function Game(): JSX.Element {
 			case "Butters": image = ButtersR; break;
 		}
 
-		// if (OnGothique)
-		// 	return (
-		// 		<video autoPlay src={Gothique} id="game-img-player-right"></video>
-		// 	);
-		// else if (OnProut)
-		// 	return (
-		// 		<video autoPlay src={Prout} id="game-img-player-right"></video>
-		// 	);	
-		// else
-			return (
-				<img alt="#" src={image} id="game-img-player-right"></img>
-			);
+		if (OnGothiqueRight)
+			return (<video autoPlay src={Gothique} id="game-img-player-right"></video>);
+		else if (OnProutRight)
+			return (<video autoPlay src={Prout} id="game-img-player-right"></video>);
+		else if (OnInfirmeRight)
+			return (<video autoPlay src={Infirme} id="game-img-player-right"></video>);
+		else if (OnSucerRight)
+			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-right"></video>);			
+		else if (OnPrincessRight)
+			return (<video autoPlay src={Princess_Kenny} id="game-img-player-right"></video>);
+		else if (OnTocRight)
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-right"></video>);		
+		else
+			return (<img alt="#" src={image} id="game-img-player-right"></img>);
 	}
 
 	function FooterCommands() {
@@ -553,14 +547,14 @@ export default function Game(): JSX.Element {
 
 		const { nameLeft, nameRight } = props;
 
-		const maxHealth = 5; // La santé maximale, ajustez-la si nécessaire
+		const maxHealth = 5;
 
 		if (healthLeft <= 0)
 			healthLeft = 0;
 		if (healthRight <= 0)
 			healthRight = 0;
 
-		const leftHealthPercent = 100 - (healthLeft / maxHealth) * 100; // Définissez leftHealthPercent ici
+		const leftHealthPercent = 100 - (healthLeft / maxHealth) * 100;
 		const rightHealthPercent = 100 - (healthRight / maxHealth) * 100;
 
 		return (

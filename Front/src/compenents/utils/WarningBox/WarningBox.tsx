@@ -14,6 +14,7 @@ export default function WarningBox() {
 
   return (
     isVisible && (
+      <>
       <div className="warning-box">
 	  	  <div id="attention">ATTENTION</div>
         <img id="rock" alt="christian_rock" src={ChristianRock}></img>
@@ -21,6 +22,7 @@ export default function WarningBox() {
           Desactive les restrictions de ton navigateur pour profiter pleinement de l'experience audio de ce putain de merveilleux site.        </div>
         <button id="move_on" onClick={handleDelete}></button>
       </div>
+      </>
     )
   );
 };
