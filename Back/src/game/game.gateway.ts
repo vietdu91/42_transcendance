@@ -348,8 +348,7 @@ export class MatchmakingGateway {
 		const token: string = socket.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
-
-		console.log(user);
+		
 		let char: string;
 
 		if (actualGame.idLeft === user.id && !actualGame.usedPowLeft) {
