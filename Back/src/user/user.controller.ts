@@ -75,7 +75,7 @@ export class UserController {
     response.json({ users: users });
   }
 
-    @Post('addFriend')
+    @Post('addFriend')  
     @UseGuards(JwtAuthenticationGuard)
     async addFriend( @Req() request, @Body() body: {name: string, userId: string}, @Res() response: Response) {;
       console.log("On y arrive pour addFriend jusqu'ici ouuuuuu");
