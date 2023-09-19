@@ -16,29 +16,22 @@ function SearchBar2({ onSearch }: SearchBarProps) {
     const [notFound, setNotFound] = useState<boolean>(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // console.log(event.target.value);
+        console.log(event.target.value);
         setSearchQuery(event.target.value);
     };
 
-    const handleSearch = async (query: string) => {
-
-        const response = await axios.post(
-            process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
-            { name: query },
-            { withCredentials: true, headers: { Authorization: `Bearer ${token}` } })
-
+    const handleSearch = async (username: string) => {
+        const response = await axios.get(
+            process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
+            { params: {username: username}, headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
-                const receivId = response.data.id;
-                console.log("id === " + receivId);
-                onSearch(response.data.name);
-                // console.log(response.data.name);
-                navigate(`/user/${response.data.name}`)
+                const receivId = response.data.user.id;
+                onSearch(response.data.user.name);
+                navigate(`/user/${response.data.user.name}`)
             }
             )
             .catch((error) => {
-                // console.log(error);
                 setNotFound(true);
-                // Gérer les erreurs de requête
                 if (notFound === true) {
                     console.log("Utilisateur not found");
                 }

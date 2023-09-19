@@ -23,7 +23,7 @@ model User {
   accessToken      String?        @unique
   twoFactorEnabled Boolean        @default(false)
   nickname         String?        @unique
-  state             UserState
+  state            UserState
   age              Int?
   character        String?
   games            Game[]         @relation("players")

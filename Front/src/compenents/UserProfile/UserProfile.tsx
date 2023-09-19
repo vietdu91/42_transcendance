@@ -32,6 +32,8 @@ export default function UserProfile() {
 	const [user, getUser] = useState(initUser);
 	const [name, getName] = useState("");
 	const [percentage, getPercentage] = useState(0);
+	const [friend, getIsFriend] = useState(false);
+	const [blocked, getIsBlocked] = useState(false);
 	let games = useRef<Game[]>([]);
 
 	const token = Cookies.get('accessToken');
@@ -44,7 +46,9 @@ export default function UserProfile() {
 			process.env.REACT_APP_LOCAL_B + '/profile/addFriend',
 			{ name },
 			{ headers: { 'Authorization': `Bearer ${token}` }, withCredentials: true })
-			.then(response => { })
+			.then(res => {
+				getIsFriend(true);
+			})
 			.catch(error => {
 				console.log(error);
 			})
@@ -58,7 +62,38 @@ export default function UserProfile() {
 			process.env.REACT_APP_LOCAL_B + '/profile/removeFriend',
 			{ name },
 			{ headers: { 'Authorization': `Bearer ${token}` }, withCredentials: true })
-			.then(response => { })
+			.then(response => {
+				getIsFriend(false);
+			})
+			.catch(error => {
+				console.log(error);
+			})
+	}
+
+	const blockUser = () => {
+		console.log("TRYING TO BLOCK USER");
+		axios.post(
+			process.env.REACT_APP_LOCAL_B + '/profile/addBlocked',
+			{ name },
+			{ headers: { 'Authorization': `Bearer ${token}` } })
+			.then(response => {
+				getIsFriend(false);
+				getIsBlocked(true);
+			})
+			.catch(error => {
+				console.log(error);
+			})
+	}
+
+	const unblockUser = () => {
+		console.log("TRYING TO UNBLOCK USER");
+		axios.post(
+			process.env.REACT_APP_LOCAL_B + '/profile/removeBlocked',
+			{ name },
+			{ headers: { 'Authorization': `Bearer ${token}` } })
+			.then(response => {
+				getIsBlocked(false);
+			})
 			.catch(error => {
 				console.log(error);
 			})
@@ -72,6 +107,8 @@ export default function UserProfile() {
 				getUser(res.data.user);
 				getName(res.data.user.name);
 				getPercentage(res.data.percentage);
+				getIsFriend(res.data.friend);
+				getIsBlocked(res.data.blocked);
 				const updatedGames: Game[] = [];
 				const limit = res.data.games.length > 3 ? res.data.games.length - 3 : 0;
 				for (let i = res.data.games.length - 1; i >= limit; i--) {
@@ -109,16 +146,16 @@ export default function UserProfile() {
 		const [currentLetter, setCurrentLetter] = useState('A');
 
 		useEffect(() => {
-		  	const interval = setInterval(() => {
-			const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			const currentIndex = alphabet.indexOf(currentLetter);
-			const nextIndex = (currentIndex + 1) % alphabet.length;
-			const nextLetter = alphabet[nextIndex];
-			
-			setCurrentLetter(nextLetter);
-		  }, 1000);
-	  
-		  return () => clearInterval(interval);
+			const interval = setInterval(() => {
+				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				const currentIndex = alphabet.indexOf(currentLetter);
+				const nextIndex = (currentIndex + 1) % alphabet.length;
+				const nextLetter = alphabet[nextIndex];
+
+				setCurrentLetter(nextLetter);
+			}, 1000);
+
+			return () => clearInterval(interval);
 		}, [currentLetter]);
 
 		return (
@@ -162,37 +199,38 @@ export default function UserProfile() {
 					<div id="user-historique">
 						{games.current.map((game, i) => (
 							<div className="user-match" key={i}><div>
-							<span>{game.names[0]} </span> 
-							<span>{game.score[0]}</span> - 
-							<span> {game.score[1]} </span> 
-							<span>{game.names[1]}</span></div></div>
-							))}
+								<span>{game.names[0]} </span>
+								<span>{game.score[0]}</span> -
+								<span> {game.score[1]} </span>
+								<span>{game.names[1]}</span></div></div>
+						))}
 					</div>
 				</div>
 				<div className="user_pfp">
 					<img id="user_pic" src={user.pfp_url} alt="PPdeMORT"></img>
 					<div className="user-buttons">
-						<button className="user-btn-1" id="user-btn-1-add" onClick={() => addFriend()}>
-						Ajouter cet ami 💕
+						{!friend && !blocked &&
+							<button className="user-btn-1" id="user-btn-1-add" onClick={() => addFriend()}>
+								Ajouter cet ami 💕
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+							</button>}<br />
+						{friend && !blocked && <button className="user-btn-1" id="user-btn-1-remove" onClick={() => removeFriend()}>
+							Supprimer cet ami 😞
 							<span></span>
-   							<span></span>
-    						<span></span>
-    						<span></span>
-						</button><br/>
-						<button className="user-btn-1" id="user-btn-1-remove" onClick={() => removeFriend()}>
-						Supprimer cet ami 😞							
 							<span></span>
-   							<span></span>
-    						<span></span>
-    						<span></span>
-						</button><br/>
+							<span></span>
+							<span></span>
+						</button>}<br />
 						<div className="user-btn-2-container">
-							<span className="user-text-buttom" id="user-txt-btn-2-bloquer">Bloquer ce gueu 🚫</span>
-							<button className="user-btn-2" id="user-btn-2-bloquer" onClick={() => removeFriend()}><span>Bloquer ce gueu 🚫</span></button><br/>
+						{!blocked && <><span className="user-text-buttom" id="user-txt-btn-2-bloquer">Bloquer ce gueu 🚫</span>
+							<button className="user-btn-2" id="user-btn-2-bloquer" onClick={() => blockUser()}><span>Bloquer ce gueu 🚫</span></button></>}<br />
 						</div>
 						<div className="user-btn-2-container">
-							<span className="user-text-buttom" id="user-txt-btn-2-debloquer">Debloquer ce gueu ✅</span>
-							<button className="user-btn-2" id="user-btn-2-debloquer" onClick={() => removeFriend()}><span>Debloquer ce gueu ✅</span></button><br/>
+						{blocked && <><span className="user-text-buttom" id="user-txt-btn-2-debloquer">Debloquer ce gueu ✅</span>
+							<button className="user-btn-2" id="user-btn-2-debloquer" onClick={() => unblockUser()}><span>Debloquer ce gueu ✅</span></button></>}<br />
 						</div>
 					</div>
 				</div>
