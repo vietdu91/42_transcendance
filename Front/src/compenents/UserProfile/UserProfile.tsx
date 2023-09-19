@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
+import SearchBar2 from '../Profile/searchBarProfile';
 import './UserProfile.css'
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
@@ -86,7 +87,6 @@ export default function UserProfile() {
 
 	const LetterChanger2 = () => {
 		const [currentLetter, setCurrentLetter] = useState('A');
-
 		useEffect(() => {
 			const interval = setInterval(() => {
 				const alphabet = 'QWERTYUIOPASDFGHJKLZXCVBNM';
@@ -109,16 +109,16 @@ export default function UserProfile() {
 		const [currentLetter, setCurrentLetter] = useState('A');
 
 		useEffect(() => {
-			const interval = setInterval(() => {
-				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-				const currentIndex = alphabet.indexOf(currentLetter);
-				const nextIndex = (currentIndex + 1) % alphabet.length;
-				const nextLetter = alphabet[nextIndex];
-
-				setCurrentLetter(nextLetter);
-			}, 1000);
-
-			return () => clearInterval(interval);
+		  	const interval = setInterval(() => {
+			const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			const currentIndex = alphabet.indexOf(currentLetter);
+			const nextIndex = (currentIndex + 1) % alphabet.length;
+			const nextLetter = alphabet[nextIndex];
+			
+			setCurrentLetter(nextLetter);
+		  }, 1000);
+	  
+		  return () => clearInterval(interval);
 		}, [currentLetter]);
 
 		return (

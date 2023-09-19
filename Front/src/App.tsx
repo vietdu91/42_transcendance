@@ -44,6 +44,7 @@ import TextComposerContainer from './compenents/Chat/TextComposerContainer/TextC
 
 import YeahYeah from './sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All Of Them).mp3'
 import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
+import SearchBar from './compenents/searchBar/searchBar';
 
 
 const ConnexionWithMusic = () => (

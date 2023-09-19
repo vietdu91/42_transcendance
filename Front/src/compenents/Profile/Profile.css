@@ -94,13 +94,13 @@
 	position: relative;
 	height: 80vh;
 	width: 50vw;
-	gap: 20px;
+	gap: 50px;
 }
 
 #profile-hardly-brothers {
 	background-image: url("../../img/Hardly-boys.png");
 	background-size: cover;
-	height: 12vh;
+	height: 11vh;
 	width: 10vw;
 
 	position: absolute;
@@ -229,7 +229,7 @@
 /******   HISTORIQUE   *********/
 
 #profile-jimbo {
-	height: 150px;
+	height: 155px;
 	width: 140px;
 
 	position: absolute;

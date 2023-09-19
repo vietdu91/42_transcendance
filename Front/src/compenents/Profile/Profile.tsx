@@ -4,6 +4,8 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 
 import './Profile.css'
+import '../searchBar/searchBar.css'
+import SearchBar2 from './searchBarProfile';
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
 import Jimbo from "../../img/characters/shoot-jimbo.gif"
@@ -155,6 +157,12 @@ export default function Profile() {
 		});
 	
 	}, [])
+	
+	const handleSearch = (query: string) => {
+        // Effectuez votre logique de recherche ici avec la valeur 'query'
+        console.log("Good SB");
+        console.log(`Recherche en cours avec la requête : ${query}`);
+    };
 
 	return (
 		<div id="profile-menu">
@@ -200,6 +208,7 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className ="pfp">
+				<SearchBar2 onSearch={handleSearch}></SearchBar2>
 					<img id="profile_pic" src={user.pfp_url} alt="PPdeMORT"></img>
 					<div className="profile-buttons">
 						<button className="profile-btn-1" onClick={() => navigate("/NewProfile")}><span className="profile-text-buttom">Modifier le profil 📝</span></button><br/>
