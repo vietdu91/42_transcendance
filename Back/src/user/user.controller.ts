@@ -197,7 +197,7 @@ export class UserController {
         where: { id: Number(userId) },
         data: { friendsList: updatedFriendList },
       })
-    }
+    } 
 
   @Patch('setNickname')
   @UseGuards(JwtAuthenticationGuard)
