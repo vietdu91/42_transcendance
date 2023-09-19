@@ -13,11 +13,13 @@ function DropdownChannels({user, setChannels}) {
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
 	const [isPrivate, setIsPrivate] = useState(false);
-
+	const id = Cookies.get('id');
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);
 	const [isOpenForJoinChannel, setIsOpenForJoinChannel] = useState(false);
 	const [isOpenForDeleteChannel, setIsOpenForDeleteChannel] = useState(false);
+	const [roomPassword, setRoomPassword] = useState('');
+	const [joinPassword, setJoinPassword] = useState('');
 
 	const toggleChannels = () => {
 		setIsOpen(!isOpen);
@@ -36,13 +38,29 @@ function DropdownChannels({user, setChannels}) {
 	};
 
 	const handleCreate = () => {
-		console.log("Creating room:", channelName);
-		socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate });
+		console.log("Created room:", channelName);
+		setIsRoomCreated(true);
+		const id = Cookies.get('id');
+		console.log(roomPassword + "password");	
+		if (roomPassword) {
+			setIsPrivate(true);
+			socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate, password: roomPassword });
+		}
+		else {
+			socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate });
+		}
 	};
 
 	const handleJoin = () => {
-		socket?.emit('joinChannel', { name: channelName, userId: id });
-		setJoined(true);
+		console.log(joinPassword + " = password = " + roomPassword);
+		if (joinPassword) {
+			socket?.emit('joinRoom', { name: channelName, userId: id, password: joinPassword });
+			setJoined(true);
+		}
+		else {
+			socket?.emit('joinRoom', { name: channelName, userId: id });
+			setJoined(true);
+		}
 	};
 
 	const handleDelete = () => {
@@ -137,7 +155,9 @@ function DropdownChannels({user, setChannels}) {
 							</div>
 						</div>
 						<div className="channel-creation-buttons">
-							<input type="text" placeholder="Password" />
+							<input type="text" placeholder="Password"
+							onChange={(e) => setRoomPassword(e.target.value)}	
+							 />
 							<button onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button>
 						</div>
 					</div>
@@ -151,7 +171,9 @@ function DropdownChannels({user, setChannels}) {
 							onChange={(e) => setChannelName(e.target.value)}
 						/>
 						{/* fairee apparaitre le password que si il est prive*/}
-						<input type="text" placeholder="Password" />
+						<input type="text" placeholder="Password"
+						onChange={(e) => setJoinPassword(e.target.value)}
+						 />
 						{/* ajouter  */}
 						<button onClick={() => { handleJoin(); toggleJoinChannel(); }}>Join</button>
 					</div>

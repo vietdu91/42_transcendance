@@ -37,6 +37,12 @@ function DropdownContact({ user, setConvs }) {
   const [otherUser, setOtherUser] = useState<OtherUser>(initUser)
   const [conv, setConv] = useState()
 
+  const accessToken = Cookie.get('accessToken');
+
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
   const toggleFriendsList = () => {
     setIsOpenFriends(!isOpenFriends);
   };
@@ -49,20 +55,75 @@ function DropdownContact({ user, setConvs }) {
     setIsOpen(!isOpen);
   };
 
-  const toggleAddFriend = () => {
+  const toggleAddFriend = async () => {
     setIsOpenForAddFriend(!isOpenForAddFriend);
+
   };
+
+  const handleAddFriend = async () => {
+    if (friendName) {
+      try {
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_LOCAL_B}/profile/addFriend`,
+          { name: friendName,
+            userId: userId},
+          { headers }
+        );
+        setNotFound(false);
+        setIsVisible(true);
+        console.log("friendName === " + friendName);
+        setFriendName('');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleDeleteFriend = async () => {
+    if (friendName) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_LOCAL_B}/profile/removeFriend`,
+          { name: friendName, userId: userId},
+          { headers }
+        );
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+
+  const handleBlockFriend = async () => {
+    if (friendName) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_LOCAL_B}/profile/addBlocked`,
+          { name: friendName, userId: userId},
+          { headers }
+        );
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
+
 
   const toggleInvite = () => {
     setIsOpenForInvite(!isOpenForInvite);
   };
 
-  const toggleDelete = () => {
+  const toggleDelete = async () => {
     setIsOpenForDelete(!isOpenForDelete);
   };
 
-  const toggleBlock = () => {
+  const toggleBlock = async () => {
     setIsOpenForBlock(!isOpenForBlock);
+
   };
 
   const toggleSendMp = () => {
@@ -71,15 +132,26 @@ function DropdownContact({ user, setConvs }) {
 
 
   const searchUser = async () => {
-    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName }, headers: {  'Authorization': `Bearer ${token}`} })
-      .then(response => {
-        console.log(response.data)
-        socket?.emit('createConversation', { id: userId, otherName: response.data.name })
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_LOCAL_B}/profile/getUserByName`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          params: {
+            username: friendName,
+          },
+        }
+      );
+  
+      console.log(response.data);
+      socket?.emit('createConversation', { id: userId, otherName: response.data.name });
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
 
   useEffect(() => {
     socket.on('conversationCreated', (response) => {
@@ -111,20 +183,26 @@ function DropdownContact({ user, setConvs }) {
       )}
       {isOpenForAddFriend && (
         <div className="channel-delete-container">
-          <input type="text" placeholder="Friend's Name" />
-          <button onClick={() => toggleAddFriend()}>ENTER</button>
+          <input type="text" placeholder="Friend's Name"
+            value={friendName}
+            onChange={handleInputChange} />
+          <button onClick={() =>  { handleAddFriend(); toggleAddFriend() }}>ENTER</button>
         </div>
       )}
       {isOpenForDelete && (
         <div className="channel-delete-container">
-          <input type="text" placeholder="Who do you want to delete" />
-          <button onClick={() => toggleDelete()}>ENTER</button>
+          <input type="text" placeholder="Who do you want to delete" 
+            value={friendName}
+            onChange={handleInputChange} />
+          <button onClick={() => { handleDeleteFriend(); toggleDelete()}}>ENTER</button>
         </div>
       )}
       {isOpenForBlock && (
         <div className="channel-delete-container">
-          <input type="text" placeholder="Friend's Name" />
-          <button onClick={() => toggleBlock()}>ENTER</button>
+          <input type="text" placeholder="Friend's Name" 
+            value={friendName}
+            onChange={handleInputChange} />
+          <button onClick={() => {handleBlockFriend(); toggleBlock()}}>ENTER</button>
         </div>
       )}
       {isOpenForSendMp && (
@@ -150,4 +228,4 @@ function DropdownContact({ user, setConvs }) {
   );
 }
 
-export default DropdownContact;
+export default DropdownContact

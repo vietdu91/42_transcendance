@@ -194,6 +194,10 @@ export class ChatGateway {
         return;
       }
     }
+    if (chann.isPrivate == true && chann.password != params.password) {
+      console.log("Mauvais mot de passe");
+      return;
+    }
     await this.prisma.channel.update({
       where: { name: name },
       data: {
@@ -204,277 +208,282 @@ export class ChatGateway {
         },
       },
     });
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        channels: {
-          include: {
-            messages: true,
-            usersList: true,
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          channels: {
+            include: {
+              messages: true,
+              usersList: true,
+            }
           }
         }
-      }
-    })
-    client.emit('channelJoined', { message: "Channel Joined", channels: user.channels });
+      })
+      client.emit('channelJoined', { message: "Channel Joined", channels: user.channels });
+    } catch (e) {
+      throw e;
+    }
   }
 
 
-  @SubscribeMessage('kickUser')
-  async handleKickUser(client: Socket, params: any): Promise<void> {
-    const channName = params.channName;
-    const userId = parseInt(String(params.userId));
-    const otherName = String(params.otherName);
-    const chann = await this.prisma.channel.findUnique({
-      where: {
-        name: channName
-      },
-      include: {
-        usersList: true,
-        adminList: true,
-      }
-    });
-    if (!chann) {
-      console.log("Le channel n'existe pas");
-      return;
+
+@SubscribeMessage('kickUser')
+async handleKickUser(client: Socket, params: any): Promise < void> {
+  const channName = params.channName;
+  const userId = parseInt(String(params.userId));
+  const otherName = String(params.otherName);
+  const chann = await this.prisma.channel.findUnique({
+    where: {
+      name: channName
+    },
+    include: {
+      usersList: true,
+      adminList: true,
     }
+  });
+  if(!chann) {
+    console.log("Le channel n'existe pas");
+    return;
+  }
 
     const user = await this.prisma.user.findUnique({ where: { name: otherName } });
 
-    if (!user) {
-      console.log("La cible n'existe pas");
-      return;
-    }
+  if(!user) {
+    console.log("La cible n'existe pas");
+    return;
+  }
 
     let i;
-    for (i = 0; i < chann.adminList.length; i++) {
-      if (chann.adminList[i].id == userId) {
-        break;
-      }
-    }
-    if (i == chann.adminList.length) {
-      console.log("Vous n'etes pas admin")
-      return;
-    }
+  for(i = 0; i <chann.adminList.length; i++) {
+  if (chann.adminList[i].id == userId) {
+    break;
+  }
+}
+if (i == chann.adminList.length) {
+  console.log("Vous n'etes pas admin")
+  return;
+}
 
-    for (i = 0; i < chann.usersList.length; i++) {
-      if (chann.usersList[i].id == user.id)
-        break;
-    }
-    if (i == chann.usersList.length) {
-      console.log("La cible n'est pas dans le channel")
-    }
+for (i = 0; i < chann.usersList.length; i++) {
+  if (chann.usersList[i].id == user.id)
+    break;
+}
+if (i == chann.usersList.length) {
+  console.log("La cible n'est pas dans le channel")
+}
 
-    for (i = 0; i < chann.adminList.length; i++) {
-      if (chann.adminList[i].name == otherName && userId != chann.ownerId) {
-        console.log("La cible est un admin");
-        return;
+for (i = 0; i < chann.adminList.length; i++) {
+  if (chann.adminList[i].name == otherName && userId != chann.ownerId) {
+    console.log("La cible est un admin");
+    return;
+  }
+}
+const newChann = await this.prisma.channel.update({
+  where: { name: channName },
+  data: {
+    usersList: {
+      disconnect: {
+        id: user.id,
+      }
+    },
+    adminList: {
+      disconnect: {
+        id: user.id,
       }
     }
-    const newChann = await this.prisma.channel.update({
-      where: { name: channName },
-      data: {
-        usersList: {
-          disconnect: {
-            id: user.id,
-          }
-        },
-        adminList: {
-          disconnect: {
-            id: user.id,
-          }
-        }
-      },
-      include: {
-        usersList: true,
-      }
-    });
-    for (let user of newChann.usersList) {
-      for (let userChat of this.users) {
-        if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('userKicked', { otherName });
-        }
-      }
+  },
+  include: {
+    usersList: true,
+  }
+});
+for (let user of newChann.usersList) {
+  for (let userChat of this.users) {
+    if (user.id === userChat.user.id) {
+      this.server.to(userChat.id).emit('userKicked', { otherName });
     }
+  }
+}
     // A TESTER
   }
 
-  @SubscribeMessage('leaveRoom') // Écoutez l'événement 'leaveRoom'
-  async handleLeaveRoom(client: Socket, params: any): Promise<void> {
-    const name = params.name;
-    const userId = parseInt(String(params.userId));
-    const chann = await this.prisma.channel.findUnique({
-      where: {
-        name: name // Assurez-vous que "name" est correctement défini
-      },
-      include: {
-        usersList: true,
-        banList: true,
-      }
-    });
+@SubscribeMessage('leaveRoom') // Écoutez l'événement 'leaveRoom'
+async handleLeaveRoom(client: Socket, params: any): Promise < void> {
+  const name = params.name;
+  const userId = parseInt(String(params.userId));
+  const chann = await this.prisma.channel.findUnique({
+    where: {
+      name: name // Assurez-vous que "name" est correctement défini
+    },
+    include: {
+      usersList: true,
+      banList: true,
+    }
+  });
 
-    await this.prisma.channel.update({
-      where: { name: name },
-      data: {
-        usersList: {
-          disconnect: {
-            id: userId,
-          }
-        },
+  await this.prisma.channel.update({
+    where: { name: name },
+    data: {
+      usersList: {
+        disconnect: {
+          id: userId,
+        }
       },
-    });
-    client.emit('userLeft', { userId });
-  }
+    },
+  });
+  client.emit('userLeft', { userId });
+}
 
-  @SubscribeMessage('deleteRoom')
-  async handleDeleteRoom(@MessageBody() data: { name: string, userId: string }): Promise<void> {
+@SubscribeMessage('deleteRoom')
+async handleDeleteRoom(@MessageBody() data: { name: string, userId: string }): Promise < void> {
     {
-      const { name, userId } = data;
+  const { name, userId } = data;
 
-      // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
-      const room = await this.prisma.channel.findUnique({
-        where: { name: name },
-      });
+  // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
+  const room = await this.prisma.channel.findUnique({
+    where: { name: name },
+  });
 
-      if (room.ownerId == parseInt(userId)) {
-        // Supprimez la room en utilisant son ID (si vous en avez un).
-        await this.prisma.channel.delete({
-          where: { id: room.id },
-        });
+  if (room.ownerId == parseInt(userId)) {
+    // Supprimez la room en utilisant son ID (si vous en avez un).
+    await this.prisma.channel.delete({
+      where: { id: room.id },
+    });
 
-        // Émettez un événement pour informer les clients que la room a été supprimée.
-        this.server.emit('roomDeleted', { name });
-      } else {
-        // Gérer le cas où la room n'a pas été trouvée.
-        console.log('Room not found:', name);
-      }
+    // Émettez un événement pour informer les clients que la room a été supprimée.
+    this.server.emit('roomDeleted', { name });
+  } else {
+    // Gérer le cas où la room n'a pas été trouvée.
+    console.log('Room not found:', name);
+  }
+}
+  }
+
+@SubscribeMessage('banRoom')
+async handleBanRoom(client: Socket, params: any): Promise < void> {
+  const name = params.name;
+  const userId = parseInt(String(params.userId));
+
+  const chann = await this.prisma.channel.findUnique({
+    where: {
+      name: name // Assurez-vous que "name" est correctement défini
     }
+  });
+  if(!chann) {
+    return;
   }
+    await this.prisma.channel.update({
+    where: { name: name },
+    data: {
+      banList: {
+        connect: {
+          id: userId,
+        }
+      },
+      usersList: {
+        disconnect: {
+          id: userId,
+        }
+      },
+    },
+  });
+}
 
-  @SubscribeMessage('banRoom')
-  async handleBanRoom(client: Socket, params: any): Promise<void> {
-    const name = params.name;
-    const userId = parseInt(String(params.userId));
+@SubscribeMessage('setAdmin')
+async handleSetAdmin(client: Socket, params: any): Promise < void> {
+  const name = params.name;
+  const userId = parseInt(String(params.userId));
 
-    const chann = await this.prisma.channel.findUnique({
-      where: {
-        name: name // Assurez-vous que "name" est correctement défini
-      }
-    });
-    if (!chann) {
-      return;
+  const chann = await this.prisma.channel.findUnique({
+    where: {
+      name: name
     }
-    await this.prisma.channel.update({
-      where: { name: name },
-      data: {
-        banList: {
-          connect: {
-            id: userId,
-          }
-        },
-        usersList: {
-          disconnect: {
-            id: userId,
-          }
-        },
+  });
+
+  await this.prisma.channel.update({
+    where: { name: name },
+    data: {
+      adminList: {
+        connect: {
+          id: userId,
+        }
       },
-    });
-  }
+    },
+  });
+}
 
-  @SubscribeMessage('setAdmin')
-  async handleSetAdmin(client: Socket, params: any): Promise<void> {
-    const name = params.name;
-    const userId = parseInt(String(params.userId));
-
-    const chann = await this.prisma.channel.findUnique({
-      where: {
-        name: name
-      }
-    });
-
-    await this.prisma.channel.update({
-      where: { name: name },
-      data: {
-        adminList: {
-          connect: {
-            id: userId,
-          }
-        },
-      },
-    });
-  }
-
-  @SubscribeMessage('unsetAdmin')
-  async handleUnsetAdmin(client: Socket, params: any): Promise<void> {
-    const name = params.name;
-    const userId = parseInt(String(params.userId));
-    const chann = await this.prisma.channel.findUnique({
-      where: {
-        name: name // Assurez-vous que "name" est correctement défini
-      }
-    });
-    await this.prisma.channel.update({
-      where: { name: name },
-      data: {
-        adminList: {
-          disconnect: {
-            id: userId,
-          }
-        },
-      },
-    });
-  }
-
-  @SubscribeMessage('createConversation')
-  async handleCreateConversation(client: Socket, params: any): Promise<void> {
-    const id = params.id;
-    const otherName = params.otherName;
-    const userId = parseInt(String(id));
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user || user.name === otherName)
-      return;
-    const otherUser = await this.prisma.user.findUnique({
-      where: { name: otherName },
-    });
-    if (!otherUser || otherUser.id === id) {
-      return;
-    };
-    const convs = await this.prisma.conversation.findMany();
-    for (let i = 0; i < convs.length; i++) {
-      if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
-        return;
-      }
+@SubscribeMessage('unsetAdmin')
+async handleUnsetAdmin(client: Socket, params: any): Promise < void> {
+  const name = params.name;
+  const userId = parseInt(String(params.userId));
+  const chann = await this.prisma.channel.findUnique({
+    where: {
+      name: name // Assurez-vous que "name" est correctement défini
     }
-    await this.prisma.conversation.create({
-      data: {
-        users: {
-          connect: [
-            { id: userId },
-            { id: otherUser.id },
-          ]
-        },
-        usersID: [userId, otherUser.id],
-        names: [user.name, otherName],
-      }
-    });
-    const newUser = await this.prisma.user.findUnique({
-      where: { id: userId },
+  });
+  await this.prisma.channel.update({
+    where: { name: name },
+    data: {
+      adminList: {
+        disconnect: {
+          id: userId,
+        }
+      },
+    },
+  });
+}
+
+@SubscribeMessage('createConversation')
+async handleCreateConversation(client: Socket, params: any): Promise < void> {
+  const id = params.id;
+  const otherName = params.otherName;
+  const userId = parseInt(String(id));
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if(!user || user.name === otherName)
+return;
+const otherUser = await this.prisma.user.findUnique({
+  where: { name: otherName },
+});
+if (!otherUser || otherUser.id === id) {
+  return;
+};
+const convs = await this.prisma.conversation.findMany();
+for (let i = 0; i < convs.length; i++) {
+  if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
+    return;
+  }
+}
+await this.prisma.conversation.create({
+  data: {
+    users: {
+      connect: [
+        { id: userId },
+        { id: otherUser.id },
+      ]
+    },
+    usersID: [userId, otherUser.id],
+    names: [user.name, otherName],
+  }
+});
+const newUser = await this.prisma.user.findUnique({
+  where: { id: userId },
+  include: {
+    conversations: {
       include: {
-        conversations: {
-          include: {
-            messages: true,
-          }
-        },
+        messages: true,
       }
-    })
-    const shortUser = {
-      name: otherName,
-      nickname: otherUser.nickname,
-      pfp: otherUser.pfp_url,
-      state: otherUser.state,
-    }
-    client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversations: newUser.conversations });
+    },
+  }
+})
+const shortUser = {
+  name: otherName,
+  nickname: otherUser.nickname,
+  pfp: otherUser.pfp_url,
+  state: otherUser.state,
+}
+client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversations: newUser.conversations });
   }
 }
 

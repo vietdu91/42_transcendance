@@ -136,6 +136,9 @@ function Chat() {
                     </div>
                 </div>
             </div>
+            <div id="return">
+				<ReturnButtom colorHexa='#ff30ff' path='/' />
+			</div>
             <FooterMenu />
         </>
     );
