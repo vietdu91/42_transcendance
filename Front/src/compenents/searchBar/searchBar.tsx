@@ -38,7 +38,7 @@ function SearchBar ({ onSearch }: SearchBarProps) {
             setNotFound(true);
             console.log("error: Not found");
         });
-        console.log(response.data);
+        // console.log(response.data);
     // Traitez les données de réponse ici
 };
 
