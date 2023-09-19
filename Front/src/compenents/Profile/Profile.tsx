@@ -156,8 +156,6 @@ export default function Profile() {
 	
 	}, [])
 
-	console.log(games.current);
-
 	return (
 		<div id="profile-menu">
 			<img id="profile-bg-menu" src={Missing} alt={'Missing'}></img>
@@ -176,7 +174,7 @@ export default function Profile() {
 							<span className="profile-info">: {user.name}</span><br/><br/> 
 						</div>
 						<div id="profile-info-3">
-							<span className="profile-titre-infos">Win / Lose </span>
+							<span className="profile-titre-infos" id="profile-titre-info-5">Win / Lose </span>
 							<span className="profile-info">: {user.wins} / {user.looses}</span><br/><br/>
 						</div>
 						<div id="profile-info-4">
@@ -188,16 +186,16 @@ export default function Profile() {
 							<span className="profile-info">: {user.age} ans</span><br/><br/> 
 						</div>
 					</div>
-						<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
-						<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
-						<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
+					<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
+					<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
+					<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
 					<div id="profile-historique">
 						{games.current.map((game, i) => (
 							<div className="profile-match" key={i}><div>
 							<span>{game.names[0]} </span> 
 							<span>{game.score[0]}</span> - 
 							<span> {game.score[1]} </span> 
-							<span>{game.names[1]}</span></div><br/><br/></div>
+							<span>{game.names[1]}</span></div></div>
 							))}
 					</div>
 				</div>

@@ -124,9 +124,22 @@
     flex-wrap: wrap;
     display: flex;
     gap: 10px 20px;
-    margin-top: 40px;
+    /* margin-top: 40px; */
     width: 48vw;
     height: 17vh;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .spectate-history {
+    margin-top: 70px;
+    margin-left: 40px;
+  }
+}
+
+@-moz-document url-prefix() {
+  .spectate-history {
+    margin-top: 40px;
+  }
 }
 
 #spectate-square-1, #spectate-square-2, #spectate-square-3 {
@@ -317,9 +330,21 @@
     position: absolute;
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
     width: 48vw;
     height: 23vh;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .match-history {
+    margin-top: 50px;
+    margin-left: 30px;
+  }
+}
+
+@-moz-document url-prefix() {
+  .match-history {
+    margin-top: 20px;
+  }
 }
 
 #match-square-1, #match-square-2, #match-square-3 {
@@ -355,7 +380,7 @@
     }
 }
 
-#container-eyesUp {
+.container-eyesUp {
     position: absolute;
     top: 0;
     left: 0;
@@ -377,7 +402,7 @@
   border-top-right-radius: 150px 100px;
 }
 
-#container-eyesDown {
+.container-eyesDown {
     position: absolute;
     top: 0;
     left: 0;
@@ -507,6 +532,16 @@
     -webkit-scrollbar-width: auto;
 }
 
+.div-classement-table::-webkit-scrollbar {
+  width: 3px;
+}
+.div-classement-table::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.div-classement-table::-webkit-scrollbar-thumb {
+  background: rgb(53, 191, 216);
+  border-radius: 5px;
+}
 
 .classement-table {
     position: relative;

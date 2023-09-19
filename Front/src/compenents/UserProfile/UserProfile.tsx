@@ -172,10 +172,28 @@ export default function UserProfile() {
 				<div className="user_pfp">
 					<img id="user_pic" src={user.pfp_url} alt="PPdeMORT"></img>
 					<div className="user-buttons">
-						<button className="user-btn-1" onClick={() => addFriend()}><span className="profile-text-buttom">Ajouter cet ami 💕</span></button><br />
-						{/* <button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Supprimer cet ami 😞</span></button><br/> */}
-						<button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Bloquer ce gueu 🚫</span></button><br />
-						{/* <button className="user-btn-1" onClick={() => removeFriend()}><span className="profile-text-buttom">Debloquer ce gueu ✅</span></button><br/> */}
+						<button className="user-btn-1" id="user-btn-1-add" onClick={() => addFriend()}>
+						Ajouter cet ami 💕
+							<span></span>
+   							<span></span>
+    						<span></span>
+    						<span></span>
+						</button><br/>
+						<button className="user-btn-1" id="user-btn-1-remove" onClick={() => removeFriend()}>
+						Supprimer cet ami 😞							
+							<span></span>
+   							<span></span>
+    						<span></span>
+    						<span></span>
+						</button><br/>
+						<div className="user-btn-2-container">
+							<span className="user-text-buttom" id="user-txt-btn-2-bloquer">Bloquer ce gueu 🚫</span>
+							<button className="user-btn-2" id="user-btn-2-bloquer" onClick={() => removeFriend()}><span>Bloquer ce gueu 🚫</span></button><br/>
+						</div>
+						<div className="user-btn-2-container">
+							<span className="user-text-buttom" id="user-txt-btn-2-debloquer">Debloquer ce gueu ✅</span>
+							<button className="user-btn-2" id="user-btn-2-debloquer" onClick={() => removeFriend()}><span>Debloquer ce gueu ✅</span></button><br/>
+						</div>
 					</div>
 				</div>
 				<button id="going_home" onClick={() => navigate("/")}></button>

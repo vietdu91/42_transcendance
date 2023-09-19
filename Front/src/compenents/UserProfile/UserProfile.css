@@ -98,8 +98,8 @@
 	width: 10vw;
 
 	position: absolute;
-	top: 10px;
-	left: 30px;
+	top: 0.5%;
+	right: 5%;
 }
 
 .user-title {
@@ -227,8 +227,8 @@
 	width: 140px;
 
 	position: absolute;
-	top: 375px;
-	left: 30px;
+	top: 43.5%;
+	left: 0%;
 }
 
 #user-historique {
@@ -258,68 +258,232 @@
 	gap: 8px;
 }
 
-.user-btn-1 {
+.user-btn-1, .user-btn-2 {
 
 	width: 250px;
 	height: 50px;
 
 	text-decoration: none;
-	border: 2px solid #010100;
 	padding: 15px;
-	color: #000000;
 	background-color: #ffffff;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	position: relative;
 	display: inline-block;
+
+	cursor: pointer;
+    overflow: hidden;
 }
 
-.user-btn-1:hover {
-
-	background-color: rgb(231, 229, 229);
-
-}
-
-.user-btn-1::before {
-
-	content: "";
-	position: absolute;
-	top: 5px;
-	left: -2px;
-	width: calc(100% + 6px);
-	/*100% plus double the times left values*/
-	height: calc(100% - 10px);
-	background-color: #ffffff;
-	transition: all 0.5s ease-in-out;
-	transform: scaleY(1);
-}
-
-.user-btn-1:hover::before {
-
-	transform: scaleY(0);
-}
-
-.user-btn-1::after {
-
-	content: "";
-	position: absolute;
-	left: 5px;
-	top: -5px;
-	width: calc(100% - 10px);
-	/*100% plus double the times left values*/
-	height: calc(100% + 10px);
-	background-color: #ffffff;
-	transition: all 0.5s ease-in-out;
-	transform: scaleX(1);
-}
-
-  .user-btn-1:hover::after {
-
-	transform: scaleX(0);
+.user-btn-2-container {
+	width: 250px;
+	height: 50px;
+	position: relative;
+	display: flex;
+    justify-content: center;
+	align-items: center;
 }
 
 .user-text-buttom {
+	position: absolute;
+    /* color: rgb(0, 0, 0); */
+	text-transform: uppercase;
+	text-decoration: none;
+	letter-spacing: 2px;
+	text-align: center;
+	font-size: 14px;
+}
 
-	z-index: 3;
-	position: relative;
+.user-text-buttom#user-txt-btn-2-bloquer{
+    color: rgb(0, 0, 0);
+}
+
+.user-text-buttom#user-txt-btn-2-debloquer{
+    color: green;
+}
+
+.user-btn-2 {
+	transition: 0.5s;
+	background: #000;
+	-webkit-mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png");
+    mask: url("https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/urban-sprite.png");
+    -webkit-mask-size: 3000% 100%;
+    mask-size: 3000% 100%;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    -webkit-animation: ani2 0.7s steps(29) forwards;
+    animation: ani2 0.7s steps(29) forwards; 
+} 
+
+.user-btn-2#user-btn-2-bloquer{
+	background: #000;
+} 
+
+.user-btn-2#user-btn-2-debloquer{
+	background: green;
+} 
+
+
+.user-btn-2:hover {
+	-webkit-animation: ani 0.7s steps(29) forwards;
+	animation: ani 0.7s steps(29) forwards; 
+}
+
+   @keyframes ani {
+	from {
+	 -webkit-mask-position: 0 0;
+	 mask-position: 0 0;
+	}
+   
+	to {
+	 -webkit-mask-position: 100% 0;
+	 mask-position: 100% 0;
+	}
+   }
+   
+   @keyframes ani2 {
+	from {
+	 -webkit-mask-position: 100% 0;
+	 mask-position: 100% 0;
+	}
+   
+	to {
+	 -webkit-mask-position: 0 0;
+	 mask-position: 0 0;
+	}
+   }
+
+#user-btn-1-add {
+	color: rgb(175, 149, 0);
+	border: 2px solid gold;
+}
+
+#user-btn-1-remove {
+	color: rgb(151, 9, 9);
+	border: 2px solid red;
+}
+
+.user-btn-1 span{
+    position: absolute;
+    display: block;
+}
+.user-btn-1 span:nth-child(1){
+    height: 3px;
+    width:250px;
+    top: 0px;
+    left:-250px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span1 2s linear infinite;
+    animation-delay: 1s;
+}
+
+#user-btn-1-add span:nth-child(1){
+    background: linear-gradient(to right, rgba(0,0,0,0), gold);
+}
+
+#user-btn-1-remove span:nth-child(1){
+    background: linear-gradient(to right, rgba(0,0,0,0), red);
+}
+
+@keyframes span1{
+    0%{
+        left:-250px;
+    }
+    100%{
+        left:250px;
+    }
+}
+.user-btn-1 span:nth-child(2){
+    height: 50px;
+    width: 3px;
+    top:-50px;
+    right:0px;
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span2 2s linear infinite;
+    animation-delay: 2s;
+}
+
+#user-btn-1-add span:nth-child(2){
+    background: linear-gradient(to bottom, rgba(0,0,0,0), gold);
+}
+
+#user-btn-1-remove span:nth-child(2){
+    background: linear-gradient(to bottom, rgba(0,0,0,0), red);
+}
+
+@keyframes span2{
+    0%{
+        top:-50px;
+    }
+    100%{
+        top:50px;
+    }
+}
+
+.user-btn-1 span:nth-child(3){
+    height:3px;
+    width:250px;
+    right:-250px;
+    bottom: 0px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    animation: span3 2s linear infinite;
+    animation-delay: 3s;
+}
+
+#user-btn-1-add span:nth-child(3){
+    background: linear-gradient(to left, rgba(0,0,0,0), gold);
+}
+
+#user-btn-1-remove span:nth-child(3){
+    background: linear-gradient(to left, rgba(0,0,0,0), red);
+}
+
+@keyframes span3{
+    0%{
+        right:-250px;
+    }
+    100%{
+        right: 250px;
+    }
+}
+
+.user-btn-1 span:nth-child(4){
+    height:50px;
+    width:3px;
+    bottom:-50px;
+    left:0px;
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    animation: span4 2s linear infinite;
+    animation-delay: 4s;
+}
+
+#user-btn-1-add span:nth-child(4){
+    background: linear-gradient(to top, rgba(0,0,0,0), gold);
+}
+
+#user-btn-1-remove span:nth-child(4){
+    background: linear-gradient(to top, rgba(0,0,0,0), red);
+}
+
+@keyframes span4{
+    0%{
+        bottom: -50px;
+    }
+    100%{
+        bottom:50px;
+    }
+}
+
+.user-btn-1:hover{
+    transition: all .5s;
+    transform: rotate(-3deg) scale(1.1);
+    box-shadow: 0px 3px 5px rgba(0,0,0,.4);
+}
+.user-btn-1:hover span{
+    animation-play-state: paused;
 }

@@ -20,18 +20,32 @@ form {
 	font-family: south_park_font;
 	transition: all 0.5s ease;
 	pointer-events: none;
+	z-index: 0;
   }
 
-  #barre[type=text]:focus~.hello {
-	  display: block;
-	  color: black;
-	  margin-top: -85px;
-	  margin-left: -1%;
-	  font-size: 16px;
-	}
+  .hello.hidden{
+	display: none;
+  }
 
-	#barre[type=text]:focus~.hello::after{
-	visibility: hidden;
+#barre[type=text]:focus~.hello {
+	display: block;
+	color: black;
+	margin-top: -85px;
+	margin-left: -1%;
+	font-size: 16px;
+
+}
+
+#barre[type=text]:focus~.hello.hidden {
+	display: block;
+	color: black;
+	margin-top: -85px;
+	margin-left: -1%;
+	font-size: 16px;
+}
+  
+  #barre[type=text]:focus~.hello::after{
+	  visibility: hidden;
 }
 
   #barre[type=text]:focus~.enter {
@@ -42,40 +56,49 @@ form {
 	right: 46%; 
 	margin-top: 50px; 
 	transform: scaleX(4.8);
-  }
+}
 
-  .enter{
+.enter{
 	transition: all ease 0.5s;
 	width: 8.3%;
 	transform: scaleX(1);
-  }
+}
 
-  #barre[type="text"]
-  {
+#barre[type="text"]
+{
 	font-size: 30px;
 	font-family: Arial;
-  }
+}
 
- textarea, #barre {
+textarea, #barre {
 	position: absolute;
 	outline: none;
 	border: 0;
 	border-bottom: 1px solid #cecece;
 	height: 50px;
 	width: 40%; 
-	/* font-family: south_park_font; */
 	max-width: 40%;
   }
 
   #barre:focus{
 	content: 'prout';
-	/* font-family: south_park_font; */
 	font-size: 200%;
   }
 
   button {
 	z-index: 999999;
   }
+
+.good_nickname_or_not {
+	font-size: 110%;
+	line-height: 1em;
+	font-family: south_park_font;
+	grid-row-start: infos;
+	grid-column: column-1 / column-2;
+	align-self: end;
+	justify-self: center;
+}
+
 
 @media (max-width: 850px) {
 	.hello {

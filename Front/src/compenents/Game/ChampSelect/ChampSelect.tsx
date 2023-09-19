@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import "./ChampSelect.css";
 
 import BusStop from "../../../img/backgrounds/bus_stop.jpg"
+import RedCross from "../../../img/buttons/red_cross.png"
 
 import CartmanNormal from "../../../img/characters/cartman_1.png"
 import CartmanSuper from "../../../img/characters/cartman_2.jpg"
@@ -65,6 +66,10 @@ export default function ChampSelect() {
 		audio.play();
 	};
 
+	const leavePage = () => {
+	  navigate(`/gamemenu`);
+	};
+
 	const handleClick = async (character:String) => {
 		await axios.patch(
 			process.env.REACT_APP_LOCAL_B + '/profile/setCharacter',
@@ -82,6 +87,7 @@ export default function ChampSelect() {
 	return (
 		<div className="menu">
 			<img id="bg--menu" src={BusStop} alt={'BusStop'}></img>
+			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
 			<div id="choose_center">
 				<img id="choose_your_fighter" src={ChooseYourFighter} alt={"ChooseYourFighter"}></img>
 			</div>
