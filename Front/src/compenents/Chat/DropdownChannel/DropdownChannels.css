@@ -79,23 +79,27 @@
 }
 
 .create-channel-title {
-	flex: 1; /* Take available space */
-    font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif; /* Use your custom font */
-    font-size: 1rem; /* Adjust font size as needed */
-    font-weight: bold; /* Adjust font weight as needed */
-    color:white;
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
 }
 
 .channel-creation-navbar img {
 	padding: 0;
 	margin: 0;
-    width: 30px;
-    height: 30px;
+	width: 30px;
+	height: 30px;
 }
 
 .channel-creation-form {
 	margin: 0;
-	padding:0;
+	padding: 0;
 	height: 91%;
 	width: 100%;
 	display: flex;
@@ -121,7 +125,7 @@
 	height: 30%;
 	margin-bottom: 10%;
 	width: 94%;
-	padding:0;
+	padding: 0;
 	/* margin-left: 3%; */
 	border-width: 1px;
 	border-style: solid;
@@ -140,13 +144,15 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 24px; /* Set the width and height for the round label */
+	width: 24px;
+	/* Set the width and height for the round label */
 	height: 24px;
 	border-radius: 50%;
 	background-color: #007bff;
 	color: white;
 	cursor: pointer;
-  }
+}
+
 .channel-creation-options div {
 	height: 100%;
 	width: 100%;
@@ -162,7 +168,7 @@
 .channel-creation-border {
 	padding: 0%;
 	border-top: 20%;
-	height:80%;
+	height: 80%;
 	width: 80%;
 	border-width: 1px;
 	border-style: solid;
@@ -172,7 +178,7 @@
 
 .checkboxes-tick input[type="checkbox"] {
 	/* margin-right: 20px; */
-  }
+}
 
 .channel-creation-container button {
 	background-color: #f5e1b2;
@@ -191,83 +197,219 @@
 	/* Lighter beige background color on hover */
 }
 
+
+/******************Join************************/
 .channel-join-container {
+	border-radius: 5px;
 	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
 	top: 50%;
 	left: 50%;
+	width: 400px;
+	height: 225px;
 	transform: translate(-50%, -50%);
-	display: flex;
 	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-	background-color: #f5e1b2;
-	/* Beige background color */
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	border-radius: 5px;
-	max-width: 300px;
 }
 
-.channel-join-container input {
+.channel-join-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 	width: 100%;
-	padding: 10px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
 }
 
-.channel-join-container button {
-	background-color: #f9f4e1;
-	/* Light beige background color */
-	color: #333;
-	/* Dark text color */
-	border: none;
-	padding: 8px 16px;
-	cursor: pointer;
-	border-radius: 4px;
-	transition: background-color 0.3s ease;
+.join-channel-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
 }
 
-.channel-join-container button:hover {
-	background-color: #f5e1b2;
-	/* Beige background color on hover */
+.channel-join-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
 }
 
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
 
-/* Channel delete container */
+.channel-join-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.channel-join-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.channel-join-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.channel-join-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.channel-join-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-join-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-join-cancel button {
+	margin-left: 4px;
+}
+
+/* **********delete container************ */
 .channel-delete-container {
+	border-radius: 5px;
 	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
 	top: 50%;
 	left: 50%;
+	width: 400px;
+	height: 225px;
 	transform: translate(-50%, -50%);
-	display: flex;
 	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-	background-color: #f9c0c0; /* Light red background color */
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	border-radius: 5px;
-	max-width: 300px;
-  }
-  
-  .channel-delete-container input {
+}
+
+.channel-delete-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 	width: 100%;
-	padding: 10px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-  }
-  
-  .channel-delete-container button {
-	background-color: #f9f4e1; /* Light beige background color */
-	color: #333; /* Dark text color */
-	border: none;
-	padding: 8px 16px;
-	cursor: pointer;
-	border-radius: 4px;
-	transition: background-color 0.3s ease;
-  }
-  
-  .channel-delete-container button:hover {
-	background-color: #f9c0c0; /* Light red background color on hover */
-  }
-  
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.delete-channel-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.channel-delete-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.channel-delete-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.channel-delete-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.channel-delete-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.channel-delete-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.channel-delete-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-delete-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-delete-cancel button {
+	margin-left: 4px;
+}

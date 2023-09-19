@@ -7,7 +7,7 @@ import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
-function DropdownChannels({user, setChannels}) {
+function DropdownChannels({ user, setChannels }) {
 	const socket = useContext(ChatContext)
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
@@ -37,7 +37,7 @@ function DropdownChannels({user, setChannels}) {
 
 	const handleCreate = () => {
 		console.log("Created room:", channelName);
-		console.log(roomPassword + "password");	
+		console.log(roomPassword + "password");
 		if (roomPassword) {
 			setIsPrivate(true);
 			socket?.emit('createChannel', { name: channelName, isPrivate: isPrivate, password: roomPassword });
@@ -117,12 +117,12 @@ function DropdownChannels({user, setChannels}) {
 						<div>
 							<img src={Minimize} alt="minimize" id="chat_minimize" />
 							<img src={Maximize} alt="Maximize" id="chat_Maximize" />
-							<img src={RedCross} alt="redcross" id="chat_redcross" />
+							<img onClick={() => { toggleCreateChannel(); }} src={RedCross} alt="redcross" id="chat_redcross" />
 						</div>
 					</ul>
 					<div className="channel-creation-form">
 						<div className="channel-creation-input">
-							<h1>Channel Name : </h1>
+							<h1 className="question">Channel Name : </h1>
 							<input
 								className="ze-input"
 								type="text"
@@ -132,21 +132,19 @@ function DropdownChannels({user, setChannels}) {
 						</div>
 						<div className="channel-creation-options">
 							<div>
-								<h1>Choose between these two options</h1>
+								<h1 className="question">Choose between these two options</h1>
 								<ul>
-									<input type="checkbox" id="public" />
+									<input type="radio" name="privacy" value="public" />
 									<label className="label-priv-pub" htmlFor="public">Public</label>
-								</ul>
-								<ul>
-									<input type="checkbox" id="private" />
-									<label className="label-priv-pub"htmlFor="private">Private</label>
+									<input type="radio" name="privacy" value="private" />
+									<label className="label-priv-pub" htmlFor="private">Private</label>
 								</ul>
 							</div>
 						</div>
 						<div className="channel-creation-buttons">
 							<input type="text" placeholder="Password"
-							onChange={(e) => setRoomPassword(e.target.value)}	
-							 />
+								onChange={(e) => setRoomPassword(e.target.value)}
+							/>
 							<button onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button>
 						</div>
 					</div>
@@ -155,28 +153,64 @@ function DropdownChannels({user, setChannels}) {
 			{
 				isOpenForJoinChannel && (
 					<div className="channel-join-container">
-						{/* Add content for channel join */}
-						<input type="text" placeholder="Channel Name"
-							onChange={(e) => setChannelName(e.target.value)}
-						/>
-						{/* fairee apparaitre le password que si il est prive*/}
-						<input type="text" placeholder="Password"
-						onChange={(e) => setJoinPassword(e.target.value)}
-						 />
-						{/* ajouter  */}
-						<button onClick={() => { handleJoin(); toggleJoinChannel(); }}>Join</button>
+						<ul className="channel-join-navbar">
+							<li className="join-channel-title">Join Channel</li>
+							<div>
+								<img src={Minimize} alt="minimize" id="chat_minimize" />
+								<img src={Maximize} alt="Maximize" id="chat_Maximize" />
+								<img onClick={() => { toggleJoinChannel(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+							</div>
+						</ul>
+						<h3 className="question">Which channel do you want to join ?:</h3>
+						<div className="channel-join-form">
+							<div className="channel-join-input">
+								<h1>Channel Name : </h1>
+								<input type="text" placeholder="Channel Name"
+									onChange={(e) => setChannelName(e.target.value)}
+								/>
+							</div>
+						</div>
+						<div className="channel-join-options">
+							<h1>If private enter Password</h1>
+							<input type="text" placeholder="Password"
+								onChange={(e) => setJoinPassword(e.target.value)}
+							/>
+						</div>
+						<div className="buttons-join-cancel">
+							<button onClick={() => { toggleJoinChannel(); }}>Cancel</button>
+							<button onClick={() => { handleJoin(); toggleJoinChannel(); }}>Join</button>
+						</div>
 					</div>
 				)
 			}
 			{
 				isOpenForDeleteChannel && (
 					<div className="channel-delete-container">
-						{/* Add content for channel delete */}
-						<input type="text" placeholder="Channel Name"
-							onChange={(e) => setChannelName(e.target.value)}
-						/>
-						<input type="text" placeholder="Password" />
-						<button onClick={() => { handleDelete(); toggleDeleteChannel(); }}>Delete</button>
+						<ul className="channel-delete-navbar">
+							<li className="delete-channel-title">Delete Channel</li>
+							<div>
+								<img src={Minimize} alt="minimize" id="chat_minimize" />
+								<img src={Maximize} alt="Maximize" id="chat_Maximize" />
+								<img onClick={() => { toggleDeleteChannel(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+							</div>
+						</ul>
+						<h3 className="question">Which channel do you want to delete ?</h3>
+						<div className="channel-delete-form">
+							<div className="channel-delete-input">
+								<h1>Channel Name : </h1>
+								<input type="text" placeholder="Channel Name"
+									onChange={(e) => setChannelName(e.target.value)}
+								/>
+							</div>
+						</div>
+						<div className="channel-delete-options">
+							<h1>If private enter Password</h1>
+							<input type="text" placeholder="Password" />
+						</div>
+						<div className="buttons-delete-cancel">
+							<button onClick={() => { toggleDeleteChannel(); }}>Cancel</button>
+							<button onClick={() => { handleDelete(); toggleDeleteChannel(); }}>Delete</button>
+						</div>
 					</div>
 				)
 			}
