@@ -165,7 +165,7 @@ export default function UserProfile() {
 							<span>{game.names[0]} </span> 
 							<span>{game.score[0]}</span> - 
 							<span> {game.score[1]} </span> 
-							<span>{game.names[1]}</span></div><br/><br/></div>
+							<span>{game.names[1]}</span></div></div>
 							))}
 					</div>
 				</div>

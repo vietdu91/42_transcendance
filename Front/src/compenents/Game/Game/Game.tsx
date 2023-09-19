@@ -113,6 +113,9 @@ export default function Game(): JSX.Element {
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 	const game = useRef(initGame);
 	const socket = useContext(GameContext);
+
+	const [userId, setUserId] = useState(0);
+
 	const [scoreLeft, setScoreLeft] = useState(0);
 	const [scoreRight, setScoreRight] = useState(0);
 
@@ -159,14 +162,6 @@ export default function Game(): JSX.Element {
 	const randomImage = Tron;
 
 	const cookies = document.cookie.split('; ');
-	let id: number = -1;
-
-	for (const cookie of cookies) {
-		const [name, value] = cookie.split('=');
-		if (name === 'id') {
-			id = Number(value);
-		}
-	}
 
 	function WhatReturnButtom({ randomImage }) {
 		if (randomImage === CityWok || randomImage === Chaos || randomImage === Tron)
@@ -243,6 +238,8 @@ export default function Game(): JSX.Element {
 				},
 			}
 			game.current = updatedGame;
+			console.log(response.userId);
+			// setUserId(response.userId);
 			setCharLeft(game.current.charLeft);
 			setCharRight(game.current.charRight);
 			setNameLeft(response.game.nameLeft);
@@ -295,6 +292,7 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("usedPower", (response) => {
+			console.log(response.message)
 			if (response.id === game.current.idLeft) {
 				powLeft = true;
 				switch (response.char) {
@@ -334,19 +332,18 @@ export default function Game(): JSX.Element {
 			}
 			game.current = updatedGame;
 
-			if (id === response.winnerId) {
-				const char: string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
+			if (response.id === response.winnerId) {
+				const char: string = (response.id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
 				navigate('/win', { state: { char: char } });
 			}
-			else if (id === game.current.idLeft || id === game.current.idRight) {
-				const char: string = (id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
+			else if (response.id === game.current.idLeft || response.id === game.current.idRight) {
+				const char: string = (response.id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
 				navigate('/gameover', { state: { char: char } });
 			}
 		})
 
 		socket.on("gaveUp", (response) => {
-			if (id !== response.id)
-				navigate('/errorgame');
+			navigate('/errorgame');
 		})
 
 		socket.on("noGame", (response) => {
@@ -380,8 +377,8 @@ export default function Game(): JSX.Element {
 					if (p.keyIsDown(32))
 						socket?.emit("usePower", roomId);
 					if (timmy &&
-						((powLeft && game.current.charLeft === "Timmy" && id !== game.current.idLeft)
-							|| (powRight && game.current.charRight === "Timmy" && id !== game.current.idRight))) {
+						((powLeft && game.current.charLeft === "Timmy" && userId !== game.current.idLeft)
+							|| (powRight && game.current.charRight === "Timmy" && userId !== game.current.idRight))) {
 						if (p.keyIsDown(87))
 							socket?.emit("movePlayer", roomId, 0);
 						if (p.keyIsDown(83))
@@ -467,7 +464,7 @@ export default function Game(): JSX.Element {
 			}
 			p5SketchRef.current?.remove();
 		};
-	}, [sketchRef, navigate, roomId, socket, id]);
+	}, [sketchRef, navigate, roomId, socket]);
 
 	function GetPlayerLeft(props) {
 
