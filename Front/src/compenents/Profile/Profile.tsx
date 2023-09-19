@@ -184,16 +184,16 @@ export default function Profile() {
 							<span className="profile-info">: {age} ans</span><br/><br/> 
 						</div>
 					</div>
-						<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
-						<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
-						<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
+					<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
+					<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
+					<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
 					<div id="profile-historique">
 						{games.current.map((game, i) => (
 							<div className="profile-match" key={i}><div>
 							<span>{game.names[0]} </span> 
 							<span>{game.score[0]}</span> - 
 							<span> {game.score[1]} </span> 
-							<span>{game.names[1]}</span></div><br/><br/></div>
+							<span>{game.names[1]}</span></div></div>
 							))}
 					</div>
 				</div>

@@ -104,8 +104,8 @@
 	width: 10vw;
 
 	position: absolute;
-	top: 10px;
-	left: 30px;
+	top: 0.5%;
+	right: 5%;
 }
 
 .profile-title {
@@ -233,23 +233,22 @@
 	width: 140px;
 
 	position: absolute;
-	top: 375px;
-	left: 30px;
+	top: 43.5%;
+	left: 0%;
 }
 
 #profile-historique {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .profile-match {
 	font-family: heavitas_font;
 	font-size: 150%;
 }
-
-
-
 
 /******   BOUTONS   *********/
 

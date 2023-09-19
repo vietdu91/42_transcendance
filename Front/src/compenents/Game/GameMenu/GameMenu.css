@@ -528,8 +528,20 @@
     overflow-y: scroll;
     scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
     scrollbar-width: auto;
+    -webkit-scrollbar-color: rgb(53, 191, 216) rgb(24, 173, 166);
+    -webkit-scrollbar-width: auto;
 }
 
+.div-classement-table::-webkit-scrollbar {
+  width: 3px;
+}
+.div-classement-table::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.div-classement-table::-webkit-scrollbar-thumb {
+  background: rgb(53, 191, 216);
+  border-radius: 5px;
+}
 
 .classement-table {
     position: relative;

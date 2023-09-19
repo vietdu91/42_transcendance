@@ -11,6 +11,7 @@ import WarningBox from "../utils/WarningBox/WarningBox";
 
 import MusicPlayerAutorisation from '../utils/MusicPlayerAutorisation/MusicPlayerAutorisation';
 import southparkSound from '../../sounds/theme_song.mp3'
+import Tab from '../utils/Tab/Tab'
 
 // IMG
 import Town from "../../img/backgrounds/south_park_town.jpg"
@@ -27,10 +28,12 @@ export default function MenuConnexion() {
 	
 	return (
 		<div id="menu">
+			<iframe src={southparkSound} allow="autoplay" id="iframeAudio">
+			</iframe> 
+			<Tab sound={southparkSound} delay={0}/>
 			{WarningBox() || null}
 			<img id="bg-menu" src={hover} alt={'Hell'}></img>
 			<div id="menu-items">
-				<MusicPlayerAutorisation audioSrc={southparkSound} delay={0}/>
 				<div className="menu-item" onClick={CookieStorage}
 					//window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
 					onMouseEnter={() => {setHover(Lotion);}}
