@@ -9,17 +9,17 @@ import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
 import groups from '../../../img/chat/group-channel-icon.png'
-import friends from '../../../img/chat/groups3d.png'
+import friendsImg from '../../../img/chat/groups3d.png'
 import SearchBar from '../../searchBar/searchBar';
 import Conversation from "../socketChat"
 import User from "../socketChat"
 
-const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, user }) => {
+const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user }) => {
 
     const friendsData = [
         {
             id: 0,
-            imageSrc: friends,
+            imageSrc: friendsImg,
             altText: "friends",
             text: "Friends Name 0"
         },
@@ -83,7 +83,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 <ul>
                     <li><img src={regularConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClick} /></li>
                     <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} /></li>
-                    <li><img src={friends} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
+                    <li><img src={friendsImg} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
@@ -93,7 +93,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                         {convs.map((item, index) => (
                             <li key={item.id} onClick={() => toggleConvSummary(index)}>
                                 <img src={regularConv} alt={regularConv} id={"icon-conv"} />
-                                {name === item.names[0] ? item.names[1] : item.names[0]} (nickname)
+                                {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
                         ))}
                     </ul>
@@ -102,7 +102,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 {channelsConv && (
                     <ul>
                         {channels.map((item, index) => (
-                            <li key={item.id} onClick={() => { console.log(item); toggleChannelSummary(index) }}>
+                            <li key={item.id} onClick={() => toggleChannelSummary(index)}>
                             <img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} />
                                 {item.name}
                             </li>
@@ -114,10 +114,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 }
                 {listFriends && (
                     <ul>
-                        {friendsData.map((item) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(item.id)}>
-                                <img src={item.imageSrc} alt={item.altText} id={`chat_${item.altText}`} />
-                                {item.text}
+                        {friends.map((item, index) => (
+                            <li key={item.id} onClick={() => toggleConvSummary(index)}>
+                                <img src={friendsImg} alt={item.altText} id={`chat_${item.altText}`} />
+                                {item.name} ({item.nickname})
                             </li>
                         ))}
                     </ul>

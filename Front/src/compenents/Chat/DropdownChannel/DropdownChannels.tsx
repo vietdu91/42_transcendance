@@ -7,7 +7,7 @@ import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
-function DropdownChannels({ user, setChannels }) {
+function DropdownChannels({ user, setChannels, setFriends }) {
 	const socket = useContext(ChatContext)
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
@@ -36,8 +36,6 @@ function DropdownChannels({ user, setChannels }) {
 	};
 
 	const handleCreate = () => {
-		console.log("Created room:", channelName);
-		console.log(roomPassword + "password");
 		if (roomPassword) {
 			setIsPrivate(true);
 			socket?.emit('createChannel', { name: channelName, isPrivate: isPrivate, password: roomPassword });
@@ -48,19 +46,17 @@ function DropdownChannels({ user, setChannels }) {
 	};
 
 	const handleJoin = () => {
-		console.log(joinPassword + " = password = " + roomPassword);
 		if (joinPassword) {
-			socket?.emit('joinRoom', { name: channelName, password: joinPassword });
+			socket?.emit('joinChannel', { name: channelName, password: joinPassword });
 			setJoined(true);
 		}
 		else {
-			socket?.emit('joinRoom', { name: channelName });
+			socket?.emit('joinChannel', { name: channelName });
 			setJoined(true);
 		}
 	};
 
 	const handleDelete = () => {
-		console.log("Deleted room:", { name: channelName });
 		setChannelName('');
 		setIsPrivate(false);
 		setJoined(false);
@@ -69,7 +65,6 @@ function DropdownChannels({ user, setChannels }) {
 
 
 	const handleLeave = () => {
-		console.log("Left room:", channelName);
 		setChannelName('');
 		setIsPrivate(false);
 		setJoined(false);
@@ -90,11 +85,13 @@ function DropdownChannels({ user, setChannels }) {
 
 	useEffect(() => {
 		socket.on('channelCreated', (response) => {
-			console.log(response);
 			setChannels(response.channels);
+			// setFriends(response.friends);
 		})
+		
 		socket.on('channelJoined', (response) => {
 			setChannels(response.channels);
+			// setFriends(response.friends);
 		})
 	})
 

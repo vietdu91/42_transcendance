@@ -4,43 +4,43 @@ import { User, Game, Prisma } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
- 
+
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createUser(userData: any): Promise<User> {
     try {
-        const user = await this.prisma.user.create({
-            data: {
-                name: userData.name,
-                email: userData.email,
-                nickname: userData.name,
-                state: 'ONLINE',
-                age: 18,
-                twoFactorSecret: authenticator.generateSecret(),
-                accessToken: userData.accessToken,
-                pfp_url: userData.pfp,
-            }
-        });
-        return user;
+      const user = await this.prisma.user.create({
+        data: {
+          name: userData.name,
+          email: userData.email,
+          nickname: userData.name,
+          state: 'ONLINE',
+          age: 18,
+          twoFactorSecret: authenticator.generateSecret(),
+          accessToken: userData.accessToken,
+          pfp_url: userData.pfp,
+        }
+      });
+      return user;
     } catch (error) {
-        console.error(error);
-        throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error(error);
+      throw new HttpException('Failed to create user', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+  }
 
-async deleteUser(id: number): Promise<User> {
+  async deleteUser(id: number): Promise<User> {
     try {
-        const user = await this.prisma.user.delete({
-            where: { id: id }
-        });
-        return user;
+      const user = await this.prisma.user.delete({
+        where: { id: id }
+      });
+      return user;
     } catch (error) {
-        console.error(error);
-        throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.error(error);
+      throw new HttpException('Failed to delete user', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+  }
 
   async getLeaderboard() {
     try {
@@ -61,7 +61,7 @@ async deleteUser(id: number): Promise<User> {
   async getUserByName(username: string): Promise<User | null> {
     try {
       const user = await this.prisma.user.findUnique({
-        where: {name: username},
+        where: { name: username },
       });
       return user;
     } catch {
@@ -98,7 +98,7 @@ async deleteUser(id: number): Promise<User> {
   async getGamesByUserId(userId: number) {
     try {
       const games = await this.prisma.game.findMany({
-        where: {players: {some: {id: parseInt(userId.toString())}}},
+        where: { players: { some: { id: parseInt(userId.toString()) } } },
       });
       return games.map(game => {
         return {
@@ -111,7 +111,7 @@ async deleteUser(id: number): Promise<User> {
       throw new UnauthorizedException();
     }
   }
-  
+
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
     try {
       return this.prisma.user.update({
@@ -161,8 +161,21 @@ async deleteUser(id: number): Promise<User> {
   async findUserByEmail(email: string): Promise<User | null> {
     try {
       return this.prisma.user.findUnique({
-          where: { email },
+        where: { email },
       });
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+
+  async getFriendsList(ids: number[]) {
+    try {
+      const users = await this.prisma.user.findMany({
+        where: {
+          id: { in: ids },
+        },
+      })
+      return users;
     } catch {
       throw new UnauthorizedException();
     }
