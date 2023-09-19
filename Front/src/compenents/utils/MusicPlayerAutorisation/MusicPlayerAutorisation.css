@@ -1,0 +1,20 @@
+.autorisation-button-toggle {
+    display: inline-block;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .autorisation-button-toggle:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .autorisation-button-toggle.active {
+    background-color: #00cc66;
+    color: #ffffff;
+    border-color: #00cc66;
+  }

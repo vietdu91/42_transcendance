@@ -17,7 +17,7 @@ export default function Loading() {
 	  }
 
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
     return (
       <div id="error-game">
         <img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />

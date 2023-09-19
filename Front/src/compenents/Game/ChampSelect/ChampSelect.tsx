@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import "./ChampSelect.css";
 
 import BusStop from "../../../img/backgrounds/bus_stop.jpg"
+import RedCross from "../../../img/buttons/red_cross.png"
 
 import CartmanNormal from "../../../img/characters/cartman_1.png"
 import CartmanSuper from "../../../img/characters/cartman_2.jpg"
@@ -58,11 +59,15 @@ export default function ChampSelect() {
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:2000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);
 		audio.play();
+	};
+
+	const leavePage = () => {
+	  navigate(`/gamemenu`);
 	};
 
 	const handleClick = async (character:String) => {
@@ -82,6 +87,7 @@ export default function ChampSelect() {
 	return (
 		<div className="menu">
 			<img id="bg--menu" src={BusStop} alt={'BusStop'}></img>
+			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
 			<div id="choose_center">
 				<img id="choose_your_fighter" src={ChooseYourFighter} alt={"ChooseYourFighter"}></img>
 			</div>

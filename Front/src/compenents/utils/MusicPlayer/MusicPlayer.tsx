@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 const MusicPlayer = ({ audioSrc, delay }) => {
+
   React.useEffect(() => {
     const audio = new Audio(audioSrc);
+
     const timeoutId = setTimeout(() => {
       audio.play();
     }, delay);
@@ -14,7 +16,7 @@ const MusicPlayer = ({ audioSrc, delay }) => {
     };
   }, [audioSrc, delay]);
 
-  return null;
+  return (null);
 };
 
 MusicPlayer.propTypes = {

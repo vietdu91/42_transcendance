@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server, Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 
 type UserChat = {
   id: string;
@@ -14,27 +15,30 @@ export class ChatGateway {
   @WebSocketServer()
   server: Server;
 
+  private jwtService = new JwtService();
+  private prisma = new PrismaService();
+  private userService = new UserService(this.prisma);
+
   private users: UserChat[] = [];
 
-  constructor(private readonly prisma: PrismaService) { } // Injectez PrismaService via le constructeur
+  constructor() { } // Injectez PrismaService via le constructeur
 
   @SubscribeMessage('joinChat')
-  async handleJoinChat(client: Socket, params: any): Promise<void> {
-    const userId = parseInt(String(params.userId));
-    const userService = new UserService(new PrismaService());
-    const user = await userService.getUserById(userId);
+  async handleJoinChat(client: Socket): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
 
     for (let user of this.users) {
-      if (user.user.id === userId) {
+      if (user.id === client.id) {
         return;
       }
     }
 
     const userChat: UserChat = {
       id: client.id,
-      user,
+      user: userDb,
     }
-
     this.users.push(userChat);
 
     client.emit('chatJoined', { message: 'Joined Chat' });
@@ -42,19 +46,18 @@ export class ChatGateway {
 
   @SubscribeMessage('sendMessageConv')
   async handleMessageConv(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const value = params.value;
-    const userId = parseInt(String(params.userId));
     const convId = params.convId;
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      }
-    });
+
     const message = await this.prisma.message.create({
       data: {
         content: value,
-        authorId: userId,
-        authorName: user.name,
+        authorId: userDb.id,
+        authorName: userDb.name,
         conversationId: convId,
       }
     });
@@ -77,19 +80,18 @@ export class ChatGateway {
 
   @SubscribeMessage('sendMessageChann')
   async handleMessageChann(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const value = params.value;
-    const userId = parseInt(String(params.userId));
     const channId = params.channId;
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: userId,
-      }
-    });
+
     const message = await this.prisma.message.create({
       data: {
         content: value,
-        authorId: userId,
-        authorName: user.name,
+        authorId: userDb.id,
+        authorName: userDb.name,
         channelId: channId,
       }
     });
@@ -112,8 +114,11 @@ export class ChatGateway {
 
   @SubscribeMessage('createChannel')
   async handleCreateChannel(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const name = params.name;
-    const ownerId = parseInt(String(params.ownerId));
     const isPrivate = params.isPrivate;
     const password = params.password;
 
@@ -127,31 +132,46 @@ export class ChatGateway {
     await this.prisma.channel.create({
       data: {
         name: name,
-        ownerId: ownerId,
+        ownerId: userDb.id,
         isPrivate: isPrivate,
-        image: 'test',
+        image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1694703850/avatars-ubXQyNB9MhoSHi6Q-2bLbtw-t500x500_tiff9c.jpg',
         password: isPrivate ? password : null,
         usersList: {
           connect: [
-            { id: ownerId },
+            { id: userDb.id },
           ]
         },
         adminList: {
           connect: [
-            { id: ownerId },
+            { id: userDb.id },
           ]
         }
       }
     });
 
-    client.emit('channelCreated', { message: 'channelCreated', name });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userDb.id },
+      include: {
+        channels: {
+          include: {
+            messages: true,
+            usersList: true,
+          }
+        },
+      }
+    })
+
+    client.emit('channelCreated', { message: "Channel Created", channels: user.channels });
   }
 
 
-  @SubscribeMessage('joinRoom') // Écoutez l'événement 'joinRoom'
+  @SubscribeMessage('joinChannel') // Écoutez l'événement 'joinRoom'
   async handleJoinRoom(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const name = params.name;
-    const userId = parseInt(String(params.userId));
 
     const chann = await this.prisma.channel.findUnique({
       where: {
@@ -169,48 +189,61 @@ export class ChatGateway {
     }
 
     for (let i = 0; i < chann.usersList.length; i++) {
-      if (chann.usersList[i].id == userId) {
-        console.log(userId + ' is already in' + name);
-        //this.server.emit('userBanned', { userId });
+      if (chann.usersList[i].id == userDb.id) {
+        console.log(userDb.id + ' is already in' + name);
+        //this.server.emit('userBanned', { userDb.id });
         return;
       }
     }
 
     for (let i = 0; i < chann.banList.length; i++) {
-      if (chann.banList[i].id == userId) {
-        console.log(userId + ' is banned from ' + name);
-        //this.server.emit('userBanned', { userId });
+      if (chann.banList[i].id == userDb.id) {
+        console.log(userDb.id + ' is banned from ' + name);
+        //this.server.emit('userBanned', { userDb.id });
         return;
       }
     }
     if (chann.isPrivate == true && chann.password != params.password) {
       console.log("Mauvais mot de passe");
       return;
-      }
-      
-    try {
-      await this.prisma.channel.update({
-        where: { name: name },
-        data: {
-          usersList: {
-            connect: {
-              id: userId,
-            }
-          },
+    }
+    await this.prisma.channel.update({
+      where: { name: name },
+      data: {
+        usersList: {
+          connect: {
+            id: userDb.id,
+          }
         },
-      });
+      },
+    });
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userDb.id },
+        include: {
+          channels: {
+            include: {
+              messages: true,
+              usersList: true,
+            }
+          }
+        }
+      })
+      client.emit('channelJoined', { message: "Channel Joined", channels: user.channels });
+    } catch (e) {
+      throw e;
     }
-    catch (e) {
-      console.log(e);
-    }
-    client.emit('userJoined', { userId });
   }
+
 
 
   @SubscribeMessage('kickUser')
   async handleKickUser(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const channName = params.channName;
-    const userId = parseInt(String(params.userId));
     const otherName = String(params.otherName);
     const chann = await this.prisma.channel.findUnique({
       where: {
@@ -226,16 +259,16 @@ export class ChatGateway {
       return;
     }
 
-    const user = await this.prisma.user.findUnique({ where: { name: otherName } });
+    const target = await this.prisma.user.findUnique({ where: { name: otherName } });
 
-    if (!user) {
+    if (!target) {
       console.log("La cible n'existe pas");
       return;
     }
 
     let i;
     for (i = 0; i < chann.adminList.length; i++) {
-      if (chann.adminList[i].id == userId) {
+      if (chann.adminList[i].id == userDb.id) {
         break;
       }
     }
@@ -245,7 +278,7 @@ export class ChatGateway {
     }
 
     for (i = 0; i < chann.usersList.length; i++) {
-      if (chann.usersList[i].id == user.id)
+      if (chann.usersList[i].id == target.id)
         break;
     }
     if (i == chann.usersList.length) {
@@ -253,7 +286,7 @@ export class ChatGateway {
     }
 
     for (i = 0; i < chann.adminList.length; i++) {
-      if (chann.adminList[i].name == otherName && userId != chann.ownerId) {
+      if (chann.adminList[i].name == otherName && userDb.id != chann.ownerId) {
         console.log("La cible est un admin");
         return;
       }
@@ -263,12 +296,12 @@ export class ChatGateway {
       data: {
         usersList: {
           disconnect: {
-            id: user.id,
+            id: target.id,
           }
         },
         adminList: {
           disconnect: {
-            id: user.id,
+            id: target.id,
           }
         }
       },
@@ -288,8 +321,11 @@ export class ChatGateway {
 
   @SubscribeMessage('leaveRoom') // Écoutez l'événement 'leaveRoom'
   async handleLeaveRoom(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const name = params.name;
-    const userId = parseInt(String(params.userId));
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: name // Assurez-vous que "name" est correctement défini
@@ -300,59 +336,54 @@ export class ChatGateway {
       }
     });
 
-    try {
-      await this.prisma.channel.update({
-        where: { name: name },
-        data: {
-          usersList: {
-            disconnect: {
-              id: userId,
-            }
-          },
+    await this.prisma.channel.update({
+      where: { name: name },
+      data: {
+        usersList: {
+          disconnect: {
+            id: userDb.id,
+          }
         },
-      });
-    }
-    catch (e) {
-      console.log(e);
-    }
-    client.emit('userLeft', { userId });
+      },
+    });
+    client.emit('userLeft', { userId: userDb.id });
   }
 
   @SubscribeMessage('deleteRoom')
-  async handleDeleteRoom(@MessageBody() data: { name: string, userId: string}): Promise<void> {
+  async handleDeleteRoom(client: Socket, params: any): Promise<void> {
     {
-    const { name , userId} = data;
-  
-    console.log('Deleted room with name:', name);
-  
+      const token: string = client.handshake.query.token as string;
+      const userToken = await this.jwtService.decode(token);
+      const userDb = await this.userService.getUserById(userToken.sub);
 
-    // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
-    const room = await this.prisma.channel.findUnique({
-      where: { name: name },
-    });
-
-    if (room.ownerId == parseInt(userId)) {
-      // Supprimez la room en utilisant son ID (si vous en avez un).
-      await this.prisma.channel.delete({
-        where: { id: room.id },
+      const name = params.name;
+      // Avant de supprimer la room, vous pouvez rechercher son ID en fonction de son nom.
+      const room = await this.prisma.channel.findUnique({
+        where: { name: name },
       });
-  
-      // Émettez un événement pour informer les clients que la room a été supprimée.
-      this.server.emit('roomDeleted', { name });
-    } else {
-      // Gérer le cas où la room n'a pas été trouvée.
-      console.log('Room not found:', name);
+
+      if (room.ownerId == userDb.id) {
+        // Supprimez la room en utilisant son ID (si vous en avez un).
+        await this.prisma.channel.delete({
+          where: { id: room.id },
+        });
+
+        // Émettez un événement pour informer les clients que la room a été supprimée.
+        this.server.emit('roomDeleted', { name });
+      } else {
+        // Gérer le cas où la room n'a pas été trouvée.
+        console.log('Room not found:', name);
       }
     }
   }
 
   @SubscribeMessage('banRoom')
   async handleBanRoom(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const name = params.name;
-    const userId = parseInt(String(params.userId));
-
-    console.log('Banned user with id:', userId, 'from room:', name);
-
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: name // Assurez-vous que "name" est correctement défini
@@ -361,34 +392,30 @@ export class ChatGateway {
     if (!chann) {
       return;
     }
-    try {
-      await this.prisma.channel.update({
-        where: { name: name },
-        data: {
-          banList: {
-            connect: {
-              id: userId,
-            }
-          },
-          usersList: {
-            disconnect: {
-              id: userId,
-            }
-          },
+    await this.prisma.channel.update({
+      where: { name: name },
+      data: {
+        banList: {
+          connect: {
+            id: userDb.id,
+          }
         },
-      });
-    }
-    catch (e) {
-      console.log(e);
-    }
+        usersList: {
+          disconnect: {
+            id: userDb.id,
+          }
+        },
+      },
+    });
   }
 
   @SubscribeMessage('setAdmin')
   async handleSetAdmin(client: Socket, params: any): Promise<void> {
-    const name = params.name;
-    const userId = parseInt(String(params.userId));
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
 
-    console.log('Set admin with id:', userId, 'from room:', name);
+    const name = params.name;
 
     const chann = await this.prisma.channel.findUnique({
       where: {
@@ -396,92 +423,93 @@ export class ChatGateway {
       }
     });
 
-    try {
-      await this.prisma.channel.update({
-        where: { name: name },
-        data: {
-          adminList: {
-            connect: {
-              id: userId,
-            }
-          },
+    await this.prisma.channel.update({
+      where: { name: name },
+      data: {
+        adminList: {
+          connect: {
+            id: userDb.id,
+          }
         },
-      });
-    }
-    catch (e) {
-      console.log(e);
-    }
+      },
+    });
   }
 
   @SubscribeMessage('unsetAdmin')
   async handleUnsetAdmin(client: Socket, params: any): Promise<void> {
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const userDb = await this.userService.getUserById(userToken.sub);
+
     const name = params.name;
-    const userId = parseInt(String(params.userId));
-    console.log('Unset admin with id:', userId, 'from room:', name);
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: name // Assurez-vous que "name" est correctement défini
       }
     });
-    try {
-      await this.prisma.channel.update({
-        where: { name: name },
-        data: {
-          adminList: {
-            disconnect: {
-              id: userId,
-            }
-          },
+    await this.prisma.channel.update({
+      where: { name: name },
+      data: {
+        adminList: {
+          disconnect: {
+            id: userDb.id,
+          }
         },
-      });
-    }
-    catch (e) {
-      console.log(e);
-    }
+      },
+    });
   }
 
   @SubscribeMessage('createConversation')
   async handleCreateConversation(client: Socket, params: any): Promise<void> {
-    const id = params.id;
+    const token: string = client.handshake.query.token as string;
+    const userToken = await this.jwtService.decode(token);
+    const user = await this.userService.getUserById(userToken.sub);
+
     const otherName = params.otherName;
-    const userId = parseInt(String(id));
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user || user.name === otherName)
+
+    if (user.name === otherName)
       return;
     const otherUser = await this.prisma.user.findUnique({
       where: { name: otherName },
     });
-    if (!otherUser || otherUser.id === id) {
+    if (!otherUser || otherUser.id === user.id) {
       return;
     };
-    // verifier que l'id existe dans la bdd 
     const convs = await this.prisma.conversation.findMany();
     for (let i = 0; i < convs.length; i++) {
       if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
         return;
       }
     }
-    const conversation = await this.prisma.conversation.create({
+    await this.prisma.conversation.create({
       data: {
         users: {
           connect: [
-            { id: userId },
+            { id: user.id },
             { id: otherUser.id },
           ]
         },
-        usersID: [userId, otherUser.id],
+        usersID: [user.id, otherUser.id],
         names: [user.name, otherName],
       }
     });
+    const newUser = await this.prisma.user.findUnique({
+      where: { id: user.id },
+      include: {
+        conversations: {
+          include: {
+            messages: true,
+          }
+        },
+      }
+    })
     const shortUser = {
       name: otherName,
       nickname: otherUser.nickname,
       pfp: otherUser.pfp_url,
-      // state: otherUser.state,
+      state: otherUser.state,
     }
-    client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversation: conversation });
+    client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversations: newUser.conversations });
   }
 }
 

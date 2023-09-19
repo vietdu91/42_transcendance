@@ -36,23 +36,14 @@ export default function Matchmaking() {
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
-
-	const cookies = document.cookie.split('; ');
-	let id:string = '';
-
-	for (const cookie of cookies) {
-		const [name, value] = cookie.split('=');
-		if (name === 'id')
-			id = value;
-	}
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const joinQueue = () => {
-		socket?.emit('joinQueue', Number(id));
+		socket?.emit('joinQueue');
 	}
 
 	const leaveQueue = () => {
-		socket?.emit('leaveQueue', Number(id));
+		socket?.emit('leaveQueue');
 		setInQueue(false);
 	  };
 
@@ -81,10 +72,6 @@ export default function Matchmaking() {
 
 		socket.on('matchFound',(response) => {
 			handleMatchFound(response.roomId);
-		})
-
-		socket.on('disconnect', () => {
-				console.log('Disconnected');
 		})
 
 		socket.on('wrongUser', (response) => {

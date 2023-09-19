@@ -58,6 +58,7 @@
     font-size: clamp(3rem, 8vw, 7rem);
     font-family: south_park_font;
     text-align: right;
+    margin-top: 2%;
 
     display: block;
     text-decoration: none;

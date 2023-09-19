@@ -28,20 +28,18 @@ const initUser: User = {
 
 function ChatConversationArea({ user, conv, isVisible }) {
   const socket = useContext(ChatContext);
-  const userId = Cookies.get('id');
 
   const [messages, setMessages] = useState(conv.messages);
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
   const send = async (value: string) => {
     const convId = conv.id;
-    socket?.emit('sendMessageConv', {value, userId, convId});
+    socket?.emit('sendMessageConv', {value, convId});
   }
 
   useEffect(() => {
     const getUserData = async () => {
-      const id = userId == conv.usersID[0] ? conv.usersID[1] : conv.usersID[0];
-      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", {params: {id: id}})
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", {params: {id: conv.usersID}})
       .then(response => {
         getOtherUser(response.data);
       })

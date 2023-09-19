@@ -48,3 +48,550 @@
     transform: translateY(0);
   }
 }
+
+/****Add Friend ***/
+
+.contact-addfriend-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 225px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-addfriend-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.addfriend-contact-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.contact-addfriend-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-addfriend-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.contact-addfriend-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-addfriend-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-addfriend-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-addfriend-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-addfriend-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-addfriend-cancel button {
+	margin-left: 4px;
+}
+
+/****delete***/
+
+
+.contact-delete-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 225px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-delete-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.delete-contact-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.contact-delete-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-delete-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.contact-delete-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-delete-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-delete-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-delete-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-delete-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-delete-cancel button {
+	margin-left: 4px;
+}
+
+/*****Block********/
+
+.contact-block-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 225px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-block-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.block-contact-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.contact-block-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-block-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.contact-block-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-block-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-block-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-block-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-block-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-block-cancel button {
+	margin-left: 4px;
+}
+
+/****Invite****/
+
+.contact-invite-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 225px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-invite-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.invite-contact-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.contact-invite-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-invite-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.contact-invite-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-invite-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-invite-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-invite-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-invite-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-invite-cancel button {
+	margin-left: 4px;
+}
+
+
+/********SendMp********/
+
+.contact-sendMp-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	/* gap: 10px;   */
+	top: 50%;
+	left: 50%;
+	width: 400px;
+	height: 225px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	/* Lighter beige background color */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-sendMp-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 18%;
+	background-color: #0057e9;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+.sendMp-contact-title {
+	flex: 1;
+	/* Take available space */
+	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
+	/* Use your custom font */
+	font-size: 1rem;
+	/* Adjust font size as needed */
+	font-weight: bold;
+	/* Adjust font weight as needed */
+	color: white;
+}
+
+.contact-sendMp-navbar img {
+	padding: 0;
+	margin: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.question {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-sendMp-form {
+	margin: 0;
+	padding: 0;
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.contact-sendMp-input {
+	height: 33%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-sendMp-input h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.contact-sendMp-options {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.contact-sendMp-options h1 {
+	font-weight: normal;
+	color: rgb(68, 66, 38);
+}
+
+.buttons-sendMp-cancel {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40%;
+}
+
+.buttons-sendMp-cancel button {
+	margin-left: 4px;
+}

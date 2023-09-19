@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 import { Response } from 'express';
@@ -14,8 +14,6 @@ export class TwofaService {
   ) {}
     
   public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: User) {
-    console.log("isTwoFactorAuthenticationCodeValid = " + twoFactorAuthenticationCode);
-    console.log("isTwoFactorSecret = " + user.twoFactorSecret);
     return authenticator.verify({
       token: twoFactorAuthenticationCode,
       secret: user.twoFactorSecret
@@ -23,21 +21,23 @@ export class TwofaService {
   }
 
   public async generateTwoFactorAuthenticationSecret(user: User) {
-    const secret = authenticator.generateSecret(); 
-    console.log("generateTwoFactorAuthenticationSecret = " + secret)
-    const otpauthUrl = authenticator.keyuri(user.email, this.configService.get('APP_NAME'), secret);
-    await this.prismaService.user.update({
-       where: { id: user.id },
-       data: { twoFactorSecret: secret },
-     });
-    return {
-      secret,
-      otpauthUrl
+    try {
+      const secret = authenticator.generateSecret(); 
+      const otpauthUrl = authenticator.keyuri(user.email, this.configService.get('APP_NAME'), secret);
+      await this.prismaService.user.update({
+         where: { id: user.id },
+         data: { twoFactorSecret: secret },
+       });
+      return {
+        secret,
+        otpauthUrl
+      }
+    } catch {
+      throw new UnauthorizedException();
     }
   }
 
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
-    console.log('pipeQrCodeStream = ' + otpauthUrl);
     return toFileStream(stream, otpauthUrl);
   }
 }

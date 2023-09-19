@@ -208,12 +208,12 @@ function History() {
 				<div className="match-history" >
                     <div id="match-square-1" onMouseEnter={() => { changeMatchSquare1Enter(); }}
           			onMouseLeave={() => { changeMatchSquare1Leave(); }}>
-						<div id="container-eyesUp">
+						<div className="container-eyesUp">
 							<img alt="#" src={EyesCartmanWin} className="eyesUp-1"></img>
 							{hoverMatch1Square && <div className="scoreUp">5</div>}
 							{hoverMatch1Square && <div className="playerUp">emtran</div>}
 						</div>
-						<div id="container-eyesDown">
+						<div className="container-eyesDown">
 							<img alt="#" src={EyesCartmanLost} className="eyesDown-1"></img>
 							{hoverMatch1Square && <div className="playerDown">dyoula</div>}
 							{hoverMatch1Square && <div className="scoreDown">1</div>}
@@ -221,12 +221,12 @@ function History() {
 					</div>
                     <div id="match-square-2" onMouseEnter={() => { changeMatchSquare2Enter(); }}
           			onMouseLeave={() => { changeMatchSquare2Leave(); }}>
-						<div id="container-eyesUp">
+						<div className="container-eyesUp">
 							<img alt="#" src={EyesTimmyWin} className="eyesUp-2"></img>
 							{hoverMatch2Square && <div className="scoreUp">5</div>}
 							{hoverMatch2Square && <div className="playerUp">emtran</div>}
 						</div>
-						<div id="container-eyesDown">
+						<div className="container-eyesDown">
 							<img alt="#" src={EyesTimmyLost} className="eyesDown-2"></img>
 							{hoverMatch2Square && <div className="playerDown">qujacob</div>}
 							{hoverMatch2Square && <div className="scoreDown">4</div>}
@@ -234,12 +234,12 @@ function History() {
 					</div>
                     <div id="match-square-3" onMouseEnter={() => { changeMatchSquare3Enter(); }}
           			onMouseLeave={() => { changeMatchSquare3Leave(); }}>
-						<div id="container-eyesUp">
+						<div className="container-eyesUp">
 							<img alt="#" src={EyesHenriettaWin} className="eyesUp-3"></img>
 							{hoverMatch3Square && <div className="scoreUp">5</div>}
 							{hoverMatch3Square && <div className="playerUp">encule</div>}
 						</div>
-						<div id="container-eyesDown">
+						<div className="container-eyesDown">
 							<img alt="#" src={EyesHenriettaLost} className="eyesDown-3"></img>
 							{hoverMatch3Square && <div className="playerDown">emtran</div>}
 							{hoverMatch3Square && <div className="scoreDown">2</div>}
@@ -262,12 +262,14 @@ function Classement() {
 	// 		<img src={Couronne} alt="couronne" id="classement-couronne"></img>
 	// 	)
 	// }
+
+	function goToProfile(name: string) {
+		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
+	}
 	
 	function GetPlace({position, name, points, pfp}) {
-		// console.log(position, name, points);
-
 		return (
-			<tr key={Number(position) - 1}>
+			<tr key={Number(position) - 1} onClick={() => {goToProfile(name)}}>
 				<td className="number">{position}</td>
 				<td className="classement-photo-profil">
 					<img className="classement-photo" src={pfp} alt="#"></img>
@@ -349,7 +351,7 @@ export default function GameMenu() {
 	
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	useEffect(() => {
 	  const timer = setTimeout(() => {

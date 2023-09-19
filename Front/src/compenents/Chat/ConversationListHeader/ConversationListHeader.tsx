@@ -31,36 +31,15 @@ import DropdownContact from '../DropdownContacts/DropdownContact';
 // }) => {
 
 
-const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, isConvListVisible, setIsConvListVisible, user}) => {
+const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
     // État pour définir si la room est privée
 
     const socket = useContext(ChatContext);
-
-    const [state, setState] = useState({
-        name: 'React',
-        showHideDemo1: false,
-    });
 
     function goToProfile() {
         window.open(process.env.REACT_APP_LOCAL_F + "/profile");
     }
 
-    const hideComponent = (name) => {
-        setState((prevState) => ({
-            ...prevState,
-            [name]: !prevState[name]
-        }));
-    }
-
-    {/** Modifs */ }
-    const [newConversation, setNewConversation] = useState('');
-
-    const handleAddConversation = () => {
-        if (newConversation.trim() !== '') {
-            addConversation(newConversation);
-            setNewConversation('');
-        }
-    };
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
@@ -74,15 +53,8 @@ const ConversationListHeader = ({name, pfp, handleVisibility, addConversation, i
             <hr />
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
-                <DropdownChannel user={user} />{/*Create Join Delete*/}
-                <DropdownContact
-                    user={user}
-                /*handleIndivConvVisibility={handleVisibility}
-                isConvListVisible={isConvListVisible}
-                setIsConvListVisible={setIsConvListVisible}
-                addConversation={addConversation}
-                handleAddConversation={handleAddConversation}*/
-                />{/* Add Block Delete MP Liste D'amis*/}
+                <DropdownChannel user={user} setChannels={setChannels} />
+                <DropdownContact user={user} setConvs={setConvs} />
                 <li>Actions</li> { /*  */}
                 <li>Tools</li> { /* */}
                 <li>Help</li>

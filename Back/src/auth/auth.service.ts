@@ -1,8 +1,8 @@
-import { Injectable, Request, Query , HttpException, HttpStatus, UnauthorizedException} from '@nestjs/common';
+import { Injectable, Request, Query, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Response} from 'express';
+import { Response } from 'express';
 import { UserService } from '../user/user.service';
-import { Prisma, User} from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
 import { TwofaController } from 'src/twofa/twofa.controller';
@@ -18,10 +18,10 @@ const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirect
 @Injectable()
 export class AuthService {
     constructor(private prisma: PrismaService,
-                private jwtService: JwtService,
-                private userService: UserService,
-                private twoFaService: TwofaService) {}
-    
+        private jwtService: JwtService,
+        private userService: UserService,
+        private twoFaService: TwofaService) { }
+
     async apiConnexion(userData: any, res: Response): Promise<User> {
         try {
             let user: User;
@@ -29,59 +29,65 @@ export class AuthService {
             if (!user) {
                 user = await this.userService.createUser(userData);
                 const newToken = await this.generateAndSetAccessToken(user);
-                this.setAuthCookies(res, newToken, user.id);
+                this.setAuthCookies(res, newToken);
                 res.redirect(process.env.URL_LOCAL_F + "/newprofile");
             }
             else {
                 if (user.twoFactorEnabled) {
-                    res.cookie('id', user.id);
                     res.redirect(process.env.URL_LOCAL_F + '/2fa');
                 }
                 else {
                     await this.prisma.user.update({
-                        where: {id: user.id},
-                        data: {state: 'ONLINE'},
+                        where: { id: user.id },
+                        data: { state: 'ONLINE' },
                     })
                     const newToken = await this.generateAndSetAccessToken(user);
-                    this.setAuthCookies(res, newToken, user.id);
+                    this.setAuthCookies(res, newToken);
                     res.redirect(process.env.URL_LOCAL_F);
                 }
             }
             return user;
-        }catch (error) {
-            console.error("error = " + error);
-            }
-        }
-            
-    async apiConnexion2fa(user: User, res: Response): Promise<void> {
-        if (!user)
-            throw new UnauthorizedException("user doesn't exist");
-        else {
-            const newToken = await this.generateAndSetAccessToken(user);
-            this.setAuthCookies(res, newToken, user.id);
+        } catch {
+            throw new UnauthorizedException();
         }
     }
-            
-    async generateAndSetAccessToken(user: User): Promise<string> {
-        const jwtPayload = { username: user.name, sub: user.id };
-        const newToken = this.jwtService.sign(jwtPayload);
 
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { accessToken: newToken },
-        });
-        return newToken;
+    async apiConnexion2fa(user: User, res: Response): Promise<void> {
+        try {
+            if (!user)
+                throw new UnauthorizedException("user doesn't exist");
+            else {
+                const newToken = await this.generateAndSetAccessToken(user);
+                this.setAuthCookies(res, newToken);
+            }
+        } catch {
+            throw new UnauthorizedException();
+        }
     }
-            
-    private setAuthCookies(res: Response, accessToken: string, userId: number): void {
+
+    async generateAndSetAccessToken(user: User): Promise<string> {
+        try {
+            const jwtPayload = { username: user.name, sub: user.id };
+            const newToken = this.jwtService.sign(jwtPayload);
+    
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { accessToken: newToken },
+            });
+            return newToken;
+        } catch {
+            throw new UnauthorizedException();
+        }
+    }
+
+    private setAuthCookies(res: Response, accessToken: string): void {
         res.cookie('accessToken', accessToken);
-        res.cookie('id', userId);
     }
-            
+
     async getAccessToken(code: string): Promise<any> {
-        try { 
-            const response = await axios.post(process.env.URL_42TOKEN, { 
-                client_id: client_id, 
+        try {
+            const response = await axios.post(process.env.URL_42TOKEN, {
+                client_id: client_id,
                 client_secret: clientSecret,
                 grant_type: "authorization_code",
                 code: code,
@@ -89,12 +95,11 @@ export class AuthService {
             });
             const accessToken = response.data.access_token;
             return accessToken;
-        } catch (error) {
-            console.error(error);
+        } catch {
             throw new HttpException('Failed to retrieve access token', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     async getUserData(accessToken: string): Promise<any> {
         try {
             const userResponse = await axios.get(process.env.URL_42ME, {
@@ -109,10 +114,8 @@ export class AuthService {
                 code: userResponse.data.code,
                 pfp: userResponse.data.image.link,
             };
-        } catch (error) {
-            console.error(error);
+        } catch {
             throw new HttpException('Failed to retrieve user data', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
-    

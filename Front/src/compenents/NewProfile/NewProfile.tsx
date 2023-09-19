@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
@@ -13,30 +13,29 @@ import Form from "../../compenents/utils/Form/Form"
 import Range from "../../compenents/utils/Range/Range"
 
 export default function NewProfile() {
-
 	const token = Cookies.get('accessToken');
-    if (!token)
-		window.location.href = "http://localhost:3000/connect";
+	if (!token)
+		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const navigate = useNavigate();
 
 	let [name, setName] = useState("");
 
 
-	useEffect (() => {
+	useEffect(() => {
 		axios.get(
 			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
-			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
-		.then(response => {
-			setName(response.data.name);
-		}).catch(error => {
-			console.error('Probleme');
-		});
+			{ headers: { Authorization: `Bearer ${token}` } })
+			.then(response => {
+				setName(response.data.user.name);
+			}).catch(error => {
+				console.error('Probleme');
+			});
 	}, [])
 
 	const handleClick = async () => {
-			navigate("/");
-	  };
+		navigate("/");
+	};
 
 	return (
 		<div id="menu">
@@ -44,7 +43,7 @@ export default function NewProfile() {
 			<div className="box">
 				<div id="welcome">WELCOME {name}</div>
 				<img id="skeeter" alt="skeeter" src={Skeeter}></img>
-				<Import/>
+				<Import />
 				<Form />
 				<Range />
 				<button id="np_move_on" onClick={handleClick}></button>
