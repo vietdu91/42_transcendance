@@ -16,7 +16,6 @@ function Channel({ user, channel, isVisible }) {
 	const [value, setValue] = useState('');
 	const [messages, setMessages] = useState(channel.messages);
 	const inputRef = useRef<HTMLDivElement | null>(null);
-	const userId = Cookies.get('id');
 
 	const handleInputChange = () => {
 		if (inputRef.current) {
@@ -31,7 +30,7 @@ function Channel({ user, channel, isVisible }) {
 	const handleSendMessage = async () => {
 		if (value.trim() !== '') {
 			const channId = channel.id;
-			socket?.emit('sendMessageChann', { value, userId, channId });
+			socket?.emit('sendMessageChann', { value, channId });
 			setValue('');
 			if (inputRef.current) {
 				inputRef.current.innerText = '';

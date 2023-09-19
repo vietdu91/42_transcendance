@@ -8,12 +8,10 @@ import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
 function DropdownChannels({user, setChannels}) {
-	const socket = useContext(ChatContext);
-	const id = Cookies.get('id');
+	const socket = useContext(ChatContext)
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
-	const [isPrivate, setIsPrivate] = useState(false);
-	const id = Cookies.get('id');
+	const [isPrivate, setIsPrivate] = useState(false)
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenForCreateChannel, setIsOpenForCreateChannel] = useState(false);
 	const [isOpenForJoinChannel, setIsOpenForJoinChannel] = useState(false);
@@ -39,26 +37,24 @@ function DropdownChannels({user, setChannels}) {
 
 	const handleCreate = () => {
 		console.log("Created room:", channelName);
-		setIsRoomCreated(true);
-		const id = Cookies.get('id');
 		console.log(roomPassword + "password");	
 		if (roomPassword) {
 			setIsPrivate(true);
-			socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate, password: roomPassword });
+			socket?.emit('createChannel', { name: channelName, isPrivate: isPrivate, password: roomPassword });
 		}
 		else {
-			socket?.emit('createChannel', { name: channelName, ownerId: id, isPrivate: isPrivate });
+			socket?.emit('createChannel', { name: channelName, isPrivate: isPrivate });
 		}
 	};
 
 	const handleJoin = () => {
 		console.log(joinPassword + " = password = " + roomPassword);
 		if (joinPassword) {
-			socket?.emit('joinRoom', { name: channelName, userId: id, password: joinPassword });
+			socket?.emit('joinRoom', { name: channelName, password: joinPassword });
 			setJoined(true);
 		}
 		else {
-			socket?.emit('joinRoom', { name: channelName, userId: id });
+			socket?.emit('joinRoom', { name: channelName });
 			setJoined(true);
 		}
 	};
@@ -68,35 +64,28 @@ function DropdownChannels({user, setChannels}) {
 		setChannelName('');
 		setIsPrivate(false);
 		setJoined(false);
-		socket?.emit('deleteRoom', { name: channelName, userId: id });
+		socket?.emit('deleteRoom', { name: channelName });
 	}
 
 
 	const handleLeave = () => {
-		const id = Cookies.get('id');
 		console.log("Left room:", channelName);
 		setChannelName('');
 		setIsPrivate(false);
 		setJoined(false);
-		socket?.emit('leaveRoom', { name: channelName, userId: id });
+		socket?.emit('leaveRoom', { name: channelName });
 	}
 
 	const handleBan = () => {
-		const id = Cookies.get('id');
-		console.log("Banned user:", id);
-		socket?.emit('banRoom', { name: channelName, userId: id });
+		socket?.emit('banRoom', { name: channelName });
 	}
 
 	const handleKik = () => {
-		const id = Cookies.get('id');
-		console.log("Kicked user:", id);
-		socket?.emit('kickUser', { name: channelName, userId: id });
+		socket?.emit('kickUser', { name: channelName });
 	}
 
 	const handleSetAdmin = () => {
-		const id = Cookies.get('id');
-		console.log("Set admin:", id);
-		socket?.emit('setAdmin', { name: channelName, userId: id });
+		socket?.emit('setAdmin', { name: channelName });
 	}
 
 	useEffect(() => {

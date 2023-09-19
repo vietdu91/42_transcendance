@@ -114,7 +114,7 @@ export class UserController {
       if (user.friendsList.includes(target.id)) {
         const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
         const userUpdate = await this.prisma.user.update({
-          where: { id: Number(userId) },
+          where: { id: user.id },
           data: {
             friendsList: updatedFriendList,
             blockList: { push: target.id },
@@ -260,17 +260,18 @@ export class UserController {
   }
 
   @Get('getUserChatById')
-  async getUserChatById(@Query('id') id: number, @Req() request: Request, @Res() response: Response) {
+  async getUserChatById(@GetUser() user: any, @Query('ids') ids: number[], @Res() response: Response) {
     try {
-      const user = await this.userService.getUserById(id);
-      if (!user) {
+      const id = user.id === ids[0] ? ids[1] : ids[0];
+      const target = await this.userService.getUserById(id);
+      if (!target) {
         throw new UnauthorizedException();
       }
       response.json({
-        name: user.name,
-        nickname: user.nickname,
-        pfp: user.pfp_url,
-        state: user.state,
+        name: target.name,
+        nickname: target.nickname,
+        pfp: target.pfp_url,
+        state: target.state,
       });
     } catch {
       throw new UnauthorizedException();

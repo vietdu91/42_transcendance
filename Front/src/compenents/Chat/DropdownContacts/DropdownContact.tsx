@@ -21,8 +21,6 @@ const initUser: OtherUser = {
 }
 
 function DropdownContact({ user, setConvs }) {
-  const token = Cookie.get('accessToken')
-  const userId = Cookie.get('id');
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFriends, setIsOpenFriends] = useState(false);
@@ -66,8 +64,7 @@ function DropdownContact({ user, setConvs }) {
 
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_B}/profile/addFriend`,
-          { name: friendName,
-            userId: userId},
+          { name: friendName },
           { headers }
         );
         setNotFound(false);
@@ -85,7 +82,7 @@ function DropdownContact({ user, setConvs }) {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_B}/profile/removeFriend`,
-          { name: friendName, userId: userId},
+          { name: friendName },
           { headers }
         );
       }
@@ -101,7 +98,7 @@ function DropdownContact({ user, setConvs }) {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_B}/profile/addBlocked`,
-          { name: friendName, userId: userId},
+          { name: friendName },
           { headers }
         );
       }
@@ -146,7 +143,7 @@ function DropdownContact({ user, setConvs }) {
       );
   
       console.log(response.data);
-      socket?.emit('createConversation', { id: userId, otherName: response.data.name });
+      socket?.emit('createConversation', { otherName: response.data.name });
     } catch (error) {
       console.log(error);
     }

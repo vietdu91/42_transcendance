@@ -85,9 +85,8 @@ function Chat() {
     const [user, setUser] = useState<User>(initUser);
     const [convs, setConvs] = useState([]);
     const [channels, setChannels] = useState([]);
-    const userId = Cookies.get('id');
 
-    socket.emit('joinChat', {userId})
+    socket.emit('joinChat');
     
     const [indivConv, setIndivConv] = useState(true);
     
