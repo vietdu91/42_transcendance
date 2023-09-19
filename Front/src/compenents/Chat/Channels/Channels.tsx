@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
+import './Channels.scss';
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
@@ -10,13 +11,40 @@ import ChampSelect from '../../Game/ChampSelect/ChampSelect';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
+import styled from 'styled-components';
 
-function Channel({ user, channel, isVisible }) {
+// const StyledDiv = styled.div`
+//   top: ${props => props.top}px;
+//   left: ${props => props.left}px;
+//   position: absolute;
+//   height: 75vh;
+//   width: 20vw;
+//   display: flex;
+//   flex-direction: column;
+//   border-radius: 5px;
+//   background-image: url('../../../img/chat/channel_wallpaper.png');
+//   background-size: cover;
+//   background-repeat: no-repeat;
+// `;
+
+function Channel({ key, i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
 	const [value, setValue] = useState('');
 	const [messages, setMessages] = useState(channel.messages);
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const userId = Cookies.get('id');
+	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenAction, setIsOpenAction] = useState(false);
+
+	type CSSProperties = React.CSSProperties & {
+		[key: string]: string;
+	  };
+
+	const toggleAction = () => {
+		setIsOpen(!isOpen);
+	}
+
+
 
 	const handleInputChange = () => {
 		if (inputRef.current) {
@@ -46,11 +74,36 @@ function Channel({ user, channel, isVisible }) {
 			socket.off('messageSentChann');
 		}
 	}, [])
+	console.log(i);
+
+	const maxTop = window.innerHeight - 80;
+	const maxLeft = window.innerWidth; // Set to the right half of the screen
+
+	const getRandomNumber = (max, sizeInPercent) => {
+		const sizeInPixels = (80 / 100) * max;
+		return Math.floor(Math.random() * ((max - sizeInPixels)));
+	};
+
+	const newPosition: CSSProperties = {
+		'--max': "" + max,
+		'--top': "" + getRandomNumber(maxTop, 0),
+		'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
+	};
+
+	console.log(newPosition);
+
+	// useEffect(() => {
+	// 	const newPosition = {
+	// 		top: getRandomNumber(window.innerHeight, 75 + 20),
+	// 		left: getRandomNumber(window.innerWidth, 20 - 2)
+	// 	};
+	// 	setPosition(newPosition);
+	// }, []);
+	console.log('Generated position:', newPosition);
 
 	return (
-		<div className="chat-channel-area">
+		<div className={`chat-channel-area-${i}`} style={newPosition}>
 			{isVisible && (
-
 				<div className="channel-main-container">
 					<div className="channel-bandeau">
 						<ul className="reduce-maximize-quit">
@@ -64,9 +117,17 @@ function Channel({ user, channel, isVisible }) {
 						<ul>
 							<li>File</li>
 							<li>Edit</li>
-							<li>Actions</li>
+							<li onClick={toggleAction}>Actions</li>
 							<li>Tools</li>
 						</ul>
+						{isOpen && (
+							<ul className="dropdown-menu">
+								<li >Ban User</li>
+								<li >kick User</li>
+								<li >Leave</li>
+								<li >Invite</li>
+							</ul>
+						)}
 					</div>
 					<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
@@ -76,12 +137,11 @@ function Channel({ user, channel, isVisible }) {
 							<div className="channel-conversation-messages">
 								{messages.map((message, index) => (
 									<ul key={index}>
-										<li>{message.authorName}</li>
-										<li>{message.content}</li>
-										<li>{message.createdAt}</li>
+										<li className="conv-sender-info-chan">{message.authorName}</li>
+										<li className="conv-message-content-chan">{message.content}</li>
+										<li className="conv-message-date-chan">{message.createdAt}</li>
 									</ul>
 								))}
-
 							</div>
 						</div>
 						<div className="channel-profile-pic-and-member-list">

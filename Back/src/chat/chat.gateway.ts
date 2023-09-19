@@ -22,17 +22,17 @@ export class ChatGateway {
   async handleJoinChat(client: Socket, params: any): Promise<void> {
     const userId = parseInt(String(params.userId));
     const userService = new UserService(new PrismaService());
-    const user = await userService.getUserById(userId);
+    const userDb = await userService.getUserById(userId);
 
     for (let user of this.users) {
-      if (user.user.id === userId) {
+      if (user.id === client.id) {
         return;
       }
     }
 
     const userChat: UserChat = {
       id: client.id,
-      user,
+      user: userDb,
     }
 
     this.users.push(userChat);
@@ -443,18 +443,22 @@ export class ChatGateway {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-    if (!user || user.name === otherName)
+    if (!user || user.name === otherName) {
+      console.log("probleme 1")
       return;
+    }
     const otherUser = await this.prisma.user.findUnique({
       where: { name: otherName },
     });
     if (!otherUser || otherUser.id === id) {
+      console.log("probleme 2")
       return;
     };
     // verifier que l'id existe dans la bdd 
     const convs = await this.prisma.conversation.findMany();
     for (let i = 0; i < convs.length; i++) {
       if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
+        console.log("probleme 3")
         return;
       }
     }

@@ -5,6 +5,9 @@ import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+import RedCross from "../../../img/chat/redcross.png"
+import Maximize from '../../../img/chat/rsz_1maximize_1.png'
+import Minimize from '../../../img/chat/minimized.jpg'
 
 interface OtherUser {
   name: string,
@@ -21,6 +24,7 @@ const initUser: OtherUser = {
 
 function DropdownContact({ user }) {
   const userId = Cookie.get('id');
+  const token = Cookie.get('accessToken');
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFriends, setIsOpenFriends] = useState(false);
@@ -69,7 +73,7 @@ function DropdownContact({ user }) {
 
 
   const searchUser = async () => {
-    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName } })
+    await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserByName', { params: { username: friendName }, headers: { 'Authorization': `Bearer ${token}` } })
       .then(response => {
         console.log(response.data)
         socket?.emit('createConversation', { id: userId, otherName: response.data.name })
@@ -102,46 +106,123 @@ function DropdownContact({ user }) {
         </ul>
       )}
       {isOpenForInvite && (
-        <div className="channel-delete-container">
-          <input type="text" placeholder="Friend's Name" />
-          <button onClick={() => toggleInvite()}>ENTER</button>
+        <div className="contact-invite-container">
+          <ul className="contact-invite-navbar">
+            <li className="invite-contact-title">Invite Someone</li>
+            <div>
+              <img src={Minimize} alt="minimize" id="chat_minimize" />
+              <img src={Maximize} alt="Maximize" id="chat_Maximize" />
+              <img onClick={() => { toggleInvite(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+            </div>
+          </ul>
+          <h3 className="question">Who do you want to invite ?</h3>
+          <div className="contact-invite-form">
+            <div className="contact-invite-input">
+              <h1>Friend's Name : </h1>
+              <input type="text" placeholder="Friend's Name" />
+            </div>
+          </div>
+          <div className="buttons-invite-cancel">
+            <button onClick={() => toggleInvite()}>Cancel</button>
+            <button onClick={() => toggleInvite()}>Enter</button>
+          </div>
         </div>
       )}
       {isOpenForAddFriend && (
-        <div className="channel-delete-container">
-          <input type="text" placeholder="Friend's Name" />
-          <button onClick={() => toggleAddFriend()}>ENTER</button>
+        <div className="contact-addfriend-container">
+          <ul className="contact-addfriend-navbar">
+            <li className="addfriend-contact-title">Add a friend</li>
+            <div>
+              <img src={Minimize} alt="minimize" id="chat_minimize" />
+              <img src={Maximize} alt="Maximize" id="chat_Maximize" />
+              <img onClick={() => { toggleAddFriend(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+            </div>
+          </ul>
+          <h3 className="question">Who do you want to addfriend ?</h3>
+          <div className="contact-addfriend-form">
+            <div className="contact-addfriend-input">
+              <h1>Friend's Name : </h1>
+              <input type="text" placeholder="Friend's Name" />
+            </div>
+          </div>
+          <div className="buttons-addfriend-cancel">
+            <button onClick={() => toggleAddFriend()}>Cancel</button>
+            <button onClick={() => toggleAddFriend()}>Enter</button>
+          </div>
         </div>
       )}
       {isOpenForDelete && (
-        <div className="channel-delete-container">
-          <input type="text" placeholder="Who do you want to delete" />
-          <button onClick={() => toggleDelete()}>ENTER</button>
+        <div className="contact-delete-container">
+          <ul className="contact-delete-navbar">
+            <li className="delete-contact-title">delete Someone</li>
+            <div>
+              <img src={Minimize} alt="minimize" id="chat_minimize" />
+              <img src={Maximize} alt="Maximize" id="chat_Maximize" />
+              <img onClick={() => { toggleDelete(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+            </div>
+          </ul>
+          <h3 className="question">Who do you want to delete ?</h3>
+          <div className="contact-delete-form">
+            <div className="contact-delete-input">
+              <h1>Friend's Name : </h1>
+              <input type="text" placeholder="Who do you want to delete" />
+            </div>
+          </div>
+          <div className="buttons-delete-cancel">
+            <button onClick={() => toggleDelete()}>Cancel</button>
+            <button onClick={() => toggleDelete()}>Enter</button>
+          </div>
         </div>
       )}
       {isOpenForBlock && (
-        <div className="channel-delete-container">
-          <input type="text" placeholder="Friend's Name" />
-          <button onClick={() => toggleBlock()}>ENTER</button>
+        <div className="contact-block-container">
+          <ul className="contact-block-navbar">
+            <li className="block-contact-title">Block Someone</li>
+            <div>
+              <img src={Minimize} alt="minimize" id="chat_minimize" />
+              <img src={Maximize} alt="Maximize" id="chat_Maximize" />
+              <img onClick={() => { toggleBlock(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+            </div>
+          </ul>
+          <h3 className="question">Who do you want to block ?</h3>
+          <div className="contact-block-form">
+            <div className="contact-block-input">
+              <h1>Friend's Name : </h1>
+              <input type="text" placeholder="Friend's Name" />
+            </div>
+          </div>
+          <div className="buttons-block-cancel">
+            <button onClick={() => toggleBlock()}>Cancel</button>
+            <button onClick={() => toggleBlock()}>Enter</button>
+          </div>
         </div>
       )}
       {isOpenForSendMp && (
-        <div className="channel-delete-container">
-          <input
-            type="text"
-            placeholder="Friend's Name"
-            value={friendName}
-            onChange={handleInputChange}
-          />
-          <button onClick={() => { searchUser(); toggleSendMp() }}>ENTER</button>
-          {isVisible && (
-            <ChatConversationArea 
-              user={user}
-              conv={conv}
-              isVisible={isVisible}
-              
-            />
-          )}
+        <div className="contact-sendMp-container">
+          <ul className="contact-sendMp-navbar">
+            <li className="sendMp-contact-title">sendMp Someone</li>
+            <div>
+              <img src={Minimize} alt="minimize" id="chat_minimize" />
+              <img src={Maximize} alt="Maximize" id="chat_Maximize" />
+              <img onClick={() => { toggleSendMp(); }} src={RedCross} alt="redcross" id="chat_redcross" />
+            </div>
+          </ul>
+          <h3 className="question">Who do you want to sendMp ?</h3>
+          <div className="contact-sendMp-form">
+            <div className="contact-sendMp-input">
+              <h1>Friend's Name : </h1>
+              <input
+                type="text"
+                placeholder="Friend's Name"
+                value={friendName}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className="buttons-sendMp-cancel">
+            <button onClick={() => toggleSendMp()}>Cancel</button>
+            <button onClick={() => { searchUser(); toggleSendMp() }}>Enter</button>
+          </div>
         </div>
       )}
     </div>
