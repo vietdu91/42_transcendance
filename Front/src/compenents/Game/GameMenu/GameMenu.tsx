@@ -351,7 +351,7 @@ export default function GameMenu() {
 	
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	useEffect(() => {
 	  const timer = setTimeout(() => {

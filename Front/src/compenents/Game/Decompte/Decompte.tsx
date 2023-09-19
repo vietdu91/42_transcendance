@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 export default function Decompte() {
     const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
     const [countdown, setCountdown] = useState(3);
     const [showKickBaby, setShowKickBaby] = useState(false);
     const [showHeadIke, setShowHeadIke] = useState(false);

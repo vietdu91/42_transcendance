@@ -21,9 +21,9 @@ import Cookies from 'js-cookie';
 
 export default function App() {
   const accessToken = Cookies.get('accessToken');
-  
+
   if (!accessToken) {
-    window.location.href = "/connect";
+    window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
   }
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function App() {
   const [code, setCode] = React.useState("");
 
   // console.log(process.env.REACT_APP_LOCAL_B);
-  const  apiEndpoint = process.env.REACT_APP_LOCAL_B;
+  const apiEndpoint = process.env.REACT_APP_LOCAL_B;
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -56,23 +56,23 @@ export default function App() {
     if (accessToken) {
       try {
         console.log("AXIOS LOGOUT ON")
-          const res = await axios({
-            url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
-            method: 'POST',
-            headers: {  'Authorization': `Bearer ${accessToken}` },
-          })
-          Cookies.remove('accessToken');
-          Cookies.remove('id');
-          console.log("COOKIES REMOVED")
-          navigate("/connect");
-          console.log("NAVIGATED")
-        }
+        const res = await axios({
+          url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${accessToken}` },
+        })
+        Cookies.remove('accessToken');
+        Cookies.remove('id');
+        console.log("COOKIES REMOVED")
+        navigate("/connect");
+        console.log("NAVIGATED")
+      }
       catch (err) {
         console.log("app-front: error: ", err)
       }
-     } else {
-       console.error('Access token not found in cookies.');
-     }
+    } else {
+      console.error('Access token not found in cookies.');
+    }
   }
 
   function toggleThanks() {

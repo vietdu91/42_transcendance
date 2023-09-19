@@ -18,7 +18,7 @@ export default function MenuConnexion() {
 	
 
 	async function CookieStorage() {
-		window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
+		window.location.href = `${process.env.REACT_APP_LOCAL_B}/southtrans/42`;
 	}
 
 	const [hover, setHover] = useState(Town);
@@ -29,7 +29,6 @@ export default function MenuConnexion() {
 			<img id="bg-menu" src={hover} alt={'Hell'}></img>
 			<div id="menu-items">
 				<div className="menu-item" onClick={CookieStorage}
-					//window.location.href = process.env.REACT_APP_LOCAL_B + "/southtrans/42";
 					onMouseEnter={() => {setHover(Lotion);}}
 					onMouseLeave={() => {setHover(Town);}}>Se connecter</div>
 			</div>

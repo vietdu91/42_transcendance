@@ -7,9 +7,9 @@ import { Req } from '@nestjs/common';
 import { Res } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
+import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import JwtAuthenticationGuard from '../jwt-guard/jwt-guard.guard';
-
-
 
 @Controller('profile')
 export class UserController {
@@ -19,240 +19,217 @@ export class UserController {
 
   @Get('getUserByName')
   @UseGuards(JwtAuthenticationGuard)
-  async getUserByName(@Query('username') username: string, @Req() request: Request, @Res() response: Response) {
-    const user = await this.userService.getUserByName(username);
-    if (!user) {
+  async getUserByName(@GetUser() user: any, @Query('username') username: string, @Res() response: Response) {
+    try {
+      const target = await this.userService.getUserByName(username);
+      if (!user || username === user.name) {
+        throw new UnauthorizedException();
+      }
+
+      let percentage: number = target.wins + target.looses === 0 ? 0 : Math.round(target.wins / (target.wins + target.looses) * 100);
+
+      const games = await this.userService.getGamesByUserId(target.id);
+
+      response.json({
+        user: target,
+        percentage: percentage,
+        games: games,
+      });
+    } catch {
       throw new UnauthorizedException();
     }
-    response.json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      twoFA: user.twoFactorEnabled,
-      nick: user.nickname,
-      age: user.age,
-      character: user.character,
-      pfp_url: user.pfp_url,
-    });
   }
 
   @Get('getUser')
   @UseGuards(JwtAuthenticationGuard)
-  async getUser(@Req() request: Request, @Res() response: Response) {
-    const userId = request.cookies.id;
-    if (!userId) {
+  async getUser(@GetUser() user: User, @Res() response: Response) {
+    try {
+      let percentage: number = user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
+
+      const games = await this.userService.getGamesByUserId(user.id);
+
+      response.json({
+        user: user,
+        percentage: percentage,
+        games: games,
+      });
+    } catch {
       throw new UnauthorizedException();
     }
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    let percentage: number = user.wins + user.looses === 0 ? 0 : Math.round(user.wins / (user.wins + user.looses) * 100);
-
-    const games = await this.userService.getGamesByUserId(userId);
-
-    response.json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      twoFA: user.twoFactorEnabled,
-      nick: user.nickname,
-      age: user.age,
-      character: user.character,
-      pfp_url: user.pfp_url,
-      wins: user.wins,
-      looses: user.looses,
-      percentage: percentage,
-      games: games,
-    });
   }
 
   @Get('getLeaderboard')
   @UseGuards(JwtAuthenticationGuard)
   async getLeaderboard(@Req() request: Request, @Res() response: Response) {
-    const users = await this.userService.getLeaderboard();
-    users.sort((a, b) => b.winrate - a.winrate);
-    response.json({ users: users });
+    try {
+      const users = await this.userService.getLeaderboard();
+      users.sort((a, b) => b.winrate - a.winrate);
+      response.json({ users: users });
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 
-    @Post('addFriend')
-    @UseGuards(JwtAuthenticationGuard)
-    async addFriend( @Req() request, @Body() body: {name: string}) {;
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
+  @Post('addFriend')
+  @UseGuards(JwtAuthenticationGuard)
+  async addFriend(@GetUser() user: any, @Body() body: { name: string }) {
+    try {
       const { name } = body;
       if (!name) {
         throw new UnauthorizedException();
       }
-      const user = await this.prisma.user.findUnique({
-        where: {name: name }
+      const target = await this.prisma.user.findUnique({
+        where: { name: name }
       })
-      if(user.id == userId){
+      if (target.id == user.id) {
         throw new UnauthorizedException();
       }
       const userUpdate = await this.prisma.user.update({
-        where: { id:  Number(userId)},
-        data: {friendsList: user.friendsList.push(user.id)},
+        where: { id: user.id },
+        data: { friendsList: user.friendsList.push(target.id) },
       })
+    } catch {
+      throw new UnauthorizedException();
     }
+  }
 
-    @Post('addBlocked')
-    @UseGuards(JwtAuthenticationGuard)
-    async addBlocked( @Req() request, @Body() body: {name: string}) {;
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
+  @Post('addBlocked')
+  @UseGuards(JwtAuthenticationGuard)
+  async addBlocked(@GetUser() user: any, @Body() body: { name: string }) {
+    try {
       const { name } = body;
       if (!name) {
         throw new UnauthorizedException();
       }
-
-      const mainUser = await this.prisma.user.findUnique({
-        where: {id: Number(userId)}
+      const target = await this.prisma.user.findUnique({
+        where: { name: name }
       })
-
-      const user = await this.prisma.user.findUnique({
-        where: {name: name }
-      })
-      if(user.id == userId){
+      if (target.id == user.id) {
         throw new UnauthorizedException();
       }
-      if (mainUser.friendsList.includes(user.id)) {
-        const updatedFriendList = mainUser.friendsList.filter((id) => id !== user.id);
+      if (user.friendsList.includes(target.id)) {
+        const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
         const userUpdate = await this.prisma.user.update({
-          where: { id:  Number(userId)},
-          data: {friendsList: updatedFriendList},
+          where: { id: user.id },
+          data: {
+            friendsList: updatedFriendList,
+            blockList: user.blockList.push(target.id),
+          },
         })
       }
-      const userUpdate = await this.prisma.user.update({
-        where: { id:  Number(userId)},
-        data: {blockList: user.blockList.push(user.id)}
-      })
+    } catch {
+      throw new UnauthorizedException();
     }
+  }
 
-    @Post('removeBlocked')
-    @UseGuards(JwtAuthenticationGuard)
-    async removeBlocked( @Req() request, @Body() body: {name: string}) {
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
+  @Post('removeBlocked')
+  @UseGuards(JwtAuthenticationGuard)
+  async removeBlocked(@GetUser() user: any, @Body() body: { name: string }) {
+    try {
       const { name } = body;
       if (!name) {
         throw new UnauthorizedException();
       }
-      const user = await this.prisma.user.findUnique({
-        where: {name: name }
+      const target = await this.prisma.user.findUnique({
+        where: { name: name }
       })
-      if (user.id == userId) {
+      if (target.id == user.id) {
         throw new UnauthorizedException();
       }
-      const updatedBlockList = user.blockList.filter((id) => id !== user.id);
-      
+
+      const updatedBlockList = user.blockList.filter((id) => id !== target.id);
       const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
-        data: {blockList: updatedBlockList},
-        })
-      }
+        where: { id: user.id },
+        data: { blockList: updatedBlockList },
+      })
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
 
-
-
-    @Post('removeFriend')
-    @UseGuards(JwtAuthenticationGuard)
-    async removeFriend( @Req() request, @Body() body: {name: string}) {
-      const userId = request.cookies.id;
-      if (!userId) {
-        throw new UnauthorizedException();
-      }
+  @Post('removeFriend')
+  @UseGuards(JwtAuthenticationGuard)
+  async removeFriend(@GetUser() user: any, @Body() body: { name: string }) {
+    try {
       const { name } = body;
       if (!name) {
         throw new UnauthorizedException();
       }
-      const user = await this.prisma.user.findUnique({
-        where: {name: name }
+      const target = await this.prisma.user.findUnique({
+        where: { name: name }
       })
-      if (user.id == userId) {
+      if (target.id == user.id) {
         throw new UnauthorizedException();
       }
-      const updatedFriendList = user.friendsList.filter((id) => id !== user.id);
-
-        const userUpdate = await this.prisma.user.update({
-        where: { id: Number(userId) },
+      const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
+      const userUpdate = await this.prisma.user.update({
+        where: { id: user.id },
         data: { friendsList: updatedFriendList },
       })
+    } catch {
+      throw new UnauthorizedException();
     }
+  }
 
   @Patch('setNickname')
   @UseGuards(JwtAuthenticationGuard)
-  async setNickname(@Req() request, @Body() body: { nickname: string }) {
-    const userId = request.cookies.id;
-    if (!userId) {
+  async setNickname(@GetUser() user: any, @Body() body: { nickname: string }) {
+    try {
+      const { nickname } = body;
+      if (!nickname)
+        throw new UnauthorizedException();
+      const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
+      if (!regex.test(nickname))
+        throw new UnauthorizedException();
+      const userUpdate = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { nickname: nickname },
+      });
+      return { message: 'Surnom enregistré avec succès' };
+    } catch {
       throw new UnauthorizedException();
     }
-    const { nickname } = body;
-    if (!nickname)
-      throw new UnauthorizedException();
-    const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
-    if (!regex.test(nickname))
-      throw new UnauthorizedException();
-    const userUpdate = await this.prisma.user.update({
-      where: { id: Number(userId) },
-      data: { nickname: nickname },
-    });
-    return { message: 'Surnom enregistré avec succès' };
   }
 
   @Patch('setAge')
   @UseGuards(JwtAuthenticationGuard)
-  async setAge(@Req() request, @Body() body: { age: number }) {
-    const userId = request.cookies.id;
-    if (!userId) {
+  async setAge(@GetUser() user: any, @Body() body: { age: number }) {
+    try {
+      const { age } = body;
+      if (age <= 0 || age > 100)
+        throw new UnauthorizedException();
+      const userUpdate = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { age: Number(age) },
+      });
+      return { message: 'Age enregistré avec succès' };
+    } catch {
       throw new UnauthorizedException();
     }
-    const { age } = body;
-    if (!age || age <= 0 || age > 100)
-      throw new UnauthorizedException();
-    const userUpdate = await this.prisma.user.update({
-      where: { id: Number(userId) },
-      data: { age: Number(age) },
-    });
-    return { message: 'Age enregistré avec succès' };
   }
 
   @Patch('setCharacter')
   @UseGuards(JwtAuthenticationGuard)
-  async setCharacter(@Req() request, @Body() body: { character: string }) {
-    const userId = request.cookies.id;
-    if (!userId) {
+  async setCharacter(@GetUser() user: any, @Body() body: { character: string }) {
+    try {
+      const { character } = body;
+      if (character != "Cartman" && character != "Servietsky" && character != "Kenny" && character != "Timmy"
+        && character != "TerrancePhilip" && character != "Garrison" && character != "Henrietta" && character != "Butters")
+        throw new UnauthorizedException();
+      const userUpdate = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { character: character },
+      });
+      if (!userUpdate)
+        return { message: 'Personnage modifié avec succès' };
+    } catch {
       throw new UnauthorizedException();
     }
-    const { character } = body;
-    if (character != "Cartman" && character != "Servietsky" && character != "Kenny" && character != "Timmy"
-      && character != "TerrancePhilip" && character != "Garrison" && character != "Henrietta" && character != "Butters") {
-      throw new UnauthorizedException();
-    }
-    const userUpdate = await this.prisma.user.update({
-      where: { id: Number(userId) },
-      data: { character: character },
-    });
-    return { message: 'Personnage modifié avec succès' };
   }
 
   @Get('getUserChat')
   @UseGuards(JwtAuthenticationGuard)
-  async getUserChat(@Req() request: Request, @Res() response: Response) {
-    const userId = request.cookies.id;
-    if (!userId) {
-      throw new UnauthorizedException();
-    }
-    const user = await this.userService.getUserById(userId);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    
+  async getUserChat(@GetUser() user: any, @Res() response: Response) {
     response.json({
       id: user.id,
       name: user.name,
@@ -266,53 +243,32 @@ export class UserController {
     })
   }
 
-
-  @Post('searchUser')
-  @UseGuards(JwtAuthenticationGuard)
-  async searchByName(@Body() body: { name: string }, @Req() request: Request, @Res() response: Response) {
-    try {
-      const { name } = body;
-      if (!name) {
-        response.status(400).json({ error: 'Le nom est manquant' });
-        return;
-      }
-      const user = await this.prisma.user.findUnique({
-        where: {
-          name: name,
-        },
-      });
-      if (!user) {
-        response.status(404).json({ error: 'Aucun utilisateur trouvé' });
-        return;
-      }
-      const id = user.id;
-      response.status(200).json({ id });
-    } catch (error) {
-      response.status(500).json({ error: 'Erreur interne du serveur' });
-    }
-  }
-
   @Patch('disableTwoFA')
   @UseGuards(JwtAuthenticationGuard)
-  async disableTwoFa(@Req() request: Request, @Body() body: { state: boolean }) {
-    const userId = parseInt(request.cookies.id);
-    if (!userId)
+  async disableTwoFa(@GetUser() user: any, @Body() body: { state: boolean }) {
+    try {
+      this.userService.turnOffTwoFactorAuthentication(user.id);
+      return { message: 'Disabled 2FA' };
+    } catch {
       throw new UnauthorizedException();
-    this.userService.turnOffTwoFactorAuthentication(userId);
-    return { message: 'Disabled 2FA' };
+    }
   }
 
   @Get('getUserChatById')
   async getUserChatById(@Query('id') id: number, @Req() request: Request, @Res() response: Response) {
-    const user = await this.userService.getUserById(id);
-    if (!user) {
+    try {
+      const user = await this.userService.getUserById(id);
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+      response.json({
+        name: user.name,
+        nickname: user.nickname,
+        pfp: user.pfp_url,
+        state: user.state,
+      });
+    } catch {
       throw new UnauthorizedException();
     }
-    response.json({
-      name: user.name,
-      nickname: user.nickname,
-      pfp: user.pfp_url,
-    });
   }
-
 }

@@ -20,9 +20,9 @@ function SearchBar ({ onSearch }: SearchBarProps) {
   const handleSearch = async (query: string) => {
 
     const response = await axios.post(
-      process.env.REACT_APP_LOCAL_B + '/profile/searchUser',
+      process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
       { name: query },
-      { withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
+      { headers: {Authorization: `Bearer ${token}`} })
     .then((response) => {
       const receivId = response.data.id;
       console.log("id === " + receivId);

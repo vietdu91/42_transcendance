@@ -80,7 +80,7 @@ function Chat() {
 
     const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
     const socket = useContext(ChatContext);
     const [user, setUser] = useState<User>(initUser);
     const [convs, setConvs] = useState([]);

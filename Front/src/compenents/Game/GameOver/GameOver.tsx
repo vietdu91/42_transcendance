@@ -22,7 +22,7 @@ import GarrisonAgain2 from "../../../img/gameover/garrison_again_2.gif"
 export default function GameOver() {
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const [showButtonCartman, setShowButtonCartman] = useState(false);
 	const [showGarrison, setShowGarrison] = useState(false);

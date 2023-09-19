@@ -42,9 +42,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
             text: "Friends Name 3"
         }
     ];
-
-    const id = Cookie.get('id');
-    const token = Cookie.get('accessToken');
+    
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     // const [indivConv, setindivConv] = useState(false);

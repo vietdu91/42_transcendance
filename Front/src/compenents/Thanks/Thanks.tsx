@@ -7,7 +7,7 @@ import './Thanks.css'
 
 import BigThanks from '../../img/thank_you.jpg';
 
-enum User{
+enum User {
 	STAFF_1,
 	STAFF_2,
 	MERCI,
@@ -17,25 +17,25 @@ enum User{
 	ROOT,
 }
 
-function CreatedBy(){
+function CreatedBy() {
 	const [test, setTest] = useState<User>(User.STAFF_1)
 	const navigate = useNavigate();
 
-	useEffect(() =>{
+	useEffect(() => {
 		const intervalTime = test === User.ROOT ? 10000 : 1500;
 		const interval = setInterval(() => {
 			if (test === User.ROOT)
 				navigate("/");
 			else
-			setTest(test + 1);
+				setTest(test + 1);
 		}, intervalTime);
 		return (() => {
 			clearInterval(interval);
 		})
-	// eslint-disable-next-line
+		// eslint-disable-next-line
 	}, [test]);
 
-	if (test === User.STAFF_1){
+	if (test === User.STAFF_1) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="title white">Created By</div>
@@ -44,7 +44,7 @@ function CreatedBy(){
 			</div>
 		)
 	}
-	else if (test === User.STAFF_2){
+	else if (test === User.STAFF_2) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="title white">Created By</div>
@@ -54,14 +54,14 @@ function CreatedBy(){
 			</div>
 		)
 	}
-	else if (test === User.MERCI){
+	else if (test === User.MERCI) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Gros Merci pour leur Aide</div>
 			</div>
 		)
 	}
-	else if (test === User.FRONT){
+	else if (test === User.FRONT) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Masters en Front</div>
@@ -69,15 +69,16 @@ function CreatedBy(){
 			</div>
 		)
 	}
-	else if (test === User.BACK){
+	else if (test === User.BACK) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Genies du Back</div>
+				<div className="subtitle purple">thzeribi</div>
 				<div className="yellow subtitle">esafar</div>
 			</div>
 		)
 	}
-	else if (test === User.FREROTS){
+	else if (test === User.FREROTS) {
 		return (
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Frerots</div>
@@ -86,7 +87,7 @@ function CreatedBy(){
 			</div>
 		)
 	}
-	else if (test === User.ROOT){
+	else if (test === User.ROOT) {
 		return (
 			<>
 				<div className="credits" onClick={() => navigate("/")}>
@@ -98,14 +99,14 @@ function CreatedBy(){
 		)
 	}
 	else {
-		return(<></>);
+		return (<></>);
 	}
 }
 
 export default function Thanks() {
 	const token = Cookies.get('accessToken');
-    if (!token)
-        window.location.href = "http://localhost:3000/connect";
+	if (!token)
+		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 	return (
 		<CreatedBy />
 	)

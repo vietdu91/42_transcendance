@@ -36,7 +36,7 @@ export default function Matchmaking() {
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:3000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const cookies = document.cookie.split('; ');
 	let id:string = '';
@@ -81,10 +81,6 @@ export default function Matchmaking() {
 
 		socket.on('matchFound',(response) => {
 			handleMatchFound(response.roomId);
-		})
-
-		socket.on('disconnect', () => {
-				console.log('Disconnected');
 		})
 
 		socket.on('wrongUser', (response) => {

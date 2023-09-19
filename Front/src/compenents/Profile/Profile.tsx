@@ -14,20 +14,24 @@ interface Game {
 	date: Date,
 }
 
+const initUser = {
+	name: "",
+	nickname: "",
+	age: 0,
+	pfp_url: "",
+	wins: 0,
+	looses: 0,
+}
+
 export default function Profile() {
 
 	const navigate = useNavigate();
 
 	const token = Cookies.get('accessToken');
     if (!token)
-		window.location.href = "http://localhost:3000/connect";
+		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
-	const [nick, getNick] = useState("");
-	const [name, getName] = useState("");
-	const [age, getAge] = useState(0);
-	const [pfp_url, getPfpUrl] = useState("");
-	const [wins, getWins] = useState(0);
-	const [looses, getLooses] = useState(0);
+	const [user, getUser] = useState(initUser);
 	const [percentage, getPercentage] = useState(0);
 	const [qrCode, setQrCode] = useState("");
 	const [showFa, setShowFa] = useState(false);
@@ -126,24 +130,24 @@ export default function Profile() {
 
 
 	useEffect (() => {
-		// axios.get('http://localhost:3001/profile/getUser', { withCredentials: true })
 		axios.get(
 			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
-			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
-		.then(response => {
-			getNick(response.data.nick);
-			getName(response.data.name);
-			getAge(response.data.age);
-			setTwoFa(response.data.twoFA);
-			getPfpUrl(response.data.pfp_url);
-			getWins(response.data.wins);
-			getLooses(response.data.looses);
-			getPercentage(response.data.percentage);
+			{ headers: {Authorization: `Bearer ${token}`} })
+		.then(res => {
+			getUser({
+				name: res.data.user.name,
+				nickname: res.data.user.nickname,
+				age: res.data.user.age,
+				pfp_url: res.data.user.pfp_url,
+				wins: res.data.user.wins,
+				looses: res.data.user.looses,
+			});
+			getPercentage(res.data.percentage)
 			const updatedGames:Game[] = [];
-			const limit = response.data.games.length > 3 ? response.data.games.length - 3 : 0;
-			for (let i = response.data.games.length - 1; i >= limit; i--) {
-				updatedGames.push(response.data.games[i]);
-				console.log(response.data.games[i]);
+			const limit = res.data.games.length > 3 ? res.data.games.length - 3 : 0;
+			for (let i = res.data.games.length - 1; i >= limit; i--) {
+				updatedGames.push(res.data.games[i]);
+				console.log(res.data.games[i]);
 			}
 			games.current = updatedGames;
 		}).catch(error => {
@@ -165,15 +169,15 @@ export default function Profile() {
 					<div className="profile-infos">	
 						<div id="profile-info-1">
 							<span className="profile-titre-infos">Pseudo </span>
-							<span className="profile-info">: {nick}</span><br/><br/> 
+							<span className="profile-info">: {user.nickname}</span><br/><br/> 
 						</div>
 						<div id="profile-info-2">
 							<span className="profile-titre-infos">Nom </span>
-							<span className="profile-info">: {name}</span><br/><br/> 
+							<span className="profile-info">: {user.name}</span><br/><br/> 
 						</div>
 						<div id="profile-info-3">
 							<span className="profile-titre-infos">Win / Lose </span>
-							<span className="profile-info">: {wins} / {looses}</span><br/><br/>
+							<span className="profile-info">: {user.wins} / {user.looses}</span><br/><br/>
 						</div>
 						<div id="profile-info-4">
 							<span className="profile-titre-infos" id="profile-titre-info-5">Votre Score </span>
@@ -181,7 +185,7 @@ export default function Profile() {
 						</div>
 						<div id="profile-info-5">
 							<span className="profile-titre-infos">Age </span>
-							<span className="profile-info">: {age} ans</span><br/><br/> 
+							<span className="profile-info">: {user.age} ans</span><br/><br/> 
 						</div>
 					</div>
 						<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
@@ -198,7 +202,7 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className ="pfp">
-					<img id="profile_pic" src={pfp_url} alt="PPdeMORT"></img>
+					<img id="profile_pic" src={user.pfp_url} alt="PPdeMORT"></img>
 					<div className="profile-buttons">
 						<button className="profile-btn-1" onClick={() => navigate("/NewProfile")}><span className="profile-text-buttom">Modifier le profil 📝</span></button><br/>
 						{twoFa && <><button className="twofa_off" onClick={handleDisable}>Disable 2FA 📷</button><br/></>}

@@ -58,7 +58,7 @@ export default function ChampSelect() {
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
     if (!token)
-        window.location.href = "http://localhost:2000/connect";
+        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);

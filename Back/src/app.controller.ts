@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Get, Redirect, Body, HttpCode, UploadedFile, UseInterceptors, Param} from '@nestjs/common';
+import { Controller, Post, UseGuards, Get, Redirect, UploadedFile, UseInterceptors, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { GameService } from './game/game.service';
@@ -8,6 +8,7 @@ import JwtAuthenticationGuard from './jwt-guard/jwt-guard.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
+import { GetUser } from './auth/decorator/get-user.decorator';
 
 @Controller('Southtrans')
 export class AppController {
@@ -28,23 +29,25 @@ export class AppController {
 @Post('online')
 @UseGuards(JwtAuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async online(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
-    const accessToken = request.headers.authorization?.split(' ')[1];
-    const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
-    return await this.cloudinary
-      .uploadImage(file)
-      .then((data) => {
-        return this.prisma.user.update({
-          where: { id: decodedJwtAccessToken.sub },
-          data: { pfp_url: data.secure_url },
+  async online(@GetUser() user: any, @UploadedFile() file: Express.Multer.File) {
+    try {
+      return await this.cloudinary
+        .uploadImage(file)
+        .then((data) => {
+          return this.prisma.user.update({
+            where: { id: user.id },
+            data: { pfp_url: data.secure_url },
+          });
+        })
+        .catch((err) => {
+          return {
+            statusCode: 400,
+            message: err.message,
+          };  
         });
-      })
-      .catch((err) => {
-        return {
-          statusCode: 400,
-          message: err.message,
-        };  
-      });
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 
 }
