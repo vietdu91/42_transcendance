@@ -20,34 +20,27 @@ function SearchBar ({ onSearch }: SearchBarProps) {
     setSearchQuery(event.target.value);
   };
 
-  const handleSearch = async (query: string) => {
-
-    const response = await axios.post(
-      process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
-      { name: query },
-      { headers: {Authorization: `Bearer ${token}`} })
-    .then((response) => {
-      const receivId = response.data.id;
-      console.log("id === " + receivId);
-      onSearch(query);
-      // console.log(response.data.name);
-      if (location.pathname === "/chat")
-        window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
-      else
-        navigate(`/user/${response.data.name}`)
-    }
-    )
-    .catch((error) => {
-      // console.log(error);
-      setNotFound(true);
-    // Gérer les erreurs de requête
-    if(notFound === true)
-    {
-      console.log("Utilisateur not found");
-    }
-    });
+  const handleSearch = async (username: string) => {
+    const response = await axios.get(
+        process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
+        { params: {username: username}, headers: { Authorization: `Bearer ${token}` } })
+        .then((response) => {
+            const receivId = response.data.user.id;
+            onSearch(response.data.user.name);
+            console.log(response.data.user.name);
+            if (location.pathname === "/chat")
+              window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.user.name}`);
+            else
+              navigate(`/user/${response.data.user.name}`)
+        }
+        )
+        .catch((error) => {
+            setNotFound(true);
+            console.log("error: Not found");
+        });
+        console.log(response.data);
     // Traitez les données de réponse ici
-  };
+};
 
   return (
     <div className="searchBar">
