@@ -242,7 +242,6 @@ export default function Game(): JSX.Element {
 		let toc: boolean = false;
 
 		socket.on('roundStarted', (response) => {
-			let player_height: number = (9 / 16) * window.innerWidth * 70 / 100 / 5;
 			const updatedGame: IGame = {
 				...game.current,
 				gameId: response.game.gameId,
@@ -280,7 +279,6 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on('playerMoved', (response) => {
-			console.log("message === " + response.message);
 			const updatedGame: IGame = {
 				...game.current,
 				posLeft: response.posLeft / 100 * window.innerWidth * 70 / 100,
@@ -313,7 +311,6 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("usedPower", (response) => {
-			console.log(response.message);
 			if (response.id === game.current.idLeft) {
 				powLeft = true;
 				switch (response.char) {
@@ -341,12 +338,10 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("newPoint", (response) => {
-			console.log(response.message);
 			socket?.emit('roundStart', roomId);
 		})
 
 		socket.on("endGame", (response) => {
-			console.log(response.message);
 			const updatedGame: IGame = {
 				...game.current,
 				isActive: false,
@@ -364,18 +359,16 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("gaveUp", (response) => {
-			console.log(response.message);
 			if (id !== response.id)
 				navigate('/errorgame');
 		})
 
 		socket.on("noGame", (response) => {
-			console.log(response.message);
 			navigate("/gamemenu")
 		})
 
 		window.addEventListener('beforeunload', () => {
-			socket.emit("giveUp", roomId, id);
+			socket.emit("giveUp", roomId);
 		})
 
 		if (game.current.isActive)
@@ -399,20 +392,20 @@ export default function Game(): JSX.Element {
 					p.background('rgba(52, 52, 52, 0.75)');
 
 					if (p.keyIsDown(32))
-						socket?.emit("usePower", roomId, id);
+						socket?.emit("usePower", roomId);
 					if (timmy &&
 						((powLeft && game.current.charLeft === "Timmy" && id !== game.current.idLeft)
 							|| (powRight && game.current.charRight === "Timmy" && id !== game.current.idRight))) {
 						if (p.keyIsDown(87))
-							socket?.emit("movePlayer", roomId, id, 0);
+							socket?.emit("movePlayer", roomId, 0);
 						if (p.keyIsDown(83))
-							socket?.emit("movePlayer", roomId, id, 1);
+							socket?.emit("movePlayer", roomId, 1);
 					}
 					else {
 						if (p.keyIsDown(87))
-							socket?.emit("movePlayer", roomId, id, 1);
+							socket?.emit("movePlayer", roomId, 1);
 						if (p.keyIsDown(83))
-							socket?.emit("movePlayer", roomId, id, 0);
+							socket?.emit("movePlayer", roomId, 0);
 					}
 					socket?.emit("moveBall", roomId);
 
@@ -483,10 +476,8 @@ export default function Game(): JSX.Element {
 		}
 
 		return () => {
-			console.log("quitte la page de jeu")
 			if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
-				console.log("entre dans le giveup");
-				socket?.emit("giveUp", roomId, id);
+				socket?.emit("giveUp", roomId);
 			}
 			p5SketchRef.current?.remove();
 		};

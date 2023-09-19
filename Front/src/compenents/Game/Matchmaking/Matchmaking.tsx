@@ -38,21 +38,12 @@ export default function Matchmaking() {
     if (!token)
         window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
-	const cookies = document.cookie.split('; ');
-	let id:string = '';
-
-	for (const cookie of cookies) {
-		const [name, value] = cookie.split('=');
-		if (name === 'id')
-			id = value;
-	}
-
 	const joinQueue = () => {
-		socket?.emit('joinQueue', Number(id));
+		socket?.emit('joinQueue');
 	}
 
 	const leaveQueue = () => {
-		socket?.emit('leaveQueue', Number(id));
+		socket?.emit('leaveQueue');
 		setInQueue(false);
 	  };
 

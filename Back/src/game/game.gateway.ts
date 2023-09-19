@@ -72,7 +72,7 @@ export class MatchmakingGateway {
 	private rTocSpeed: number = (9 / 16) * 100 / 160;
 
 	@SubscribeMessage('joinQueue')
-	async handleJoinQueue(client: Socket, userId: number): Promise<void> {
+	async handleJoinQueue(client: Socket): Promise<void> {
 		const token: string = client.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
@@ -99,7 +99,7 @@ export class MatchmakingGateway {
 	}
 
 	@SubscribeMessage('leaveQueue')
-	async handleLeaveQueue(client: Socket, userId: number): Promise<void> {
+	async handleLeaveQueue(client: Socket): Promise<void> {
 		const token: string = client.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
@@ -110,7 +110,7 @@ export class MatchmakingGateway {
 
 	private async createMatch(): Promise<void> {
 		if (this.queue.length >= 2) {
-		// if (this.queue.length >= 1) {
+			// if (this.queue.length >= 1) {
 			const player1 = this.queue.shift();
 			const player2 = this.queue.shift();
 			const prisma = new PrismaService();
@@ -206,10 +206,10 @@ export class MatchmakingGateway {
 		const actualGame: Game = this.games[roomId];
 		if (actualGame == null)
 			return;
-		
-		const gameCheck = await this.prismaService.game.findUnique({where: {id: roomId}});
+
+		const gameCheck = await this.prismaService.game.findUnique({ where: { id: roomId } });
 		if (!gameCheck.playing) {
-			return ;
+			return;
 		}
 
 		actualGame.isPowLeft = actualGame.isPowRight = false;
@@ -238,11 +238,14 @@ export class MatchmakingGateway {
 		if (actualGame == null)
 			return;
 		const prisma = new PrismaService();
+		const token: string = socket.handshake.query.token as string;
+		const userToken = await this.jwtService.decode(token);
+		const user = await this.userService.getUserById(userToken.sub);
 
 		if (actualGame.gaveUp)
 			return;
 
-		const winnerId: number = params[1] === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
+		const winnerId: number = user.id === actualGame.idLeft ? actualGame.idRight : actualGame.idLeft;
 
 		actualGame.isActive = false;
 
@@ -297,7 +300,7 @@ export class MatchmakingGateway {
 		actualGame.gaveUp = true;
 		const sendTo: string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
-		this.server.to(sendTo).emit("gaveUp", { message: "The other player gave up ! Boooo !", id: params[1] });
+		this.server.to(sendTo).emit("gaveUp", { message: "The other player gave up ! Boooo !", id: user.id });
 	}
 
 	@SubscribeMessage('movePlayer')
@@ -305,17 +308,20 @@ export class MatchmakingGateway {
 		const actualGame: Game = this.games[params[0]];
 		if (actualGame == null)
 			return;
+		const token: string = socket.handshake.query.token as string;
+		const userToken = await this.jwtService.decode(token);
+		const user = await this.userService.getUserById(userToken.sub);
 
 		const speed: number = (9 / 16) * 100 / 80;
 
-		if (params[1] === actualGame.idLeft) {
+		if (user.id === actualGame.idLeft) {
 			params[2] === 1 ? actualGame.posLeft -= speed : actualGame.posLeft += speed;
 			if (actualGame.posLeft < (9 / 16) * 100 / 150)
 				actualGame.posLeft = (9 / 16) * 100 / 150;
 			else if (actualGame.posLeft > (9 / 16) * 100 - ((9 / 16) * 100 / 150) - (actualGame.hLeft))
 				actualGame.posLeft = (9 / 16) * 100 - ((9 / 16) * 100 / 150) - (actualGame.hLeft);
 		}
-		if (params[1] === actualGame.idRight) {
+		if (user.id === actualGame.idRight) {
 			params[2] === 1 ? actualGame.posRight -= speed : actualGame.posRight += speed;
 			if (actualGame.posRight < (9 / 16) * 100 / 150)
 				actualGame.posRight = (9 / 16) * 100 / 150;
@@ -331,9 +337,12 @@ export class MatchmakingGateway {
 		const actualGame: Game = this.games[params[0]];
 		if (actualGame == null)
 			return;
+		const token: string = socket.handshake.query.token as string;
+		const userToken = await this.jwtService.decode(token);
+		const user = await this.userService.getUserById(userToken.sub);
 		let char: string;
 
-		if (actualGame.idLeft === params[1] && !actualGame.usedPowLeft) {
+		if (actualGame.idLeft === user.id && !actualGame.usedPowLeft) {
 			switch (actualGame.charLeft) {
 				case "Cartman": actualGame.hLeft = (9 / 16) * 100 / 2; break;
 				case "Servietsky": ; break;
@@ -347,7 +356,7 @@ export class MatchmakingGateway {
 			char = actualGame.charLeft;
 			actualGame.usedPowLeft = actualGame.isPowLeft = true;
 		}
-		else if (actualGame.idRight === params[1] && !actualGame.usedPowRight) {
+		else if (actualGame.idRight === user.id && !actualGame.usedPowRight) {
 			switch (actualGame.charRight) {
 				case "Cartman": actualGame.hRight = (9 / 16) * 100 / 2; break;
 				case "Servietsky": ; break;
@@ -363,8 +372,8 @@ export class MatchmakingGateway {
 		}
 		else
 			return;
-		this.server.to(actualGame.sockLeft).emit("usedPower", { message: "Power by : " + char, id: params[1], char: char, game: actualGame });
-		this.server.to(actualGame.sockRight).emit("usedPower", { message: "Power by : " + char, id: params[1], char: char, game: actualGame });
+		this.server.to(actualGame.sockLeft).emit("usedPower", { message: "Power by : " + char, id: user.id, char: char, game: actualGame });
+		this.server.to(actualGame.sockRight).emit("usedPower", { message: "Power by : " + char, id: user.id, char: char, game: actualGame });
 	}
 
 	@SubscribeMessage('moveBall')
