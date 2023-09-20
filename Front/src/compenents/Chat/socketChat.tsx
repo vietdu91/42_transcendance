@@ -13,7 +13,7 @@ import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
 import FooterMenu from './FooterMenu/FooterMenu';
 import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
 import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
-
+import BackgroundWindows from './windows-xp-wallpaper-bliss.jpg'
 
 import './Chat.css';
 import axios from "axios"
@@ -112,6 +112,7 @@ function Chat() {
     return (
         <>
             <div className="truc">
+                <img className="img-truc" id="img-truc" src={BackgroundWindows}></img>
                 <div className="left-part-chat">
                     <div className="conversations-list">
                         <ConversationListHeader
@@ -135,9 +136,6 @@ function Chat() {
                     </div>
                 </div>
             </div>
-            <div id="return">
-				<ReturnButtom colorHexa='#ff30ff' path='/' />
-			</div>
             <FooterMenu />
         </>
     );

@@ -19,6 +19,8 @@ import RandyWin2 from "../../../img/win/randy_win_2.gif";
 import RandyAgain from "../../../img/win/randy_again_1.gif"
 import RandyAgain2 from "../../../img/win/randy_again_2.gif"
 
+import YeahYeah from '../../../sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All Of Them).mp3'
+
 export default function Win() {
 	const token = Cookies.get('accessToken');
 	if (!token)
@@ -70,9 +72,9 @@ export default function Win() {
 	}, []);
 
 	useEffect(() => {
-		if (char == "Butters")
+		if (char === "Butters")
 			setIsButters(true);
-	}, []);
+	}, [char]);
 
 	useEffect(() => {
 		const showRandyAgainDelay = 4000;
@@ -99,6 +101,7 @@ export default function Win() {
 
 	return (
 		<div id="bg-win">
+			<iframe title="YeahYeah_sound" src={YeahYeah} allow="autoplay" id="iframeAudio"></iframe>
 			<div className="stars">
 				<Star />
 				<Star />

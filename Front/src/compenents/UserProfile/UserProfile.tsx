@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
-import SearchBar2 from '../Profile/searchBarProfile';
 import './UserProfile.css'
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
@@ -120,7 +119,7 @@ export default function UserProfile() {
 			.catch(error => {
 				navigate("/profile");
 			})
-	}, []);
+	}, [navigate, token, username]);
 
 	const LetterChanger2 = () => {
 		const [currentLetter, setCurrentLetter] = useState('A');

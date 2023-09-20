@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './DropdownChannels.css'
 import { useContext } from 'react';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"

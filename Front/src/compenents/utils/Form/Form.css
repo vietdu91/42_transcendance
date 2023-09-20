@@ -3,10 +3,11 @@
 	src: url(../../../fonts/south\ park.ttf)
 }
 
-form {
+#form-form {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-wrap: wrap;
 	grid-row-start: infos;
 	grid-column: column-1 / column-2;
 }
@@ -83,10 +84,6 @@ textarea, #barre {
   #barre:focus{
 	content: 'prout';
 	font-size: 200%;
-  }
-
-  button {
-	z-index: 999999;
   }
 
 .good_nickname_or_not {

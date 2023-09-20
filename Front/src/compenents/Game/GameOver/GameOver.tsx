@@ -19,6 +19,8 @@ import ButtonCartmanSad2 from "../../../img/gameover/button_cartman_sad_2.gif";
 import GarrisonAgain from "../../../img/gameover/garrison_again_1.gif"
 import GarrisonAgain2 from "../../../img/gameover/garrison_again_2.gif"
 
+import CulbuterTaMere from '../../../sounds/win_and_GO/La Mort.mp3'
+
 export default function GameOver() {
 	const token = Cookies.get('accessToken');
     if (!token)
@@ -90,6 +92,7 @@ export default function GameOver() {
 
 	return (
 	  <div id="bg-gameover">
+		<iframe src={CulbuterTaMere} title="culbutertamere_sound" allow="autoplay" id="iframeAudio"></iframe>
       {showButtonCartman && (
         <img
           id="button-cartman-sad"

@@ -73,17 +73,18 @@ export default function Matchmaking() {
 		socket.on('matchFound',(response) => {
 			handleMatchFound(response.roomId);
 		})
-
+		
 		socket.on('wrongUser', (response) => {
 			alert(response.message);
 			navigate("/gamemenu");
 		})
-
+		
 		return () => {
 			if (inQueue)
-				leaveQueue();
-		};
-	}, [inQueue, socket]);
+			leaveQueue();
+	};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [inQueue, socket, navigate]);
 
 	
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
-import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
+// import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'

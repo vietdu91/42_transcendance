@@ -36,7 +36,7 @@ export default function Form() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form id="form-form" onSubmit={handleSubmit}>
         <input
           id="barre"
           type="text"
@@ -48,6 +48,7 @@ export default function Form() {
         />
         <label className={`hello ${nickname ? 'hidden' : ''}`}>Ton petit surnom 👶</label>
         <span className="enter"></span>
+        <button type="submit" className="form-buttom">Enregistrer</button>
       </form>
       <div className="good_nickname_or_not">
         {valid && <div>Nickname valide !</div>}

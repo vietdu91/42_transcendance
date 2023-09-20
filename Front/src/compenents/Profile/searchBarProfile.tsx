@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Cookie from 'js-cookie'
 import axios from "axios"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import './searchBarProfile.css'
 
 interface SearchBarProps {
@@ -9,7 +9,7 @@ interface SearchBarProps {
 }
 
 function SearchBar2({ onSearch }: SearchBarProps) {
-    const location = useLocation();
+    // const location = useLocation();
     const navigate = useNavigate();
     const token = Cookie.get('accessToken')
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -21,11 +21,11 @@ function SearchBar2({ onSearch }: SearchBarProps) {
     };
 
     const handleSearch = async (username: string) => {
-        const response = await axios.get(
+        await axios.get(
             process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
             { params: {username: username}, headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
-                const receivId = response.data.user.id;
+                // const receivId = response.data.user.id;
                 onSearch(response.data.user.name);
                 navigate(`/user/${response.data.user.name}`)
             }

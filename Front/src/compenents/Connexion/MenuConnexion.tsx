@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 
 // CSS
 import './Connexion.css';
@@ -9,7 +8,6 @@ import './Connexion.css';
 // COMPENENTS
 import WarningBox from "../utils/WarningBox/WarningBox";
 
-import MusicPlayerAutorisation from '../utils/MusicPlayerAutorisation/MusicPlayerAutorisation';
 import southparkSound from '../../sounds/theme_song.mp3'
 import Tab from '../utils/Tab/Tab'
 
@@ -28,7 +26,7 @@ export default function MenuConnexion() {
 	
 	return (
 		<div id="menu">
-			<iframe src={southparkSound} allow="autoplay" id="iframeAudio">
+			<iframe src={southparkSound} title="sps" allow="autoplay" id="iframeAudio">
 			</iframe> 
 			<Tab sound={southparkSound} delay={0}/>
 			{WarningBox() || null}

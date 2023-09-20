@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 // import { GameContext } from '../../utils/GameContext';
 import Cookies from 'js-cookie';
@@ -9,43 +9,43 @@ import RedCross from "../../../img/buttons/red_cross.png"
 import MustWatchIt from "../../../img/must_watch_it.gif"
 import Loading from "../../utils/Loading/Loading"
 
-import Couronne from "../../../img/game/couronne.png"
+import Baleze from '../../../sounds/baleze.mp3'
 
 /* YEUX - HISTORY */
 import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
 import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
-import EyesKennyWin from "../../../img/eyes/kennyWin.jpg"
-import EyesKennyLost from "../../../img/eyes/kennyLost.jpg"
+// import EyesKennyWin from "../../../img/eyes/kennyWin.jpg"
+// import EyesKennyLost from "../../../img/eyes/kennyLost.jpg"
 import EyesTimmyWin from "../../../img/eyes/timmyWin.jpg"
 import EyesTimmyLost from "../../../img/eyes/timmyLost.jpg"
-import EyesGarrisonWin from "../../../img/eyes/garrisonWin.jpg"
-import EyesGarrisonLost from "../../../img/eyes/garrisonLost.jpg"
-import EyesButtersWin from "../../../img/eyes/buttersWin.jpg"
-import EyesButtersLost from "../../../img/eyes/buttersLost.jpg"
-import EyesTPLost from "../../../img/eyes/TPLost.jpg"
-import EyesTPWin from "../../../img/eyes/TPWin.jpg"
+// import EyesGarrisonWin from "../../../img/eyes/garrisonWin.jpg"
+// import EyesGarrisonLost from "../../../img/eyes/garrisonLost.jpg"
+// import EyesButtersWin from "../../../img/eyes/buttersWin.jpg"
+// import EyesButtersLost from "../../../img/eyes/buttersLost.jpg"
+// import EyesTPLost from "../../../img/eyes/TPLost.jpg"
+// import EyesTPWin from "../../../img/eyes/TPWin.jpg"
 import EyesHenriettaWin from "../../../img/eyes/henriettaWin.jpg"
 import EyesHenriettaLost from "../../../img/eyes/henriettaLost.jpg"
-import EyesServietskyWin from "../../../img/eyes/servietskyWin.jpg"
-import EyesServietskyLost from "../../../img/eyes/servietskyLost.jpg"
+// import EyesServietskyWin from "../../../img/eyes/servietskyWin.jpg"
+// import EyesServietskyLost from "../../../img/eyes/servietskyLost.jpg"
 
 /* SPECTATE */
-import CartmanL from "../../../img/en_cours/cartman_left.png"
-import CartmanR from "../../../img/en_cours/cartman_right.png"
-import GarrisonL from "../../../img/en_cours/garrison_left.png"
-import GarrisonR from "../../../img/en_cours/garrison_right.png"
+// import CartmanL from "../../../img/en_cours/cartman_left.png"
+// import CartmanR from "../../../img/en_cours/cartman_right.png"
+// import GarrisonL from "../../../img/en_cours/garrison_left.png"
+// import GarrisonR from "../../../img/en_cours/garrison_right.png"
 import KennyL from "../../../img/en_cours/kenny_left.png"
-import KennyR from "../../../img/en_cours/kenny_right.png"
-import TimmyL from "../../../img/en_cours/timmy_left.png"
+// import KennyR from "../../../img/en_cours/kenny_right.png"
+// import TimmyL from "../../../img/en_cours/timmy_left.png"
 import TimmyR from "../../../img/en_cours/timmy_right.png"
 import TP_L from "../../../img/en_cours/TP_left.png"
-import TP_R from "../../../img/en_cours/TP_right.png"
-import ButtersL from "../../../img/en_cours/butters_left.png"
+// import TP_R from "../../../img/en_cours/TP_right.png"
+// import ButtersL from "../../../img/en_cours/butters_left.png"
 import ButtersR from "../../../img/en_cours/butters_right.png"
-import HenriettaL from "../../../img/en_cours/henrietta_left.png"
-import HenriettaR from "../../../img/en_cours/henrietta_right.png"
-import ServietskyL from "../../../img/en_cours/servietsky_left.png"
-import ServietskyR from "../../../img/en_cours/servietsky_right.png"
+// import HenriettaL from "../../../img/en_cours/henrietta_left.png"
+// import HenriettaR from "../../../img/en_cours/henrietta_right.png"
+// import ServietskyL from "../../../img/en_cours/servietsky_left.png"
+// import ServietskyR from "../../../img/en_cours/servietsky_right.png"
 
 import VS from "../../../img/en_cours/VS.png"
 
@@ -62,8 +62,8 @@ interface User {
 function SpecMenu() {
 	
 	const [isBlinking, setIsBlinking] = useState(false);
-	const click = useRef(false);
-	const [id, setId] = useState(-1);
+	// const click = useRef(false);
+	// const [id, setId] = useState(-1);
 	// const socket = useContext(GameContext);
 
     const [hoveredPartie, setHoveredPartie] = useState(StaticNoise);
@@ -114,8 +114,8 @@ function SpecMenu() {
 					LIVE
 				</div>
 				<div className="spectate-history" >
-					<GetPartie img_left={GarrisonL} img_right={GarrisonR} />
-                    <GetPartie img_left={KennyL} img_right={KennyR} />
+					<GetPartie img_left={TP_L} img_right={ButtersR} />
+                    <GetPartie img_left={KennyL} img_right={TimmyR} />
 				</div>
 				<img src={MustWatchIt} alt="#" id="mustWatchIt" onClick={goToPartiesEnCours}></img>
 			</div>
@@ -125,13 +125,11 @@ function SpecMenu() {
 
 function History() {
 
-	const [hoverMatchMenu, setHoverMatchMenu] = useState(false);
 	const [hoverMatch1Square, setHoverMatch1Square] = useState(false);
 	const [hoverMatch2Square, setHoverMatch2Square] = useState(false);
 	const [hoverMatch3Square, setHoverMatch3Square] = useState(false);
 
 	const changeMatchMenuEnter = () => {
-		setHoverMatchMenu(true);
 		const opacitySquare1 = document.getElementById('match-square-1');
 		if (!opacitySquare1) return
 		opacitySquare1.style.opacity = '0.75';
@@ -144,7 +142,6 @@ function History() {
 	}
 
 	const changeMatchMenuLeave = () => {
-		setHoverMatchMenu(false);
 		const opacitySquare1 = document.getElementById('match-square-1');
 		if (!opacitySquare1) return
 		opacitySquare1.style.opacity = '0.2';
@@ -256,13 +253,6 @@ function Classement() {
 	let users = useRef<User[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// function CouronneOrNot() {
-
-	// 	return (
-	// 		<img src={Couronne} alt="couronne" id="classement-couronne"></img>
-	// 	)
-	// }
-
 	function goToProfile(name: string) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
 	}
@@ -295,7 +285,7 @@ function Classement() {
 			}
 		}
 		leaderboard();
-	}, []);
+	}, [token]);
 
 	if (isLoading) {
 		return (<div>Ca arrive</div>)
@@ -330,7 +320,7 @@ function PlayButton() {
 	}
 
 	return (
-		<a className="play-button" href="#" onClick={handleClick}>
+		<div className="play-button" onClick={handleClick}>
 			<span>GO FIGHT</span>
 			<span id="span_menu">
 				<svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -341,7 +331,7 @@ function PlayButton() {
 					</g>
 				</svg>
 			</span>
-		</a>
+		</div>
 	)
 }
 
@@ -371,8 +361,9 @@ export default function GameMenu() {
 			<Loading />
 		) : (
 		  <div className="bg-game">
+			<iframe src={Baleze} title="Baleze_sound" allow="autoplay" id="iframeAudio"></iframe>
 			<img className="bg-game bg-mental" src={MentalBattle} alt={'ButtersBlood'}></img>
-			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
+			<img id="red-cross" alt="red-cross" src={RedCross} onClick={leavePage}></img>
 			<SpecMenu />
 			<PlayButton />
 			<History />

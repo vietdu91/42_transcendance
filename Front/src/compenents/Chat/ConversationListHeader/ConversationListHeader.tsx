@@ -1,16 +1,14 @@
 import React from 'react';
-import { useContext, useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { ChatContext } from '../../utils/ChatContext';
-import { useNavigate } from "react-router-dom";
+// import { useContext } from 'react';
+// import Cookies from 'js-cookie';
+// import { ChatContext } from '../../utils/ChatContext';
+// import { useNavigate } from "react-router-dom";
 
 
 import './ConversationListHeader.css';
-import RedCross from '../../../img/chat/redcross.png'
-import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import Minimize from '../../../img/chat/minimized.jpg'
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
+import Logo from '../../../img/chat/group-conv.png'
 
 // interface ConversationListHeaderProps {
 //     name: string;
@@ -34,7 +32,7 @@ import DropdownContact from '../DropdownContacts/DropdownContact';
 const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
     // État pour définir si la room est privée
 
-    const socket = useContext(ChatContext);
+    // const socket = useContext(ChatContext);
 
     function goToProfile() {
         window.open(process.env.REACT_APP_LOCAL_F + "/profile");
@@ -43,14 +41,15 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
     return (
         <div className="conversations-list-header">
             <ul className="top-conversation-list">
-                <li className="transcendance-messenger">Transcendance Messenger</li>
+                <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+                <li className="transcendance-messenger">Transcendence Messenger</li>
                 <div className="right-icons">
-                    <li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
-                    <li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
-                    <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
+                    <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+                    <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+                    <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
                 </div>
             </ul>
-            <hr />
+            {/* <hr /> */}
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
                 <DropdownChannel user={user} setChannels={setChannels} />

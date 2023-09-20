@@ -9,12 +9,10 @@ import './Game.css'
 
 // COMPONENTS
 import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
-import MusicPlayer from '../../../compenents/utils/MusicPlayer/MusicPlayer';
 
 // IMG
 import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
 import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
-import WallMart from '../../../img/backgrounds/backgrounds-game/wallmart.jpg'
 import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 import Tron from '../../../img/backgrounds/backgrounds-game/tron.png'
 
@@ -161,7 +159,7 @@ export default function Game(): JSX.Element {
 	console.log(game);
 	const randomImage = Tron;
 
-	const cookies = document.cookie.split('; ');
+	// const cookies = document.cookie.split('; ');
 
 	function WhatReturnButtom({ randomImage }) {
 		if (randomImage === CityWok || randomImage === Chaos || randomImage === Tron)
@@ -464,7 +462,7 @@ export default function Game(): JSX.Element {
 			}
 			p5SketchRef.current?.remove();
 		};
-	}, [sketchRef, navigate, roomId, socket]);
+	}, [sketchRef, navigate, roomId, socket, userId]);
 
 	function GetPlayerLeft(props) {
 

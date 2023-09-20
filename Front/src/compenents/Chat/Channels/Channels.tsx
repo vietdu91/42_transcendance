@@ -6,12 +6,11 @@ import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
 import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
-import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
-import ChampSelect from '../../Game/ChampSelect/ChampSelect';
-import Cookies from 'js-cookie';
+// import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
+// import ChampSelect from '../../Game/ChampSelect/ChampSelect';
+// import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
-import axios from 'axios';
-import styled from 'styled-components';
+// import axios from 'axios';
 
 // const StyledDiv = styled.div`
 //   top: ${props => props.top}px;
@@ -33,7 +32,7 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 	const [messages, setMessages] = useState(channel.messages);
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
-	const [isOpenAction, setIsOpenAction] = useState(false);
+	// const [isOpenAction, setIsOpenAction] = useState(false);
 
 	type CSSProperties = React.CSSProperties & {
 		[key: string]: string;
@@ -76,7 +75,7 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 		return () => {
 			socket.off('messageSentChann');
 		}
-	}, [])
+	}, [socket])
 
 	const maxTop = window.innerHeight - 80;
 	const maxLeft = window.innerWidth; // Set to the right half of the screen
@@ -148,14 +147,14 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 							<div className="channel-group-pic-main-container">
 								<div className="channel-group-pic-cadre">
 									<div className="channel-pik">
-										<img src={channel.image}/>
+										<img alt="channel-img" src={channel.image}/>
 									</div>
 								</div>
 							</div>
 							<div className="channel-group-member-list">
 								<ul>
 									{channel.usersList?.map((user, index) => (
-										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} />{user.nickname} ({user.name})</li>
+										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} alt="regularConv"/>{user.nickname} ({user.name})</li>
 									))}
 								</ul>
 							</div>
@@ -184,7 +183,7 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 						<div className="channel-my-profile-pic-main-container">
 							<div className="channel-my-profile-pic-group-pic-cadre">
 								<div>
-									<img src={user.pfp}></img>
+									<img alt="user.pfp" src={user.pfp}></img>
 								</div>
 								{user.name}
 							</div>

@@ -156,7 +156,7 @@ export default function Profile() {
 			console.error(error);
 		});
 	
-	}, [])
+	}, [token])
 	
 	const handleSearch = (username: string) => {
         // Effectuez votre logique de recherche ici avec la valeur 'username'
@@ -217,7 +217,7 @@ export default function Profile() {
 						{showFa && 
 							<>
 								<br/>
-								<img src={qrCode}></img>
+								<img src={qrCode} alt="qrcode"></img>
 								<form onSubmit={handleEnable}>
 									<input placeholder='Show Me Your HALLPASS' value={code} onChange={handleChange}></input>
 								</form>

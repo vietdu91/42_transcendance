@@ -4,7 +4,7 @@ import ConversationContainer from '../ConversationContainer/ConversationContaine
 import TextComposerContainer from '../TextComposerContainer/TextComposerContainer'; // Import the TextComposerContainer component
 import Invite from '../../../img/chat/invite-gimp.jpg';
 import InviteGame from '../../../img/chat/game-gimp.jpg';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 
@@ -14,11 +14,11 @@ interface User {
   pfp: string,
 }
 
-interface Message {
-  content: string,
-  date: Date,
-  authorName: number,
-}
+// interface Message {
+//   content: string,
+//   date: Date,
+//   authorName: number,
+// }
 
 const initUser: User = {
   name: "",
@@ -54,9 +54,9 @@ function ChatConversationArea({ user, conv, isVisible }) {
     return () => {
       socket.off('messageSentConv');
     }
-  }, []);
+  }, [conv.usersID, socket]);
 
-  if (isVisible == false)
+  if (isVisible === false)
     return null;
   return (
     <div className='chat-conversation-area'>

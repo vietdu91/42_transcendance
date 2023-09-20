@@ -21,11 +21,11 @@ function SearchBar ({ onSearch }: SearchBarProps) {
   };
 
   const handleSearch = async (username: string) => {
-    const response = await axios.get(
+    await axios.get(
         process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
         { params: {username: username}, headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
-            const receivId = response.data.user.id;
+            // const receivId = response.data.user.id;
             onSearch(response.data.user.name);
             console.log(response.data.user.name);
             if (location.pathname === "/chat")

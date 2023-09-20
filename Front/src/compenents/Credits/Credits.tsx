@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import './Credits.css'
 
 import Metrosexual from "../../img/video/kyle_gets_a_queer_eye_makeover.mp4"
+import queer_eye from '../../sounds/queer_eye.mp3'
 
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom'
 
@@ -53,6 +54,7 @@ export default function Credits() {
 
 	return (
 		<>
+			<iframe src={queer_eye} title="queer_eye_sound" allow="autoplay" id="iframeAudio"></iframe>
 			<div id="page_credits">
 				<video autoPlay muted loop id="bg" src={Metrosexual}></video>
 				<Cercle />

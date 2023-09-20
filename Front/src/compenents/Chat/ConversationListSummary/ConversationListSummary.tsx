@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Cookie from 'js-cookie';
-import axios from 'axios';
+// import Cookie from 'js-cookie';
+// import axios from 'axios';
 
 import './ConversationListSummary.css';
-import Advertisement from './../../../img/chat/thicker.jpg';
+import Advertisement1 from './../../../img/chat/thicker.jpg';
+import Advertisement2 from './../../../img/chat/thicker.jpg';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
-import groups from '../../../img/chat/group-channel-icon.png'
+// import groups from '../../../img/chat/group-channel-icon.png'
 import friends from '../../../img/chat/groups3d.png'
 import SearchBar from '../../searchBar/searchBar';
-import Conversation from "../socketChat"
-import User from "../socketChat"
+// import Conversation from "../socketChat"
+// import User from "../socketChat"
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, user }) => {
 
@@ -64,17 +65,17 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
         console.log(`Recherche en cours avec la requête : ${query}`);
     };
 
-    {/* modif benda */ }
-    const handleIndivConvVisibility = (visibility) => {
-        handleVisibility(visibility);
-    };
-    {/* modif benda */ }
+    /* modif benda */
+    // const handleIndivConvVisibility = (visibility) => {
+    //     handleVisibility(visibility);
+    // };
+    /* modif benda */
     
 
     useEffect(() => {
         setVisibleItems(Array.from({ length: convs.length }, () => false));
         setVisibleChannels(Array.from({ length: convs.length }, () => false));
-    }, [setVisibleItems, setVisibleChannels]);
+    }, [setVisibleItems, setVisibleChannels, convs.length]);
 
     return (
         <div className="conversation-list-summary">
@@ -126,7 +127,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
             </div>
             <div className="advertisement-scope">
                 <div className="advertisement">
-                    <img src={Advertisement} alt="advertisement" id="chat_advertisement" />
+                    <img src={Advertisement1} alt="advertisement" id="chat_advertisement" />
+                </div>
+                <div className="advertisement">
+                    <img src={Advertisement2} alt="advertisement" id="chat_advertisement" />
                 </div>
             </div>
             {visibleItems.map((isVisible, index) => (
