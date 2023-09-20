@@ -88,6 +88,7 @@ function Chat() {
     const [convs, setConvs] = useState([]);
     const [channels, setChannels] = useState([]);
     const [friends, setFriends] = useState([]);
+    const [blocked, setBlocked] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
     const navigate = useNavigate();
@@ -115,6 +116,7 @@ function Chat() {
                     setConvs(res.data.conversations);
                     setChannels(res.data.channels);
                     setFriends(res.data.friends);
+                    setBlocked(res.data.blocks);
                 })
                 .catch(error => {
                     console.log(error);
@@ -146,6 +148,7 @@ function Chat() {
                             convs={convs}
                             channels={channels}
                             friends={friends}
+                            blocked={blocked}
                         />
                     </div>
                 </div>

@@ -12,14 +12,14 @@ import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 
-function Channel({ i, max, user, channel, isVisible }) {
+function Channel({ i, max, user, channel, isVisible, blocked }) {
 	const socket = useContext(ChatContext);
+	const token = Cookie.get('accessToken');
 	const [value, setValue] = useState('');
-	const [messages, setMessages] = useState(channel.messages);
+	const [messages, setMessages] = useState(channel.messages.filter((index) => !(blocked.includes(index.authorId))));
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenAction, setIsOpenAction] = useState(false);
-	const token = Cookie.get('accessToken');
 
 	// type CSSProperties = React.CSSProperties & {
 	// 	[key: string]: string;
@@ -130,14 +130,14 @@ function Channel({ i, max, user, channel, isVisible }) {
 							<div className="channel-group-pic-main-container">
 								<div className="channel-group-pic-cadre">
 									<div className="channel-pik">
-										<img alt="channel-img" src={channel.image}/>
+										<img alt="channel-img" src={channel.image} />
 									</div>
 								</div>
 							</div>
 							<div className="channel-group-member-list">
 								<ul>
 									{channel.usersList?.map((user, index) => (
-										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} alt="regularConv"/>{user.nickname} ({user.name})</li>
+										<li key={index} onClick={() => { goToProfile(user.name) }}><img src={regularConv} alt="regularConv" />{user.nickname} ({user.name})</li>
 									))}
 								</ul>
 							</div>

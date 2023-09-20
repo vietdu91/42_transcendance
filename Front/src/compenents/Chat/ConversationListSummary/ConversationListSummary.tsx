@@ -17,7 +17,7 @@ import SearchBar from '../../searchBar/searchBar';
 // import Conversation from "../socketChat"
 // import User from "../socketChat"
 
-const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user }) => {
+const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
     
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
@@ -149,10 +149,11 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                     user={user}
                     conv={convs[index]}
                     isVisible={isVisible}
+                    blocked={blocked}
                 />
             ))}
             {visibleChannels.map((isVisible, index) => (
-                channels[index] && <Channel key={index} i={index} max={channels.length} user={user} channel={channels[index]} isVisible={isVisible} />
+                channels[index] && <Channel key={index} i={index} max={channels.length} user={user} channel={channels[index]} isVisible={isVisible} blocked={blocked} />
             ))}
         </div>
     );

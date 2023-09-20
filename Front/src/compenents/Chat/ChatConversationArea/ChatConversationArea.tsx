@@ -26,11 +26,11 @@ const initUser: User = {
   pfp: "",
 }
 
-function ChatConversationArea({ user, conv, isVisible }) {
+function ChatConversationArea({ user, conv, isVisible, blocked }) {
   const token = Cookie.get('accessToken')
   const socket = useContext(ChatContext);
 
-  const [messages, setMessages] = useState(conv.messages);
+  const [messages, setMessages] = useState(conv.messages.filter((index) => !(blocked.includes(index.authorId))));
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
   const send = async (value: string) => {
@@ -47,14 +47,16 @@ function ChatConversationArea({ user, conv, isVisible }) {
         .catch(error => {
           console.log(error);
         });
+      // await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
+      //   .then(response => {
+      //     setMessages(response.data.messages);
+      //   })
       socket.on('messageSentConv', (res => {
         axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
           .then(response => {
             setMessages(response.data.messages);
           })
       }));
-
-
     }
     getUserData();
     return () => {
