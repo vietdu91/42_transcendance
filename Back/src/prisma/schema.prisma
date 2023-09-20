@@ -22,7 +22,7 @@ model User {
   twoFactorSecret  String         @unique
   accessToken      String?        @unique
   twoFactorEnabled Boolean        @default(false)
-  nickname         String?        @unique
+  nickname         String        @unique
   state            UserState
   age              Int?
   character        String?

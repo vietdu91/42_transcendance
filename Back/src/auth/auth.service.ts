@@ -7,13 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
 import { TwofaController } from 'src/twofa/twofa.controller';
 import { TwofaService } from 'src/twofa/twofa.service';
+import { serialize } from 'cookie'
 config();
 
 
-const axios = require('axios'); // Axios est une librairie qui permet de faire des requêtes HTTP
-const client_id = process.env.CLIENT_ID; // Remplacer par le client_id de votre application
-const clientSecret = process.env.CLIENT_SECRET; // Remplacer par le client_secret de votre application
-const urlRedirect = process.env.URL_REDIRECT; // Remplacer par l'url de redirection de votre application
+const axios = require('axios');
+const client_id = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+const urlRedirect = process.env.URL_REDIRECT;
 
 @Injectable()
 export class AuthService {
@@ -22,19 +23,16 @@ export class AuthService {
         private userService: UserService,
         private twoFaService: TwofaService) { }
 
-    async apiConnexion(userData: any, res: Response): Promise<User> {
+    async apiConnexion(userData: any, token: string, res: Response): Promise<User> {
         try {
             let user: User;
             user = await this.userService.findUserByEmail(userData.email);
             if (!user) {
-                user = await this.userService.createUser(userData);
-                const newToken = await this.generateAndSetAccessToken(user);
-                this.setAuthCookies(res, newToken);
-                res.redirect(process.env.URL_LOCAL_F + "/newprofile");
+                res.redirect(`` + process.env.URL_LOCAL_F + `/setNickname?token=${token}`);
             }
             else {
                 if (user.twoFactorEnabled) {
-                    res.redirect(process.env.URL_LOCAL_F + '/2fa');
+                    res.redirect(`` + process.env.URL_LOCAL_F + `/2fa?id=${user.id}`);
                 }
                 else {
                     await this.prisma.user.update({
@@ -42,7 +40,7 @@ export class AuthService {
                         data: { state: 'ONLINE' },
                     })
                     const newToken = await this.generateAndSetAccessToken(user);
-                    this.setAuthCookies(res, newToken);
+                    res.cookie("accessToken", newToken);
                     res.redirect(process.env.URL_LOCAL_F);
                 }
             }
@@ -52,13 +50,21 @@ export class AuthService {
         }
     }
 
+    async connexionPostNickname(token: string, nickname: string, res: Response) {
+        const userData = await this.getUserData(token);
+        const user = await this.userService.createUser(userData, nickname);
+        const newToken = await this.generateAndSetAccessToken(user);
+        res.cookie("accessToken", newToken);
+        res.status(200).json({ message: 'Connexion réussie' });
+    }
+
     async apiConnexion2fa(user: User, res: Response): Promise<void> {
         try {
             if (!user)
                 throw new UnauthorizedException("user doesn't exist");
             else {
                 const newToken = await this.generateAndSetAccessToken(user);
-                this.setAuthCookies(res, newToken);
+                res.cookie("accessToken", newToken);
             }
         } catch {
             throw new UnauthorizedException();
@@ -69,19 +75,10 @@ export class AuthService {
         try {
             const jwtPayload = { username: user.name, sub: user.id };
             const newToken = this.jwtService.sign(jwtPayload);
-    
-            await this.prisma.user.update({
-                where: { id: user.id },
-                data: { accessToken: newToken },
-            });
             return newToken;
         } catch {
             throw new UnauthorizedException();
         }
-    }
-
-    private setAuthCookies(res: Response, accessToken: string): void {
-        res.cookie('accessToken', accessToken);
     }
 
     async getAccessToken(code: string): Promise<any> {

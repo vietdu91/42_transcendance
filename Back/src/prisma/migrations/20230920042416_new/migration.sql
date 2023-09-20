@@ -9,7 +9,7 @@ CREATE TABLE "User" (
     "twoFactorSecret" TEXT NOT NULL,
     "accessToken" TEXT,
     "twoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
-    "nickname" TEXT,
+    "nickname" TEXT NOT NULL,
     "state" "UserState" NOT NULL,
     "age" INTEGER,
     "character" TEXT,

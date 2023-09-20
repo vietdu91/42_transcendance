@@ -9,13 +9,13 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export class UserService {
   constructor(private prisma: PrismaService) { }
 
-  async createUser(userData: any): Promise<User> {
+  async createUser(userData: any, nickname: string): Promise<User> {
     try {
       const user = await this.prisma.user.create({
         data: {
           name: userData.name,
           email: userData.email,
-          nickname: userData.name,
+          nickname: nickname,
           state: 'ONLINE',
           age: 18,
           twoFactorSecret: authenticator.generateSecret(),
