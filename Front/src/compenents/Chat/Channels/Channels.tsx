@@ -124,7 +124,23 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 							</ul>
 						)}
 					</div>
-					
+					{ isOpen && (
+						<div className="contact-addfriend-container">
+						<ul className="contact-addfriend-navbar">
+						  <li className="addfriend-contact-title">Add a friend</li> 
+						</ul>
+						<h3 className="question">Who do you want to addfriend ?</h3>
+						<div className="contact-addfriend-form">
+						  <div className="contact-addfriend-input">
+							<h1>Friend's Name : </h1>
+							<input type="text" placeholder="Friend's Name"
+							  value={''}
+							  onChange={handleInputChange} />
+						  </div>
+						</div>
+					</div>
+					)}
+
 					<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
