@@ -35,18 +35,24 @@ function ChatConversationArea({ user, conv, isVisible }) {
 
   const send = async (value: string) => {
     const convId = conv.id;
-    socket?.emit('sendMessageConv', {value, convId});
+    socket?.emit('sendMessageConv', { value, convId });
   }
 
   useEffect(() => {
     const getUserData = async () => {
-      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", {params: {ids: conv.usersID}, headers: {'Authorization': `Bearer ${token}`}})
-      .then(response => {
-        getOtherUser(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", { params: { ids: conv.usersID }, headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          getOtherUser(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          setMessages(response.data.messages);
+        })
+
       socket.on('messageSentConv', (res => {
         setMessages(res.messages);
       }));
@@ -73,7 +79,7 @@ function ChatConversationArea({ user, conv, isVisible }) {
               <li></li> */}
             </ul>
           </div>
-          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages}/>
+          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
           <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
         </div>
       )}

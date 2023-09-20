@@ -8,36 +8,22 @@ import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
 import ChampSelect from '../../Game/ChampSelect/ChampSelect';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
-import styled from 'styled-components';
 
-// const StyledDiv = styled.div`
-//   top: ${props => props.top}px;
-//   left: ${props => props.left}px;
-//   position: absolute;
-//   height: 75vh;
-//   width: 20vw;
-//   display: flex;
-//   flex-direction: column;
-//   border-radius: 5px;
-//   background-image: url('../../../img/chat/channel_wallpaper.png');
-//   background-size: cover;
-//   background-repeat: no-repeat;
-// `;
-
-function Channel({ key, i, max, user, channel, isVisible }) {
+function Channel({ i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
 	const [value, setValue] = useState('');
 	const [messages, setMessages] = useState(channel.messages);
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenAction, setIsOpenAction] = useState(false);
+	const token = Cookie.get('accessToken');
 
-	type CSSProperties = React.CSSProperties & {
-		[key: string]: string;
-	  };
+	// type CSSProperties = React.CSSProperties & {
+	// 	[key: string]: string;
+	// };
 
 	const toggleAction = () => {
 		setIsOpen(!isOpen);
@@ -68,6 +54,10 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 
 	useEffect(() => {
 		const getData = async () => {
+			await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
+				.then(response => {
+					setMessages(response.data.messages);
+				})
 			socket.on('messageSentChann', (res => {
 				setMessages(res.messages);
 			}))
@@ -86,23 +76,16 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 		return Math.floor(Math.random() * ((max - sizeInPixels)));
 	};
 
-	const newPosition: CSSProperties = {
-		'--max': "" + max,
-		'--top': "" + getRandomNumber(maxTop, 0),
-		'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
-	};
+	// const newPosition: CSSProperties = {
+	// 	'--max': "" + max,
+	// 	'--top': "" + getRandomNumber(maxTop, 0),
+	// 	'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
+	// };
 
-	// useEffect(() => {
-	// 	const newPosition = {
-	// 		top: getRandomNumber(window.innerHeight, 75 + 20),
-	// 		left: getRandomNumber(window.innerWidth, 20 - 2)
-	// 	};
-	// 	setPosition(newPosition);
-	// }, []);
-	console.log('Generated position:', newPosition);
+	// console.log('Generated position:', newPosition);
 
 	return (
-		<div className={`chat-channel-area-${i}`} style={newPosition}>
+		<div className="chat-channel-area" >
 			{isVisible && (
 				<div className="channel-main-container">
 					<div className="channel-bandeau">
@@ -148,14 +131,14 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 							<div className="channel-group-pic-main-container">
 								<div className="channel-group-pic-cadre">
 									<div className="channel-pik">
-										<img src={channel.image}/>
+										<img src={channel.image} />
 									</div>
 								</div>
 							</div>
 							<div className="channel-group-member-list">
 								<ul>
 									{channel.usersList?.map((user, index) => (
-										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} />{user.nickname} ({user.name})</li>
+										<li key={index} onClick={() => { goToProfile(user.name) }}><img src={regularConv} />{user.nickname} ({user.name})</li>
 									))}
 								</ul>
 							</div>

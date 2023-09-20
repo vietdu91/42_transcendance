@@ -62,10 +62,7 @@ export default function App() {
           headers: { 'Authorization': `Bearer ${accessToken}` },
         })
         Cookies.remove('accessToken');
-        Cookies.remove('id');
-        console.log("COOKIES REMOVED")
         navigate("/connect");
-        console.log("NAVIGATED")
       }
       catch (err) {
         console.log("app-front: error: ", err)

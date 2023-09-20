@@ -22,7 +22,7 @@ export class UserController {
   async getUserByName(@GetUser() user: any, @Query('username') username: string, @Res() response: Response) {
     try {
       const target = await this.userService.getUserByName(username);
-      if (!target || username === user.name) {
+      if (!target) {
         throw new UnauthorizedException();
       }
 
@@ -250,7 +250,6 @@ export class UserController {
   async getUserChat(@GetUser() user: any, @Res() response: Response) {
     try {
       const friends = await this.userService.getFriendsList(user.friendsList);
-      console.log(friends);
       response.json({
         id: user.id,
         name: user.name,
@@ -295,6 +294,16 @@ export class UserController {
       });
     } catch {
       throw new UnauthorizedException();
+    }
+  }
+
+  @Get('getBlocked')
+  @UseGuards(JwtAuthenticationGuard)
+  async getBlocked(@GetUser() user: any, @Res() response: Response) {
+    try {
+      response.json({ blocked: user.blockList });
+    } catch (error) {
+      throw error;
     }
   }
 }

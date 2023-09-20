@@ -72,7 +72,8 @@ export class ChatGateway {
     for (let user of conv.users) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('messageSentConv', { message: "message sent to conversation", value: value, messages: conv.messages });
+          let persoMessages = conv.messages.filter((index) => !(user.blockList.includes(index.authorId)));
+          this.server.to(userChat.id).emit('messageSentConv', { message: "message sent to conversation", value: value, messages: persoMessages });
         }
       }
     }
@@ -106,7 +107,8 @@ export class ChatGateway {
     for (let user of chann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('messageSentChann', { message: "message sent to channel", value: value, messages: chann.messages });
+          let persoMessages = chann.messages.filter((index) => !(user.blockList.includes(index.authorId)));
+          this.server.to(userChat.id).emit('messageSentChann', { message: "message sent to channel", value: value, messages: persoMessages });
         }
       }
     }
@@ -125,6 +127,12 @@ export class ChatGateway {
     const channel = await this.prisma.channel.findUnique({ where: { name: name } });
     if (channel) {
       client.emit('errorSocket', { message: "This channel already exists" });
+      return;
+    }
+
+    const regex: RegExp = /^[a-zA-Z\-\_]{2,20}$/;
+    if (!regex.test(name)) {
+      client.emit('errorSocket', { message: "Not a valid channel name" });
       return;
     }
 

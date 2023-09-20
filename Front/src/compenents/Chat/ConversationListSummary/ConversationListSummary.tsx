@@ -9,26 +9,32 @@ import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
 import groups from '../../../img/chat/group-channel-icon.png'
-import friendsImg from '../../../img/chat/groups3d.png'
+import offlineImg from '../../../img/chat/solo-conv.png'
+import onlineImg from '../../../img/chat/groups3d.png'
+import ingameImg from '../../../img/chat/group-conv.png'
 import SearchBar from '../../searchBar/searchBar';
 import Conversation from "../socketChat"
 import User from "../socketChat"
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user }) => {
-
-    const friendsData = [
-        {
-            id: 0,
-            imageSrc: friendsImg,
-            altText: "friends",
-            text: "Friends Name 0"
-        },
-    ];
     
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
+
+    function goToProfile(name: string) {
+		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
+	}
+
+    function imageState(state: string) {
+        switch(state) {
+            case 'OFFLINE': return offlineImg;break;
+            case 'ONLINE': return onlineImg;break;
+            case 'INGAME': return ingameImg;break;
+            default: return offlineImg;
+        }
+    }
 
     const toggleConvSummary = (index: number) => {
         const newVisibleItems = [...visibleItems];
@@ -83,7 +89,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 <ul>
                     <li><img src={regularConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClick} /></li>
                     <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} /></li>
-                    <li><img src={friendsImg} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
+                    <li><img src={onlineImg} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
@@ -115,9 +121,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 {listFriends && (
                     <ul>
                         {friends.map((item, index) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(index)}>
-                                <img src={friendsImg} alt={item.altText} id={`chat_${item.altText}`} />
+                            <li key={item.id} onClick={() => goToProfile(item.name)}>
+                                <img src={imageState(item.state)} alt={item.altText} id={`chat_${item.altText}`} />
                                 {item.name} ({item.nickname})
+                                <img src={item.pfp_url}/>
                             </li>
                         ))}
                     </ul>
@@ -131,6 +138,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
             </div>
             {visibleItems.map((isVisible, index) => (
                 convs[index] && <ChatConversationArea
+                    key={index}
                     user={user}
                     conv={convs[index]}
                     isVisible={isVisible}

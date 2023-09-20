@@ -43,6 +43,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 		else {
 			socket?.emit('createChannel', { name: channelName, isPrivate: isPrivate });
 		}
+		setChannelName('');
 	};
 
 	const handleJoin = () => {
@@ -54,6 +55,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 			socket?.emit('joinChannel', { name: channelName });
 			setJoined(true);
 		}
+		setChannelName('');
 	};
 
 	const handleDelete = () => {
