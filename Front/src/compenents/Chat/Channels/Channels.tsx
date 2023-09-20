@@ -86,23 +86,16 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 		return Math.floor(Math.random() * ((max - sizeInPixels)));
 	};
 
-	const newPosition: CSSProperties = {
-		'--max': "" + max,
-		'--top': "" + getRandomNumber(maxTop, 0),
-		'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
-	};
+	// const newPosition: CSSProperties = {
+	// 	'--max': "" + max,
+	// 	'--top': "" + getRandomNumber(maxTop, 0),
+	// 	'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
+	// };
 
-	// useEffect(() => {
-	// 	const newPosition = {
-	// 		top: getRandomNumber(window.innerHeight, 75 + 20),
-	// 		left: getRandomNumber(window.innerWidth, 20 - 2)
-	// 	};
-	// 	setPosition(newPosition);
-	// }, []);
-	console.log('Generated position:', newPosition);
+	// console.log('Generated position:', newPosition);
 
 	return (
-		<div className={`chat-channel-area-${i}`} style={newPosition}>
+		<div className={`chat-channel-area`}>
 			{isVisible && (
 				<div className="channel-main-container">
 					<div className="channel-bandeau">
@@ -124,11 +117,14 @@ function Channel({ key, i, max, user, channel, isVisible }) {
 							<ul className="dropdown-menu">
 								<li >Ban User</li>
 								<li >kick User</li>
+								<li >Set Admin</li>
+								<li >Delete</li>
 								<li >Leave</li>
 								<li >Invite</li>
 							</ul>
 						)}
 					</div>
+					
 					<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
