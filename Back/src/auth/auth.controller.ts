@@ -1,6 +1,6 @@
-import { Controller, Get, Res, Post, Query, UseGuards , Req, UnauthorizedException, BadRequestException} from '@nestjs/common';
+import { Controller, Get, Res, Post, Patch, Body, UseGuards, Req, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response,} from 'express';
+import { Response, } from 'express';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
@@ -12,10 +12,10 @@ import { TwofaService } from 'src/twofa/twofa.service';
 @Controller('Auth')
 export class AuthController {
   constructor(private readonly AuthService: AuthService,
-              private prisma: PrismaService,
-              private readonly jwtService: JwtService,
-              private readonly userService: UserService,
-              private readonly twoFaService: TwofaService) {}
+    private prisma: PrismaService,
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly twoFaService: TwofaService) { }
 
   @Get('connexion')
   async connexion(@Req() req, @Res() response): Promise<any> {
@@ -23,26 +23,46 @@ export class AuthController {
       const code = req.query.code;
       const accessToken = await this.AuthService.getAccessToken(code);
       const userData = await this.AuthService.getUserData(accessToken);
-      const user = await this.AuthService.apiConnexion(userData, response);
+      await this.AuthService.apiConnexion(userData, accessToken, response);
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+
+  @Patch('checkNickname')
+  async checkNickname(@Res() res, @Body() body: { nickname: string, token: string }) {
+    const { nickname, token } = body;
+    try {
+      const user = await this.prisma.user.findUnique({ where: { nickname: nickname } });
+      if (user !== null) {
+        throw new UnauthorizedException();
+      }
+      const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
+      if (!regex.test(nickname))
+        throw new UnauthorizedException();
+      await this.AuthService.connexionPostNickname(token, nickname, res);
     } catch {
       throw new UnauthorizedException();
     }
   }
 
   @Get('connect2fa')
-  async connect2fa(@Query('code') code: string, @Req() req: Request, @Res() res: Response) {
+  async connect2fa(@Req() req: any, @Res() res: any) {
     try {
-      const userId = parseInt(req.cookies.id);
-      const user = await this.userService.getUserById(userId);
-      if (!user.twoFactorSecret || !user.twoFactorEnabled)
+      const code = req.query.code;
+      const id = req.query.id;
+      const user = await this.userService.getUserById(id);
+      if (!user.twoFactorSecret || !user.twoFactorEnabled) {
         throw new BadRequestException('2Fa is not enabled for this user');
+      }
       const isCodeValid = this.twoFaService.isTwoFactorAuthenticationCodeValid(code, user);
-      if (!isCodeValid)
+      if (!isCodeValid) {
         throw new UnauthorizedException('Wrong authentication code');
+      }
       await this.AuthService.apiConnexion2fa(user, res);
       await this.prisma.user.update({
-        where: {id: userId},
-        data: {state: 'ONLINE'},
+        where: { id: 1 },
+        data: { state: 'ONLINE' },
       })
       res.status(200).json({ message: 'Connexion réussie' });
     } catch {
@@ -62,7 +82,7 @@ export class AuthController {
       }
       await this.prisma.user.update({
         where: { id: user.id },
-        data: { 
+        data: {
           accessToken: null,
           state: 'OFFLINE',
         },

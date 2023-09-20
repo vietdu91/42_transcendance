@@ -2,29 +2,28 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-import './TwoFa.css';
+import './SetNickname.css';
 
 import Pass from '../../img/backgrounds/hall_monitor.png'
 import RedCross from "../../img/buttons/red_cross.png"
 
-export default function TwoFa() {
+export default function SetNickname() {
 	const navigate = useNavigate();
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
-	const id = urlParams.get('id');
-	const [code, setCode] = useState("");
+	const token = urlParams.get('token');
+	const [nickname, setNickname] = useState("");
 
 	const handleChange = (event) => {
-		setCode(event.target.value);
+		setNickname(event.target.value);
 	};
 
 	const handleEnable = async (e) => {
 		e.preventDefault();
-		console.log(code);
-		await axios.get(
-			process.env.REACT_APP_LOCAL_B + `/auth/connect2fa?code=${code}&id=${Number(id)}`, { withCredentials: true })
+		await axios.patch(
+			process.env.REACT_APP_LOCAL_B + `/auth/checkNickname`, {nickname, token}, { withCredentials: true })
 			.then(response => {
-				navigate('/');
+				navigate('/newprofile');
 			})
 			.catch(err => {
 				console.log(err);
@@ -40,8 +39,8 @@ export default function TwoFa() {
 			<img id="TwoFA-bg" src={Pass} alt={'Pass'} />
 			<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
 			<form onSubmit={handleEnable} id="TwoFA-form">
-				<input className="swing" id="twofa-swing" placeholder='Show Me Your HALLPASS !' value={code} onChange={handleChange}></input>
-				<label htmlFor="twofa-swing">2FA</label>
+				<input className="swing" id="twofa-swing" placeholder='Show Me Your NICKNAME !' value={nickname} onChange={handleChange}></input>
+				<label htmlFor="twofa-swing">Nick</label>
 			</form>
 		</div>
 	)

@@ -23,7 +23,7 @@ const initUser: OtherUser = {
   state: 0,
 }
 
-function DropdownContact({ user, setConvs }) {
+function DropdownContact({ user, setConvs, setFriends }) {
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFriends, setIsOpenFriends] = useState(false);
@@ -145,10 +145,9 @@ function DropdownContact({ user, setConvs }) {
         }
       );
 
-      console.log(response.data);
-      socket?.emit('createConversation', { otherName: response.data.name });
+      socket?.emit('createConversation', {otherName: response.data.user.name});
     } catch (error) {
-      console.log(error);
+      console.log("You can't create a convesation with yourself");
     }
   };
 
@@ -158,6 +157,7 @@ function DropdownContact({ user, setConvs }) {
       console.log(response);
       setOtherUser(response.otherUser);
       setConvs(response.conversations);
+      // setFriends(response.friends);
     })
   }, []);
 

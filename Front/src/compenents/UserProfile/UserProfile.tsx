@@ -141,6 +141,13 @@ export default function UserProfile() {
 		);
 	}
 
+	const handleSearch = (username: string) => {
+        // Effectuez votre logique de recherche ici avec la valeur 'username'
+        console.log("Good SB");
+        console.log(`Recherche en cours avec la requête : ${username}`);
+    };
+
+
 	const LetterChanger = () => {
 		const [currentLetter, setCurrentLetter] = useState('A');
 
@@ -233,7 +240,7 @@ export default function UserProfile() {
 						</div>
 					</div>
 				</div>
-				<button id="going_home" onClick={() => navigate("/")}></button>
+				<button id="going_home" onClick={() => navigate("/profile")}></button>
 			</div>
 		</div>
 	)
