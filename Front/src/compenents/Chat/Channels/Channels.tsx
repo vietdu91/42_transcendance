@@ -46,6 +46,7 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 		if (value.trim() !== '') {
 			const channId = channel.id;
 			socket?.emit('sendMessageChann', { value, channId });
+			scrollToBottom();
 			setValue('');
 			if (inputRef.current) {
 				inputRef.current.innerText = '';
@@ -53,12 +54,14 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 		}
 	};
 
+	const scrollToBottom = () => {
+		if (divRef.current) {
+			divRef.current.scrollTop = divRef.current.scrollHeight;
+		}
+	};
+	scrollToBottom();
+
 	useEffect(() => {
-		const scrollToBottom = () => {
-			if (divRef.current) {
-				divRef.current.scrollTop = divRef.current.scrollHeight;
-			}
-		};
 		scrollToBottom();
 		const getData = async () => {
 			socket.on('messageSentChann', (res => {
@@ -72,7 +75,7 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 		return () => {
 			socket.off('messageSentChann');
 		}
-	}, [socket])
+	}, [socket, scrollToBottom])
 
 	const maxTop = window.innerHeight - 80;
 	const maxLeft = window.innerWidth; // Set to the right half of the screen

@@ -9,15 +9,16 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
         window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
     }
 
-    
+    const scrollToBottom = () => {
+        if (divRef.current) {
+            divRef.current.scrollTop = divRef.current.scrollHeight;
+        }
+    };
+    scrollToBottom();
 
     useEffect(() => {
-        const scrollToBottom = () => {
-            if (divRef.current) {
-                divRef.current.scrollTop = divRef.current.scrollHeight;
-            }
-        };
         scrollToBottom();
+
     }, []);
 
     return (
