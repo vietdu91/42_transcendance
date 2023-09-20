@@ -1,25 +1,26 @@
-// $top: var(--top);
-// $left: var(--left);
+$top: var(--top);
+$left: var(--left);
+$max: 10;
 
-// :root {
-// 	--max: 10;
-// }
+:root {
+	--max: 10;
+}
 
 
-// @for $i from 0 through $max {
-// 	$className: channel-main-container-#{$i};
+@for $i from 0 through $max {
+	$className: chat-channel-area-#{$i};
 
-// 	.#{$className} {
-// 		top: #{$top};
-// 		left: #{$left};
-// 		position: absolute;
-// 		height: 75vh;
-// 		width: 20vw;
-// 		display: flex;
-// 		flex-direction: column;
-// 		border-radius: 5px;
-// 		background-image: url('../../../img/chat/channel_wallpaper.png');
-// 		background-size: cover;
-// 		background-repeat: no-repeat;
-// 	}
-// }
+	.#{$className} {
+		top: #{$top};
+		left: #{$left};
+		position: absolute;
+		height: 75vh;
+		width: 20vw;
+		display: flex;
+		flex-direction: column;
+		border-radius: 5px;
+		background-image: url('../../../img/chat/channel_wallpaper.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+}

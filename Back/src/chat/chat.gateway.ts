@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { User } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import * as argon2 from 'argon2';
 
 type UserChat = {
   id: string;
@@ -124,6 +125,10 @@ export class ChatGateway {
     const isPrivate = params.isPrivate;
     const password = params.password;
 
+    console.log("password ++ " + password);
+    const hashPassword = await argon2.hash(password);
+    console.log("hashPassword ++ " + hashPassword);
+
     const channel = await this.prisma.channel.findUnique({ where: { name: name } });
     if (channel) {
       client.emit('errorSocket', { message: "This channel already exists" });
@@ -142,7 +147,7 @@ export class ChatGateway {
         ownerId: userDb.id,
         isPrivate: isPrivate,
         image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1694703850/avatars-ubXQyNB9MhoSHi6Q-2bLbtw-t500x500_tiff9c.jpg',
-        password: isPrivate ? password : null,
+        password: isPrivate ? hashPassword : null,
         usersList: {
           connect: [
             { id: userDb.id },
@@ -172,7 +177,7 @@ export class ChatGateway {
   }
 
 
-  @SubscribeMessage('joinChannel') // Écoutez l'événement 'joinRoom'
+  @SubscribeMessage('joinRoom') // Écoutez l'événement 'joinRoom'
   async handleJoinRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
@@ -211,10 +216,15 @@ export class ChatGateway {
         return;
       }
     }
-    if (chann.isPrivate == true && chann.password != params.password) {
-      client.emit('errorSocket', { message: "Wrong password" });
+    try 
+    {
+      const verifyHash = await argon2.verify(chann.password, params.password);
+    }
+    catch (e) {
+      console.log("Pas de mot de passe");
       return;
     }
+
     await this.prisma.channel.update({
       where: { name: name },
       data: {
