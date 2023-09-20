@@ -1,6 +1,6 @@
 import React from 'react'
 import { GameContext, gameSocket } from './compenents/utils/GameContext';
-// import { ChatContext, chatSocket } from './compenents/utils/ChatContext';
+import { ChatContext, chatSocket } from './compenents/utils/ChatContext';
 
 // CSS
 import './App.css';
@@ -41,36 +41,39 @@ import SetNickname from './compenents/SetNickname/SetNickname';
 
 
 export default function App() {
-	
+
 	return (
-		<GameContext.Provider value={gameSocket}>
-			<div className="App">
-				<Routes>
-        		<Route path="/win" element={<Win />}/>
-				<Route path="/" element={<Menu />}/>
-				<Route path="/gamemenu" element={<GameMenu />}/>
-				<Route path="/2fa" element={<TwoFa />}/>
-				<Route path="/champselect" element={<ChampSelect />}/>
-				<Route path="/matchmaking" element={<Matchmaking />}/>
-				<Route path="/game" element={<Game />}/>
-				<Route path="/game/:roomId" element={<Game />}/>
-				<Route path="/connect" element={<Connexion />}/>
-				<Route path="/newprofile" element={<NewProfile />}/>
-				<Route path="/profile" element={<Profile />}/>
-				<Route path="/user/:username" element={<UserProfile />}/>
-				<Route path="/chat" element={<Chat />}/>
-				<Route path="/credits" element={<Credits />}/>
-				<Route path="/thanks" element={<Thanks />}/>
-				<Route path="/quoi" element={<QuoiQuoiDansMesFesses />}/>
-				<Route path="/achievement" element={<Achievement />}/>
-				<Route path="/decompte" element={<Decompte />}/>
-				<Route path="/partiesencours" element={<EnCours />}/>
-				<Route path="/gameover" element={<GameOver />}/>
-				<Route path="/errorgame" element={<GameError />}/>
-				<Route path="/404" element={<PageNotFound />}/>
-				<Route path="*" element={<Navigate to="/404" />}/>
-				</Routes>
-			</div>
-		</GameContext.Provider>
+		<ChatContext.Provider value={chatSocket}>
+			<GameContext.Provider value={gameSocket}>
+				<div className="App">
+					<Routes>
+						<Route path="/win" element={<Win />} />
+						<Route path="/" element={<Menu />} />
+						<Route path="/gamemenu" element={<GameMenu />} />
+						<Route path="/2fa" element={<TwoFa />} />
+						<Route path="/setNickname" element={<SetNickname />} />
+						<Route path="/champselect" element={<ChampSelect />} />
+						<Route path="/matchmaking" element={<Matchmaking />} />
+						<Route path="/game" element={<Game />} />
+						<Route path="/game/:roomId" element={<Game />} />
+						<Route path="/connect" element={<Connexion />} />
+						<Route path="/newprofile" element={<NewProfile />} />
+						<Route path="/profile" element={<Profile />} />
+						<Route path="/user/:username" element={<UserProfile />} />
+						<Route path="/chat" element={<Chat />} />
+						<Route path="/credits" element={<Credits />} />
+						<Route path="/thanks" element={<Thanks />} />
+						<Route path="/quoi" element={<QuoiQuoiDansMesFesses />} />
+						<Route path="/achievement" element={<Achievement />} />
+						<Route path="/decompte" element={<Decompte />} />
+						<Route path="/partiesencours" element={<EnCours />} />
+						<Route path="/gameover" element={<GameOver />} />
+						<Route path="/errorgame" element={<GameError />} />
+						<Route path="/404" element={<PageNotFound />} />
+						<Route path="*" element={<Navigate to="/404" />} />
+					</Routes>
+				</div>
+			</GameContext.Provider>
+		</ChatContext.Provider>
 	)
 }

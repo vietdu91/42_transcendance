@@ -4,7 +4,8 @@ import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
 import Cookies from 'js-cookie';
-import { ChatContext } from '../utils/ChatContext';
+import { ChatContext, chatSocket } from '../utils/ChatContext';
+import { useNavigate } from "react-router-dom"
 
 
 import ConversationContainer from './ConversationContainer/ConversationContainer';
@@ -80,28 +81,32 @@ const initUser: User = {
 function Chat() {
 
     const token = Cookies.get('accessToken');
+    const socket = useContext(ChatContext);
     if (!token)
         window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
-    const socket = useContext(ChatContext);
     const [user, setUser] = useState<User>(initUser);
     const [convs, setConvs] = useState([]);
     const [channels, setChannels] = useState([]);
     const [friends, setFriends] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
+    const navigate = useNavigate();
 
-    socket.emit('joinChat');
-
+    
     const [indivConv, setIndivConv] = useState(true);
-
+    
     const handleIndivConvVisibility = (visibility) => {
         setIndivConv(visibility);
     };
-
+    
     useEffect(() => {
+        socket?.emit('joinChat');
         socket.on('errorSocket', (response) => {
             setSnackMessage(response.message);
             setSnackbarOpen(true);
+        })
+        socket.on('errorJoinChat', () => {
+            navigate("/");
         })
         const getUserData = async () => {
             await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', { withCredentials: true, headers: { Authorization: `Bearer ${token}` } })
@@ -119,7 +124,7 @@ function Chat() {
     }, []);
 
     return (
-        <>
+        <ChatContext.Provider value={chatSocket}>
             <div className="truc">
                 <img className="img-truc" id="img-truc" src={BackgroundWindows}></img>
                 <div className="left-part-chat">
@@ -147,7 +152,7 @@ function Chat() {
             </div>
             <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
             <FooterMenu />
-        </>
+        </ChatContext.Provider>
     );
 }
 

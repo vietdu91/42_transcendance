@@ -24,6 +24,7 @@ export default function SetNickname() {
 			process.env.REACT_APP_LOCAL_B + `/auth/checkNickname`, {nickname, token}, { withCredentials: true })
 			.then(response => {
 				navigate('/newprofile');
+				window.location.reload();
 			})
 			.catch(err => {
 				console.log(err);

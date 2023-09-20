@@ -54,12 +54,11 @@ function Channel({ i, max, user, channel, isVisible }) {
 
 	useEffect(() => {
 		const getData = async () => {
-			await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
-				.then(response => {
-					setMessages(response.data.messages);
-				})
 			socket.on('messageSentChann', (res => {
-				setMessages(res.messages);
+				axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
+					.then(response => {
+						setMessages(response.data.messages);
+					})
 			}))
 		}
 		getData();

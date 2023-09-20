@@ -23,6 +23,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
+    const [clicked, setClicked] = useState(false);
 
     function goToProfile(name: string) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
@@ -38,12 +39,14 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
     }
 
     const toggleConvSummary = (index: number) => {
+        setClicked(!clicked);
         const newVisibleItems = [...visibleItems];
         newVisibleItems[index] = !newVisibleItems[index];
         setVisibleItems(newVisibleItems);
     };
 
     const toggleChannelSummary = (index: number) => {
+        setClicked(!clicked);
         const newVisibleChannels = [...visibleChannels];
         newVisibleChannels[index] = !newVisibleChannels[index];
         setVisibleChannels(newVisibleChannels);

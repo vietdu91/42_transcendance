@@ -47,15 +47,14 @@ function ChatConversationArea({ user, conv, isVisible }) {
         .catch(error => {
           console.log(error);
         });
-
-      await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
-        .then(response => {
-          setMessages(response.data.messages);
-        })
-
       socket.on('messageSentConv', (res => {
-        setMessages(res.messages);
+        axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
+          .then(response => {
+            setMessages(response.data.messages);
+          })
       }));
+
+
     }
     getUserData();
     return () => {
