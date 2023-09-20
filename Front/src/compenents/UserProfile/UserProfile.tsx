@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
-import SearchBar2 from '../Profile/searchBarProfile';
 import './UserProfile.css'
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
@@ -120,7 +119,7 @@ export default function UserProfile() {
 			.catch(error => {
 				navigate("/profile");
 			})
-	}, []);
+	}, [navigate, token, username]);
 
 	const LetterChanger2 = () => {
 		const [currentLetter, setCurrentLetter] = useState('A');
@@ -141,6 +140,13 @@ export default function UserProfile() {
 			<span id="profile-south">{currentLetter}</span>
 		);
 	}
+
+	const handleSearch = (username: string) => {
+        // Effectuez votre logique de recherche ici avec la valeur 'username'
+        console.log("Good SB");
+        console.log(`Recherche en cours avec la requête : ${username}`);
+    };
+
 
 	const LetterChanger = () => {
 		const [currentLetter, setCurrentLetter] = useState('A');
@@ -234,7 +240,7 @@ export default function UserProfile() {
 						</div>
 					</div>
 				</div>
-				<button id="going_home" onClick={() => navigate("/")}></button>
+				<button id="going_home" onClick={() => navigate("/profile")}></button>
 			</div>
 		</div>
 	)

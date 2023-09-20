@@ -7,6 +7,8 @@ import './Thanks.css'
 
 import BigThanks from '../../img/thank_you.jpg';
 
+import end_credit from '../../sounds/end_credit.mp3'
+
 enum User {
 	STAFF_1,
 	STAFF_2,
@@ -108,6 +110,9 @@ export default function Thanks() {
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 	return (
-		<CreatedBy />
+		<>
+			<iframe src={end_credit} allow="autoplay" id="iframeAudio" title="end_credit_audio"></iframe>
+			<CreatedBy />
+		</>
 	)
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
 import './EnCours.css';
@@ -87,7 +87,7 @@ export default function EnCours() {
             ) : (
                 <div className="bg-encours">
                     <img className="bg-encours bg-n_ggers" src={N_ggers} alt={'N_ggers'}></img>
-                    <img id="red-cross" src={RedCross} onClick={leavePage}></img>
+                    <img id="red-cross" alt="red-cross" src={RedCross} onClick={leavePage}></img>
                     <div id="title-encours">
                         <GetLetter letter='P' />
                         <GetLetter letter='A' />

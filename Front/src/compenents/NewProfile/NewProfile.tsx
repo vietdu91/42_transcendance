@@ -31,7 +31,7 @@ export default function NewProfile() {
 			}).catch(error => {
 				console.error('Probleme');
 			});
-	}, [])
+	}, [token])
 
 	const handleClick = async () => {
 		navigate("/");

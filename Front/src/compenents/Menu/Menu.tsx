@@ -7,6 +7,7 @@ import './Menu.css';
 import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
+import southparkSound from '../../sounds/theme_song.mp3'
 
 // IMG
 import Hell from "../../img/backgrounds/hell.jpg"
@@ -28,11 +29,9 @@ export default function App() {
   const [hover, setHover] = React.useState(Town);
   const navigate = useNavigate();
   const [show, setShow] = React.useState(true);
-  const [show2, setShow2] = React.useState(false);
-  const [code, setCode] = React.useState("");
 
   // console.log(process.env.REACT_APP_LOCAL_B);
-  const apiEndpoint = process.env.REACT_APP_LOCAL_B;
+  // const apiEndpoint = process.env.REACT_APP_LOCAL_B;
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -56,16 +55,13 @@ export default function App() {
     if (accessToken) {
       try {
         console.log("AXIOS LOGOUT ON")
-        const res = await axios({
+        await axios({
           url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
           method: 'POST',
           headers: { 'Authorization': `Bearer ${accessToken}` },
         })
         Cookies.remove('accessToken');
-        Cookies.remove('id');
-        console.log("COOKIES REMOVED")
         navigate("/connect");
-        console.log("NAVIGATED")
       }
       catch (err) {
         console.log("app-front: error: ", err)
@@ -81,6 +77,7 @@ export default function App() {
 
   return (
     <div id="menu">
+      <iframe src={southparkSound} title="southparksound_sound" allow="autoplay" id="iframeAudio"></iframe>
       <img id="bg-menu" src={hover} alt={'bg'}></img>
       <div id="menu-items">
         {show && <div className="menu-item" onClick={() => navigate("/gamemenu")} onMouseEnter={() => { setHover(ButtersBlood); }}

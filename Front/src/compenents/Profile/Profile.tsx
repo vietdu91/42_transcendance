@@ -46,7 +46,6 @@ export default function Profile() {
 			process.env.REACT_APP_LOCAL_B + '/twofa/generate',
 			{headers: {  'Authorization': `Bearer ${token}` }})
 		.then(response => {
-			console.log("respond === " + response.data.code);
 			setShowFa(true);
 			setQrCode(response.data.code);
 		})
@@ -60,13 +59,15 @@ export default function Profile() {
 	  };
 
 	const handleEnable = async (e) => {
-		console.log(code);
-		// e.preventDefault();
+		// console.log(code);
+		e.preventDefault();
 		await axios.post(
 			process.env.REACT_APP_LOCAL_B + '/twofa/turn-on',
 			{ code },
 			{ withCredentials: true, headers: {  'Authorization': `Bearer ${token}` } })
 		.then(response => {
+			setShowFa(false);
+			setTwoFa(true);
 		})
 		.catch(err => {
 			console.log(err);
@@ -144,6 +145,7 @@ export default function Profile() {
 				wins: res.data.user.wins,
 				looses: res.data.user.looses,
 			});
+			setTwoFa(res.data.user.twoFactorEnabled);
 			getPercentage(res.data.percentage)
 			const updatedGames:Game[] = [];
 			const limit = res.data.games.length > 3 ? res.data.games.length - 3 : 0;
@@ -156,7 +158,7 @@ export default function Profile() {
 			console.error(error);
 		});
 	
-	}, [])
+	}, [token])
 	
 	const handleSearch = (username: string) => {
         // Effectuez votre logique de recherche ici avec la valeur 'username'
@@ -217,7 +219,7 @@ export default function Profile() {
 						{showFa && 
 							<>
 								<br/>
-								<img src={qrCode}></img>
+								<img src={qrCode} alt="qrcode"></img>
 								<form onSubmit={handleEnable}>
 									<input placeholder='Show Me Your HALLPASS' value={code} onChange={handleChange}></input>
 								</form>

@@ -13,7 +13,8 @@ import ChatConversationArea from './ChatConversationArea/ChatConversationArea';
 import FooterMenu from './FooterMenu/FooterMenu';
 import ConversationListSummary from './ConversationListSummary/ConversationListSummary';
 import ConversationListHeader from './ConversationListHeader/ConversationListHeader';
-
+import SnackBarCustom from '../utils/SnackBarCustom/SnackBarCustom'
+import BackgroundWindows from './windows-xp-wallpaper-bliss.jpg'
 
 import './Chat.css';
 import axios from "axios"
@@ -85,26 +86,34 @@ function Chat() {
     const [user, setUser] = useState<User>(initUser);
     const [convs, setConvs] = useState([]);
     const [channels, setChannels] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackMessage, setSnackMessage] = useState('');
 
     socket.emit('joinChat');
-    
+
     const [indivConv, setIndivConv] = useState(true);
-    
+
     const handleIndivConvVisibility = (visibility) => {
         setIndivConv(visibility);
     };
-    
+
     useEffect(() => {
+        socket.on('errorSocket', (response) => {
+            setSnackMessage(response.message);
+            setSnackbarOpen(true);
+        })
         const getUserData = async () => {
-            await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', {withCredentials: true, headers: {Authorization: `Bearer ${token}`}})
-            .then(res => {
-                setUser(res.data);
-                setConvs(res.data.conversations);
-                setChannels(res.data.channels);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+            await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', { withCredentials: true, headers: { Authorization: `Bearer ${token}` } })
+                .then(res => {
+                    setUser(res.data);
+                    setConvs(res.data.conversations);
+                    setChannels(res.data.channels);
+                    setFriends(res.data.friends);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
         getUserData();
     }, []);
@@ -112,6 +121,7 @@ function Chat() {
     return (
         <>
             <div className="truc">
+                <img className="img-truc" id="img-truc" src={BackgroundWindows}></img>
                 <div className="left-part-chat">
                     <div className="conversations-list">
                         <ConversationListHeader
@@ -120,7 +130,7 @@ function Chat() {
                             user={user}
                             setConvs={setConvs}
                             setChannels={setChannels}
-                        /*Channels */
+                            setFriends={setFriends}
                         />
                         <ConversationListSummary
                             name={user.name}
@@ -129,15 +139,13 @@ function Chat() {
                             handleVisibility={handleIndivConvVisibility}
                             user={user}
                             convs={convs}
-                            /*CHannels */
                             channels={channels}
+                            friends={friends}
                         />
                     </div>
                 </div>
             </div>
-            <div id="return">
-				<ReturnButtom colorHexa='#ff30ff' path='/' />
-			</div>
+            <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
             <FooterMenu />
         </>
     );

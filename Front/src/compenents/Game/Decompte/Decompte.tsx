@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Decompte.css';
-import { count } from 'console';
 import Cookies from "js-cookie";
 
 import KickBaby from '../../../img/game/kick_baby.gif'
@@ -37,7 +36,7 @@ export default function Decompte() {
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [countdown]);
+    }, [countdown, navigate, roomId]);
 
     return (
     <div id="decompte_bg">

@@ -10,14 +10,14 @@
 }
 * { box-sizing: border-box }
 
-input, 
-button {
+.SearchBox-input, 
+.SearchBox-button {
 	border: none;
 	background: none;
 	outline: 0;
 }
 
-button {cursor: pointer}
+.SearchBox-button {cursor: pointer}
 .SearchBox-input::placeholder {/* No es un seudoelemento estandar */
  color:white;
 	opacity: .6;

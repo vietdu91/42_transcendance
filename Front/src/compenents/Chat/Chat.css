@@ -4,8 +4,20 @@
     background: #2c2b5c;
     display: flex;
     flex-direction: row;
-    background-image: url("./windows-xp-wallpaper-bliss.jpg");
-    /* position: fixed; */
+}
+
+.img-truc {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    background-color:#89cede;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    z-index: 0;
 }
 
 .left-part-chat {
@@ -15,6 +27,7 @@
     grid-template-columns: repeat(50, 2%);
 	grid-template-rows: repeat(50, 2%);
     /* background-color: red; */
+    z-index: 1;
 }
 
 /* Chat containers */
@@ -55,12 +68,15 @@
     grid-column-end: 40;
     background-color: #d5e2f7;
     border-radius: 5px;
-    border-width: 3px;
-    border: solid;
-    border-color: #0256ef;
     display: flex;
     flex-direction: column;
-    box-shadow: 1px 1px 1px rgb(67, 69, 82);
+    /* box-shadow: 1px 1px 1px rgb(67, 69, 82); */
+    box-shadow: inset -1px -1px #00138c, 
+    inset 1px 1px #0831d9, 
+    inset -2px -2px #001ea0, 
+    inset 2px 2px #166aee, 
+    inset -3px -3px #003bda, 
+    inset 3px 3px #0855dd;
 }
 
 .wrapper-message-send input {

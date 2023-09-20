@@ -195,7 +195,6 @@ export class MatchmakingGateway {
 					state: 'INGAME',
 				},
 			})
-
 			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
 			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 		}
@@ -232,11 +231,8 @@ export class MatchmakingGateway {
 		if (Math.random() < 0.5) {
 			actualGame.ball.vy *= -1;
 		}
-
-		let left = user.id === actualGame.idLeft ? actualGame.idLeft : actualGame.idRight;
-		let right = user.id === actualGame.idRight ? actualGame.idLeft : actualGame.idRight;
-		this.server.to(actualGame.sockLeft).emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball, userId: left });
-		this.server.to(actualGame.sockRight).emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball, userId: right });
+		this.server.to(actualGame.sockLeft).emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball, userId: actualGame.idLeft });
+		this.server.to(actualGame.sockRight).emit('roundStarted', { success: true, message: 'The round started with ' + actualGame.ball.vx + "vx, " + actualGame.ball.vy + "vy", game: actualGame, ball: actualGame.ball, userId: actualGame.idRight });
 	}
 
 	@SubscribeMessage('giveUp')
@@ -518,10 +514,8 @@ export class MatchmakingGateway {
 							},
 						})
 					}
-					let left = user.id === actualGame.idLeft ? actualGame.idLeft : actualGame.idRight;
-					let right = user.id === actualGame.idRight ? actualGame.idLeft : actualGame.idRight;
-					this.server.to(actualGame.sockLeft).emit("endGame", { message: "Game Over !! Winner : " + winnerId, winnerId: winnerId, isActive: actualGame.isActive, id: left });
-					this.server.to(actualGame.sockRight).emit("endGame", { message: "Game Over !! Winner : " + winnerId, winnerId: winnerId, isActive: actualGame.isActive, id: right });
+					this.server.to(actualGame.sockLeft).emit("endGame", { message: "Game Over !! Winner : " + winnerId, winnerId: winnerId, isActive: actualGame.isActive, id: actualGame.idLeft });
+					this.server.to(actualGame.sockRight).emit("endGame", { message: "Game Over !! Winner : " + winnerId, winnerId: winnerId, isActive: actualGame.isActive, id: actualGame.idRight });
 				}
 				this.server.to(actualGame.sockLeft).emit("newPoint", { message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight });
 				this.server.to(actualGame.sockRight).emit("newPoint", { message: "Goal !! New point ! " + actualGame.scoreLeft + " - " + actualGame.scoreRight });

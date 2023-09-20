@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -44,6 +44,7 @@ import KennyBague from "../../../sounds/phrases/Kenny La bague.mp3"
 import TropConformiste from "../../../sounds/phrases/Henrietta_Danse des gothiques.mp3"
 
 import ChooseYourFighter from "../../../img/choose_your_fighter.gif"
+import choose_your_fighter from '../../../sounds/choose_your_fighter.mp3'
 
 export default function ChampSelect() {
 
@@ -86,8 +87,9 @@ export default function ChampSelect() {
 
 	return (
 		<div className="menu">
+			<iframe src={choose_your_fighter} title="choose_your_fighter_sound" allow="autoplay" id="iframeAudio"></iframe>
 			<img id="bg--menu" src={BusStop} alt={'BusStop'}></img>
-			<img id="red-cross" src={RedCross} onClick={leavePage}></img>
+			<img id="red-cross" alt="red-cross" src={RedCross} onClick={leavePage}></img>
 			<div id="choose_center">
 				<img id="choose_your_fighter" src={ChooseYourFighter} alt={"ChooseYourFighter"}></img>
 			</div>

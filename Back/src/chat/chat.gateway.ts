@@ -73,7 +73,8 @@ export class ChatGateway {
     for (let user of conv.users) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('messageSentConv', { message: "message sent to conversation", value: value, messages: conv.messages });
+          let persoMessages = conv.messages.filter((index) => !(user.blockList.includes(index.authorId)));
+          this.server.to(userChat.id).emit('messageSentConv', { message: "message sent to conversation", value: value, messages: persoMessages });
         }
       }
     }
@@ -107,7 +108,8 @@ export class ChatGateway {
     for (let user of chann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('messageSentChann', { message: "message sent to channel", value: value, messages: chann.messages });
+          let persoMessages = chann.messages.filter((index) => !(user.blockList.includes(index.authorId)));
+          this.server.to(userChat.id).emit('messageSentChann', { message: "message sent to channel", value: value, messages: persoMessages });
         }
       }
     }
@@ -129,8 +131,13 @@ export class ChatGateway {
 
     const channel = await this.prisma.channel.findUnique({ where: { name: name } });
     if (channel) {
-      console.log("Le channel existe deja");
-      // emit un retour d'erreur
+      client.emit('errorSocket', { message: "This channel already exists" });
+      return;
+    }
+
+    const regex: RegExp = /^[a-zA-Z\-\_]{2,20}$/;
+    if (!regex.test(name)) {
+      client.emit('errorSocket', { message: "Not a valid channel name" });
       return;
     }
 
@@ -166,7 +173,7 @@ export class ChatGateway {
       }
     })
 
-    client.emit('channelCreated', { message: "Channel Created", channels: user.channels });
+    client.emit('channelCreated', { message: "Channel Created", channels: user.channels, friends: user.friendsList });
   }
 
 
@@ -175,7 +182,7 @@ export class ChatGateway {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
-
+    console.log("hiihihia")
     const name = params.name;
 
     const chann = await this.prisma.channel.findUnique({
@@ -189,14 +196,15 @@ export class ChatGateway {
     });
 
     if (!chann) {
-      console.log("Le channel n'existe pas");
+      client.emit('errorSocket', { message: "This channel doesn't exist" });
       return;
     }
-
+    console.log("hihihi");
     for (let i = 0; i < chann.usersList.length; i++) {
+      console.log(chann.usersList[i].id, userDb.id)
       if (chann.usersList[i].id == userDb.id) {
         console.log(userDb.id + ' is already in' + name);
-        //this.server.emit('userBanned', { userDb.id });
+        client.emit('errorSocket', { message: "You already are in the channel" });
         return;
       }
     }
@@ -204,7 +212,7 @@ export class ChatGateway {
     for (let i = 0; i < chann.banList.length; i++) {
       if (chann.banList[i].id == userDb.id) {
         console.log(userDb.id + ' is banned from ' + name);
-        //this.server.emit('userBanned', { userDb.id });
+        client.emit('errorSocket', { message: "You are banned from the channel" });
         return;
       }
     }
@@ -239,7 +247,7 @@ export class ChatGateway {
           }
         }
       })
-      client.emit('channelJoined', { message: "Channel Joined", channels: user.channels });
+      client.emit('channelJoined', { message: "Channel Joined", channels: user.channels, friends: user.friendsList });
     } catch (e) {
       throw e;
     }
@@ -265,14 +273,14 @@ export class ChatGateway {
       }
     });
     if (!chann) {
-      console.log("Le channel n'existe pas");
+      client.emit('errorSocket', { message: "The channel doesn't exist" });
       return;
     }
 
     const target = await this.prisma.user.findUnique({ where: { name: otherName } });
 
     if (!target) {
-      console.log("La cible n'existe pas");
+      client.emit('errorSocket', { message: "The target " + otherName + " doesn't exist" });
       return;
     }
 
@@ -283,7 +291,7 @@ export class ChatGateway {
       }
     }
     if (i == chann.adminList.length) {
-      console.log("Vous n'etes pas admin")
+      client.emit('errorSocket', { message: "You are not a channel admin" });
       return;
     }
 
@@ -292,12 +300,13 @@ export class ChatGateway {
         break;
     }
     if (i == chann.usersList.length) {
-      console.log("La cible n'est pas dans le channel")
+      client.emit('errorSocket', { message: "The target " + otherName + " is not in the channel" });
+      return;
     }
 
     for (i = 0; i < chann.adminList.length; i++) {
       if (chann.adminList[i].name == otherName && userDb.id != chann.ownerId) {
-        console.log("La cible est un admin");
+        client.emit('errorSocket', { message: "The target " + otherName + " is a chann admin" });
         return;
       }
     }
@@ -477,17 +486,21 @@ export class ChatGateway {
 
     const otherName = params.otherName;
 
-    if (user.name === otherName)
+    if (user.name === otherName) {
+      client.emit('errorSocket', { message: "You can't talk to yourself" });
       return;
+    }
     const otherUser = await this.prisma.user.findUnique({
       where: { name: otherName },
     });
     if (!otherUser || otherUser.id === user.id) {
+      client.emit('errorSocket', { message: "You can't talk to yourself" });
       return;
     };
     const convs = await this.prisma.conversation.findMany();
     for (let i = 0; i < convs.length; i++) {
       if ((user.name === convs[i].names[0] && otherName === convs[i].names[1]) || (user.name === convs[i].names[1] && otherName === convs[i].names[0])) {
+        client.emit('errorSocket', { message: "You already have a conversation with " + otherUser.name });
         return;
       }
     }
@@ -519,7 +532,7 @@ export class ChatGateway {
       pfp: otherUser.pfp_url,
       state: otherUser.state,
     }
-    client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversations: newUser.conversations });
+    client.emit('conversationCreated', { message: "CA MARCHE", otherUser: shortUser, conversations: newUser.conversations, friends: newUser.friendsList });
   }
 }
 

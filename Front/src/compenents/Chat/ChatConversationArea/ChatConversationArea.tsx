@@ -4,7 +4,7 @@ import ConversationContainer from '../ConversationContainer/ConversationContaine
 import TextComposerContainer from '../TextComposerContainer/TextComposerContainer'; // Import the TextComposerContainer component
 import Invite from '../../../img/chat/invite-gimp.jpg';
 import InviteGame from '../../../img/chat/game-gimp.jpg';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 
@@ -14,11 +14,11 @@ interface User {
   pfp: string,
 }
 
-interface Message {
-  content: string,
-  date: Date,
-  authorName: number,
-}
+// interface Message {
+//   content: string,
+//   date: Date,
+//   authorName: number,
+// }
 
 const initUser: User = {
   name: "",
@@ -27,6 +27,7 @@ const initUser: User = {
 }
 
 function ChatConversationArea({ user, conv, isVisible }) {
+  const token = Cookie.get('accessToken')
   const socket = useContext(ChatContext);
 
   const [messages, setMessages] = useState(conv.messages);
@@ -34,18 +35,24 @@ function ChatConversationArea({ user, conv, isVisible }) {
 
   const send = async (value: string) => {
     const convId = conv.id;
-    socket?.emit('sendMessageConv', {value, convId});
+    socket?.emit('sendMessageConv', { value, convId });
   }
 
   useEffect(() => {
     const getUserData = async () => {
-      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", {params: {id: conv.usersID}})
-      .then(response => {
-        getOtherUser(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/profile/getUserChatById", { params: { ids: conv.usersID }, headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          getOtherUser(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
+        .then(response => {
+          setMessages(response.data.messages);
+        })
+
       socket.on('messageSentConv', (res => {
         setMessages(res.messages);
       }));
@@ -54,9 +61,9 @@ function ChatConversationArea({ user, conv, isVisible }) {
     return () => {
       socket.off('messageSentConv');
     }
-  }, []);
+  }, [conv.usersID, socket]);
 
-  if (isVisible == false)
+  if (isVisible === false)
     return null;
   return (
     <div className='chat-conversation-area'>
@@ -72,7 +79,7 @@ function ChatConversationArea({ user, conv, isVisible }) {
               <li></li> */}
             </ul>
           </div>
-          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages}/>
+          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
           <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import './Tab.css';
@@ -9,24 +9,20 @@ import Sound_no from '../../../img/icons/sound_no.png'
 
 function Tab({ sound, delay }) {
   const [isTabOpen, setIsTabOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const toggleTab = () => {
     setIsTabOpen(!isTabOpen);
-    console.log("Open : " + isTabOpen);
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
   };
 
   //////////////////////////////////////////////
   const MusicPlayerAutorisation = ({ audioSrc, delay }) => {
 
-    const [isPlaying, setIsPlaying] = useState(false);
+    // const [isPlaying, setIsPlaying] = useState(true);
 
     const audio = new Audio(audioSrc);
-  
+    console.log(isPlaying);
+    
     const playAudioWithDelay = (delay) => {
       setTimeout(() => {
         audio.play().then(() => {
@@ -46,13 +42,12 @@ function Tab({ sound, delay }) {
         audio.pause();
         setIsPlaying(false);
       }
-        
 
     };
 
     return (
       <span onClick={handleTogglePlay}>
-          {isPlaying ? 
+          {!isPlaying ? 
             <img alt="tab-sound" className="tab-sound" src={Sound_no}></img> : 
             <img alt="tab-sound" className="tab-sound" src={Sound}></img>}
       </span>

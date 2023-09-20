@@ -24,6 +24,25 @@
 	background-repeat: no-repeat;
 }
 
+.chat-channel-area {
+	top: 20vh;
+	left: 60vw;
+}
+
+.channel-main-container {
+	top: 20vh;
+	left: 60vw;
+	position: absolute;
+	height: 75vh;
+	width: 20vw;
+	display: flex;
+	flex-direction: column;
+	border-radius: 5px;
+	background-image: url('../../../img/chat/channel_wallpaper.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 .channel-name {
 	flex: 1;
 	/* Take available space */
