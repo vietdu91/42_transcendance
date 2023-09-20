@@ -18,6 +18,7 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 	const [value, setValue] = useState('');
 	const [messages, setMessages] = useState(channel.messages.filter((index) => !(blocked.includes(index.authorId))));
 	const inputRef = useRef<HTMLDivElement | null>(null);
+	const divRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenAction, setIsOpenAction] = useState(false);
 
@@ -53,6 +54,12 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 	};
 
 	useEffect(() => {
+		const scrollToBottom = () => {
+			if (divRef.current) {
+				divRef.current.scrollTop = divRef.current.scrollHeight;
+			}
+		};
+		scrollToBottom();
 		const getData = async () => {
 			socket.on('messageSentChann', (res => {
 				axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
@@ -116,7 +123,7 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 						<div className="channel-group-convo">
 							<div className="channel-members-presentation"> {/*add le name du channel*/}
 							</div>
-							<div className="channel-conversation-messages">
+							<div className="channel-conversation-messages" ref={divRef}>
 								{messages.map((message, index) => (
 									<ul key={index}>
 										<li className="conv-sender-info-chan">{message.authorName}</li>
