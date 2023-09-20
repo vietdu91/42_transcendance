@@ -177,7 +177,6 @@ export class ChatGateway {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
-    console.log("hiihihia")
     const name = params.name;
 
     const chann = await this.prisma.channel.findUnique({
@@ -194,7 +193,6 @@ export class ChatGateway {
       client.emit('errorSocket', { message: "This channel doesn't exist" });
       return;
     }
-    console.log("hihihi");
     for (let i = 0; i < chann.usersList.length; i++) {
       console.log(chann.usersList[i].id, userDb.id)
       if (chann.usersList[i].id == userDb.id) {

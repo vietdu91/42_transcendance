@@ -25,7 +25,6 @@ export class ChatController {
 				}
 			})
 			let persoMessages = conv.messages.filter((index) => !(user.blockList.includes(index.authorId)));
-			console.log(persoMessages);
 			response.json({messages: persoMessages});
 		} catch {
 			throw new UnauthorizedException();
@@ -43,7 +42,6 @@ export class ChatController {
 				}
 			})
 			let persoMessages = channel.messages.filter((index) => !(user.blockList.includes(index.authorId)));
-			console.log(persoMessages);
 			response.json({messages: persoMessages});
 		} catch {
 			throw new UnauthorizedException();
