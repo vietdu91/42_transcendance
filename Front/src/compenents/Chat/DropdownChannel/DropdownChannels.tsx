@@ -133,11 +133,9 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 							<div>
 								<h1 className="question">Choose between these two options</h1>
 								<ul>
-									<input type="radio" name="privacy" value="public"
-									 onChange={() => setIsPrivate(false)} />
+									<input type="radio" name="privacy" value="public" />
 									<label className="label-priv-pub" htmlFor="public">Public</label>
-									<input type="radio" name="privacy" value="private"
-									 onChange={() => setIsPrivate(true)} />
+									<input type="radio" name="privacy" value="private" />
 									<label className="label-priv-pub" htmlFor="private">Private</label>
 								</ul>
 							</div>
