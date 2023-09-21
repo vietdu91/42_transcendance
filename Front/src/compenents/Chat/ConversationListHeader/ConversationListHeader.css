@@ -196,6 +196,7 @@ button[aria-label="Close"]:not(:disabled):active {
     grid-row-end: 42;
     grid-column-start: 5;
     grid-column-end: 9;
+    background-color: black;
     border-radius: 5px;
 }
 
@@ -211,7 +212,7 @@ button[aria-label="Close"]:not(:disabled):active {
 .user-informations {
     grid-row-start: 13;
     grid-row-end: 42;
-    grid-column-start: 15;
+    grid-column-start: 17;
     grid-column-end: 48;
     /* background-color: black; */
 }
