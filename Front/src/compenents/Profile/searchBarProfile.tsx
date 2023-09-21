@@ -33,8 +33,10 @@ function SearchBar2({ onSearch }: SearchBarProps) {
                     Cookie.remove('accessToken')
                     window.location.href = "/";
                 }
-                else
+                else if (error.response.data.message !== "your profile")
                     setNotFound(true);
+                else
+                    setNotFound(false);
             });
     };
 

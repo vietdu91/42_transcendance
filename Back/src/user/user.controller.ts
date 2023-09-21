@@ -25,6 +25,9 @@ export class UserController {
       if (!target) {
         throw new BadRequestException();
       }
+      if (target.name == user.name) {
+        throw new BadRequestException("your profile");
+      }
 
       let percentage: number = target.wins + target.looses === 0 ? 0 : Math.round(target.wins / (target.wins + target.looses) * 100);
 
@@ -37,8 +40,8 @@ export class UserController {
         friend: user.friendsList.includes(target.id),
         blocked: user.blockList.includes(target.id),
       });
-    } catch {
-      throw new BadRequestException();
+    } catch (error) {
+      throw error;
     }
   }
 

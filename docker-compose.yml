@@ -8,7 +8,7 @@ networks:
 
 services:
   postgres:
-    image: postgres
+    image: postgres:16
     container_name: postgres
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
     image: nestjs-app
     build:
       context: ./Back
-      dockerfile: Dockerfile
+      target: production
     env_file:
       - .env
     ports:
@@ -45,7 +45,7 @@ services:
     container_name: frontend
     build:
       context: ./Front
-      dockerfile: Dockerfile
+      target: production
     env_file:
       - .env
     ports:

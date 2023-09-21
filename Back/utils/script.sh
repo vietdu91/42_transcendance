@@ -1,3 +1,7 @@
-npx prisma migrate dev --schema=./src/prisma/schema.prisma
+npx prisma migrate deploy --schema=./src/prisma/schema.prisma
 
-npm run start:dev
+npm run build
+
+# npx prisma migrate dev --schema=./src/prisma/schema.prisma
+
+# npm run start:dev

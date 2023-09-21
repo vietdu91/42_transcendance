@@ -98,6 +98,12 @@ CREATE TABLE "_adminList" (
 );
 
 -- CreateTable
+CREATE TABLE "_mutedList" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_conversations" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -146,6 +152,12 @@ CREATE UNIQUE INDEX "_adminList_AB_unique" ON "_adminList"("A", "B");
 CREATE INDEX "_adminList_B_index" ON "_adminList"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_mutedList_AB_unique" ON "_mutedList"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_mutedList_B_index" ON "_mutedList"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_conversations_AB_unique" ON "_conversations"("A", "B");
 
 -- CreateIndex
@@ -186,6 +198,12 @@ ALTER TABLE "_adminList" ADD CONSTRAINT "_adminList_A_fkey" FOREIGN KEY ("A") RE
 
 -- AddForeignKey
 ALTER TABLE "_adminList" ADD CONSTRAINT "_adminList_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_mutedList" ADD CONSTRAINT "_mutedList_A_fkey" FOREIGN KEY ("A") REFERENCES "Channel"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_mutedList" ADD CONSTRAINT "_mutedList_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_conversations" ADD CONSTRAINT "_conversations_A_fkey" FOREIGN KEY ("A") REFERENCES "Conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
