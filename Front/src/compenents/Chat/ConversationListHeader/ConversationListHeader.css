@@ -147,7 +147,6 @@ button[aria-label="Close"]:not(:disabled):active {
     border-left: 4px solid #0831d9;
     border-right: 4px solid #0831d9;
     border-top: 1px solid #0831d9;
-
 }
 
 .option-conversation-list * {
@@ -158,8 +157,8 @@ button[aria-label="Close"]:not(:disabled):active {
 }
 
 .option-conversation-list li:hover {
-    background-color: #333; /* Dark background color on hover */
-    color: white; /* White text color on hover */
+    background-color: #333;
+    color: white;
 }
 .topbar-conversation-list {
     height: 68%;
@@ -168,17 +167,22 @@ button[aria-label="Close"]:not(:disabled):active {
     border-radius: 5px;
     box-shadow: 1px 1px 1px grey;
     margin: 1px 2px 2px 2px;
-    display: grid;
-    grid-template-columns: repeat(50, 2%);
-    grid-template-rows: repeat(50, 2%);
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 2%;
+    /* grid-template-columns: repeat(50, 2%);
+    grid-template-rows: repeat(50, 2%); */
 
 }
 
 .profile-pic-messenger {
-    grid-row-start: 13;
+    height: 75%;
+    width: auto;
+    /* grid-row-start: 13;
     grid-row-end: 42;
     grid-column-start: 2;
-    grid-column-end: 9;
+    grid-column-end: 9; */
     background-color: black;
     border-radius: 5px;
 }
@@ -190,10 +194,12 @@ button[aria-label="Close"]:not(:disabled):active {
 }
 
 .user-informations {
-    grid-row-start: 13;
+    width: 65%;
+    padding-left: 2%;
+    /* grid-row-start: 13;
     grid-row-end: 42;
     grid-column-start: 12;
-    grid-column-end: 48;
+    grid-column-end: 48; */
     /* background-color: black; */
 }
 

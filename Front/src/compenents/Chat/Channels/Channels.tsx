@@ -14,6 +14,7 @@ import axios from 'axios';
 import groupConv from '../../../img/chat/group-conv.png';
 import blockUser from '../../../img/chat/block_user.png';
 import banUser from '../../../img/chat/ban_user.png';
+import moreOptions from '../../../img/chat/more-options.png';
 
 function Channel({ i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
@@ -22,7 +23,9 @@ function Channel({ i, max, user, channel, isVisible }) {
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenAction, setIsOpenAction] = useState(false);
+	const [isOpenMoreOptions, setIsOpenMoreOptions] = useState<boolean[]>(Array.from({ length: channel.usersList.length }, () => false));
 	const token = Cookie.get('accessToken');
+    // const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: channel.usersList.length }, () => false));
 
 	// type CSSProperties = React.CSSProperties & {
 	// 	[key: string]: string;
@@ -32,13 +35,17 @@ function Channel({ i, max, user, channel, isVisible }) {
 		setIsOpen(!isOpen);
 	}
 
-
-
 	const handleInputChange = () => {
 		if (inputRef.current) {
 			setValue(inputRef.current.innerText);
 		}
 	};
+
+	const toggleMoreOptions = (index: number) => {
+		const newOptions = [...isOpenMoreOptions];
+        newOptions[index] = !newOptions[index];
+		setIsOpenMoreOptions(newOptions);
+	}
 
 	function goToProfile(name: string) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
@@ -72,7 +79,7 @@ function Channel({ i, max, user, channel, isVisible }) {
 	}, [socket])
 
 	const maxTop = window.innerHeight - 80;
-	const maxLeft = window.innerWidth; // Set to the right half of the screen
+	const maxLeft = window.innerWidth;
 
 	const getRandomNumber = (max, sizeInPercent) => {
 		const sizeInPixels = (80 / 100) * max;
@@ -141,18 +148,36 @@ function Channel({ i, max, user, channel, isVisible }) {
 							</div>
 							<div className="channel-group-member-list">
 								<ul className="channel-group-member-list-ul">
-									{channel.usersList?.map((user, index) => (
-										<li className="channel-group-member-list-ul-li"key={index} >
-											<div className="channel-group-member-list-logo-name-pseudo">
-												<img src={regularConv} alt="regularConv" />
-												<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(user.name) }}>{user.nickname} ({user.name} )</div>
-											</div>
-											<div className="channel-group-member-list-ban-block">
-												<img src={banUser} alt="channels-ban-user" id="channels-ban-user" />
-												<img src={blockUser} alt="channels-block-user" id="channels-block-user" />
-											</div>
-										</li>
 
+									{channel.usersList?.map((users, index) => (
+										<div key={index}>
+											<li className="channel-group-member-list-ul-li">
+												<div className="channel-group-member-list-logo-name-pseudo">
+													<img src={regularConv} alt="regularConv" />
+													<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(users.name) }}>{users.nickname} ({users.name} )</div>
+												</div> { (user.id === channel.ownerId) &&
+													<img src={moreOptions} alt="channels-more-options" id="channels-more-options" onClick={() => toggleMoreOptions(index)} />
+												}
+											</li>
+											<div className="channel-group-member-list-ban-block">
+												{isOpenMoreOptions[index] && (
+													<div className="channels-more-options-dropdown">
+														<div className="channel-more-option-choose">
+															What do we do with (insert name) ?
+														</div>
+														<ul className="channel-more-option-choose-buttons">
+															<button>KICK</button>
+															<button>BAN</button>
+															<button>SET ADMIN</button>
+														</ul>
+														{/* Add the content you want to display when isOpenMoreOptions is true */}
+													</div>
+												)}
+												{/* 
+												<img src={banUser} alt="channels-ban-user" id="channels-ban-user" />
+												<img src={blockUser} alt="channels-block-user" id="channels-block-user" /> */}
+											</div>
+										</div>
 									))}
 								</ul>
 							</div>

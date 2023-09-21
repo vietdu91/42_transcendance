@@ -29,7 +29,7 @@ import Logo from '../../../img/chat/group-conv.png'
 // }) => {
 
 
-const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFriends}) => {
+const ConversationListHeader = ({ name, pfp, user, setConvs, setChannels, setFriends }) => {
     // État pour définir si la room est privée
 
     // const socket = useContext(ChatContext);
@@ -60,8 +60,9 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFrie
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger">
-                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile}/> {/* Add the profile picture */}
-                </div>                <div className="user-informations">
+                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile} /> {/* Add the profile picture */}
+                </div>
+                <div className="user-informations">
                     <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
                     <h4 className="status-edit">status to Edit</h4>
                 </div>

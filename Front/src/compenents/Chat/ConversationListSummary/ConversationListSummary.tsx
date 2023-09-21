@@ -70,14 +70,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
     const handleSearch = (query: string) => {
         console.log(`Recherche en cours avec la requête : ${query}`);
     };
-
-    /* modif benda */
-    // const handleIndivConvVisibility = (visibility) => {
-    //     handleVisibility(visibility);
-    // };
-    /* modif benda */
     
-
     useEffect(() => {
         setVisibleItems(Array.from({ length: convs.length }, () => false));
         setVisibleChannels(Array.from({ length: convs.length }, () => false));
