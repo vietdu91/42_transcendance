@@ -52,7 +52,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 			setJoined(true);
 		}
 		else {
-			socket?.emit('joinChannel', { name: channelName });
+			socket?.emit('joinChannel', { name: channelName, password: null });
 			setJoined(true);
 		}
 		setChannelName('');
@@ -88,12 +88,12 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 	useEffect(() => {
 		socket.on('channelCreated', (response) => {
 			setChannels(response.channels);
-			// setFriends(response.friends);
+			setFriends(response.friends);
 		})
 		
 		socket.on('channelJoined', (response) => {
 			setChannels(response.channels);
-			// setFriends(response.friends);
+			setFriends(response.friends);
 		})
 	})
 

@@ -4,8 +4,12 @@ import { Close as CloseIcon } from '@mui/icons-material';
 export default function SnackBarCustom({ open, setOpen, message }) {
 	return (
 		<Snackbar
+			anchorOrigin={{
+				vertical: 'top',
+				horizontal: 'center',
+			}}
 			open={open}
-			autoHideDuration={6000} // Durée d'affichage du snackbar en millisecondes
+			autoHideDuration={6000}
 			onClose={() => setOpen(false)}
 		>
 			<SnackbarContent

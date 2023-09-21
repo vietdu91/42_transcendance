@@ -39,6 +39,7 @@ model User {
   whereBan         Channel[]      @relation("banList")
   whereAdmin       Channel[]      @relation("adminList")
   whereOwner       Channel[]
+  mutedChannels    Channel[]      @relation("mutedList")
 }
 
 model Game {
@@ -78,7 +79,8 @@ model Channel {
   usersList User[]   @relation("channels")
   banList   User[]   @relation("banList")
   adminList User[]   @relation("adminList")
-  messages  Message[] 
+  messages  Message[]
+  mutedList User[]  @relation("mutedList")
 
 }
 
