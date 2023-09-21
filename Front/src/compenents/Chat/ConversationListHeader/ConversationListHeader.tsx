@@ -43,7 +43,7 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
             <ul className="top-conversation-list">
                 <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
                 <li className="transcendance-messenger">Transcendence Messenger</li>
-                <div className="right-icons">
+                <div className="clh-right-icons">
                     <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
                     <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
                     <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
@@ -54,9 +54,9 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
                 {/* <li onClick={() => showContact("First")}></li> */}
                 <DropdownChannel user={user} setChannels={setChannels} />
                 <DropdownContact user={user} setConvs={setConvs} />
-                <li>Actions</li> { /*  */}
-                <li>Tools</li> { /* */}
-                <li>Help</li>
+                <li className="li-option-conversation-list">Actions</li> { /*  */}
+                <li className="li-option-conversation-list">Tools</li> { /* */}
+                <li className="li-option-conversation-list">Help</li>
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger">

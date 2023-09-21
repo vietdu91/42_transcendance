@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
-import './Channels.scss';
+
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'

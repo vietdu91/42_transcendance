@@ -32,6 +32,8 @@ import Chat from './compenents/Chat/socketChat';
 import Achievement from './compenents/utils/Achievement/Achievement';
 
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
+import SetNickname from './compenents/SetNickname/SetNickname';
+
 
 export default function App() {
 	
@@ -43,6 +45,7 @@ export default function App() {
 				<Route path="/" element={<Menu />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
 				<Route path="/2fa" element={<TwoFa />}/>
+				<Route path="/setNickname" element={<SetNickname />} />
 				<Route path="/champselect" element={<ChampSelect />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>
 				<Route path="/game" element={<Game />}/>

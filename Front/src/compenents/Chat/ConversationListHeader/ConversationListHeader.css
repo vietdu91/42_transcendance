@@ -26,11 +26,11 @@
     text-indent: 2%;
 }
 
-.right-icons {
+.clh-right-icons {
     display: flex;
     align-items: center; /* Center vertically */
 }
-.right-icons li {
+.clh-right-icons li {
     margin-left: 10px; 
     /* Adjust the spacing as needed */
 }
@@ -97,8 +97,8 @@ button[aria-label="Close"]:not(:disabled):active {
 .top-conversation-list {
     height: 35px;
     width: 100%;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     border: 1px solid #0831d9;
     background: linear-gradient(
         180deg,
@@ -132,17 +132,16 @@ button[aria-label="Close"]:not(:disabled):active {
     height: auto;
 }
 
-
 .option-conversation-list {
     height: 12%;
     width: 100%;
-    list-style-type: none;
+    /* list-style-type: none; */
     background-color: #ece8d8;
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
     padding: 0;
-    font-size: 50%;
+    /* font-size: 50%; */
     align-items: center;
     border-left: 4px solid #0831d9;
     border-right: 4px solid #0831d9;
@@ -150,17 +149,25 @@ button[aria-label="Close"]:not(:disabled):active {
 
 }
 
-.option-conversation-list * {
+/* .option-conversation-list * {
     height: auto;
     padding-right: 3%;
     font-size: 0.8vw;
     padding-left: 7px;
-}
+} */
 
-.option-conversation-list li:hover {
+/* .option-conversation-list * {
+    height: auto;
+    padding-right: 3%;
+    font-size: 0.8vw; */
+    /* padding-left: 7px;
+} */
+
+.option-conversation-list .li-option-conversation-list-:hover {
     background-color: #333; /* Dark background color on hover */
     color: white; /* White text color on hover */
 }
+
 .topbar-conversation-list {
     height: 68%;
     background: linear-gradient(180deg, rgba(182, 209, 238, 1) 0%, rgba(176, 212, 249, 1) 3%,
