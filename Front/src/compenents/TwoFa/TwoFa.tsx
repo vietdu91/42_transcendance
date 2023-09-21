@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -9,24 +9,26 @@ import RedCross from "../../img/buttons/red_cross.png"
 
 export default function TwoFa() {
 	const navigate = useNavigate();
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const id = urlParams.get('id');
 	const [code, setCode] = useState("");
 
 	const handleChange = (event) => {
 		setCode(event.target.value);
-	  };
+	};
 
 	const handleEnable = async (e) => {
 		e.preventDefault();
 		console.log(code);
 		await axios.get(
-			process.env.REACT_APP_LOCAL_B + `/auth/connect2fa?code=${code}`,
-			{withCredentials: true})
-		.then(response => {
-			navigate('/');
-		})
-		.catch(err => {
-			console.log(err);
-		});
+			process.env.REACT_APP_LOCAL_B + `/auth/connect2fa?code=${code}&id=${Number(id)}`, { withCredentials: true })
+			.then(response => {
+				navigate('/');
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	}
 
 	const leavePage = () => {

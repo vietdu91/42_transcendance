@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // CSS
 import './Menu.css';
@@ -61,10 +61,7 @@ export default function App() {
           headers: { 'Authorization': `Bearer ${accessToken}` },
         })
         Cookies.remove('accessToken');
-        Cookies.remove('id');
-        console.log("COOKIES REMOVED")
         navigate("/connect");
-        console.log("NAVIGATED")
       }
       catch (err) {
         console.log("app-front: error: ", err)

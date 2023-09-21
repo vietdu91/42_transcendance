@@ -8,7 +8,7 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
 }
 
-function SearchBar ({ onSearch }: SearchBarProps) {
+function SearchBar({ onSearch }: SearchBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const token = Cookie.get('accessToken')
@@ -16,31 +16,28 @@ function SearchBar ({ onSearch }: SearchBarProps) {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.target.value);
     setSearchQuery(event.target.value);
   };
 
-  const handleSearch = async (username: string) => {
+  const handleSearch = async (query: string) => {
+
     await axios.get(
-        process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
-        { params: {username: username}, headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => {
-            // const receivId = response.data.user.id;
-            onSearch(response.data.user.name);
-            console.log(response.data.user.name);
-            if (location.pathname === "/chat")
-              window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.user.name}`);
-            else
-              navigate(`/user/${response.data.user.name}`)
+      process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
+      { headers: { "Authorization": `Bearer ${token}` }, params: { username: query } })
+      .then((response) => {
+        onSearch(query);
+        if (location.pathname === "/chat") {
+          setNotFound(false);
+          window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
         }
-        )
-        .catch((error) => {
-            setNotFound(true);
-            console.log("error: Not found");
-        });
-        // console.log(response.data);
-    // Traitez les données de réponse ici
-};
+        else
+          navigate(`/user/${response.data.name}`)
+      }
+      )
+      .catch((error) => {
+        setNotFound(true);
+      });
+  };
 
   return (
     <div className="searchBar">
@@ -53,7 +50,7 @@ function SearchBar ({ onSearch }: SearchBarProps) {
       />
       <button
         className="searchBar-button"
-       onClick={() => handleSearch(searchQuery)}>Rechercher</button>
+        onClick={() => handleSearch(searchQuery)}>Rechercher</button>
       {notFound && <div>Utilisateur non trouvé</div>}
     </div>
   );

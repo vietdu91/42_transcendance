@@ -1,6 +1,6 @@
 import React from 'react'
 import { GameContext, gameSocket } from './compenents/utils/GameContext';
-// import { ChatContext, chatSocket } from './compenents/utils/ChatContext';
+import { ChatContext, chatSocket } from './compenents/utils/ChatContext';
 
 // CSS
 import './App.css';
@@ -32,11 +32,16 @@ import Chat from './compenents/Chat/socketChat';
 import Achievement from './compenents/utils/Achievement/Achievement';
 
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
+import TextComposerContainer from './compenents/Chat/TextComposerContainer/TextComposerContainer';
+
+import YeahYeah from './sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All Of Them).mp3'
+import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
+import SearchBar from './compenents/searchBar/searchBar';
 import SetNickname from './compenents/SetNickname/SetNickname';
 
 
 export default function App() {
-	
+
 	return (
 		<GameContext.Provider value={gameSocket}>
 			<div className="App">
@@ -45,7 +50,6 @@ export default function App() {
 				<Route path="/" element={<Menu />}/>
 				<Route path="/gamemenu" element={<GameMenu />}/>
 				<Route path="/2fa" element={<TwoFa />}/>
-				<Route path="/setNickname" element={<SetNickname />} />
 				<Route path="/champselect" element={<ChampSelect />}/>
 				<Route path="/matchmaking" element={<Matchmaking />}/>
 				<Route path="/game" element={<Game />}/>

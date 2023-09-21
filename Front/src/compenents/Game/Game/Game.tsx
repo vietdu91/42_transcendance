@@ -236,8 +236,7 @@ export default function Game(): JSX.Element {
 				},
 			}
 			game.current = updatedGame;
-			console.log(response.userId);
-			// setUserId(response.userId);
+			setUserId(response.userId);
 			setCharLeft(game.current.charLeft);
 			setCharRight(game.current.charRight);
 			setNameLeft(response.game.nameLeft);

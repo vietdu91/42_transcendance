@@ -29,7 +29,7 @@ import Logo from '../../../img/chat/group-conv.png'
 // }) => {
 
 
-const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
+const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFriends}) => {
     // État pour définir si la room est privée
 
     // const socket = useContext(ChatContext);
@@ -52,11 +52,19 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels}) => {
             {/* <hr /> */}
             <ul className="option-conversation-list">
                 {/* <li onClick={() => showContact("First")}></li> */}
+<<<<<<< HEAD
                 <DropdownChannel user={user} setChannels={setChannels} />
                 <DropdownContact user={user} setConvs={setConvs} />
                 <li className="li-option-conversation-list">Actions</li> { /*  */}
                 <li className="li-option-conversation-list">Tools</li> { /* */}
                 <li className="li-option-conversation-list">Help</li>
+=======
+                <DropdownChannel user={user} setChannels={setChannels} setFriends={setFriends} />
+                <DropdownContact user={user} setConvs={setConvs} setFriends={setFriends} />
+                <li>Actions</li> { /*  */}
+                <li>Tools</li> { /* */}
+                <li>Help</li>
+>>>>>>> master
             </ul>
             <div className="topbar-conversation-list">
                 <div className="profile-pic-messenger">

@@ -13,6 +13,9 @@ import { AuthModule } from './auth/auth.module';
 import { GameService } from './game/game.service';
 import { GameController } from './game/game.controller';
 
+import { ChatService } from './chat/chat.service';
+import { ChatController } from './chat/chat.controller';
+
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
@@ -45,8 +48,8 @@ import { join } from 'path';
     }),
     CloudinaryModule,
   ],
-  controllers: [AppController, UserController, AuthController, GameController],
+  controllers: [AppController, UserController, AuthController, GameController, ChatController],
   providers: [
-    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatGateway, MatchmakingGateway, GameService],
+    PrismaService, AppService, AuthService, UserService, TwofaService, ConfigService, JwtStrategy, ChatService, ChatGateway, MatchmakingGateway, GameService],
 })
 export class AppModule {}
