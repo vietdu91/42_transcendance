@@ -68,22 +68,6 @@
 	/* Adjust the right margin for spacing */
 }
 
-.dropdown-menu {
-	z-index: ;
-	position: absolute;
-	cursor: pointer;
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	background-color: #f9f4e1;
-	/* Light beige background color for the menu */
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	display: none;
-}
-
 .channel-modo-mode {
 	width: 100%;
 	height: 10%;

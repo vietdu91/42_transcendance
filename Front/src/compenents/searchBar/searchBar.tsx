@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Cookie from 'js-cookie'
 import axios from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -17,8 +17,11 @@ function SearchBar({ onSearch }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [notFound, setNotFound] = useState<boolean>(false);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
+    setNotFound(false);
   };
 
   const handleSearch = async (query: string) => {
@@ -41,21 +44,40 @@ function SearchBar({ onSearch }: SearchBarProps) {
       });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        // Clic en dehors de l'input, masquez la div d'erreur
+        setNotFound(false);
+      }
+    };
+
+      document.addEventListener('mousedown', handleClickOutside);
+
+      return () => {
+        // Retirez l'écouteur d'événement lorsque le composant est démonté
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
+
   return (
     <div className="searchBar">
-      <input
-        className="searchBar-input"
+      <input className="searchBar-input"
         type="text"
         placeholder="Search User"
         value={searchQuery}
         onChange={handleInputChange}
+        ref={inputRef}
       />
-      <img
-        className="searchBar-button"
+      <img className="searchBar-button"
         src={Lampe}
         alt="lampe"
         onClick={() => handleSearch(searchQuery)}></img>
-      {notFound && <div>Utilisateur non trouvé</div>}
+      {notFound && <div className="searchBar-error">User No Found</div>}
     </div>
   );
 };

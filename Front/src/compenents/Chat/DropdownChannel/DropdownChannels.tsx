@@ -118,7 +118,7 @@ function DropdownChannels({ user, setChannels }) {
 	return (
 	<>
 		<div className="dropdown">
-			<li className="option-conversation-option" onClick={toggleChannels}>
+			<li className="option-conversation-option" id="option-channels" onClick={toggleChannels}>
 				Channels
 			</li>
 			{isOpen && (

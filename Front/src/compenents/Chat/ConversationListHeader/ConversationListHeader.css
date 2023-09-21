@@ -196,7 +196,6 @@ button[aria-label="Close"]:not(:disabled):active {
     grid-row-end: 42;
     grid-column-start: 5;
     grid-column-end: 9;
-    background-color: black;
     border-radius: 5px;
 }
 

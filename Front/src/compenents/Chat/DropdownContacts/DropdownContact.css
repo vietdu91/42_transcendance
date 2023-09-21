@@ -27,7 +27,6 @@
 	padding: 0;
 	margin: 0;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	display: none;
 	font-size: 13px;
 	z-index:2;
 }
@@ -46,7 +45,7 @@
 }
 
 /* Dropdown animation */
-.dropdown-contact:hover .dropdown-contact-menu {
+.dropdown-contact:hover + .dropdown-contact-menu {
   display: block;
   animation: fadeIn 0.2s ease-in-out;
 }
@@ -129,6 +128,7 @@
 	inset 2px 2px #166aee, 
 	inset -3px -3px #003bda, 
 	inset 3px 3px #0855dd;
+	z-index: 2;
 }
 
 /****Invite****/
