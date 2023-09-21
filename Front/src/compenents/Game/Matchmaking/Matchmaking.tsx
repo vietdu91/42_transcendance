@@ -11,23 +11,23 @@ import './Matchmaking.css';
 
 const MatchmakingQueue = ({ leaveQueue }) => (
 	<div id="bg-black">
-	  <div id="waiting-black">
-		<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leaveQueue} />
-		<img id="balls_waiting" src={BallsWaiting} alt="Balls Waiting" />
-		<div id="waiting-text">Waiting</div>
-	  </div>
+		<div id="waiting-black">
+			<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leaveQueue} />
+			<img id="balls_waiting" src={BallsWaiting} alt="Balls Waiting" />
+			<div id="waiting-text">Waiting</div>
+		</div>
 	</div>
-  );
-  
-  const MatchmakingNotInQueue = ({ joinQueue, leavePage }) => (
+);
+
+const MatchmakingNotInQueue = ({ joinQueue, leavePage }) => (
 	<div id="bg-game">
-	  <img id="bg-game" src={Fire} alt={'Fire'} />
-	  <img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
-	  <div id="waiting">
-		<button id="queue-button" onClick={joinQueue}>Entrer dans la lutte</button>
-	  </div>
+		<img id="bg-game" src={Fire} alt={'Fire'} />
+		<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
+		<div id="waiting">
+			<button id="queue-button" onClick={joinQueue}>Entrer dans la lutte</button>
+		</div>
 	</div>
-  );
+);
 
 export default function Matchmaking() {
 
@@ -35,8 +35,8 @@ export default function Matchmaking() {
 	const [inQueue, setInQueue] = useState(false);
 	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
-    if (!token)
-        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
+	if (!token)
+		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const joinQueue = () => {
 		socket?.emit('joinQueue');
@@ -45,16 +45,16 @@ export default function Matchmaking() {
 	const leaveQueue = () => {
 		socket?.emit('leaveQueue');
 		setInQueue(false);
-	  };
+	};
 
 	const leavePage = () => {
 		navigate(`/gamemenu`);
 	}
 
-	const handleMatchFound = (roomId:string) => {
-		navigate(`/decompte`, {state: {roomId: roomId}});
+	const handleMatchFound = (roomId: string) => {
+		navigate(`/decompte`, { state: { roomId: roomId } });
 	}
-	
+
 	useEffect(() => {
 		socket.on('connect', () => {
 			console.log('Connection established');
@@ -67,29 +67,29 @@ export default function Matchmaking() {
 
 		socket.on('alreadyJoined', (response) => {
 			console.log(response.message);
-			setInQueue(true);
+			setInQueue(false);
 		})
 
-		socket.on('matchFound',(response) => {
+		socket.on('matchFound', (response) => {
 			handleMatchFound(response.roomId);
 		})
-		
+
 		socket.on('wrongUser', (response) => {
 			alert(response.message);
 			navigate("/gamemenu");
 		})
-		
+
 		return () => {
 			if (inQueue)
-			leaveQueue();
-	};
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+				leaveQueue();
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inQueue, socket, navigate]);
 
-	
+
 
 	if (inQueue) {
-	return <MatchmakingQueue leaveQueue={leaveQueue} />;
+		return <MatchmakingQueue leaveQueue={leaveQueue} />;
 	}
 
 	return <MatchmakingNotInQueue joinQueue={joinQueue} leavePage={leavePage} />;

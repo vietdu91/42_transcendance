@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -58,9 +58,10 @@ export default function ChampSelect() {
 	const [butters, setButters] = useState(ButtersNormal);
 
 	const navigate = useNavigate();
+	const location = useLocation();
 	const token = Cookies.get('accessToken');
-    if (!token)
-        window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
+	if (!token)
+		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const playSound = (soundFile) => {
 		const audio = new Audio(soundFile);
@@ -68,21 +69,38 @@ export default function ChampSelect() {
 	};
 
 	const leavePage = () => {
-	  navigate(`/gamemenu`);
+		if (!location.search)
+			navigate(`/gamemenu`);
+		else
+			navigate(`/chat`);
 	};
 
-	const handleClick = async (character:String) => {
+	useEffect(() => {
+		async function getUser() {
+			await axios.get(
+				process.env.REACT_APP_LOCAL_B + '/profile/getUserByname',
+				{ withCredentials: true, params: { username: location.search.slice(location.search.lastIndexOf('=') + 1) }, headers: { "Authorization": `Bearer ${token}` } })
+				.catch((error) => {
+					console.log(error);
+					navigate('/chat');
+				})
+		}
+		if (location.search)
+			getUser();
+	})
+
+	const handleClick = async (character: String) => {
 		await axios.patch(
 			process.env.REACT_APP_LOCAL_B + '/profile/setCharacter',
 			{ character },
-			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
-			.then((response) => {
-				console.log(response.data.message);
-			})
+			{ withCredentials: true, headers: { "Authorization": `Bearer ${token}` } })
 			.catch((error) => {
 				console.error(error);
 			});
-		navigate("/matchmaking");
+		if (!location.search)
+			navigate("/matchmaking");
+		else
+			navigate(`/invitematch${location.search}`)
 	}
 
 	return (
@@ -95,37 +113,37 @@ export default function ChampSelect() {
 			</div>
 			<div className="grid">
 				<img className="card" src={cartman} alt={'Cartman'}
-				onMouseEnter={() => {setCartman(CartmanSuper);}}
-				onMouseLeave={() => {setCartman(CartmanNormal);}}
-				onClick={() => {playSound(RespectezMonAutorite); setTimeout(() => {handleClick('Cartman')}, 2000);}}></img>
+					onMouseEnter={() => { setCartman(CartmanSuper); }}
+					onMouseLeave={() => { setCartman(CartmanNormal); }}
+					onClick={() => { playSound(RespectezMonAutorite); setTimeout(() => { handleClick('Cartman') }, 2000); }}></img>
 				<img className="card" src={servietsky} alt={'Servietsky'}
-				onMouseEnter={() => {setServietsky(ServietskySuper);}}
-				onMouseLeave={() => {setServietsky(ServietskyNormal);}}
-				onClick={() => {playSound(OnSFumeUnPetard); setTimeout(() => {handleClick('Servietsky')}, 2000);}}></img>
+					onMouseEnter={() => { setServietsky(ServietskySuper); }}
+					onMouseLeave={() => { setServietsky(ServietskyNormal); }}
+					onClick={() => { playSound(OnSFumeUnPetard); setTimeout(() => { handleClick('Servietsky') }, 2000); }}></img>
 				<img className="card" src={kenny} alt={'Kenny'}
-				onMouseEnter={() => {setKenny(KennySuper);}}
-				onMouseLeave={() => {setKenny(KennyNormal);}}
-				onClick={() => {playSound(KennyBague); setTimeout(() => {handleClick('Kenny')}, 2000);}}></img>
+					onMouseEnter={() => { setKenny(KennySuper); }}
+					onMouseLeave={() => { setKenny(KennyNormal); }}
+					onClick={() => { playSound(KennyBague); setTimeout(() => { handleClick('Kenny') }, 2000); }}></img>
 				<img className="card" src={timmy} alt={'Timmy'}
-				onMouseEnter={() => {setTimmy(TimmySuper);}}
-				onMouseLeave={() => {setTimmy(TimmyNormal);}}
-				onClick={() => {playSound(EwwlibleauTimmay); setTimeout(() => {handleClick('Timmy')}, 2000);}}></img>
+					onMouseEnter={() => { setTimmy(TimmySuper); }}
+					onMouseLeave={() => { setTimmy(TimmyNormal); }}
+					onClick={() => { playSound(EwwlibleauTimmay); setTimeout(() => { handleClick('Timmy') }, 2000); }}></img>
 				<img className="card" src={terrancePhilip} alt={'TerrancePhilip'}
-				onMouseEnter={() => {setTerrancePhilip(TerrancePhilipSuper);}}
-				onMouseLeave={() => {setTerrancePhilip(TerrancePhilipNormal);}}
-				onClick={() => {playSound(JsuispastonPote); setTimeout(() => {handleClick('TerrancePhilip')}, 2000);}}></img>
+					onMouseEnter={() => { setTerrancePhilip(TerrancePhilipSuper); }}
+					onMouseLeave={() => { setTerrancePhilip(TerrancePhilipNormal); }}
+					onClick={() => { playSound(JsuispastonPote); setTimeout(() => { handleClick('TerrancePhilip') }, 2000); }}></img>
 				<img className="card" src={garrison} alt={'Garrison'}
-				onMouseEnter={() => {setGarrison(GarrisonSuper);}}
-				onMouseLeave={() => {setGarrison(GarrisonNormal);}}
-				onClick={() => {playSound(AucuneConfiance); setTimeout(() => {handleClick('Garrison')}, 2000);}}></img>
+					onMouseEnter={() => { setGarrison(GarrisonSuper); }}
+					onMouseLeave={() => { setGarrison(GarrisonNormal); }}
+					onClick={() => { playSound(AucuneConfiance); setTimeout(() => { handleClick('Garrison') }, 2000); }}></img>
 				<img className="card" src={henrietta} alt={'Henrietta'}
-				onMouseEnter={() => {setHenrietta(HenriettaSuper);}}
-				onMouseLeave={() => {setHenrietta(HenriettaNormal);}}
-				onClick={() => {playSound(TropConformiste); setTimeout(() => {handleClick('Henrietta')}, 2000);}}></img>
+					onMouseEnter={() => { setHenrietta(HenriettaSuper); }}
+					onMouseLeave={() => { setHenrietta(HenriettaNormal); }}
+					onClick={() => { playSound(TropConformiste); setTimeout(() => { handleClick('Henrietta') }, 2000); }}></img>
 				<img className="card" src={butters} alt={'Butters'}
-				onMouseEnter={() => {setButters(ButtersSuper);}}
-				onMouseLeave={() => {setButters(ButtersNormal);}}
-				onClick={() => {playSound(BonjourMonsieurZizi); setTimeout(() => {handleClick('Butters')}, 2000);}}></img>
+					onMouseEnter={() => { setButters(ButtersSuper); }}
+					onMouseLeave={() => { setButters(ButtersNormal); }}
+					onClick={() => { playSound(BonjourMonsieurZizi); setTimeout(() => { handleClick('Butters') }, 2000); }}></img>
 			</div>
 		</div>
 	);

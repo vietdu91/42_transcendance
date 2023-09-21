@@ -65,11 +65,65 @@ export class MatchmakingGateway {
 	private userService = new UserService(this.prismaService);
 
 	private queue: Player[] = [];
+	private invite: Player[][] = [];
 
 	private games: Game[] = [];
 
 	private lTocSpeed: number = (9 / 16) * 100 / 160;
 	private rTocSpeed: number = (9 / 16) * 100 / 160;
+
+	@SubscribeMessage('joinInvite')
+	async handleJoinInvite(client: Socket, params: any): Promise<void> {
+		const token: string = client.handshake.query.token as string;
+		const userToken = await this.jwtService.decode(token);
+		const user = await this.userService.getUserById(userToken.sub);
+		const target = await this.userService.getUserByName(params.name);
+
+		for (let players of this.queue) {
+			if (players.user.id == user.id) {
+				client.emit('alreadyJoined', { message: 'You already joined a matchmaking' });
+				return;
+			}
+		}
+
+		for (let room of this.invite) {
+			for (let player of room) {
+				if (player.user.id == user.id) {
+					client.emit('alreadyJoined', { message: 'You already joined the invite matchmaking' });
+					return;
+				}
+			}
+		}
+
+		const player: Player = {
+			id: client.id,
+			user,
+		}
+
+		for (let room of this.invite) {
+			for (let otherPlayer of room) {
+				if (otherPlayer.user.id == target.id) {
+					room.push(player);
+					client.emit('inviteJoined', { message: "Joined invite matchmaking" });
+					this.invite.splice(this.invite.indexOf(room, 1));
+					await this.createMatch("invite", otherPlayer, player);
+					return;
+				}
+			}
+		}
+
+		this.invite.push([player]);
+
+		client.emit('inviteJoined', { message: "Joined invite matchmaking" });
+	}
+
+	@SubscribeMessage('leaveInvite')
+	async handleLeaveInvite(client: Socket): Promise<void> {
+		const token: string = client.handshake.query.token as string;
+		const userToken = await this.jwtService.decode(token);
+		const user = await this.userService.getUserById(userToken.sub);
+		this.invite = this.invite.filter((player) => { player[0].user.id !== user.id; });
+	}
 
 	@SubscribeMessage('joinQueue')
 	async handleJoinQueue(client: Socket): Promise<void> {
@@ -87,6 +141,15 @@ export class MatchmakingGateway {
 			}
 		}
 
+		for (let room of this.invite) {
+			for (let player of room) {
+				if (player.user.id == user.id) {
+					client.emit('alreadyJoined', { message: 'You already joined the invite matchmaking' });
+					return;
+				}
+			}
+		}
+
 		const player: Player = {
 			id: client.id,
 			user,
@@ -95,7 +158,7 @@ export class MatchmakingGateway {
 		this.queue.push(player);
 
 		client.emit('queueJoined', { success: true, message: 'Joined matchmaking queue' });
-		await this.createMatch();
+		await this.createMatch("queue", null, null);
 	}
 
 	@SubscribeMessage('leaveQueue')
@@ -103,106 +166,109 @@ export class MatchmakingGateway {
 		const token: string = client.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
-		this.queue = this.queue.filter((player) => {
-			player.user.id !== user.id;
-		});
+		this.queue = this.queue.filter((player) => { player.user.id !== user.id; });
 	}
 
-	private async createMatch(): Promise<void> {
-		if (this.queue.length >= 2) {
-			// if (this.queue.length >= 1) {
-			const player1 = this.queue.shift();
-			const player2 = this.queue.shift();
-			const prisma = new PrismaService();
-			const date = new Date();
-
-			const game = await prisma.game.create({
-				data: {
-					players: {
-						connect: [
-							{ id: player1.user.id },
-							{ id: player2.user.id }, // change player1 to player2
-						]
-					},
-					playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
-					playersName: [player1.user.name, player2.user.name], // change player1 n2 to player2
-					score: [0, 0],
-					characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
-					playing: true,
-					date: date,
-				}
-			});
-
-			let newGame: Game = {
-				gameId: game.id,
-				isActive: true,
-				idLeft: game.playersId[0],
-				idRight: game.playersId[1],
-				sockLeft: player1.id,
-				sockRight: player2.id, //change to player2
-				scoreLeft: 0,
-				scoreRight: 0,
-				charLeft: game.characters[0],
-				charRight: game.characters[1],
-				posLeft: (9 / 16) * 100 / 2,
-				posRight: (9 / 16) * 100 / 2,
-				nameLeft: game.playersName[0],
-				nameRight: game.playersName[1],
-				wLeft: 100 / 75,
-				hLeft: (9 / 16) * 100 / 5,
-				wRight: 100 / 75,
-				hRight: (9 / 16) * 100 / 5,
-				usedPowLeft: false,
-				usedPowRight: false,
-				isPowLeft: false,
-				isPowRight: false,
-				tocLeft: null,
-				tocRight: null,
-				ball: {
-					x: 100 / 2,
-					y: (9 / 16) * 100 / 2,
-					rad: (9 / 16) * 100 / 75,
-					speed: (9 / 16) * 100 / 125,
-					inertia: 0,
-					vx: 0,
-					vy: 0,
-				},
-				gaveUp: false,
-			}
-
-			const gameIdIndex = game.id;
-			if (gameIdIndex >= this.games.length) {
-				this.games.length = gameIdIndex + 1;
-			}
-			for (let i = 0; i < gameIdIndex; i++) {
-				if (this.games[i] === undefined) {
-					this.games[i] = null;
-				}
-			}
-			this.games[gameIdIndex] = newGame;
-
-			await prisma.user.update({
-				where: { id: game.playersId[0] },
-				data: {
-					actualGame: game.id,
-					state: 'INGAME',
-				},
-			})
-			await prisma.user.update({
-				where: { id: game.playersId[1] },
-				data: {
-					actualGame: game.id,
-					state: 'INGAME',
-				},
-			})
-			this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
-			this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
+	private async createMatch(mode: string, p1: Player, p2: Player): Promise<void> {
+		let player1, player2;
+		if (mode === "queue" && this.queue.length >= 2) {
+			player1 = this.queue.shift();
+			player2 = this.queue.shift();
 		}
+		else if (mode === "invite") {
+			player1 = p1;
+			player2 = p2;
+		}
+		else
+			return;
+		const prisma = new PrismaService();
+		const date = new Date();
+
+		const game = await prisma.game.create({
+			data: {
+				players: {
+					connect: [
+						{ id: player1.user.id },
+						{ id: player2.user.id }, // change player1 to player2
+					]
+				},
+				playersId: [player1.user.id, player2.user.id], // change player1 n2 to player2
+				playersName: [player1.user.name, player2.user.name], // change player1 n2 to player2
+				score: [0, 0],
+				characters: [player1.user.character, player2.user.character], // change player1 n2 to player2
+				playing: true,
+				date: date,
+			}
+		});
+
+		let newGame: Game = {
+			gameId: game.id,
+			isActive: true,
+			idLeft: game.playersId[0],
+			idRight: game.playersId[1],
+			sockLeft: player1.id,
+			sockRight: player2.id, //change to player2
+			scoreLeft: 0,
+			scoreRight: 0,
+			charLeft: game.characters[0],
+			charRight: game.characters[1],
+			posLeft: (9 / 16) * 100 / 2,
+			posRight: (9 / 16) * 100 / 2,
+			nameLeft: game.playersName[0],
+			nameRight: game.playersName[1],
+			wLeft: 100 / 75,
+			hLeft: (9 / 16) * 100 / 5,
+			wRight: 100 / 75,
+			hRight: (9 / 16) * 100 / 5,
+			usedPowLeft: false,
+			usedPowRight: false,
+			isPowLeft: false,
+			isPowRight: false,
+			tocLeft: null,
+			tocRight: null,
+			ball: {
+				x: 100 / 2,
+				y: (9 / 16) * 100 / 2,
+				rad: (9 / 16) * 100 / 75,
+				speed: (9 / 16) * 100 / 125,
+				inertia: 0,
+				vx: 0,
+				vy: 0,
+			},
+			gaveUp: false,
+		}
+
+		const gameIdIndex = game.id;
+		if (gameIdIndex >= this.games.length) {
+			this.games.length = gameIdIndex + 1;
+		}
+		for (let i = 0; i < gameIdIndex; i++) {
+			if (this.games[i] === undefined) {
+				this.games[i] = null;
+			}
+		}
+		this.games[gameIdIndex] = newGame;
+
+		await prisma.user.update({
+			where: { id: game.playersId[0] },
+			data: {
+				actualGame: game.id,
+				state: 'INGAME',
+			},
+		})
+		await prisma.user.update({
+			where: { id: game.playersId[1] },
+			data: {
+				actualGame: game.id,
+				state: 'INGAME',
+			},
+		})
+		this.server.to(player1.id).emit('matchFound', { roomId: game.id, opponent: player2.user }); // change player1 to player2
+		this.server.to(player2.id).emit('matchFound', { roomId: game.id, opponent: player1.user });
 	}
 
 	@SubscribeMessage('roundStart')
 	async handleGameStart(socket: Socket, roomId: number): Promise<void> {
-
 		const actualGame: Game = this.games[roomId];
 		if (actualGame == null)
 			return;
@@ -211,7 +277,6 @@ export class MatchmakingGateway {
 		if (!gameCheck.playing) {
 			return;
 		}
-
 		const token: string = socket.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
@@ -344,7 +409,7 @@ export class MatchmakingGateway {
 		const token: string = socket.handshake.query.token as string;
 		const userToken = await this.jwtService.decode(token);
 		const user = await this.userService.getUserById(userToken.sub);
-		
+
 		let char: string;
 
 		if (actualGame.idLeft === user.id && !actualGame.usedPowLeft) {
@@ -386,10 +451,6 @@ export class MatchmakingGateway {
 		const actualGame: Game = this.games[roomId];
 		if (actualGame == null)
 			return;
-
-		const token: string = socket.handshake.query.token as string;
-		const userToken = await this.jwtService.decode(token);
-		const user = await this.userService.getUserById(userToken.sub);
 
 		actualGame.ball.x += actualGame.ball.vx;
 		actualGame.ball.y += actualGame.ball.vy;

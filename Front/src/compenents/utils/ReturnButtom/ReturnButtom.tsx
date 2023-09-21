@@ -12,7 +12,7 @@ const ReturnButtom = ({colorHexa, path}) => {
 
 	return (
 		<FontAwesomeIcon icon={faChevronCircleLeft}
-		style={{color: colorHexa}} onClick={() => navigate(path)}/>
+		style={{color: colorHexa}} onClick={() => {navigate(path); window.location.reload();}}/>
 	);
 };
 

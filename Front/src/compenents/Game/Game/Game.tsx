@@ -11,9 +11,6 @@ import './Game.css'
 import ReturnButtom from '../../utils/ReturnButtom/ReturnButtom'
 
 // IMG
-import Chaos from '../../../img/backgrounds/backgrounds-game/chaos.jpg'
-import CityWok from '../../../img/backgrounds/backgrounds-game/city_wok.jpg'
-import TimmyVSJimmy from '../../../img/video/Timmy_Fights_Jimmy.mp4'
 import Tron from '../../../img/backgrounds/backgrounds-game/tron.png'
 
 // PLAYERS
@@ -121,7 +118,7 @@ export default function Game(): JSX.Element {
 
 	const [OnGothiqueLeft, setOnGothiqueLeft] = useState(false);
 	const [OnGothiqueRight, setOnGothiqueRight] = useState(false);
-	
+
 	const [OnInfirmeLeft, setOnInfirmeLeft] = useState(false);
 	const [OnInfirmeRight, setOnInfirmeRight] = useState(false);
 
@@ -155,50 +152,19 @@ export default function Game(): JSX.Element {
 
 	const sketchRef = useRef<HTMLDivElement>(null);
 
-	console.log(p5SketchRef.current);
-	console.log(game);
-	const randomImage = Tron;
-
-	// const cookies = document.cookie.split('; ');
-
-	function WhatReturnButtom({ randomImage }) {
-		if (randomImage === CityWok || randomImage === Chaos || randomImage === Tron)
-			return (
-				<ReturnButtom colorHexa='#FFFFFF' path='/' />
-			)
-		else
-			return (
-				<ReturnButtom colorHexa='#000000' path='/' />
-			)
-	}
-
-	function GetBg({ randomImage }) {
-		if (randomImage === TimmyVSJimmy)
-			return (
-				<video autoPlay muted loop className="bg opacity" src={randomImage}></video>
-			)
-		else
-			return (
-				<img className="bg" src={randomImage} alt={'bg'}></img>
-			)
-	}
-
 	function ActiveGeneriqueButters() {
-
 		setOnGeneriqueButters(true);
 		setTimeout(() => {
 			setOnGeneriqueButters(false)
 		}, 43000);
 	}
-	
-	function ActivePower(setter, delay) {
 
+	function ActivePower(setter, delay) {
 		setter(true);
-		setTimeout(() => {setter(false)}, delay);
+		setTimeout(() => { setter(false) }, delay);
 	}
 
 	function DesactivePower(setter) {
-
 		setter(false);
 	}
 
@@ -293,27 +259,27 @@ export default function Game(): JSX.Element {
 			if (response.id === game.current.idLeft) {
 				powLeft = true;
 				switch (response.char) {
-					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
-					case "Servietsky" : weed = true; ActivePower(setOnSucerLeft, 14000); break;
-					case "Timmy" : timmy = true; ActivePower(setOnInfirmeLeft, 19000); break;
-					case "TerrancePhilip" : fart = true; ActivePower(setOnProutLeft, 42000); break;
-					case "Garrison" : toc = true; game.current.tocLeft = response.game.tocLeft; ActivePower(setOnTocLeft, 29000); break;
-					case "Henrietta" : game.current.scoreRight--; ActivePower(setOnGothiqueLeft, 12000); setScoreRight(game.current.scoreRight); break;
-					case "Butters" : ActiveGeneriqueButters(); break;
-					case "Kenny" : ActivePower(setOnPrincessLeft, 51000); break;
+					case "Cartman": game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
+					case "Servietsky": weed = true; ActivePower(setOnSucerLeft, 14000); break;
+					case "Timmy": timmy = true; ActivePower(setOnInfirmeLeft, 19000); break;
+					case "TerrancePhilip": fart = true; ActivePower(setOnProutLeft, 42000); break;
+					case "Garrison": toc = true; game.current.tocLeft = response.game.tocLeft; ActivePower(setOnTocLeft, 29000); break;
+					case "Henrietta": game.current.scoreRight--; ActivePower(setOnGothiqueLeft, 12000); setScoreRight(game.current.scoreRight); break;
+					case "Butters": ActiveGeneriqueButters(); break;
+					case "Kenny": ActivePower(setOnPrincessLeft, 51000); break;
 				}
 			}
 			else {
 				powRight = true;
 				switch (response.char) {
-					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
-					case "Servietsky" : weed = true; ActivePower(setOnSucerRight, 14000); break;
-					case "Timmy" : timmy = true; ActivePower(setOnInfirmeRight, 19000); break;
-					case "TerrancePhilip" : fart = true; ActivePower(setOnProutRight, 42000); break;
-					case "Garrison" : toc = true; game.current.tocRight = response.game.tocRight; ActivePower(setOnTocRight, 29000); break;
-					case "Henrietta" : game.current.scoreLeft--; ActivePower(setOnGothiqueRight, 12000); setScoreLeft(game.current.scoreLeft); break;
-					case "Butters" : ActiveGeneriqueButters(); break;
-					case "Kenny" : ActivePower(setOnPrincessRight, 51000); break;
+					case "Cartman": game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
+					case "Servietsky": weed = true; ActivePower(setOnSucerRight, 14000); break;
+					case "Timmy": timmy = true; ActivePower(setOnInfirmeRight, 19000); break;
+					case "TerrancePhilip": fart = true; ActivePower(setOnProutRight, 42000); break;
+					case "Garrison": toc = true; game.current.tocRight = response.game.tocRight; ActivePower(setOnTocRight, 29000); break;
+					case "Henrietta": game.current.scoreLeft--; ActivePower(setOnGothiqueRight, 12000); setScoreLeft(game.current.scoreLeft); break;
+					case "Butters": ActiveGeneriqueButters(); break;
+					case "Kenny": ActivePower(setOnPrincessRight, 51000); break;
 				}
 			}
 		})
@@ -337,10 +303,12 @@ export default function Game(): JSX.Element {
 				const char: string = (response.id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
 				navigate('/gameover', { state: { char: char } });
 			}
+			p5SketchRef.current?.remove();
 		})
 
 		socket.on("gaveUp", (response) => {
 			navigate('/errorgame');
+			p5SketchRef.current?.remove();
 		})
 
 		socket.on("noGame", (response) => {
@@ -351,8 +319,7 @@ export default function Game(): JSX.Element {
 			socket.emit("giveUp", roomId);
 		})
 
-		if (game.current.isActive)
-			socket?.emit("roundStart", roomId);
+		socket?.emit("roundStart", roomId);
 
 		if (!p5SketchRef.current) {
 			p5SketchRef.current = new p5((p: p5) => {
@@ -370,7 +337,6 @@ export default function Game(): JSX.Element {
 				p.draw = () => {
 					p.clear();
 					p.background('rgba(52, 52, 52, 0.75)');
-
 					if (p.keyIsDown(32))
 						socket?.emit("usePower", roomId);
 					if (timmy &&
@@ -456,10 +422,12 @@ export default function Game(): JSX.Element {
 		}
 
 		return () => {
-			if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
-				socket?.emit("giveUp", roomId);
-			}
-			p5SketchRef.current?.remove();
+			// console.log(game.current.scoreLeft, game.current.scoreRight);
+			// if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
+			// 	console.log("Nan la !!!!!");
+			// 	socket?.emit("giveUp", roomId);
+			// }
+			// p5SketchRef.current?.remove();
 		};
 	}, [sketchRef, navigate, roomId, socket, userId]);
 
@@ -484,11 +452,11 @@ export default function Game(): JSX.Element {
 		else if (OnInfirmeLeft)
 			return (<video autoPlay src={Infirme} id="game-img-player-left"></video>);
 		else if (OnSucerLeft)
-			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-left"></video>);	
+			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-left"></video>);
 		else if (OnPrincessLeft)
 			return (<video autoPlay src={Princess_Kenny} id="game-img-player-left"></video>);
 		else if (OnTocLeft)
-			return (<video autoPlay src={Mr_Toc} id="game-img-player-left"></video>);	
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-left"></video>);
 		else
 			return (<img alt="#" src={image} id="game-img-player-left"></img>);
 	}
@@ -514,11 +482,11 @@ export default function Game(): JSX.Element {
 		else if (OnInfirmeRight)
 			return (<video autoPlay src={Infirme} id="game-img-player-right"></video>);
 		else if (OnSucerRight)
-			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-right"></video>);			
+			return (<video autoPlay src={Sucer_une_serviette} id="game-img-player-right"></video>);
 		else if (OnPrincessRight)
 			return (<video autoPlay src={Princess_Kenny} id="game-img-player-right"></video>);
 		else if (OnTocRight)
-			return (<video autoPlay src={Mr_Toc} id="game-img-player-right"></video>);		
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-right"></video>);
 		else
 			return (<img alt="#" src={image} id="game-img-player-right"></img>);
 	}
@@ -571,6 +539,7 @@ export default function Game(): JSX.Element {
 							value={healthLeft}
 							step="1"
 							title=""
+							readOnly
 						/>
 					</div>
 					<div className="health_pseudo" id="player-1">
@@ -591,6 +560,7 @@ export default function Game(): JSX.Element {
 							max={maxHealth}
 							value={healthRight}
 							step="1"
+							readOnly
 						/>
 					</div>
 					<div className="health_pseudo" id="player-2">
@@ -603,7 +573,7 @@ export default function Game(): JSX.Element {
 
 	return (
 		<div id="game-bg">
-			<GetBg randomImage={randomImage} />
+			<img className="bg" src={Tron} alt={'bg'}></img>
 			<div id="game-player-left">
 				<GetPlayerLeft char={charLeft} />
 			</div>
@@ -617,7 +587,7 @@ export default function Game(): JSX.Element {
 				{OnGeneriqueButters && (<video autoPlay className="generique_butters" src={GeneriqueButters}></video>)}
 			</div>
 			<div id="game-return">
-				<WhatReturnButtom randomImage={randomImage} />
+				<ReturnButtom colorHexa='#FFFFFF' path='/' />
 			</div>
 			<div id="game-player-right">
 				<GetPlayerRight char={charRight} />

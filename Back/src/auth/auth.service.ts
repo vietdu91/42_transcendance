@@ -101,7 +101,7 @@ export class AuthService {
         try {
             const userResponse = await axios.get(process.env.URL_42ME, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    "Authorization": `Bearer ${accessToken}`
                 }
             });
             return {

@@ -25,7 +25,7 @@ export default function NewProfile() {
 	useEffect(() => {
 		axios.get(
 			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
-			{ headers: { Authorization: `Bearer ${token}` } })
+			{ headers: { "Authorization": `Bearer ${token}` } })
 			.then(response => {
 				setName(response.data.user.name);
 			}).catch(error => {

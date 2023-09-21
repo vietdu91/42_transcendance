@@ -79,7 +79,7 @@ export default function Profile() {
 		await axios.patch(
 			process.env.REACT_APP_LOCAL_B + '/profile/disableTwoFA',
 			{state},
-			{ withCredentials: true, headers: {Authorization: `Bearer ${token}`} })
+			{ withCredentials: true, headers: {"Authorization": `Bearer ${token}`} })
 		.then(response => {
 			setTwoFa(false);
 			setShowFa(false);
@@ -135,7 +135,7 @@ export default function Profile() {
 	useEffect (() => {
 		axios.get(
 			process.env.REACT_APP_LOCAL_B + '/profile/getUser',
-			{ headers: {Authorization: `Bearer ${token}`} })
+			{ headers: {"Authorization": `Bearer ${token}`} })
 		.then(res => {
 			getUser({
 				name: res.data.user.name,

@@ -110,7 +110,7 @@ function Chat() {
             navigate("/");
         })
         const getUserData = async () => {
-            await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', { withCredentials: true, headers: { Authorization: `Bearer ${token}` } })
+            await axios.get(process.env.REACT_APP_LOCAL_B + '/profile/getUserChat', { withCredentials: true, headers: { "Authorization": `Bearer ${token}` } })
                 .then(res => {
                     setUser(res.data);
                     setConvs(res.data.conversations);

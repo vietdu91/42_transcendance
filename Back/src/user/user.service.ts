@@ -21,6 +21,7 @@ export class UserService {
           twoFactorSecret: authenticator.generateSecret(),
           accessToken: userData.accessToken,
           pfp_url: userData.pfp,
+          character: "Butters",
         }
       });
       return user;

@@ -7,6 +7,7 @@ import InviteGame from '../../../img/chat/game-gimp.jpg';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 interface User {
   name: string,
@@ -29,13 +30,21 @@ const initUser: User = {
 function ChatConversationArea({ user, conv, isVisible, blocked }) {
   const token = Cookie.get('accessToken')
   const socket = useContext(ChatContext);
+  const navigate = useNavigate();
 
   const [messages, setMessages] = useState(conv.messages.filter((index) => !(blocked.includes(index.authorId))));
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
+  const inviteToGame = async () => {
+    socket?.emit('sendMessageConv', { value: "Viens jouer ! Clique sur le bouton Games !", convId: conv.id })
+  }
+
+  const goPersonalMatchmaking = () => {
+    navigate(`/champselect?other=${otherUser.name}`);
+  }
+
   const send = async (value: string) => {
-    const convId = conv.id;
-    socket?.emit('sendMessageConv', { value, convId });
+    socket?.emit('sendMessageConv', { value, convId: conv.id });
   }
 
   useEffect(() => {
@@ -47,10 +56,6 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
         .catch(error => {
           console.log(error);
         });
-      // await axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
-      //   .then(response => {
-      //     setMessages(response.data.messages);
-      //   })
       socket.on('messageSentConv', (res => {
         axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
           .then(response => {
@@ -73,8 +78,8 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
           <div className="navbar-conv"> {/* faire un degrade  */}
             {/* Content for the navbar */}
             <ul>
-              <li><img src={Invite} alt="Invite" id="chat_Invite" /></li>
-              <li><img src={InviteGame} alt="InviteGame" id="chat_InviteGame" /></li>
+              <li><img src={Invite} alt="Invite" id="chat_Invite" onClick={inviteToGame} /></li>
+              <li><img src={InviteGame} alt="InviteGame" id="chat_InviteGame" onClick={goPersonalMatchmaking} /></li>
               {/* <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li> */}
               {/* <li></li>
               <li></li> */}

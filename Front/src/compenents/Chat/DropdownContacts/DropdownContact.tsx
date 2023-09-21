@@ -41,7 +41,7 @@ function DropdownContact({ user, setConvs, setFriends }) {
   const accessToken = Cookie.get('accessToken');
 
   const headers = {
-    Authorization: `Bearer ${accessToken}`,
+    "Authorization": `Bearer ${accessToken}`,
   };
 
   const toggleFriendsList = () => {
@@ -137,7 +137,7 @@ function DropdownContact({ user, setConvs, setFriends }) {
         `${process.env.REACT_APP_LOCAL_B}/profile/getUserByName`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${accessToken}`,
           },
           params: {
             username: friendName,

@@ -21,7 +21,7 @@ function SearchBar2({ onSearch }: SearchBarProps) {
     const handleSearch = async (username: string) => {
         await axios.get(
             process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
-            { params: { username: username }, headers: { Authorization: `Bearer ${token}` } })
+            { params: { username: username }, headers: { "Authorization": `Bearer ${token}` } })
             .then((response) => {
                 setNotFound(false);
                 onSearch(response.data.user.name);

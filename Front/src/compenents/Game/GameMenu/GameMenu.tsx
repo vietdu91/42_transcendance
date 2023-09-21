@@ -275,7 +275,7 @@ function Classement() {
 		  try {
 				const response = await axios.get(
 					process.env.REACT_APP_LOCAL_B + "/profile/getLeaderboard",
-					{ headers: {Authorization: `Bearer ${token}`} });
+					{ headers: {"Authorization": `Bearer ${token}`} });
 				const updatedUsers: User[] = response.data.users;
 				users.current = updatedUsers;
 				setIsLoading(false);
