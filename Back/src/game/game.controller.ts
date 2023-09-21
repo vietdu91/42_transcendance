@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, BadRequestException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GameService } from '../game/game.service';
 import { JwtService } from '@nestjs/jwt';
@@ -16,7 +16,7 @@ export class GameController {
   async getGameById(@Query('roomId') roomId: number, @Req() request: Request, @Res() response: Response) {
     const room = await this.gameService.getGameById(roomId);
     if (!room) {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
     response.json({
       id: room.id,

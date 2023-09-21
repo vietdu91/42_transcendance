@@ -54,12 +54,21 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
           getOtherUser(response.data);
         })
         .catch(error => {
-          console.log(error);
+          if (error.response.status === 401) {
+            Cookie.remove('accessToken')
+            window.location.href = "/";
+          }
         });
       socket.on('messageSentConv', (res => {
         axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
           .then(response => {
             setMessages(response.data.messages);
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+							Cookie.remove('accessToken')
+							window.location.href = "/";
+						}
           })
       }));
     }

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 import { Response } from 'express';
@@ -33,7 +33,7 @@ export class TwofaService {
         otpauthUrl
       }
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 

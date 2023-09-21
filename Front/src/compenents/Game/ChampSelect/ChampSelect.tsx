@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 
 import "./ChampSelect.css";
 
@@ -59,7 +59,7 @@ export default function ChampSelect() {
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const token = Cookies.get('accessToken');
+	const token = Cookie.get('accessToken');
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
@@ -80,9 +80,11 @@ export default function ChampSelect() {
 			await axios.get(
 				process.env.REACT_APP_LOCAL_B + '/profile/getUserByname',
 				{ withCredentials: true, params: { username: location.search.slice(location.search.lastIndexOf('=') + 1) }, headers: { "Authorization": `Bearer ${token}` } })
-				.catch((error) => {
-					console.log(error);
-					navigate('/chat');
+				.catch(error => {
+					if (error.response.status === 401) {
+						Cookie.remove('accessToken')
+						window.location.href = "/";
+					}
 				})
 		}
 		if (location.search)
@@ -94,9 +96,12 @@ export default function ChampSelect() {
 			process.env.REACT_APP_LOCAL_B + '/profile/setCharacter',
 			{ character },
 			{ withCredentials: true, headers: { "Authorization": `Bearer ${token}` } })
-			.catch((error) => {
-				console.error(error);
-			});
+			.catch(error => {
+				if (error.response.status === 401) {
+					Cookie.remove('accessToken')
+					window.location.href = "/";
+				}
+			})
 		if (!location.search)
 			navigate("/matchmaking");
 		else

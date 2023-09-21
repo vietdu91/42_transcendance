@@ -49,7 +49,10 @@ export default function UserProfile() {
 				getIsFriend(true);
 			})
 			.catch(error => {
-				console.log(error);
+				if (error.response.status === 401) {
+                    Cookies.remove('accessToken')
+                    window.location.href = "/";
+                }
 			})
 	}
 
@@ -65,7 +68,10 @@ export default function UserProfile() {
 				getIsFriend(false);
 			})
 			.catch(error => {
-				console.log(error);
+				if (error.response.status === 401) {
+                    Cookies.remove('accessToken')
+                    window.location.href = "/";
+                }
 			})
 	}
 
@@ -80,7 +86,10 @@ export default function UserProfile() {
 				getIsBlocked(true);
 			})
 			.catch(error => {
-				console.log(error);
+				if (error.response.status === 401) {
+                    Cookies.remove('accessToken')
+                    window.location.href = "/";
+                }
 			})
 	}
 
@@ -94,7 +103,10 @@ export default function UserProfile() {
 				getIsBlocked(false);
 			})
 			.catch(error => {
-				console.log(error);
+				if (error.response.status === 401) {
+                    Cookies.remove('accessToken')
+                    window.location.href = "/";
+                }
 			})
 	}
 
@@ -117,7 +129,13 @@ export default function UserProfile() {
 				games.current = updatedGames;
 			})
 			.catch(error => {
-				navigate("/profile");
+				if (error.response.status === 401) {
+                    Cookies.remove('accessToken')
+                    window.location.href = "/";
+                }
+				else {
+					navigate("/profile");
+				}
 			})
 	}, [navigate, token, username]);
 

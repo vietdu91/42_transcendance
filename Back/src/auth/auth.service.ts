@@ -1,4 +1,4 @@
-import { Injectable, Request, Query, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Request, Query, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Response } from 'express';
 import { UserService } from '../user/user.service';
@@ -46,7 +46,7 @@ export class AuthService {
             }
             return user;
         } catch {
-            throw new UnauthorizedException();
+            throw new BadRequestException();
         }
     }
 
@@ -61,13 +61,13 @@ export class AuthService {
     async apiConnexion2fa(user: User, res: Response): Promise<void> {
         try {
             if (!user)
-                throw new UnauthorizedException("user doesn't exist");
+                throw new BadRequestException("user doesn't exist");
             else {
                 const newToken = await this.generateAndSetAccessToken(user);
                 res.cookie("accessToken", newToken);
             }
         } catch {
-            throw new UnauthorizedException();
+            throw new BadRequestException();
         }
     }
 
@@ -77,7 +77,7 @@ export class AuthService {
             const newToken = this.jwtService.sign(jwtPayload);
             return newToken;
         } catch {
-            throw new UnauthorizedException();
+            throw new BadRequestException();
         }
     }
 

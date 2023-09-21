@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User, Game, Prisma } from '@prisma/client';
 import { authenticator } from 'otplib';
@@ -55,7 +55,7 @@ export class UserService {
       });
     }
     catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -66,7 +66,7 @@ export class UserService {
       });
       return user;
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -92,7 +92,7 @@ export class UserService {
       });
       return user;
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -109,7 +109,7 @@ export class UserService {
         }
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -120,7 +120,7 @@ export class UserService {
         data: { twoFactorSecret: secret },
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -131,7 +131,7 @@ export class UserService {
         data: { twoFactorEnabled: true },
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -142,7 +142,7 @@ export class UserService {
         data: { twoFactorEnabled: false },
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -155,7 +155,7 @@ export class UserService {
       });
       return Boolean(user);
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -165,7 +165,7 @@ export class UserService {
         where: { email },
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -178,7 +178,7 @@ export class UserService {
       })
       return users;
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 

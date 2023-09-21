@@ -63,51 +63,54 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
   const handleAddFriend = async () => {
     if (friendName) {
-      try {
-
-        const response = await axios.post(
-          `${process.env.REACT_APP_LOCAL_B}/profile/addFriend`,
-          { name: friendName },
-          { headers }
-        );
-        setNotFound(false);
-        setIsVisible(true);
-        console.log("friendName === " + friendName);
-        setFriendName('');
-      } catch (error) {
-        console.error(error);
-      }
+      await axios.post(
+        `${process.env.REACT_APP_LOCAL_B}/profile/addFriend`,
+        { name: friendName },
+        { headers }
+      )
+        .catch(error => {
+          if (error.response.status === 401) {
+            Cookie.remove('accessToken')
+            window.location.href = "/";
+          }
+        })
+      setNotFound(false);
+      setIsVisible(true);
+      console.log("friendName === " + friendName);
+      setFriendName('');
     }
   };
 
   const handleDeleteFriend = async () => {
     if (friendName) {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_LOCAL_B}/profile/removeFriend`,
-          { name: friendName },
-          { headers }
-        );
-      }
-      catch (error) {
-        console.error(error);
-      }
+      await axios.post(
+        `${process.env.REACT_APP_LOCAL_B}/profile/removeFriend`,
+        { name: friendName },
+        { headers }
+      )
+        .catch(error => {
+          if (error.response.status === 401) {
+            Cookie.remove('accessToken')
+            window.location.href = "/";
+          }
+        })
     }
   };
 
 
   const handleBlockFriend = async () => {
     if (friendName) {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_LOCAL_B}/profile/addBlocked`,
-          { name: friendName },
-          { headers }
-        );
-      }
-      catch (error) {
-        console.error(error);
-      }
+      await axios.post(
+        `${process.env.REACT_APP_LOCAL_B}/profile/addBlocked`,
+        { name: friendName },
+        { headers }
+      )
+        .catch(error => {
+          if (error.response.status === 401) {
+            Cookie.remove('accessToken')
+            window.location.href = "/";
+          }
+        })
     }
   };
 
@@ -132,23 +135,26 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
 
   const searchUser = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_B}/profile/getUserByName`,
-        {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-          },
-          params: {
-            username: friendName,
-          },
+    await axios.get(
+      `${process.env.REACT_APP_LOCAL_B}/profile/getUserByName`,
+      {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
+        params: {
+          username: friendName,
+        },
+      }
+    )
+      .then(response => {
+        socket?.emit('createConversation', { otherName: response.data.user.name });
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          Cookie.remove('accessToken')
+          window.location.href = "/";
         }
-      );
-
-      socket?.emit('createConversation', {otherName: response.data.user.name});
-    } catch (error) {
-      console.log("You can't create a convesation with yourself");
-    }
+      })
   };
 
 

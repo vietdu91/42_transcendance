@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import toStream = require('buffer-to-stream');
 
@@ -19,7 +19,7 @@ export class CloudinaryService {
         toStream(fileName.buffer).pipe(upload);
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 }

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 
 import './Profile.css'
 import '../searchBar/searchBar.css'
@@ -29,7 +29,7 @@ export default function Profile() {
 
 	const navigate = useNavigate();
 
-	const token = Cookies.get('accessToken');
+	const token = Cookie.get('accessToken');
     if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
@@ -50,7 +50,10 @@ export default function Profile() {
 			setQrCode(response.data.code);
 		})
 		.catch(err => {
-			console.log("app-front: error: ", err)
+			if (err.response.status === 401) {
+				Cookie.remove('accessToken')
+				window.location.href = "/";
+			}
 		})
 	}
 
@@ -70,7 +73,10 @@ export default function Profile() {
 			setTwoFa(true);
 		})
 		.catch(err => {
-			console.log(err);
+			if (err.response.status === 401) {
+				Cookie.remove('accessToken')
+				window.location.href = "/";
+			}
 		})
 	}
 
@@ -85,7 +91,10 @@ export default function Profile() {
 			setShowFa(false);
 		})
 		.catch(err => {
-			console.log(err);
+			if (err.response.status === 401) {
+				Cookie.remove('accessToken')
+				window.location.href = "/";
+			}
 		})
 	}
 
@@ -155,7 +164,10 @@ export default function Profile() {
 			}
 			games.current = updatedGames;
 		}).catch(error => {
-			console.error(error);
+			if (error.response.status === 401) {
+				Cookie.remove('accessToken')
+				window.location.href = "/";
+			}
 		});
 	
 	}, [token])

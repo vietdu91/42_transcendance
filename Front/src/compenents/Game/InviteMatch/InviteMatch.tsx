@@ -2,12 +2,12 @@ import React from "react";
 import { useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import { GameContext } from "../../utils/GameContext";
 
 export default function InviteMatch() {
 
-	const token = Cookies.get('accessToken');
+	const token = Cookie.get('accessToken');
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 	const socket = useContext(GameContext);
@@ -21,8 +21,13 @@ export default function InviteMatch() {
 				process.env.REACT_APP_LOCAL_B + '/profile/getUserByname',
 				{ withCredentials: true, params: { username: otherName }, headers: { "Authorization": `Bearer ${token}` } })
 				.catch((error) => {
-					console.log(error);
-					navigate('/chat');
+					if (error.response.status === 401) {
+						Cookie.remove('accessToken')
+						window.location.href = "/";
+					}
+					else {
+						navigate('/chat');
+					}
 				})
 		}
 		if (location.search && location.search.slice(0, location.search.indexOf('=') + 1) === "?other=")

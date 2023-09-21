@@ -1,7 +1,7 @@
 import { Controller, Get, Post, UseGuards, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Query } from '@nestjs/common';
 import { Req } from '@nestjs/common';
 import { Res } from '@nestjs/common';
@@ -23,7 +23,7 @@ export class UserController {
     try {
       const target = await this.userService.getUserByName(username);
       if (!target) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
 
       let percentage: number = target.wins + target.looses === 0 ? 0 : Math.round(target.wins / (target.wins + target.looses) * 100);
@@ -38,7 +38,7 @@ export class UserController {
         blocked: user.blockList.includes(target.id),
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -56,7 +56,7 @@ export class UserController {
         games: games,
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -68,7 +68,7 @@ export class UserController {
       users.sort((a, b) => b.winrate - a.winrate);
       response.json({ users: users });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -78,16 +78,16 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
       if (target.blockList.includes(user.id)) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       if (target.id == user.id) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
@@ -97,7 +97,7 @@ export class UserController {
         name: target.name,
       })
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -107,13 +107,13 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
       if (target.id === user.id) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       if (target.friendsList.includes(user.id)) {
         const updatedFriendList = target.friendsList.filter((id) => id !== user.id);
@@ -136,7 +136,7 @@ export class UserController {
         },
       })
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -146,13 +146,13 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
       if (target.id === user.id) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const updatedBlockList = user.blockList.filter((id) => id !== target.id);
       const userUpdate = await this.prisma.user.update({
@@ -160,7 +160,7 @@ export class UserController {
         data: { blockList: updatedBlockList },
       })
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -170,13 +170,13 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
       if (target.id === user.id) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
 
@@ -185,7 +185,7 @@ export class UserController {
         data: { friendsList: updatedFriendList },
       })
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -195,17 +195,17 @@ export class UserController {
     try {
       const { nickname } = body;
       if (!nickname)
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
       if (!regex.test(nickname))
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: { nickname: nickname },
       });
       return { message: 'Surnom enregistré avec succès' };
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -215,14 +215,14 @@ export class UserController {
     try {
       const { age } = body;
       if (age <= 0 || age > 100)
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: { age: Number(age) },
       });
       return { message: 'Age enregistré avec succès' };
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -233,7 +233,7 @@ export class UserController {
       const { character } = body;
       if (character != "Cartman" && character != "Servietsky" && character != "Kenny" && character != "Timmy"
         && character != "TerrancePhilip" && character != "Garrison" && character != "Henrietta" && character != "Butters")
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: { character: character },
@@ -241,7 +241,7 @@ export class UserController {
       if (!userUpdate)
         return { message: 'Personnage modifié avec succès' };
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -262,7 +262,7 @@ export class UserController {
         channels: user.channels,
       })
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -273,7 +273,7 @@ export class UserController {
       this.userService.turnOffTwoFactorAuthentication(user.id);
       return { message: 'Disabled 2FA' };
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -284,7 +284,7 @@ export class UserController {
       const id = (user.id == ids[0] ? ids[1] : ids[0]);
       const target = await this.userService.getUserById(id);
       if (!target) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       response.json({
         name: target.name,
@@ -293,7 +293,7 @@ export class UserController {
         state: target.state,
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 

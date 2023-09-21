@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Patch, Body, UseGuards, Req, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Res, Post, Patch, Body, UseGuards, Req, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response, } from 'express';
 import { Request } from 'express';
@@ -25,7 +25,7 @@ export class AuthController {
       const userData = await this.AuthService.getUserData(accessToken);
       await this.AuthService.apiConnexion(userData, accessToken, response);
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -35,14 +35,14 @@ export class AuthController {
     try {
       const user = await this.prisma.user.findUnique({ where: { nickname: nickname } });
       if (user !== null) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
       if (!regex.test(nickname))
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       await this.AuthService.connexionPostNickname(token, nickname, res);
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -57,7 +57,7 @@ export class AuthController {
       }
       const isCodeValid = this.twoFaService.isTwoFactorAuthenticationCodeValid(code, user);
       if (!isCodeValid) {
-        throw new UnauthorizedException('Wrong authentication code');
+        throw new BadRequestException('Wrong authentication code');
       }
       await this.AuthService.apiConnexion2fa(user, res);
       await this.prisma.user.update({
@@ -66,7 +66,7 @@ export class AuthController {
       })
       res.status(200).json({ message: 'Connexion réussie' });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 
@@ -78,7 +78,7 @@ export class AuthController {
       const decodedJwtAccessToken: any = this.jwtService.decode(accessToken);
       const user = await this.userService.getUserById(decodedJwtAccessToken.sub);
       if (!user) {
-        throw new UnauthorizedException();
+        throw new BadRequestException();
       }
       await this.prisma.user.update({
         where: { id: user.id },

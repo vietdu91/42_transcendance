@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Get, Redirect, UploadedFile, UseInterceptors, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, UseGuards, Get, Redirect, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { GameService } from './game/game.service';
@@ -45,7 +45,7 @@ export class AppController {
           };  
         });
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 

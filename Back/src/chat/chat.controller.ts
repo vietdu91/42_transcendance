@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, BadRequestException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ChatService } from '../chat/chat.service';
 import { JwtService } from '@nestjs/jwt';
@@ -27,7 +27,7 @@ export class ChatController {
 			let persoMessages = conv.messages.filter((index) => !(user.blockList.includes(index.authorId)));
 			response.json({messages: persoMessages});
 		} catch {
-			throw new UnauthorizedException();
+			throw new BadRequestException();
 		}
 	}
 
@@ -44,7 +44,7 @@ export class ChatController {
 			let persoMessages = channel.messages.filter((index) => !(user.blockList.includes(index.authorId)));
 			response.json({messages: persoMessages});
 		} catch {
-			throw new UnauthorizedException();
+			throw new BadRequestException();
 		}
 	}
 

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Game, Prisma } from '@prisma/client';
  
@@ -17,7 +17,7 @@ export class GameService {
       });
       return room;
     } catch {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
   }
 

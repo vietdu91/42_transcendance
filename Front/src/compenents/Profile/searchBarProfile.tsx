@@ -29,7 +29,12 @@ function SearchBar2({ onSearch }: SearchBarProps) {
             }
             )
             .catch((error) => {
-                setNotFound(true);
+                if (error.response.status === 401) {
+                    Cookie.remove('accessToken')
+                    window.location.href = "/";
+                }
+                else
+                    setNotFound(true);
             });
     };
 

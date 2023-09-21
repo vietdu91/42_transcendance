@@ -3,7 +3,7 @@ import io, { Socket } from "socket.io-client";
 import ReturnButtom from '../utils/ReturnButtom/ReturnButtom';
 import MessageInput from '../Messages/messageInput';
 import Room from '../Room/room';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import { ChatContext, chatSocket } from '../utils/ChatContext';
 import { useNavigate } from "react-router-dom"
 
@@ -80,7 +80,7 @@ const initUser: User = {
 
 function Chat() {
 
-    const token = Cookies.get('accessToken');
+    const token = Cookie.get('accessToken');
     const socket = useContext(ChatContext);
     if (!token)
         window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
@@ -119,7 +119,10 @@ function Chat() {
                     setBlocked(res.data.blocks);
                 })
                 .catch(error => {
-                    console.log(error);
+                    if (error.response.status === 401) {
+                        Cookie.remove('accessToken')
+                        window.location.href = "/";
+                    }
                 })
         }
         getUserData();

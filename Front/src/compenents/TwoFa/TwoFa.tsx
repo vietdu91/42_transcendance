@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Cookie from 'js-cookie'
 
 import './TwoFa.css';
 
@@ -27,7 +28,10 @@ export default function TwoFa() {
 				navigate('/');
 			})
 			.catch(err => {
-				console.log(err);
+				if (err.response.status === 401) {
+                    Cookie.remove('accessToken')
+                    window.location.href = "/";
+                }
 			});
 	}
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 
 import './NewProfile.css'
 
@@ -13,7 +13,7 @@ import Form from "../../compenents/utils/Form/Form"
 import Range from "../../compenents/utils/Range/Range"
 
 export default function NewProfile() {
-	const token = Cookies.get('accessToken');
+	const token = Cookie.get('accessToken');
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
@@ -29,7 +29,10 @@ export default function NewProfile() {
 			.then(response => {
 				setName(response.data.user.name);
 			}).catch(error => {
-				console.error('Probleme');
+				if (error.response.status === 401) {
+					Cookie.remove('accessToken')
+					window.location.href = "/";
+				}
 			});
 	}, [token])
 

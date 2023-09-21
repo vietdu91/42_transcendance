@@ -69,6 +69,12 @@ function Channel({ i, max, user, channel, isVisible, blocked }) {
 					.then(response => {
 						setMessages(response.data.messages);
 					})
+					.catch(error => {
+						if (error.response.status === 401) {
+							Cookie.remove('accessToken')
+							window.location.href = "/";
+						}
+					})
 			}))
 		}
 		getData();
