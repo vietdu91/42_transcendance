@@ -1,10 +1,16 @@
 import React from 'react';
 import './FooterMenu.css'
 import xpLogo from '../../../img/chat/xp-logo-removebg-preview.png';
+import { useNavigate } from "react-router-dom";
+
+
 const FooterMenu = () => {
+
+    const navigate = useNavigate();
+
     return (
         <ul className="menu-footer">
-            <li className="footer-first-element"><img src={xpLogo} alt="redcross" id="window" />Démarrer</li>
+            <li className="footer-first-element" onClick={() => navigate('/')}><img src={xpLogo} alt="redcross" id="window"/>Démarrer</li>
             {/* <ConversationInFooter Messages={true}/> */}
             <li className="footer-element">Conv avec Ami</li>
             <li className="footer-element">Channel</li>

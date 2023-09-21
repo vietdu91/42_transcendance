@@ -10,8 +10,16 @@
 
 /* Base styles for DropdownChannels */
 .dropdown {
-	position: relative;
+	width: 13%;
 	display: inline-block;
+}
+
+.dropdown .option-conversation-option {
+	width: 100%;
+}
+
+.dropdown .option-conversation-option li:hover {
+    background-color: #e2dec6;
 }
 
 .dropdown-toggle {
@@ -24,17 +32,22 @@
 .dropdown-menu {
 	position: absolute;
 	background-color: #f9f4e1;
-	/* Light beige background color for the menu */
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 	display: none;
+	font-size: 13px;
+	z-index:2;
 }
 
 .dropdown-menu li {
 	padding: 10px 20px;
 	cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+	background-color: #e2dec6;
 }
 
 /* Dropdown animation */
@@ -54,6 +67,8 @@
 		transform: translateY(0);
 	}
 }
+
+/*/////////////////////////////////*/
 
 .channel-creation-container {
 	border-radius: 5px;
@@ -327,9 +342,8 @@ input[type="radio"] {
 	border-radius: 5px;
 	position: fixed;
 	display: flex;
-	/* gap: 10px;   */
-	top: 20%;
-	left: 50%;
+	top: 18%;
+	left: 45%;
 	width: 400px;
 	height: 200px;
 	transform: translate(-50%, -50%);
@@ -337,13 +351,12 @@ input[type="radio"] {
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
-	/* Lighter beige background color */
 	box-shadow: inset -1px -1px #00138c, 
 	inset 1px 1px #0831d9, 
 	inset -2px -2px #001ea0, 
 	inset 2px 2px #166aee, 
 	inset -3px -3px #003bda, 
-	inset 3px 3px #0855dd
+	inset 3px 3px #0855dd;
 }
 
 .channel-join-navbar {
@@ -504,7 +517,7 @@ input[type="radio"] {
 	display: flex;
 	/* gap: 10px;   */
 	top: 80%;
-	left: 50%;
+	left: 41%;
 	width: 400px;
 	height: 200px;
 	transform: translate(-50%, -50%);

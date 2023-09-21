@@ -13,6 +13,8 @@ export default function SetNickname() {
 	const urlParams = new URLSearchParams(queryString);
 	const token = urlParams.get('token');
 	const [nickname, setNickname] = useState("");
+    const [used, setUsed] = useState(false);
+    const [regex, setRegex] = useState(false);
 
 	const handleChange = (event) => {
 		setNickname(event.target.value);
@@ -27,7 +29,16 @@ export default function SetNickname() {
 				window.location.reload();
 			})
 			.catch(err => {
-				console.log(err);
+                if (err.response.data.message === "wrong regex")
+                {
+                    setUsed(false);
+                    setRegex(true);
+                }
+                else if (err.response.data.message === "already used")
+                {
+                    setUsed(true);
+                    setRegex(false);
+                }
 			});
 	}
 
@@ -39,10 +50,16 @@ export default function SetNickname() {
         <div id="SetNickName">
             <img id="SetNickName-bg" src={JLopez} alt={'Jefferson'} />
             <img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
-            <form onSubmit={handleEnable} id="SetNickName-form">
-                <input className="swing" id="SetNickName-swing" placeholder='Show Me Your NickName !' value={code} onChange={handleChange}></input>
-                <label htmlFor="SetNickName-swing">2FA</label>
-            </form>
+            <div id="SetNickName-truc">
+                <form onSubmit={handleEnable} id="SetNickName-form">
+                    <input className="swing" id="SetNickName-swing" placeholder='Show Me Your NickName !' value={nickname} onChange={handleChange}></input>
+                    <label className="tacos" htmlFor="SetNickName-swing">🌮</label>
+                </form>
+                <div className="setNick_good_nickname_or_not">
+                    {used && <div>Nickname deja utilise !</div>}
+                    {regex && <div>Nickname invalide ! Min: 2 - Max: 20, lettres, chiffres, espace, tiret, _</div>}
+                </div>       
+            </div>
         </div>
 	)
 }

@@ -4,6 +4,8 @@ import axios from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
 import './searchBar.css'
 
+import Lampe from '../../img/chat/lampe_emoticone.jpg'
+
 interface SearchBarProps {
   onSearch: (query: string) => void;
 }
@@ -44,13 +46,15 @@ function SearchBar({ onSearch }: SearchBarProps) {
       <input
         className="searchBar-input"
         type="text"
-        placeholder="Rechercher..."
+        placeholder="Search User"
         value={searchQuery}
         onChange={handleInputChange}
       />
-      <button
+      <img
         className="searchBar-button"
-        onClick={() => handleSearch(searchQuery)}>Rechercher</button>
+        src={Lampe}
+        alt="lampe"
+        onClick={() => handleSearch(searchQuery)}></img>
       {notFound && <div>Utilisateur non trouvé</div>}
     </div>
   );

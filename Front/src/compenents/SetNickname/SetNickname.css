@@ -9,7 +9,7 @@
 	align-items: center;
 
 	height: 100vh;
-    margin-right: 150px;
+    margin-right: 10%;
 }
 
 #SetNickName-bg {
@@ -28,6 +28,12 @@
 	left: 3vw;
 	height: 30px;
 	width: 30px;
+}
+
+#SetNickName-truc {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
 }
 
 #SetNickName-form {
@@ -112,4 +118,19 @@
 .swing:focus + label, .swing:active + label {
 	animation: swing 1.4s 1 ease-in-out;
 	transform: rotate(82deg);
+}
+
+.tacos {
+	font-size: 90%;
+}
+
+.setNick_good_nickname_or_not {
+	font-size: 130%;
+	line-height: 1em;
+	font-family: south_park_font;
+	z-index: 10;
+	color: white;
+	width: 275px;
+	text-align: center;
+	text-shadow: #FC0 1px 0 10px;
 }

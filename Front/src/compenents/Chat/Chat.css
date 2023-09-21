@@ -65,12 +65,11 @@
     grid-row-start: 4;
     grid-row-end: 46;
     grid-column-start: 8;
-    grid-column-end: 40;
+    grid-column-end: 35;
     background-color: #d5e2f7;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    /* box-shadow: 1px 1px 1px rgb(67, 69, 82); */
     box-shadow: inset -1px -1px #00138c, 
     inset 1px 1px #0831d9, 
     inset -2px -2px #001ea0, 

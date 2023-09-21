@@ -1,35 +1,48 @@
 /* Base styles for DropdownContact */
 .dropdown-contact {
-  position: relative;
+  width: 13%;
   display: inline-block;
 }
 
+.dropdown-contact .option-conversation-option {
+	width: 100%;
+	height: 100%;
+}
+
+.dropdown .option-conversation-option li:hover {
+    background-color: #e2dec6;
+}
+
 .dropdown-contact-toggle {
-  color: #333; /* Dark text color */
-  border: none;
-  /* padding: 10px 20px; */
-  cursor: pointer;
+	color: #333; /* Dark text color */
+	border: none;
+	/* padding: 10px 20px; */
+	cursor: pointer;
 }
 
 .dropdown-contact-menu {
-  position: absolute;
-  background-color: #f9f4e1; /* Light beige background color for the menu */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  display: none;
+	position: absolute;
+	background-color: #f9f4e1;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	display: none;
+	font-size: 13px;
+	z-index:2;
 }
 
 .dropdown-contact-menu li {
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Add transition for smooth effect */
+	padding: 10px 20px;
+	cursor: pointer;
 }
 
+.dropdown .option-conversation-option li:hover {
+	background-color: #e2dec6;
+}
 /* Hover effect for menu items */
 .dropdown-contact-menu li:hover {
-  background-color: #f5e1b2; /* Change background color on hover */
+  background-color: #e2dec6;
 }
 
 /* Dropdown animation */
@@ -55,217 +68,44 @@
 	border-radius: 5px;
 	position: fixed;
 	display: flex;
-	/* gap: 10px;   */
-	top: 50%;
-	left: 50%;
+	top: 41%;
+	left: 40%;
 	width: 400px;
-	height: 225px;
+	height: 150px;
 	transform: translate(-50%, -50%);
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
-	/* Lighter beige background color */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.contact-addfriend-navbar {
-	padding: 0;
-	margin: 0;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	width: 100%;
-	height: 18%;
-	background-color: #0057e9;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
-	list-style: none;
-}
-
-.addfriend-contact-title {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
-}
-
-.contact-addfriend-navbar img {
-	padding: 0;
-	margin: 0;
-	width: 30px;
-	height: 30px;
-}
-
-.question {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-addfriend-form {
-	margin: 0;
-	padding: 0;
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-
-}
-
-.contact-addfriend-input {
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-addfriend-input h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-addfriend-options {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-addfriend-options h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.buttons-addfriend-cancel {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-	height: 40%;
-}
-
-.buttons-addfriend-cancel button {
-	margin-left: 4px;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
 }
 
 /****delete***/
-
 
 .contact-delete-container {
 	border-radius: 5px;
 	position: fixed;
 	display: flex;
-	/* gap: 10px;   */
-	top: 50%;
-	left: 50%;
+	top: 59%;
+	left: 36%;
 	width: 400px;
-	height: 225px;
+	height: 150px;
 	transform: translate(-50%, -50%);
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
-	/* Lighter beige background color */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.contact-delete-navbar {
-	padding: 0;
-	margin: 0;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	width: 100%;
-	height: 18%;
-	background-color: #0057e9;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
-	list-style: none;
-}
-
-.delete-contact-title {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
-}
-
-.contact-delete-navbar img {
-	padding: 0;
-	margin: 0;
-	width: 30px;
-	height: 30px;
-}
-
-.question {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-delete-form {
-	margin: 0;
-	padding: 0;
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-
-}
-
-.contact-delete-input {
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-delete-input h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-delete-options {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-delete-options h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.buttons-delete-cancel {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-	height: 40%;
-}
-
-.buttons-delete-cancel button {
-	margin-left: 4px;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
 }
 
 /*****Block********/
@@ -274,107 +114,21 @@
 	border-radius: 5px;
 	position: fixed;
 	display: flex;
-	/* gap: 10px;   */
-	top: 50%;
-	left: 50%;
+	top: 35%;
+	left: 27%;
 	width: 400px;
-	height: 225px;
+	height: 150px;
 	transform: translate(-50%, -50%);
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
-	/* Lighter beige background color */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.contact-block-navbar {
-	padding: 0;
-	margin: 0;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	width: 100%;
-	height: 18%;
-	background-color: #0057e9;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
-	list-style: none;
-}
-
-.block-contact-title {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
-}
-
-.contact-block-navbar img {
-	padding: 0;
-	margin: 0;
-	width: 30px;
-	height: 30px;
-}
-
-.question {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-block-form {
-	margin: 0;
-	padding: 0;
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-
-}
-
-.contact-block-input {
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-block-input h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-block-options {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-block-options h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.buttons-block-cancel {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-	height: 40%;
-}
-
-.buttons-block-cancel button {
-	margin-left: 4px;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
 }
 
 /****Invite****/
@@ -384,17 +138,22 @@
 	position: fixed;
 	display: flex;
 	/* gap: 10px;   */
-	top: 50%;
-	left: 50%;
+	top: 25%;
+	left: 55%;
 	width: 400px;
-	height: 225px;
+	height: 150px;
 	transform: translate(-50%, -50%);
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
 	/* Lighter beige background color */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
 }
 
 .contact-invite-navbar {
@@ -403,25 +162,37 @@
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	width: 100%;
-	height: 18%;
-	background-color: #0057e9;
+	height: 50px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(9, 151, 255, 1) 0%,
+        rgba(0, 83, 238, 1) 8%,
+        rgba(0, 80, 238, 1) 40%,
+        rgba(0, 102, 255, 1) 88%,
+        rgba(0, 102, 255, 1) 93%,
+        rgba(0, 91, 255, 1) 95%,
+        rgba(0, 61, 215, 1) 96%,
+        rgba(0, 61, 215, 1) 100%
+    );
+
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
 	list-style: none;
+	border: 1px solid #0831d9;
 }
 
 .invite-contact-title {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
+    flex: 1;
+    font-family: trebuchet_ms_xp;
+    letter-spacing: 1px;
+    font-size: 90%;
+    font-weight: bold;
+    color:white;
+    text-shadow: 1px 1px #0f1089;
+    text-indent: 2%;
 }
 
 .contact-invite-navbar img {
@@ -431,59 +202,122 @@
 	height: 30px;
 }
 
+#logo {
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.ddc-right-icons {
+    display: flex;
+    align-items: center; /* Center vertically */
+}
+
 .question {
 	font-weight: normal;
 	color: rgb(68, 66, 38);
+	margin-right: 10px;
+}
+
+.contact-invite-fieldset {
+	box-shadow: none;
+    background: #fff;
+    border: 1px solid #d0d0bf;
+    border-radius: 4px;
+    padding-top: 10px;
+	width: 92%;
+
+	margin-top: 15px;
+	margin-left: 15px;
+    margin-right: 15px;
+}
+
+.contact-invite-legend {
+    background: transparent;
+    color: #0046d5;
+	font-size: 11px;
 }
 
 .contact-invite-form {
 	margin: 0;
 	padding: 0;
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
+	height: 91%;
+	width: 95%;
 
+	margin-left: 15px;
+	margin-right: 15px;
+	font-family: tahoma_xp;
+	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .contact-invite-input {
 	height: 33%;
 	width: 100%;
+	font-size: 7px;
+
+	margin-left: 25px;
+
+
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
 }
 
-.contact-invite-input h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-invite-options {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-invite-options h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
+.ze-input {
+	padding: 3px 4px;
+    border: 1px solid #7f9db9;
+    background-color: #fff;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    height: 21px;
+    line-height: 2;
 }
 
 .buttons-invite-cancel {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: flex-end;
-	height: 40%;
+	justify-content: end;
+	height: 50%;
+	gap: 5px;
+	margin-right: 15px;
 }
 
-.buttons-invite-cancel button {
-	margin-left: 4px;
+.contact-invite-cancel, .contact-invite-enter {
+	-webkit-font-smoothing: antialiased;
+	font-size: 12px;
+	box-sizing: border-box;
+	border: 1px solid #003c74;
+	background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(236, 235, 229) 86%, rgb(216, 208, 196) 100%);
+	box-shadow: none;
+	border-radius: 3px;
+	color: rgb(68, 66, 38);
+}
+
+.contact-invite-cancel:not(:disabled):active, .contact-invite-cancel:not(:disabled).active,
+.contact-invite-enter:not(:disabled):active, .contact-invite-enter:not(:disabled).active {
+	box-shadow: none;
+	background: linear-gradient(180deg, rgb(205, 202, 195) 0%, rgb(227, 227, 219) 8%, rgb(229, 229, 222) 94%, rgb(242, 242, 241) 100%);
+}
+
+.contact-invite-cancel:not(:disabled):hover,  .contact-invite-enter:not(:disabled):hover{
+	box-shadow: inset -1px 1px #fff0cf, inset 1px 2px #fdd889, inset -2px 2px #fbc761, inset 2px -2px #e5a01a;
+}
+
+.contact-invite-cancel:focus, .contact-invite-cancel.focused,
+.contact-invite-enter:focus, .contact-invite-enter.focused {
+	box-shadow: inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6, inset 1px -1px #89ade4, inset 2px -2px #89ade4;
+}
+
+.contact-invite-cancel::-moz-focus-inner, .contact-invite-enter::-moz-focus-inner{
+	border: 0;
 }
 
 
@@ -493,105 +327,19 @@
 	border-radius: 5px;
 	position: fixed;
 	display: flex;
-	/* gap: 10px;   */
-	top: 50%;
-	left: 50%;
+	top: 72%;
+	left: 42%;
 	width: 400px;
-	height: 225px;
+	height: 150px;
 	transform: translate(-50%, -50%);
 	flex-direction: column;
 	padding: 0;
 	margin: 0;
 	background-color: #E9E8D7;
-	/* Lighter beige background color */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.contact-sendMp-navbar {
-	padding: 0;
-	margin: 0;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	width: 100%;
-	height: 18%;
-	background-color: #0057e9;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
-	list-style: none;
-}
-
-.sendMp-contact-title {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
-}
-
-.contact-sendMp-navbar img {
-	padding: 0;
-	margin: 0;
-	width: 30px;
-	height: 30px;
-}
-
-.question {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-sendMp-form {
-	margin: 0;
-	padding: 0;
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-
-}
-
-.contact-sendMp-input {
-	height: 33%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-sendMp-input h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.contact-sendMp-options {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.contact-sendMp-options h1 {
-	font-weight: normal;
-	color: rgb(68, 66, 38);
-}
-
-.buttons-sendMp-cancel {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-	height: 40%;
-}
-
-.buttons-sendMp-cancel button {
-	margin-left: 4px;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
 }

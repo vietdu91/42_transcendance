@@ -2,13 +2,14 @@ import React from 'react';
 // import { useContext } from 'react';
 // import Cookies from 'js-cookie';
 // import { ChatContext } from '../../utils/ChatContext';
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 import './ConversationListHeader.css';
 import DropdownChannel from '../DropdownChannel/DropdownChannels';
 import DropdownContact from '../DropdownContacts/DropdownContact';
-import Logo from '../../../img/chat/group-conv.png'
+import Logo from '../../../img/chat/group-conv.png';
+import MSN_Messenger from '../../../img/chat/logo_msn_messenger.png';
 
 // interface ConversationListHeaderProps {
 //     name: string;
@@ -33,6 +34,7 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFrie
     // État pour définir si la room est privée
 
     // const socket = useContext(ChatContext);
+    const navigate = useNavigate();
 
     function goToProfile() {
         window.open(process.env.REACT_APP_LOCAL_F + "/profile");
@@ -46,33 +48,26 @@ const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFrie
                 <div className="clh-right-icons">
                     <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
                     <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
-                    <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
+                    <li><button className="chat-icons-messenger" aria-label="Close" onClick={() => navigate("/")}></button></li>
                 </div>
             </ul>
             {/* <hr /> */}
-            <ul className="option-conversation-list">
+            <ul className="option-conversation-list" id="option-conversation-bar">
                 {/* <li onClick={() => showContact("First")}></li> */}
-<<<<<<< HEAD
-                <DropdownChannel user={user} setChannels={setChannels} />
-                <DropdownContact user={user} setConvs={setConvs} />
-                <li className="li-option-conversation-list">Actions</li> { /*  */}
-                <li className="li-option-conversation-list">Tools</li> { /* */}
-                <li className="li-option-conversation-list">Help</li>
-=======
-                <DropdownChannel user={user} setChannels={setChannels} setFriends={setFriends} />
+                <DropdownChannel user={user} setChannels={setChannels}/>
                 <DropdownContact user={user} setConvs={setConvs} setFriends={setFriends} />
-                <li>Actions</li> { /*  */}
-                <li>Tools</li> { /* */}
-                <li>Help</li>
->>>>>>> master
+                <li className="option-conversation-option">Actions</li>
+                <li className="option-conversation-option">Tools</li> 
+                <li className="option-conversation-option">Help</li>
             </ul>
-            <div className="topbar-conversation-list">
-                <div className="profile-pic-messenger">
-                    <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile}/> {/* Add the profile picture */}
-                </div>                <div className="user-informations">
-                    <h2 className="username-info">{name} <span className="status-online">(online)</span></h2>
-                    <h4 className="status-edit">status to Edit</h4>
+        <div className="topbar-conversation-list">
+            <div className="profile-pic-messenger">
+                <img className="Your-profile-pic-topbar" src={pfp} alt="profile" onClick={goToProfile}/></div>                
+                <div className="user-informations">
+                    <h2 className="username-info">{name} <span className="status-online">(Online)</span><span className="triangle">▾</span></h2>
+                    <h4 className="status-edit">&lt;Type a personal message&gt;<span className="triangle">▾</span></h4>
                 </div>
+                <img className="logo-msn-messenger" src={MSN_Messenger} alt="messsenger"/>
             </div>
         </div>
     );

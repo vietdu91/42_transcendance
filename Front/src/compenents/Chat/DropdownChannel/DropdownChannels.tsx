@@ -7,15 +7,11 @@ import './DropdownChannels.css'
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
-<<<<<<< HEAD
 
 import Logo from '../../../img/chat/group-conv.png'
 
 
 function DropdownChannels({ user, setChannels }) {
-=======
-function DropdownChannels({ user, setChannels, setFriends }) {
->>>>>>> master
 	const socket = useContext(ChatContext)
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
@@ -39,6 +35,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 
 	const toggleChannels = () => {
 		setIsOpen(!isOpen);
+		console.log(isOpen);
 	};
 
 	const toggleCreateChannel = () => {
@@ -119,10 +116,11 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 	})
 
 	return (
+	<>
 		<div className="dropdown">
-			<div className="dropdown-toggle" onClick={toggleChannels}>
+			<li className="option-conversation-option" onClick={toggleChannels}>
 				Channels
-			</div>
+			</li>
 			{isOpen && (
 				<ul className="dropdown-menu">
 					<li onClick={toggleCreateChannel}>Create Channel</li>
@@ -132,7 +130,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 			)}
 			{
 				isOpenForCreateChannel && (
-				<div className="channel-creation-container" >
+					<div className="channel-creation-container" >
 					<ul className="channel-creation-navbar">
 						<li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
 						<li className="create-channel-title">Create Channel</li>
@@ -150,7 +148,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 								type="text"
 								placeholder="Channel Name"
 								onChange={(e) => setChannelName(e.target.value)} // Capture the channel name
-							/>
+								/>
 						</div>
 						<div className="channel-creation-options">
 							<fieldset className="channel-creation-fieldset">
@@ -168,7 +166,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 						<div className="channel-creation-buttons">
 							<input type="text" placeholder="Password" className={`${isPasswordEnabled ? "channel-creation-password" : "channel-creation-password-disabled"}`}
 								disabled={!isPasswordEnabled} onChange={(e) => setRoomPassword(e.target.value)}
-							/>
+								/>
 							<button className="button-create" onClick={() => { handleCreate(); toggleCreateChannel(); }}>Create</button>
 						</div>
 					</div>
@@ -194,7 +192,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 										<input className="ze-input"
 											type="text" placeholder="Channel Name"
 											onChange={(e) => setChannelName(e.target.value)}
-										/>
+											/>
 									</div>
 								</div>
 						</fieldset>
@@ -202,7 +200,7 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 							<h1 className="question">If private, enter a Password: </h1>
 							<input className="ze-input" type="text" placeholder="Password"
 								onChange={(e) => setJoinPassword(e.target.value)}
-							/>
+								/>
 						</div>
 						<div className="buttons-join-cancel">
 							<button className="button-join-cancel" onClick={() => { toggleJoinChannel(); }}>Cancel</button>
@@ -213,69 +211,43 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 			}
 			{
 				isOpenForDeleteChannel && (
-					// <div className="channel-delete-container">
-					// 	<ul className="channel-delete-navbar">
-					// 		<li className="delete-channel-title">Delete Channel</li>
-					// 		<div>
-					// 			<img src={Minimize} alt="minimize" id="chat_minimize" />
-					// 			<img src={Maximize} alt="Maximize" id="chat_Maximize" />
-					// 			<img onClick={() => { toggleDeleteChannel(); }} src={RedCross} alt="redcross" id="chat_redcross" />
-					// 		</div>
-					// 	</ul>
-					// 	<h3 className="question">Which channel do you want to delete ?</h3>
-					// 	<div className="channel-delete-form">
-					// 		<div className="channel-delete-input">
-					// 			<h1>Channel Name : </h1>
-					// 			<input type="text" placeholder="Channel Name"
-					// 				onChange={(e) => setChannelName(e.target.value)}
-					// 			/>
-					// 		</div>
-					// 	</div>
-					// 	<div className="channel-delete-options">
-					// 		<h1>If private enter Password</h1>
-					// 		<input type="text" placeholder="Password" />
-					// 	</div>
-					// 	<div className="buttons-delete-cancel">
-					// 		<button onClick={() => { toggleDeleteChannel(); }}>Cancel</button>
-					// 		<button onClick={() => { handleDelete(); toggleDeleteChannel(); }}>Delete</button>
-					// 	</div>
-					// </div>
-						<div className="channel-delete-container">
-							<ul className="channel-delete-navbar">
-								<li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
-								<li className="create-channel-title">Delete Channel</li>
-								<div className="ddc-right-icons">
-									<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
-									   <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
-									<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close" onClick={() => { toggleDeleteChannel(); }}></button></li>
-								</div>
-							</ul>
-							<fieldset className="channel-join-fieldset">
-								  <legend className="channel-join-legend">Which channel do you want to delete ?</legend>
-									<div className="channel-join-form">
-										<div className="channel-join-input">
-											<h1 className="question">Channel Name : </h1>
-											<input className="ze-input"
-												type="text" placeholder="Channel Name"
-												onChange={(e) => setChannelName(e.target.value)}
+					<div className="channel-delete-container">
+						<ul className="channel-delete-navbar">
+							<li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+							<li className="create-channel-title">Delete Channel</li>
+							<div className="ddc-right-icons">
+								<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+								   <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+								<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close" onClick={() => { toggleDeleteChannel(); }}></button></li>
+							</div>
+						</ul>
+						<fieldset className="channel-join-fieldset">
+							  <legend className="channel-join-legend">Which channel do you want to delete ?</legend>
+								<div className="channel-join-form">
+									<div className="channel-join-input">
+										<h1 className="question">Channel Name : </h1>
+										<input className="ze-input"
+											type="text" placeholder="Channel Name"
+											onChange={(e) => setChannelName(e.target.value)}
 											/>
-										</div>
 									</div>
-							</fieldset>
-							<div className="channel-join-options">
-								<h1 className="question">If private, enter a Password: </h1>
-								<input className="ze-input" type="text" placeholder="Password"
-									onChange={(e) => setJoinPassword(e.target.value)}
-								/>
-							</div>
-							<div className="buttons-join-cancel">
-								<button className="button-join-cancel" onClick={() => { toggleJoinChannel(); }}>Cancel</button>
-								<button className="button-join-join" onClick={() => { handleJoin(); toggleDeleteChannel(); }}>Join</button>
-							</div>
+								</div>
+						</fieldset>
+						<div className="channel-join-options">
+							<h1 className="question">If private, enter a Password: </h1>
+							<input className="ze-input" type="text" placeholder="Password"
+								onChange={(e) => setJoinPassword(e.target.value)}
+							/>
 						</div>
+						<div className="buttons-join-cancel">
+							<button className="button-join-cancel" onClick={() => { toggleDeleteChannel(); }}>Cancel</button>
+							<button className="button-join-join" onClick={() => { handleJoin(); toggleDeleteChannel(); }}>Join</button>
+						</div>
+					</div>
 				)
 			}
 		</div>
+	</>
 	);
 }
 

@@ -47,6 +47,7 @@ import Infirme from "../../../img/game/videos/infirme.mp4"
 import Sucer_une_serviette from "../../../img/game/videos/sucer_une_serviette.mp4"
 import Princess_Kenny from "../../../img/game/videos/princess_kenny.mp4"
 import Mr_Toc from "../../../img/game/videos/mr_toc.mp4"
+import PasGros from "../../../img/game/videos/je_suis_pas_gros.mp4"
 
 
 interface IBall {
@@ -136,6 +137,9 @@ export default function Game(): JSX.Element {
 
 	const [OnTocLeft, setOnTocLeft] = useState(false);
 	const [OnTocRight, setOnTocRight] = useState(false);
+
+	const [OnGrosLeft, setOnGrosLeft] = useState(false);
+	const [OnGrosRight, setOnGrosRight] = useState(false);
 
 	const [charLeft, setCharLeft] = useState("");
 	const [charRight, setCharRight] = useState("");
@@ -254,6 +258,8 @@ export default function Game(): JSX.Element {
 			DesactivePower(setOnPrincessRight);
 			DesactivePower(setOnTocLeft);
 			DesactivePower(setOnTocRight);
+			DesactivePower(setOnGrosLeft);
+			DesactivePower(setOnGrosRight);
 		})
 
 		socket.on('playerMoved', (response) => {
@@ -293,7 +299,7 @@ export default function Game(): JSX.Element {
 			if (response.id === game.current.idLeft) {
 				powLeft = true;
 				switch (response.char) {
-					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; break;
+					case "Cartman" : game.current.hLeft = response.game.hLeft / 100 * window.innerWidth * 70 / 100; ActivePower(setOnGrosLeft, 7000); break;
 					case "Servietsky" : weed = true; ActivePower(setOnSucerLeft, 14000); break;
 					case "Timmy" : timmy = true; ActivePower(setOnInfirmeLeft, 19000); break;
 					case "TerrancePhilip" : fart = true; ActivePower(setOnProutLeft, 42000); break;
@@ -306,7 +312,7 @@ export default function Game(): JSX.Element {
 			else {
 				powRight = true;
 				switch (response.char) {
-					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; break;
+					case "Cartman" : game.current.hRight = response.game.hRight / 100 * window.innerWidth * 70 / 100; ActivePower(setOnGrosRight, 7000); break;
 					case "Servietsky" : weed = true; ActivePower(setOnSucerRight, 14000); break;
 					case "Timmy" : timmy = true; ActivePower(setOnInfirmeRight, 19000); break;
 					case "TerrancePhilip" : fart = true; ActivePower(setOnProutRight, 42000); break;
@@ -488,7 +494,9 @@ export default function Game(): JSX.Element {
 		else if (OnPrincessLeft)
 			return (<video autoPlay src={Princess_Kenny} id="game-img-player-left"></video>);
 		else if (OnTocLeft)
-			return (<video autoPlay src={Mr_Toc} id="game-img-player-left"></video>);	
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-left"></video>);
+		else if (OnGrosLeft)
+			return (<video autoPlay src={PasGros} id="game-img-player-left"></video>);	
 		else
 			return (<img alt="#" src={image} id="game-img-player-left"></img>);
 	}
@@ -518,7 +526,9 @@ export default function Game(): JSX.Element {
 		else if (OnPrincessRight)
 			return (<video autoPlay src={Princess_Kenny} id="game-img-player-right"></video>);
 		else if (OnTocRight)
-			return (<video autoPlay src={Mr_Toc} id="game-img-player-right"></video>);		
+			return (<video autoPlay src={Mr_Toc} id="game-img-player-right"></video>);	
+		else if (OnGrosRight)
+			return (<video autoPlay src={PasGros} id="game-img-player-right"></video>);	
 		else
 			return (<img alt="#" src={image} id="game-img-player-right"></img>);
 	}

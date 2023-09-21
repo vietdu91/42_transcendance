@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 import './ConversationListSummary.css';
 import Advertisement1 from './../../../img/chat/thicker.jpg';
-import Advertisement2 from './../../../img/chat/thicker.jpg';
+import Advertisement2 from './../../../img/chat/IMG_3240.png';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
