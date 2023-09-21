@@ -74,14 +74,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
     const handleSearch = (query: string) => {
         console.log(`Recherche en cours avec la requête : ${query}`);
     };
-
-    /* modif benda */
-    // const handleIndivConvVisibility = (visibility) => {
-    //     handleVisibility(visibility);
-    // };
-    /* modif benda */
     
-
     useEffect(() => {
         setVisibleItems(Array.from({ length: convs.length }, () => false));
         setVisibleChannels(Array.from({ length: convs.length }, () => false));
@@ -100,10 +93,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
             </div>
             <div className="display-list-convo">
                 {indivConv && (
-                    <ul>
+                    <ul className="channel-ul-convo"> Conversations :
                         {convs.map((item, index) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(index)}>
-                                <img src={regularConv} alt={regularConv} id={"icon-conv"} />
+                            <li className="channel-li-convo" key={item.id} onClick={() => toggleConvSummary(index)}>
+                                <img src={regularConv} alt={regularConv} id={"icon-conv-img"} />
                                 {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
                         ))}
@@ -111,10 +104,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 )
                 }
                 {channelsConv && (
-                    <ul>
+                    <ul className="channel-ul-channels"> Channels : 
                         {channels.map((item, index) => (
-                            <li key={item.id} onClick={() => toggleChannelSummary(index)}>
-                            <img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} />
+                            <li className="channel-li-channels" key={item.id} onClick={() => toggleChannelSummary(index)}>
+                            <img src={groupConv} alt="regularConv" id="icon-channels-img" onClick={handleImageClickChannels} />
                                 {item.name}
                             </li>
                         ))}
@@ -124,10 +117,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 )
                 }
                 {listFriends && (
-                    <ul>
+                    <ul className="channel-ul-friend-list"> Your Friends :
                         {friends.map((item, index) => (
-                            <li key={item.id} onClick={() => goToProfile(item.name)}>
-                                <img src={imageState(item.state)} alt={item.altText} id={`chat_${item.altText}`} />
+                            <li className="channel-li-friend-list" key={item.id} onClick={() => goToProfile(item.name)}>
+                                <img src={imageState(item.state)} alt={item.altText} id="icon-friends" />
                                 {item.name} ({item.nickname})
                                 <img src={item.pfp_url}/>
                             </li>

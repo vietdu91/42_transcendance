@@ -69,6 +69,51 @@
     height: 20px;
 }
 
+.channel-ul-convo {
+    list-style: none;
+}
+
+#icon-conv-img {
+    margin-left: 2%;;
+    margin-right: 2%;;
+}
+
+.channel-li-convo{
+    margin-left: 2%;
+    list-style: none;
+    font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
+}
+
+.channel-ul-channels {
+    list-style: none;
+}
+
+#icon-channels-img {
+    margin-left: 2%;;
+    margin-right: 2%;;
+}
+
+.channel-li-channels {
+    margin-left: 2%;
+    list-style: none;
+    font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
+}
+
+.channel-ul-friend-list {
+    list-style: none;
+}
+
+.channel-li-friend-list {
+    margin-left: 2%;
+    list-style: none;
+    font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
+}
+
+#icon-friends {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
 .advertisement-scope {
     height: 19%;
     width: 89.5%;

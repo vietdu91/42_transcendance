@@ -30,7 +30,7 @@ import MSN_Messenger from '../../../img/chat/logo_msn_messenger.png';
 // }) => {
 
 
-const ConversationListHeader = ({name, pfp, user, setConvs, setChannels, setFriends}) => {
+const ConversationListHeader = ({ name, pfp, user, setConvs, setChannels, setFriends }) => {
     // État pour définir si la room est privée
 
     // const socket = useContext(ChatContext);

@@ -27,6 +27,7 @@ export class ChatGateway {
   async handleJoinChat(client: Socket): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
+    console.log(userToken);
     const userDb = await this.userService.getUserById(userToken.sub);
 
     for (let user of this.users) {

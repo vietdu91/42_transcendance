@@ -22,7 +22,7 @@ export class UserController {
   async getUserByName(@GetUser() user: any, @Query('username') username: string, @Res() response: Response) {
     try {
       const target = await this.userService.getUserByName(username);
-      if (!target) {
+      if (!target || username === user.name) {
         throw new UnauthorizedException();
       }
 
