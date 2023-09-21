@@ -11,6 +11,9 @@ import ChampSelect from '../../Game/ChampSelect/ChampSelect';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
+import groupConv from '../../../img/chat/group-conv.png';
+import blockUser from '../../../img/chat/block_user.png';
+import banUser from '../../../img/chat/ban_user.png';
 
 function Channel({ i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
@@ -89,8 +92,9 @@ function Channel({ i, max, user, channel, isVisible }) {
 			{isVisible && (
 				<div className="channel-main-container">
 					<div className="channel-bandeau">
+						<img src={groupConv} alt="regularConv" id="chat_icon" />
+						<div className="channel-name">{channel.name}</div>
 						<ul className="reduce-maximize-quit">
-							<li className="channel-name">{channel.name}</li>
 							<li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
 							<li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
 							<li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
@@ -131,25 +135,35 @@ function Channel({ i, max, user, channel, isVisible }) {
 							<div className="channel-group-pic-main-container">
 								<div className="channel-group-pic-cadre">
 									<div className="channel-pik">
-										<img alt="channel-img" src={channel.image}/>
+										<img alt="channel-img" src={channel.image} />
 									</div>
 								</div>
 							</div>
 							<div className="channel-group-member-list">
-								<ul>
+								<ul className="channel-group-member-list-ul">
 									{channel.usersList?.map((user, index) => (
-										<li key={index} onClick={() => {goToProfile(user.name)}}><img src={regularConv} alt="regularConv"/>{user.nickname} ({user.name})</li>
+										<li className="channel-group-member-list-ul-li"key={index} >
+											<div className="channel-group-member-list-logo-name-pseudo">
+												<img src={regularConv} alt="regularConv" />
+												<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(user.name) }}>{user.nickname} ({user.name} )</div>
+											</div>
+											<div className="channel-group-member-list-ban-block">
+												<img src={banUser} alt="channels-ban-user" id="channels-ban-user" />
+												<img src={blockUser} alt="channels-block-user" id="channels-block-user" />
+											</div>
+										</li>
+
 									))}
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div className="channel-send-messages-part">
-						<div className="channel-input-text">{/*Add buttons*/}
-							<div className="channel-left">
-								<span
+						<div className="channel-input-text">
+							<div className="channel-up">
+								<span className="channel-up-span"
 									ref={inputRef}
-									className="text-area-indiv"
+									// className="text-area-indiv"
 									role="textbox"
 									contentEditable
 									onInput={handleInputChange}
@@ -158,11 +172,9 @@ function Channel({ i, max, user, channel, isVisible }) {
 									style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
 								></span>
 							</div>
-							<div className="channel-right-buttons">
-								<button onClick={handleSendMessage}>Send</button>
+							<div className="channel-down">
+								<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
 							</div>
-							{/* <button></button>
-					<button></button> */}
 						</div>
 						<div className="channel-my-profile-pic-main-container">
 							<div className="channel-my-profile-pic-group-pic-cadre">
