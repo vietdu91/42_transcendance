@@ -303,11 +303,13 @@ export default function Game(): JSX.Element {
 				const char: string = (response.id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
 				navigate('/gameover', { state: { char: char } });
 			}
+			socket.disconnect();
 			p5SketchRef.current?.remove();
 		})
 
 		socket.on("gaveUp", (response) => {
 			navigate('/errorgame');
+			socket.disconnect();
 			p5SketchRef.current?.remove();
 		})
 
@@ -421,14 +423,6 @@ export default function Game(): JSX.Element {
 			});
 		}
 
-		return () => {
-			// console.log(game.current.scoreLeft, game.current.scoreRight);
-			// if (game.current.scoreLeft < 5 && game.current.scoreRight < 5) {
-			// 	console.log("Nan la !!!!!");
-			// 	socket?.emit("giveUp", roomId);
-			// }
-			// p5SketchRef.current?.remove();
-		};
 	}, [sketchRef, navigate, roomId, socket, userId]);
 
 	function GetPlayerLeft(props) {

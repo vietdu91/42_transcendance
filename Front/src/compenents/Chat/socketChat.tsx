@@ -126,6 +126,9 @@ function Chat() {
                 })
         }
         getUserData();
+        return () => {
+            socket.disconnect();
+        }
     }, []);
 
     return (

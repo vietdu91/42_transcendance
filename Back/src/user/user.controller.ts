@@ -86,6 +86,9 @@ export class UserController {
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
+      if (user.friendsList.includes(target.id)) {
+        throw new BadRequestException();
+      }
       if (target.blockList.includes(user.id)) {
         throw new BadRequestException();
       }
@@ -96,8 +99,10 @@ export class UserController {
         where: { id: user.id },
         data: { friendsList: { push: target.id } },
       })
+      const friends = await this.userService.getFriendsList(userUpdate.friendsList);
       res.json({
         name: target.name,
+        friends: friends,
       })
     } catch {
       throw new BadRequestException();
@@ -106,17 +111,23 @@ export class UserController {
 
   @Post('addBlocked')
   @UseGuards(JwtAuthenticationGuard)
-  async addBlocked(@GetUser() user: any, @Body() body: { name: string }) {
+  async addBlocked(@GetUser() user: any, @Res() res: Response, @Body() body: { name: string }) {
     try {
       const { name } = body;
       if (!name) {
-        throw new BadRequestException();
+        throw new BadRequestException("There is no name !!!!!!");
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
+      if (!target) {
+        throw new BadRequestException("This user doesn't exist")
+      }
       if (target.id === user.id) {
-        throw new BadRequestException();
+        throw new BadRequestException("You can't block yourself");
+      }
+      if (user.blockList.includes(target.id)) {
+        throw new BadRequestException("You already blocked them");
       }
       if (target.friendsList.includes(user.id)) {
         const updatedFriendList = target.friendsList.filter((id) => id !== user.id);
@@ -131,15 +142,19 @@ export class UserController {
       if (user.friendsList.includes(target.id)) {
         updatedFriendList = user.friendsList.filter((id) => id !== target.id);
       }
-      await this.prisma.user.update({
+      const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: {
           friendsList: updatedFriendList,
           blockList: { push: target.id },
         },
       })
-    } catch {
-      throw new BadRequestException();
+      const friends = await this.userService.getFriendsList(userUpdate.friendsList);
+      res.json({
+        friends: friends,
+      })
+    } catch (err){
+      throw err;
     }
   }
 
@@ -157,6 +172,9 @@ export class UserController {
       if (target.id === user.id) {
         throw new BadRequestException();
       }
+      if (!user.blockList.includes(target.id)) {
+        throw new BadRequestException();
+      }
       const updatedBlockList = user.blockList.filter((id) => id !== target.id);
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
@@ -169,7 +187,7 @@ export class UserController {
 
   @Post('removeFriend')
   @UseGuards(JwtAuthenticationGuard)
-  async removeFriend(@GetUser() user: any, @Body() body: { name: string }) {
+  async removeFriend(@GetUser() user: any, @Body() body: { name: string },@Res() res: Response) {
     try {
       const { name } = body;
       if (!name) {
@@ -181,11 +199,18 @@ export class UserController {
       if (target.id === user.id) {
         throw new BadRequestException();
       }
+      if (!user.friendsList.includes(target.id)) {
+        throw new BadRequestException();
+      }
       const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
 
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: { friendsList: updatedFriendList },
+      })
+      const friends = await this.userService.getFriendsList(userUpdate.friendsList);
+      res.json({
+        friends: friends,
       })
     } catch {
       throw new BadRequestException();

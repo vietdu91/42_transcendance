@@ -12,7 +12,7 @@ import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 
-function Channel({ i, max, user, channel, isVisible, blocked }) {
+function Channel({ user, channel, isVisible, blocked }) {
 	const socket = useContext(ChatContext);
 	const token = Cookie.get('accessToken');
 	const [value, setValue] = useState('');

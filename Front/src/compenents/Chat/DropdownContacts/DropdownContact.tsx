@@ -8,6 +8,7 @@ import { ChatContext } from '../../utils/ChatContext';
 import RedCross from "../../../img/chat/redcross.png"
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
+import SnackBarCustom from '../../utils/SnackBarCustom/SnackBarCustom';
 
 interface OtherUser {
   name: string,
@@ -37,6 +38,8 @@ function DropdownContact({ user, setConvs, setFriends }) {
   const [isVisible, setIsVisible] = useState(false);
   const [otherUser, setOtherUser] = useState<OtherUser>(initUser)
   const [conv, setConv] = useState()
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
 
   const accessToken = Cookie.get('accessToken');
 
@@ -68,6 +71,10 @@ function DropdownContact({ user, setConvs, setFriends }) {
         { name: friendName },
         { headers }
       )
+        .then(response => {
+          setFriends(response.data.friends);
+          console.log(response.data.friends)
+        })
         .catch(error => {
           if (error.response.status === 401) {
             Cookie.remove('accessToken')
@@ -88,6 +95,9 @@ function DropdownContact({ user, setConvs, setFriends }) {
         { name: friendName },
         { headers }
       )
+        .then(response => {
+          setFriends(response.data.friends);
+        })
         .catch(error => {
           if (error.response.status === 401) {
             Cookie.remove('accessToken')
@@ -105,10 +115,19 @@ function DropdownContact({ user, setConvs, setFriends }) {
         { name: friendName },
         { headers }
       )
+        .then(response => {
+          setFriends(response.data.friends);
+        })
         .catch(error => {
+          console.log(error.response);
           if (error.response.status === 401) {
             Cookie.remove('accessToken')
             window.location.href = "/";
+          }
+          else{
+            if(error.response.data.message != "Bad Request") {
+              setSnackMessage(error.response.data.message);
+            }
           }
         })
     }
@@ -307,6 +326,7 @@ function DropdownContact({ user, setConvs, setFriends }) {
           </div>
         </div>
       )}
+      <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
     </div>
   );
 }

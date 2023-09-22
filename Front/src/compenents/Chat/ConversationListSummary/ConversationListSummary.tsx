@@ -91,7 +91,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 {indivConv && (
                     <ul>
                         {convs.map((item, index) => (
-                            <li key={item.id} onClick={() => toggleConvSummary(index)}>
+                            <li key={index} onClick={() => toggleConvSummary(index)}>
                                 <img src={regularConv} alt={regularConv} id={"icon-conv"} />
                                 {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
@@ -102,7 +102,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 {channelsConv && (
                     <ul>
                         {channels.map((item, index) => (
-                            <li key={item.id} onClick={() => toggleChannelSummary(index)}>
+                            <li key={index} onClick={() => toggleChannelSummary(index)}>
                             <img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} />
                                 {item.name}
                             </li>
@@ -115,7 +115,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 {listFriends && (
                     <ul>
                         {friends.map((item, index) => (
-                            <li key={item.id} onClick={() => goToProfile(item.name)}>
+                            <li key={index} onClick={() => goToProfile(item.name)}>
                                 <img src={imageState(item.state)} alt={item.altText} id={`chat_${item.altText}`} />
                                 {item.name} ({item.nickname})
                                 <img src={item.pfp_url}/>
@@ -143,7 +143,7 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 />
             ))}
             {visibleChannels.map((isVisible, index) => (
-                channels[index] && <Channel key={index} i={index} max={channels.length} user={user} channel={channels[index]} isVisible={isVisible} blocked={blocked} />
+                channels[index] && <Channel key={index} user={user} channel={channels[index]} isVisible={isVisible} blocked={blocked} />
             ))}
         </div>
     );

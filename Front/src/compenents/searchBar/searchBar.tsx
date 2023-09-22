@@ -28,10 +28,10 @@ function SearchBar({ onSearch }: SearchBarProps) {
         onSearch(query);
         if (location.pathname === "/chat") {
           setNotFound(false);
-          window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.name}`);
+          window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.user.name}`);
         }
         else
-          navigate(`/user/${response.data.name}`)
+          navigate(`/user/${response.data.user.name}`)
       }
       )
       .catch((error) => {

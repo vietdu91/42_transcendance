@@ -256,7 +256,11 @@ export class ChatGateway {
       include: {
         usersList: {
           include: {
-            channels: true,
+            channels: {
+              include: {
+                messages: true,
+              }
+            }
           }
         }
       }
