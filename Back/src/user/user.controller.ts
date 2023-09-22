@@ -23,7 +23,7 @@ export class UserController {
     try {
       const target = await this.userService.getUserByName(username);
       if (!target) {
-        throw new BadRequestException("Bad pickaxe, try to new");
+        throw new BadRequestException("Bad pickaxe, try to new ⛏️");
       }
       if (target.name == user.name) {
         throw new BadRequestException("This is your profiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiile");
@@ -87,7 +87,7 @@ export class UserController {
         where: { name: name }
       })
       if (!target) {
-        throw new BadRequestException("This user doesn't exist")
+        throw new BadRequestException("This user doesn't exist 🤯")
       }
       if (user.friendsList.includes(target.id)) {
         throw new BadRequestException("They already are your friend");
@@ -96,10 +96,10 @@ export class UserController {
         throw new BadRequestException("They are blocked !");
       }
       if (target.blockList.includes(user.id)) {
-        throw new BadRequestException("Oh no ! He blocked you ! Sad ;)");
+        throw new BadRequestException("Oh no ! He blocked you ! Sad 🙂🥲🥹😂🤣");
       }
       if (target.id == user.id) {
-        throw new BadRequestException("You can't befriend yourself ! Oopsies");
+        throw new BadRequestException("You can't befriend yourself ! Oopsies 🤪");
       }
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
@@ -127,7 +127,7 @@ export class UserController {
         where: { name: name }
       })
       if (!target) {
-        throw new BadRequestException("This user doesn't exist")
+        throw new BadRequestException("This user doesn't exist 🤯")
       }
       if (target.id === user.id) {
         throw new BadRequestException("You can't block yourself");
@@ -176,10 +176,10 @@ export class UserController {
         where: { name: name }
       })
       if (!target) {
-        throw new BadRequestException("This user doesn't exist")
+        throw new BadRequestException("This user doesn't exist 🤯")
       }
       if (target.id === user.id) {
-        throw new BadRequestException("You can't unblock yourself ! Duh x)");
+        throw new BadRequestException("You can't unblock yourself ! Duh 🥨");
       }
       if (!user.blockList.includes(target.id)) {
         throw new BadRequestException("You didn't blocked them, silly..");
@@ -206,13 +206,13 @@ export class UserController {
         where: { name: name }
       })
       if (!target) {
-        throw new BadRequestException("This user doesn't exist")
+        throw new BadRequestException("This user doesn't exist 🤯")
       }
       if (target.id === user.id) {
-        throw new BadRequestException("You are not your own friend hahahahahahahaha dumb");
+        throw new BadRequestException("You are not your own friend hahahahahahahaha dumb 🗿");
       }
       if (!user.friendsList.includes(target.id)) {
-        throw new BadRequestException("He is not your frienddo, すみません !!!!");
+        throw new BadRequestException("しまった (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄), he is not your frienddo, すみません !!!! 🍥⛩️🍜🗻🍣🚄🍡");
       }
       const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
 
