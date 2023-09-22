@@ -3,6 +3,7 @@ import Cookie from 'js-cookie'
 import axios from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
 import './searchBar.css'
+import SnackBarCustom from '../utils/SnackBarCustom/SnackBarCustom';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -14,6 +15,8 @@ function SearchBar({ onSearch }: SearchBarProps) {
   const token = Cookie.get('accessToken')
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [notFound, setNotFound] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -39,10 +42,10 @@ function SearchBar({ onSearch }: SearchBarProps) {
           Cookie.remove('accessToken')
           window.location.href = "/";
         }
-        else if (error.response.data.message !== "your profile")
-          setNotFound(true);
-        else
-          setNotFound(false);
+        else if (error.response.data.message !== "Bad Request") {
+          setSnackMessage(error.response.data.message);
+          setSnackbarOpen(true);
+        }
       });
   };
 
@@ -58,7 +61,7 @@ function SearchBar({ onSearch }: SearchBarProps) {
       <button
         className="searchBar-button"
         onClick={() => handleSearch(searchQuery)}>Rechercher</button>
-      {notFound && <div>Utilisateur non trouvé</div>}
+      <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
     </div>
   );
 };

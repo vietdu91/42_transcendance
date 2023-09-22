@@ -80,7 +80,12 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
+          else if (error.response.data.message != "Bad Request") {
+            setSnackMessage(error.response.data.message);
+            setSnackbarOpen(true);
+          }
         })
+
       setNotFound(false);
       setIsVisible(true);
       console.log("friendName === " + friendName);
@@ -103,6 +108,10 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
+          else if (error.response.data.message != "Bad Request") {
+            setSnackMessage(error.response.data.message);
+            setSnackbarOpen(true);
+          }
         })
     }
   };
@@ -124,10 +133,9 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
-          else{
-            if(error.response.data.message != "Bad Request") {
-              setSnackMessage(error.response.data.message);
-            }
+          else if (error.response.data.message != "Bad Request") {
+            setSnackMessage(error.response.data.message);
+            setSnackbarOpen(true);
           }
         })
     }

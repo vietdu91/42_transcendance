@@ -23,10 +23,10 @@ export class UserController {
     try {
       const target = await this.userService.getUserByName(username);
       if (!target) {
-        throw new BadRequestException();
+        throw new BadRequestException("Bad pickaxe, try to new");
       }
       if (target.name == user.name) {
-        throw new BadRequestException("your profile");
+        throw new BadRequestException("This is your profiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiile");
       }
 
       let percentage: number = target.wins + target.looses === 0 ? 0 : Math.round(target.wins / (target.wins + target.looses) * 100);
@@ -81,19 +81,25 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new BadRequestException();
+        throw new BadRequestException("There is no name");
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
+      if (!target) {
+        throw new BadRequestException("This user doesn't exist")
+      }
       if (user.friendsList.includes(target.id)) {
-        throw new BadRequestException();
+        throw new BadRequestException("They already are your friend");
+      }
+      if (user.blockList.includes(target.id)) {
+        throw new BadRequestException("They are blocked !");
       }
       if (target.blockList.includes(user.id)) {
-        throw new BadRequestException();
+        throw new BadRequestException("Oh no ! He blocked you ! Sad ;)");
       }
       if (target.id == user.id) {
-        throw new BadRequestException();
+        throw new BadRequestException("You can't befriend yourself ! Oopsies");
       }
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
@@ -104,8 +110,8 @@ export class UserController {
         name: target.name,
         friends: friends,
       })
-    } catch {
-      throw new BadRequestException();
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -153,8 +159,8 @@ export class UserController {
       res.json({
         friends: friends,
       })
-    } catch (err){
-      throw err;
+    } catch (error){
+      throw error;
     }
   }
 
@@ -164,24 +170,27 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new BadRequestException();
+        throw new BadRequestException("There is no name");
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
+      if (!target) {
+        throw new BadRequestException("This user doesn't exist")
+      }
       if (target.id === user.id) {
-        throw new BadRequestException();
+        throw new BadRequestException("You can't unblock yourself ! Duh x)");
       }
       if (!user.blockList.includes(target.id)) {
-        throw new BadRequestException();
+        throw new BadRequestException("You didn't blocked them, silly..");
       }
       const updatedBlockList = user.blockList.filter((id) => id !== target.id);
       const userUpdate = await this.prisma.user.update({
         where: { id: user.id },
         data: { blockList: updatedBlockList },
       })
-    } catch {
-      throw new BadRequestException();
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -191,16 +200,19 @@ export class UserController {
     try {
       const { name } = body;
       if (!name) {
-        throw new BadRequestException();
+        throw new BadRequestException("There is no name");
       }
       const target = await this.prisma.user.findUnique({
         where: { name: name }
       })
+      if (!target) {
+        throw new BadRequestException("This user doesn't exist")
+      }
       if (target.id === user.id) {
-        throw new BadRequestException();
+        throw new BadRequestException("You are not your own friend hahahahahahahaha dumb");
       }
       if (!user.friendsList.includes(target.id)) {
-        throw new BadRequestException();
+        throw new BadRequestException("He is not your frienddo, すみません !!!!");
       }
       const updatedFriendList = user.friendsList.filter((id) => id !== target.id);
 
@@ -212,8 +224,8 @@ export class UserController {
       res.json({
         friends: friends,
       })
-    } catch {
-      throw new BadRequestException();
+    } catch (error) {
+      throw error;
     }
   }
 
