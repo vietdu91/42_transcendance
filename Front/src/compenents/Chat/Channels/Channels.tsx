@@ -195,7 +195,6 @@ function Channel({ user, channel, isVisible, blocked }) {
 					<div className="channel-send-messages-part">
 						<div className="channel-input-text">
 							<div className="channel-up">
-								<div className="channel-input-empty"></div>
 								<span className="channel-up-span"
 									ref={inputRef}
 									role="textbox"
