@@ -1,14 +1,14 @@
 # build step
-FROM node:18-alpine as development
+# FROM node:18-alpine as development
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN npm install -g npm@10.1.0 \
-	&& npm install --legacy-peer-deps
+# RUN npm install -g npm@10.1.0 \
+# 	&& npm install --legacy-peer-deps
 
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
 
 FROM node:18-alpine as production
 

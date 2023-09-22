@@ -56,10 +56,11 @@
     "qrcode": "^1.5.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "xdg-utils": "^0.0.3"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.1.17",
+    "@nestjs/cli": "^10.1.18",
     "@nestjs/schematics": "^10.0.2",
     "@nestjs/testing": "^10.2.5",
     "@types/cookie-parser": "^1.4.4",
