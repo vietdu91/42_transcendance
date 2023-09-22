@@ -85,9 +85,9 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
 
             <div className="info-conversation-list">
                 <ul>
-                    <li><img src={regularConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClick} /></li>
-                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} /></li>
-                    <li><img src={onlineImg} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
+                    <li><img src={regularConv} alt="regularConv" className="chat_regularConv2" onClick={handleImageClick} /></li>
+                    <li><img src={groupConv} alt="regularConv" className="chat_regularConv" onClick={handleImageClickChannels} /></li>
+                    <li><img src={onlineImg} alt="friends" className="chat_regularConv2" onClick={handleImageClickListFriends} /></li>
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>

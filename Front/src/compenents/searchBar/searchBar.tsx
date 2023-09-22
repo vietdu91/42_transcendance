@@ -66,18 +66,20 @@ function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <div className="searchBar">
-      <input className="searchBar-input"
-        type="text"
-        placeholder="Search User"
-        value={searchQuery}
-        onChange={handleInputChange}
-        ref={inputRef}
-      />
+      <div className="searchBar-input-container">
+        <input className="searchBar-input"
+          type="text"
+          placeholder="Search User"
+          value={searchQuery}
+          onChange={handleInputChange}
+          ref={inputRef}
+        />
+        {notFound && <div className="searchBar-error">User No Found</div>}
+      </div>
       <img className="searchBar-button"
         src={Lampe}
         alt="lampe"
         onClick={() => handleSearch(searchQuery)}></img>
-      {notFound && <div className="searchBar-error">User No Found</div>}
     </div>
   );
 };

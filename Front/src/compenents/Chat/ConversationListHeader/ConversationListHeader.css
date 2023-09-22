@@ -177,6 +177,7 @@ button[aria-label="Close"]:not(:disabled):active {
 
 .topbar-conversation-list {
     height: 68%;
+    width: 98.5%;
     background: linear-gradient(180deg, rgba(182, 209, 238, 1) 0%, rgba(176, 212, 249, 1) 3%,
             rgba(248, 248, 250, 1) 20%, rgba(232, 238, 242, 1) 74%, rgba(224, 234, 239, 1) 100%);
     /* border-radius: 5px; */
@@ -185,18 +186,21 @@ button[aria-label="Close"]:not(:disabled):active {
     display: grid;
     grid-template-columns: repeat(50, 2%);
     grid-template-rows: repeat(50, 2%);
-    box-shadow: inset -1px 0px #00138c, 
+    /* box-shadow: inset -1px 0px #00138c, 
     inset 1px 0px #0831d9, inset -2px 0px #001ea0, 
     inset 2px 0px #166aee, inset -3px 0px #003bda, 
-    inset 3px 0px #0855dd;
+    inset 3px 0px #0855dd; */
+
+    margin: 1px 2px 2px 3px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 2%;
 }
 
 .profile-pic-messenger {
-    grid-row-start: 10;
-    grid-row-end: 42;
-    grid-column-start: 5;
-    grid-column-end: 9;
-    background-color: black;
+    height: 75%;
+    width: auto;
     border-radius: 5px;
 }
 
@@ -205,8 +209,10 @@ button[aria-label="Close"]:not(:disabled):active {
     width: 85px;
     border-radius: 5px;
     margin-right: 10px;
+    margin-left: 20px;
     border: 3px solid rgb(133, 183, 230);
     -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(0,0,0,0.0) 90%, rgba(0,0,0,0.4));
+    object-fit: cover;
 }
 
 .user-informations {
@@ -262,9 +268,9 @@ button[aria-label="Close"]:not(:disabled):active {
 .logo-msn-messenger {
     height: 28px;
     position: relative;
-    top: 5px;
-    grid-column-end: 51;
-    justify-self: end;
+    align-self: flex-start;
+    margin-top: 7px;
+    margin-right: 5px;
 }
 
 .triangle {

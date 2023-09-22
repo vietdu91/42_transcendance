@@ -4,9 +4,6 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 
-import RedCross from "../../../img/chat/redcross.png"
-import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import Minimize from '../../../img/chat/minimized.jpg'
 import Logo from '../../../img/chat/group-conv.png'
 
 interface OtherUser {

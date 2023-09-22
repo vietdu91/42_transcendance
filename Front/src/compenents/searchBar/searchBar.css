@@ -17,15 +17,27 @@
     appearance: none;
     border-radius: 0;
     height: 21px;
-	width: 150px;
+	width: 90%;
     line-height: 2;
+	position: relative;
 }
+
+.searchBar-input-container {
+    height: 21px;
+	width: 150px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+	align-items: center;
+}
+
 .searchBar-button {
 	width: 21px;
 	height: 21px;
 	cursor: pointer;
 	overflow: hidden;
-	margin-left: 10px;
+	margin-left: 5px;
 }
 
 .searchBar-error {

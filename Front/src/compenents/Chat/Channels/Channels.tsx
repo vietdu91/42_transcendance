@@ -16,6 +16,9 @@ import blockUser from '../../../img/chat/block_user.png';
 import banUser from '../../../img/chat/ban_user.png';
 import moreOptions from '../../../img/chat/more-options.png';
 
+import Virgin from '../../../img/chat/virgin.jpg'
+import Logo from '../../../img/chat/group-conv.png'
+
 function Channel({ i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
 	const [value, setValue] = useState('');
@@ -97,32 +100,32 @@ function Channel({ i, max, user, channel, isVisible }) {
 		<div className="chat-channel-area" >
 			{isVisible && (
 				<div className="channel-main-container">
-					<div className="channel-bandeau">
-						<img src={groupConv} alt="regularConv" id="chat_icon" />
-						<div className="channel-name">{channel.name}</div>
-						<ul className="reduce-maximize-quit">
-							<li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
-							<li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
-							<li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
-						</ul>
-					</div>
+					<ul className="channel-bandeau">
+            		  <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+            		  <li className="invite-contact-title">{channel.name}</li>
+            		  <div className="ddc-right-icons">
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close"></button></li>
+            		  </div>
+            		</ul>
 					<div className="channel-actions">
-						<ul>
+						<ul className="channel-actions-menu">
 							<li>File</li>
 							<li>Edit</li>
 							<li onClick={toggleAction}>Actions</li>
 							<li>Tools</li>
 						</ul>
 						{isOpen && (
-							<ul className="dropdown-menu">
-								<li >Ban User</li>
-								<li >kick User</li>
-								<li >Leave</li>
-								<li >Invite</li>
+							<ul className="channel-dropdown-menu">
+								<li>Ban User</li>
+								<li>Kick User</li>
+								<li>Leave</li>
+								<li>Invite</li>
 							</ul>
 						)}
 					</div>
-					<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
+					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
 							<div className="channel-members-presentation"> {/*add le name du channel*/}
