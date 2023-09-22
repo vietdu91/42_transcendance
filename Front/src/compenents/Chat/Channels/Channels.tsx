@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
-import './Channels.scss';
+
 import RedCross from '../../../img/chat/redcross.png'
 import Maximize from '../../../img/chat/rsz_1maximize_1.png'
 import Minimize from '../../../img/chat/minimized.jpg'
@@ -11,6 +11,13 @@ import ChampSelect from '../../Game/ChampSelect/ChampSelect';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
+import groupConv from '../../../img/chat/group-conv.png';
+import blockUser from '../../../img/chat/block_user.png';
+import banUser from '../../../img/chat/ban_user.png';
+
+import Virgin from '../../../img/chat/virgin.jpg'
+import Logo from '../../../img/chat/group-conv.png'
+import Info from '../../../img/chat/info.png'
 
 function Channel({ user, channel, isVisible, blocked }) {
 	const socket = useContext(ChatContext);
@@ -30,13 +37,17 @@ function Channel({ user, channel, isVisible, blocked }) {
 		setIsOpen(!isOpen);
 	}
 
-
-
 	const handleInputChange = () => {
 		if (inputRef.current) {
 			setValue(inputRef.current.innerText);
 		}
 	};
+
+	const toggleMoreOptions = (index: number) => {
+		const newOptions = [...isOpenMoreOptions];
+        newOptions[index] = !newOptions[index];
+		setIsOpenMoreOptions(newOptions);
+	}
 
 	function goToProfile(name: string) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
@@ -83,54 +94,43 @@ function Channel({ user, channel, isVisible, blocked }) {
 		}
 	}, [socket, scrollToBottom])
 
-	const maxTop = window.innerHeight - 80;
-	const maxLeft = window.innerWidth; // Set to the right half of the screen
-
-	const getRandomNumber = (max, sizeInPercent) => {
-		const sizeInPixels = (80 / 100) * max;
-		return Math.floor(Math.random() * ((max - sizeInPixels)));
-	};
-
-	// const newPosition: CSSProperties = {
-	// 	'--max': "" + max,
-	// 	'--top': "" + getRandomNumber(maxTop, 0),
-	// 	'--left': "" + (maxLeft / 2 + getRandomNumber(maxLeft, maxLeft / 2)),
-	// };
-
-	// console.log('Generated position:', newPosition);
-
 	return (
-		<div className="chat-channel-area" >
+		<div className="chat-channel-area">
 			{isVisible && (
 				<div className="channel-main-container">
-					<div className="channel-bandeau">
-						<ul className="reduce-maximize-quit">
-							<li className="channel-name">{channel.name}</li>
-							<li><img src={Minimize} alt="redcross" id="chat_redcross" /></li>
-							<li><img src={Maximize} alt="maximize" id="chat_maximize" /></li>
-							<li><img src={RedCross} alt="redcross" id="chat_redcross" /></li>
-						</ul>
-					</div>
+					<ul className="channel-bandeau">
+            		  <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+            		  <li className="invite-contact-title">{channel.name}</li>
+            		  <div className="ddc-right-icons">
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close"></button></li>
+            		  </div>
+            		</ul>
 					<div className="channel-actions">
-						<ul>
+						<ul className="channel-actions-menu">
 							<li>File</li>
 							<li>Edit</li>
 							<li onClick={toggleAction}>Actions</li>
 							<li>Tools</li>
 						</ul>
 						{isOpen && (
-							<ul className="dropdown-menu">
-								<li >Ban User</li>
-								<li >kick User</li>
-								<li >Leave</li>
-								<li >Invite</li>
+							<ul className="channel-dropdown-menu">
+								<li>Ban User</li>
+								<li>Kick User</li>
+								<li>Leave</li>
+								<li>Invite</li>
 							</ul>
 						)}
 					</div>
-					<div className="channel-modo-mode"><img src={scam} alt="scam" id="chat_scam" /></div>
+					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
-							<div className="channel-members-presentation"> {/*add le name du channel*/}
+							<div className="channel-members-presentation"> 
+								<div className="channel-members-presentation-text">
+									<img alt="info" src={Info} className="channel-info"></img>
+									...add le name du channel...
+								</div>	
 							</div>
 							<div className="channel-conversation-messages" ref={divRef}>
 								{messages.map((message, index) => (
@@ -151,20 +151,53 @@ function Channel({ user, channel, isVisible, blocked }) {
 								</div>
 							</div>
 							<div className="channel-group-member-list">
-								<ul>
-									{channel.usersList?.map((user, index) => (
-										<li key={index} onClick={() => { goToProfile(user.name) }}><img src={regularConv} alt="regularConv" />{user.nickname} ({user.name})</li>
+								<ul className="channel-group-member-list-ul">
+
+									{channel.usersList?.map((users, index) => (
+										<div key={index}>
+											<li className="channel-group-member-list-ul-li">
+												<div className="channel-group-member-list-logo-name-pseudo">
+													<img src={regularConv} alt="regularConv" />
+													<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(users.name) }}>{users.nickname} ({users.name} )</div>
+												</div> 
+												{ (user.id === channel.ownerId) &&
+													(<span id="channels-more-options" onClick={() => toggleMoreOptions(index)}>
+														{!isOpenMoreOptions[index] && "▸"}
+														{isOpenMoreOptions[index] && "▾"}
+													</span>)
+												}
+											</li>
+											<div className="channel-group-member-list-ban-block">
+												{isOpenMoreOptions[index] && (
+													<div className="channels-more-options-dropdown">
+														<div className="channel-more-option-choose">
+															What do we do with (insert name) ?
+														</div>
+														<ul className="channel-more-option-choose-buttons">
+															<button>KICK</button>
+															<button>BAN</button>
+															<button>SET ADMIN</button>
+															<button>MUTE</button>
+														</ul>
+														{/* Add the content you want to display when isOpenMoreOptions is true */}
+													</div>
+												)}
+												{/* 
+												<img src={banUser} alt="channels-ban-user" id="channels-ban-user" />
+												<img src={blockUser} alt="channels-block-user" id="channels-block-user" /> */}
+											</div>
+										</div>
 									))}
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div className="channel-send-messages-part">
-						<div className="channel-input-text">{/*Add buttons*/}
-							<div className="channel-left">
-								<span
+						<div className="channel-input-text">
+							<div className="channel-up">
+								<div className="channel-input-empty"></div>
+								<span className="channel-up-span"
 									ref={inputRef}
-									className="text-area-indiv"
 									role="textbox"
 									contentEditable
 									onInput={handleInputChange}
@@ -172,19 +205,21 @@ function Channel({ user, channel, isVisible, blocked }) {
 									// onKeyDown={handleKeyDown}
 									style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
 								></span>
+								<div className="channel-down">
+									<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
+									<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
+								</div>
 							</div>
-							<div className="channel-right-buttons">
-								<button onClick={handleSendMessage}>Send</button>
-							</div>
-							{/* <button></button>
-					<button></button> */}
 						</div>
 						<div className="channel-my-profile-pic-main-container">
 							<div className="channel-my-profile-pic-group-pic-cadre">
 								<div>
 									<img alt="user.pfp" src={user.pfp}></img>
 								</div>
-								{user.name}
+								<span className="channel-infos-user">								
+									<span className="channel-infos-user-name">{user.name}</span>	
+									<span className="channel-infos-user-triangle">▾</span>
+								</span>
 							</div>
 						</div>
 					</div>

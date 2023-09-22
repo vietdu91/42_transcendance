@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+
 // import Cookie from 'js-cookie';
 // import axios from 'axios';
 
 import './ConversationListSummary.css';
 import Advertisement1 from './../../../img/chat/thicker.jpg';
-import Advertisement2 from './../../../img/chat/thicker.jpg';
+import Advertisement2 from './../../../img/chat/IMG_3240.png';
 import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
@@ -81,18 +82,18 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
 
             <div className="info-conversation-list">
                 <ul>
-                    <li><img src={regularConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClick} /></li>
-                    <li><img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} /></li>
-                    <li><img src={onlineImg} alt="friends" id="chat_friends" onClick={handleImageClickListFriends} /></li>
+                    <li><img src={regularConv} alt="regularConv" className="chat_regularConv2" onClick={handleImageClick} /></li>
+                    <li><img src={groupConv} alt="regularConv" className="chat_regularConv" onClick={handleImageClickChannels} /></li>
+                    <li><img src={onlineImg} alt="friends" className="chat_regularConv2" onClick={handleImageClickListFriends} /></li>
                 </ul>
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
             <div className="display-list-convo">
                 {indivConv && (
-                    <ul>
+                    <ul className="channel-ul-convo"> Conversations :
                         {convs.map((item, index) => (
-                            <li key={index} onClick={() => toggleConvSummary(index)}>
-                                <img src={regularConv} alt={regularConv} id={"icon-conv"} />
+                            <li className="channel-li-convo" key={index} onClick={() => toggleConvSummary(index)}>
+                                <img src={regularConv} alt={regularConv} id={"icon-conv-img"} />
                                 {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
                         ))}
@@ -100,10 +101,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 )
                 }
                 {channelsConv && (
-                    <ul>
+                    <ul className="channel-ul-channels"> Channels : 
                         {channels.map((item, index) => (
-                            <li key={index} onClick={() => toggleChannelSummary(index)}>
-                            <img src={groupConv} alt="regularConv" id="chat_regularConv" onClick={handleImageClickChannels} />
+                            <li className="channel-li-channels" key={index} onClick={() => toggleChannelSummary(index)}>
+                            <img src={groupConv} alt="regularConv" id="icon-channels-img" onClick={handleImageClickChannels} />
                                 {item.name}
                             </li>
                         ))}
@@ -113,10 +114,10 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 )
                 }
                 {listFriends && (
-                    <ul>
+                    <ul className="channel-ul-friend-list"> Your Friends :
                         {friends.map((item, index) => (
-                            <li key={index} onClick={() => goToProfile(item.name)}>
-                                <img src={imageState(item.state)} alt={item.altText} id={`chat_${item.altText}`} />
+                            <li className="channel-li-friend-list" key={index} onClick={() => goToProfile(item.name)}>
+                                <img src={imageState(item.state)} alt={item.altText} id="icon-friends" />
                                 {item.name} ({item.nickname})
                                 <img src={item.pfp_url}/>
                             </li>

@@ -1,13 +1,84 @@
+@font-face {
+	font-family: trebuchet_ms_xp;
+	src: url(../../../fonts/trebuc.ttf)
+  }
+
+  @font-face {
+	font-family: tahoma_xp;
+	src: url(../../../fonts/Tahoma\ Regular\ font.ttf)
+  }
+
+  @font-face {
+	font-family: montserrat_xp;
+	src: url(../../../fonts/Montserrat-Bold.ttf)
+  }
+
+.channel-main-container {
+	top: 5vh;
+	left: 60vw;
+	
+	position: fixed;
+
+	height: 82vh;
+	width: 30vw;
+
+	display: flex;	
+	flex-direction: column;
+	
+	border-radius: 5px;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
+	
+	background-image: url('../../../img/chat/channel_wallpaper.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 .channel-bandeau {
-	height: 5%;
+	height: 35px;
 	width: 100%;
-	background-color: #0054e8;
+
+    background: linear-gradient(
+        180deg,
+        rgba(9, 151, 255, 1) 0%,
+        rgba(0, 83, 238, 1) 8%,
+        rgba(0, 80, 238, 1) 40%,
+        rgba(0, 102, 255, 1) 88%,
+        rgba(0, 102, 255, 1) 93%,
+        rgba(0, 91, 255, 1) 95%,
+        rgba(0, 61, 215, 1) 96%,
+        rgba(0, 61, 215, 1) 100%
+    );
+
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border: 1px solid #0831d9;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+
+	margin: 0;
+	padding: 0;
+}
+
+#chat_icon {
+	/* position: inherit; */
+	height: 25px;
+	width: 25px;
+	;
 }
 
 .channel-conv-pfp {
 	height: 100%;
-    width: 100%;
-    border-radius: 5px;
+	width: 100%;
+	border-radius: 5px;
 }
 
 .chat-channel-area {
@@ -15,87 +86,96 @@
 	left: 60vw;
 }
 
-.channel-main-container {
-	top: 20vh;
-	left: 60vw;
-	position: absolute;
-	height: 75vh;
-	width: 20vw;
-	display: flex;
-	flex-direction: column;
-	border-radius: 5px;
-	background-image: url('../../../img/chat/channel_wallpaper.png');
-	background-size: cover;
-	background-repeat: no-repeat;
-}
-
-.channel-name {
-	flex: 1;
-	/* Take available space */
-	font-family: 'YourCustomFont', Tahoma, Geneva, Verdana, sans-serif;
-	/* Use your custom font */
-	font-size: 1rem;
-	/* Adjust font size as needed */
-	font-weight: bold;
-	/* Adjust font weight as needed */
-	color: white;
-}
-
-.channel-bandeau ul {
-	display: flex;
-	flex-direction: row;
-	justify-content: end;
-	list-style: none;
-}
-
-.channel-actions {
+.channel-actions {	
 	cursor: pointer;
+
 	width: 100%;
 	height: 3%;
-	background-color: #f0ecf2;
+
+	background-color: #ece8d8;
+
+	box-shadow: inset -1px 0px #00138c, 
+	inset 1px 0px #0831d9, 
+	inset -2px 0px #001ea0, 
+	inset 2px 0px #166aee, 
+	inset -3px 0px #003bda, 
+	inset 3px 0px #0855dd;
+}
+
+.channel-actions-menu {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	margin-right: 10px;
 }
 
 .channel-actions ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	display: flex;
-	align-items: center;
+	
 }
 
 .channel-actions ul li {
-	margin-right: 10px;
-	/* Adjust the right margin for spacing */
+	padding-left: 10px;
+	cursor: pointer;
+	font-size: 13px;
 }
 
-.dropdown-menu {
-	z-index: ;
-	position: absolute;
-	cursor: pointer;
-	display: flex;
-	flex-direction: column;
+.channel-dropdown-menu {
 	position: absolute;
 	background-color: #f9f4e1;
-	/* Light beige background color for the menu */
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	display: none;
+	font-size: 13px;
+	z-index:2;
+
+	display: flex;
+	flex-direction: column;
+
+	left: 64px;
+;}
+
+.channel-dropdown-menu li {
+	padding: 10px 10px;
+	cursor: pointer;
 }
 
+.channel-dropdown-menu li:hover {
+	background-color: #e2dec6;
+  }
+
+  .channel-actions:hover + .channel-dropdown-menu {
+	display: block;
+	animation: fadeIn 0.2s ease-in-out;
+  }
+
+
+/*   //////////////////////   */
+
 .channel-modo-mode {
-	width: 100%;
+	width: 99.3%;
 	height: 10%;
 	background-color: #4165b3;
 	border-radius: 5px;
-	/*faire effet de degrade*/
-	/*faire padding*/
+	
+	margin-left: 2px;
+
+	box-shadow: inset -1px 0px #00138c, 
+	inset 1px 0px #0831d9, 
+	inset -2px 0px #001ea0, 
+	inset 2px 0px #166aee, 
+	inset -3px 0px #003bda, 
+	inset 3px 0px #0855dd;
 }
 
 .channel-modo-mode img {
 	height: 100%;
 	width: 100%;
+	object-fit: cover;
+	object-position: 12% 12%;
 }
 
 .channel-modo-mode ul {
@@ -114,13 +194,14 @@
 	/* background-color: #e9e9f5; */
 	display: flex;
 	flex-direction: row;
+	padding-top: 2%;
+	padding-left: 2%;
+	;
 }
 
 .channel-group-convo {
 	height: 98%;
 	width: 64%;
-	margin-top: 2%;
-	margin-left: 2%;
 	padding-top: 2%;
 	padding-bottom: 2%;
 	display: flex;
@@ -136,10 +217,27 @@
 	height: 7%;
 	margin-left: 3%;
 	margin-right: 3%;
-	/* background-color: #f7eeb1; */
-	background-color: rgba(247,238,177, 0.9);
+
+	background-color: rgba(247, 238, 177, 0.9);
 	font-size: 8px;
-	/* background-color: black; */
+
+}
+
+.channel-members-presentation-text {
+	height: 100%;
+	width: 100%;
+
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 2px;
+
+	font-size: 10px;
+	word-wrap: break-word;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
 }
 
 /*1*/
@@ -159,54 +257,66 @@
 	font-size: 10px;
 	list-style: none;
 	margin-left: 3%;
-	padding: 0; 
+	padding: 0;
 	list-style: none;
-    margin-left: 0px;
-    /* padding-left: 10px; */
+	margin-left: 0px;
+	/* padding-left: 10px; */
 }
 
 /*2*/
 
 .conv-sender-info-chan {
 	font-size: 13px;
-    font-weight: bold;
-    margin-right: 5px;
-    margin-left: 0px;
+	font-weight: bold;
+
+	margin-top: 10px;
+	margin-bottom: 2px;
+	margin-right: 5px;
+	margin-left: 5px;
 	/* font-size: 10px; */
-    color: #216ec0; /* Blue color for the sender's name */
+	color: #216ec0;
+	/* Blue color for the sender's name */
 }
 
 .conv-message-content-chan {
-    background-color: #f1f0f0;
+	background-color: #f1f0f0;
 	font-size: 16px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    /* margin-left: 6%; */
+
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	/* margin-left: 6%; */
+
+	margin-bottom: 3px;
+
 	padding-left: 8%;
+
 	width: 100%;
 	height: 15%;
+
+	font-size: 12px;
+	letter-spacing: 0.5px;
+
+	word-wrap: break-word;
 }
 
 .conv-message-date-chan {
-	font-size: 12px;
-	color: #888; 
+	margin-left: 5px;
+	font-size: 9px;
+	color: #888;
 }
 
 .channel-conversation-messages {
 	width: 100;
-    height: 100%;
-    background-color: #FCFDFF;
+	height: 100%;
+	background-color: #FCFDFF;
 	/* background-color: red; */
-    opacity: 0.7;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+	opacity: 0.7;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
 	padding: 0;
-    overflow-y: auto;
-}
-
-.channel-conversation-messages::-webkit-scrollbar {
-	display: none;
-	cursor: pointer;
+	overflow-y: scroll;
+	scrollbar-color: red orange;
+	scrollbar-width: thin;
 }
 
 .channel-profile-pic-and-member-list {
@@ -214,7 +324,124 @@
 	margin-top: 1%;
 	margin-left: 2%;
 	width: 30%;
+
+	overflow-y: auto;
 	/* background-color: orange; */
+}
+
+#channels-more-options {
+	font-size: 15px;
+	margin-right: 5px;
+	justify-self: flex-end;
+}
+
+#channels-ban-user {
+	height: 30px;
+	width: 30px;
+}
+
+#channels-block-user {
+	height: 15px;
+	width: 15px;
+}
+
+.channels-more-options-dropdown {
+	position: relative;
+	background-color: #ece8d8;
+	border: 1px solid #808080;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	padding: 10px;
+	z-index: 1;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+
+	/* Ensure it's on top of other elements */
+}
+
+.channel-more-option-choose {
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 11px;
+}
+
+.channel-more-option-choose-buttons {
+	list-style-type: none;
+	padding: 0;
+
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 50% 50%; 
+	gap: 1px;
+}
+
+.channel-more-option-choose-buttons button {
+    border: 1px solid #86898d;
+    background: #FBFBFB;
+    box-shadow: -4px -4px 4px #C0C9E0 inset;
+    width: 50px;
+    height: 29px;
+    border-radius: 5px;
+    font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 9px;
+    color: rgb(160, 160, 160);
+	line-height: 1;
+}
+
+.channel-more-option-choose-buttons button:hover {
+	background-color: #e0e0e0;
+}
+
+.channel-group-member-list-ul-li {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 0;
+	margin: 0;
+	/* padding: 10px; */
+	margin-top: 5px;
+
+	justify-content: space-between;
+}
+
+.channel-group-member-list ul img {
+	height: 15px;
+}
+
+.channel-group-member-list-logo-name-pseudo {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+}
+
+.channel-group-member-list-logo-name-pseudo img {
+	margin-left: 7px;
+	margin-right: 5px;
+}
+
+.channel-group-member-list-nickname {
+	font-size: 11px;
+
+	word-wrap: break-word;
+}
+
+.channel-group-member-list-ban-bloc {
+	display: flex;
+	width: 25%;
+	padding: 0;
+	margin: 0;
+	flex-direction: column;
+	justify-content: flex-start;
 }
 
 .channel-group-pic-main-container {
@@ -231,17 +458,17 @@
 	width: 95%;
 	height: 95%;
 	border-radius: 5px;
-	background-color: #E7E8F3;
+	background-color: #a2acc6;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid black;
 	/* Center vertically */
 }
 
 .channel-pik {
 	width: 75%;
 	height: 75%;
-	background-color: white;
 	border-radius: 5px;
 	border-width: 1px;
 	border-style: solid;
@@ -251,6 +478,8 @@
 .channel-pik img {
 	width: 100%;
 	height: 100%;
+
+	object-fit: cover;
 }
 
 .channel-group-member-list {
@@ -273,73 +502,59 @@
 	cursor: pointer;
 }
 
-.channel-group-member-list ul {
+.channel-group-member-list-ul {
 	list-style: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	font-size: 15px;
 	margin: 0;
 	padding: 0;
 }
 
-.channel-group-member-list ul img {
-	height: 20px;
-}
-
-.channel-group-member-list ul li {
-	display: flex;
-	/* Use flex layout to align the image and text */
-	align-items: center;
-	/* Center align vertically */
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 5px 0;
-}
-
 .channel-send-messages-part {
 	height: 25%;
 	width: 100%;
-	/* background-color: #e4e7ec; */
-	/* opacity: 45%; */
 	display: flex;
 	padding-left: 2%;
 	padding-right: 2%;
+	padding-bottom: 2%;
 	flex-direction: row;
 }
 
 .channel-input-text {
 	width: 66%;
+	/* padding: 2% 2% 2% 2%; */
+	padding-top: 0.7%;
+	padding-bottom: 4.5%;
+	/* width: 60%; */
 	height: 100%;
-	/* background-color: #818eb1; */
-	/* background-color: red; */
 	border-radius: 15px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
-	/* Center horizontally */
 	align-items: center;
-	/* Center vertically */
+	/* background-color: red; */
 }
 
-.channel-left {
+.channel-input-empty {
+	width: 100%;
+	height: 60%;
+	background-color: #fff;
+	opacity: 0.7;
+	order: 3;
+}
+.channel-up {
 	position: relative;
-	height: 70%;
-	width: 75%;
-	/* background-color: #f2f5f8; */
-	/* background-image: url('../../../img/chat/channel_wallpaper.png'); */
-
+	height: 90%;
+	width: 100%;
 	border: 1px solid #ccc;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+	border-radius: 5px;
 	border-width: 1px;
 	display: flex;
 	flex-direction: column-reverse;
-	/* Reverse the direction for messages */
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	background-color: #fff;
-	opacity: 0.7;
-
-	/* Subtle shadow */
+	/* background-color: #fff; */
 }
 
 textarea::-webkit-scrollbar {
@@ -347,50 +562,73 @@ textarea::-webkit-scrollbar {
 	cursor: pointer;
 }
 
-.channel-right-buttons {
-	width: 25%;
-	height: 70%;
+.channel-down {
+	background-color: #fff;
+	width: 100%;
+	/* opacity: 0.7; */
 	display: flex;
-	flex-direction: column;
+	flex-direction: row-reverse;
 }
 
-.channel-right-buttons {
-	display: flex;
-	flex-direction: column-reverse;
+.channel-down-button {
+    border: 1px solid #93989C;
+    background: #FBFBFB;
+    box-shadow: -4px -4px 4px #C0C9E0 inset;
+    width: 58px;
+    height: 37px;
+    border-radius: 5px;
+    font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 11px;
+    color: #969C9A;
+	z-index: 1;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	order: 1;
 }
 
-.button {
+.channel-down-button#wizz-button {
+    font-size: 20px;
+}
+
+
+.channel-down-button:hover {
+	background-color: #e0e0e0;
+}
+
+span.channel-up-span[contenteditable]:empty::before {
+	content: '   Anything to say ?';
 	display: inline-block;
-	padding: 8px 16px;
-	background-color: #0B3E9D;
-	/* Windows blue */
-	color: #FFFFFF;
-	border: 1px solid #005A9E;
-	border-radius: 4px;
-	font-size: 14px;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	transition: background-color 0.3s ease;
 	cursor: text;
+	overflow-y: auto;
 }
 
-/* span.textarea[contenteditable]:empty::before {
-    content: 'Anything to say ?';
-    display: inline-block;
-	cursor: text;
-} */
+.channel-up-span {
+	display: block;
+	width: 100%;
+	min-height: 7%;
+	overflow: auto;
+	/* resize: none; */
+	line-height: 20px;
+	max-height: 200px;
+	border: none;
+	background-color: #fff;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	opacity: 0.7;
+	order: 2;
+}
 
-.button:hover {
-	background-color: #005A9E;
+.channel-up-span::-webkit-scrollbar {
+	display: none;
+	cursor: pointer;
 }
 
 .channel-my-profile-pic-main-container {
 	width: 34%;
 	height: 100%;
-	margin-top: 5%;
-	/* background-color: #a2acc6; */
-	/* background-color: orange; */
+	padding: 3% 2% 2% 2%;
 	border-radius: 15px;
 	display: flex;
 	justify-content: center;
@@ -398,8 +636,9 @@ textarea::-webkit-scrollbar {
 }
 
 .channel-my-profile-pic-group-pic-cadre {
-	width: 95%;
-	height: 75%;
+	padding: 2% 2% 2% 2%;
+	width: 100%;
+	height: 90%;
 	background-color: #a2acc6;
 	border-radius: 5px;
 	border-width: 1px;
@@ -424,4 +663,29 @@ textarea::-webkit-scrollbar {
 .channel-my-profile-pic-group-pic-cadre div img {
 	height: 100%;
 	width: 100%;
+
+	object-fit: cover;
 }
+
+.channel-infos-user {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 80%;
+}
+
+.channel-infos-user-name {
+	font-family: tahoma_xp;
+	font-size: 11px;
+	letter-spacing: 0.5px;
+	font-style: bold;
+	padding-top: 3px;
+}
+
+.channel-info {
+	width: 15px;
+	height: 15px;
+
+	margin-right: 5px;
+}
+

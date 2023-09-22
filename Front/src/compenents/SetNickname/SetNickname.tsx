@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 
 import './SetNickname.css';
 
-import Pass from '../../img/backgrounds/hall_monitor.png'
+import JLopez from '../../img/backgrounds/jennifer.jpg'
 import RedCross from "../../img/buttons/red_cross.png"
 
 export default function SetNickname() {
@@ -14,6 +14,8 @@ export default function SetNickname() {
 	const urlParams = new URLSearchParams(queryString);
 	const token = urlParams.get('token');
 	const [nickname, setNickname] = useState("");
+    const [used, setUsed] = useState(false);
+    const [regex, setRegex] = useState(false);
 
 	const handleChange = (event) => {
 		setNickname(event.target.value);
@@ -28,9 +30,19 @@ export default function SetNickname() {
 				window.location.reload();
 			})
 			.catch(err => {
-				if (err.response.status === 401) {
-                    Cookie.remove('accessToken')
-                    window.location.href = "/";
+				// if (err.response.status === 401) {
+                //     Cookie.remove('accessToken')
+                //     window.location.href = "/";
+                // }
+                if (err.response.data.message === "wrong regex")
+                {
+                    setUsed(false);
+                    setRegex(true);
+                }
+                else if (err.response.data.message === "already used")
+                {
+                    setUsed(true);
+                    setRegex(false);
                 }
 			});
 	}
@@ -40,13 +52,19 @@ export default function SetNickname() {
 	}
 
 	return (
-		<div id="TwoFA">
-			<img id="TwoFA-bg" src={Pass} alt={'Pass'} />
-			<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
-			<form onSubmit={handleEnable} id="TwoFA-form">
-				<input className="swing" id="twofa-swing" placeholder='Show Me Your NICKNAME !' value={nickname} onChange={handleChange}></input>
-				<label htmlFor="twofa-swing">Nick</label>
-			</form>
-		</div>
+        <div id="SetNickName">
+            <img id="SetNickName-bg" src={JLopez} alt={'Jefferson'} />
+            <img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
+            <div id="SetNickName-truc">
+                <form onSubmit={handleEnable} id="SetNickName-form">
+                    <input className="swing" id="SetNickName-swing" placeholder='Show Me Your NickName !' value={nickname} onChange={handleChange}></input>
+                    <label className="tacos" htmlFor="SetNickName-swing">🌮</label>
+                </form>
+                <div className="setNick_good_nickname_or_not">
+                    {used && <div>Nickname deja utilise !</div>}
+                    {regex && <div>Nickname invalide ! Min: 2 - Max: 20, lettres, chiffres, espace, tiret, _</div>}
+                </div>       
+            </div>
+        </div>
 	)
 }

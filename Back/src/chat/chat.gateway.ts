@@ -29,6 +29,7 @@ export class ChatGateway {
   async handleJoinChat(client: Socket): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
+    console.log(userToken);
     const userDb = await this.userService.getUserById(userToken.sub);
 
     for (let user of this.users) {
@@ -170,7 +171,7 @@ export class ChatGateway {
         name: name,
         ownerId: userDb.id,
         isPrivate: isPrivate,
-        image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1694703850/avatars-ubXQyNB9MhoSHi6Q-2bLbtw-t500x500_tiff9c.jpg',
+        image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1695365476/qpws7dliiofbiklrrlf4.jpg',
         password: isPrivate ? password : null,
         usersList: {
           connect: [

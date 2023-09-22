@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Cookie from 'js-cookie'
 import axios from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
 import './searchBar.css'
 import SnackBarCustom from '../utils/SnackBarCustom/SnackBarCustom';
+import Lampe from '../../img/chat/lampe_emoticone.jpg'
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -14,9 +15,10 @@ function SearchBar({ onSearch }: SearchBarProps) {
   const navigate = useNavigate();
   const token = Cookie.get('accessToken')
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [notFound, setNotFound] = useState<boolean>(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -30,7 +32,6 @@ function SearchBar({ onSearch }: SearchBarProps) {
       .then((response) => {
         onSearch(query);
         if (location.pathname === "/chat") {
-          setNotFound(false);
           window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${response.data.user.name}`);
         }
         else
@@ -49,19 +50,41 @@ function SearchBar({ onSearch }: SearchBarProps) {
       });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        // Clic en dehors de l'input, masquez la div d'erreur
+      }
+    };
+
+      document.addEventListener('mousedown', handleClickOutside);
+
+      return () => {
+        // Retirez l'écouteur d'événement lorsque le composant est démonté
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
+
   return (
     <div className="searchBar">
-      <input
-        className="searchBar-input"
-        type="text"
-        placeholder="Rechercher..."
-        value={searchQuery}
-        onChange={handleInputChange}
-      />
-      <button
-        className="searchBar-button"
-        onClick={() => handleSearch(searchQuery)}>Rechercher</button>
-      <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
+      <div className="searchBar-input-container">
+        <input className="searchBar-input"
+          type="text"
+          placeholder="Search User"
+          value={searchQuery}
+          onChange={handleInputChange}
+          ref={inputRef}
+        />
+      </div>
+      <img className="searchBar-button"
+        src={Lampe}
+        alt="lampe"
+        onClick={() => handleSearch(searchQuery)}></img>
+        <SnackBarCustom open={snackbarOpen} setOpen={setSnackbarOpen} message={snackMessage} />
     </div>
   );
 };
