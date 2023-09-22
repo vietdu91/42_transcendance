@@ -27,7 +27,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 	const inputRef = useRef<HTMLDivElement | null>(null);
 	const divRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
-	const [isOpenAction, setIsOpenAction] = useState(false);
+	const [isOpenMoreOptions, setIsOpenMoreOptions] = useState<boolean[]>(Array.from({ length: channel.usersList.length }, () => false));
 
 	// type CSSProperties = React.CSSProperties & {
 	// 	[key: string]: string;

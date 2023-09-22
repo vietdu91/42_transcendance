@@ -54,7 +54,7 @@ const ConversationListHeader = ({ name, pfp, user, setConvs, setChannels, setFri
             {/* <hr /> */}
             <ul className="option-conversation-list" id="option-conversation-bar">
                 {/* <li onClick={() => showContact("First")}></li> */}
-                <DropdownChannel user={user} setChannels={setChannels}/>
+                <DropdownChannel user={user} setChannels={setChannels} setFriends={setFriends} />
                 <DropdownContact user={user} setConvs={setConvs} setFriends={setFriends} />
                 <li className="option-conversation-option">Actions</li>
                 <li className="option-conversation-option">Tools</li> 

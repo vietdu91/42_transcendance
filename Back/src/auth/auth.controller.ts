@@ -35,11 +35,11 @@ export class AuthController {
     try {
       const user = await this.prisma.user.findUnique({ where: { nickname: nickname } });
       if (user !== null) {
-        throw new UnauthorizedException("already used");
+        throw new BadRequestException("already used");
       }
       const regex: RegExp = /^[a-zA-Z0-9\s\-\_]{2,20}$/;
       if (!regex.test(nickname))
-        throw new UnauthorizedException("wrong regex");
+        throw new BadRequestException("wrong regex");
       await this.AuthService.connexionPostNickname(token, nickname, res);
     } catch (err) {
       throw err;

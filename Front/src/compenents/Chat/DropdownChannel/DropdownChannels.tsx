@@ -11,7 +11,7 @@ import Minimize from '../../../img/chat/minimized.jpg'
 import Logo from '../../../img/chat/group-conv.png'
 
 
-function DropdownChannels({ user, setChannels }) {
+function DropdownChannels({ user, setChannels, setFriends }) {
 	const socket = useContext(ChatContext)
 	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
