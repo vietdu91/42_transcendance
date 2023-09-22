@@ -1,3 +1,18 @@
+@font-face {
+	font-family: trebuchet_ms_xp;
+	src: url(../../../fonts/trebuc.ttf)
+  }
+
+  @font-face {
+	font-family: tahoma_xp;
+	src: url(../../../fonts/Tahoma\ Regular\ font.ttf)
+  }
+
+  @font-face {
+	font-family: montserrat_xp;
+	src: url(../../../fonts/Montserrat-Bold.ttf)
+  }
+
 .channel-main-container {
 	top: 5vh;
 	left: 60vw;
@@ -141,10 +156,19 @@
 /*   //////////////////////   */
 
 .channel-modo-mode {
-	width: 100%;
+	width: 99.3%;
 	height: 10%;
 	background-color: #4165b3;
 	border-radius: 5px;
+	
+	margin-left: 2px;
+
+	box-shadow: inset -1px 0px #00138c, 
+	inset 1px 0px #0831d9, 
+	inset -2px 0px #001ea0, 
+	inset 2px 0px #166aee, 
+	inset -3px 0px #003bda, 
+	inset 3px 0px #0855dd;
 }
 
 .channel-modo-mode img {
@@ -193,10 +217,27 @@
 	height: 7%;
 	margin-left: 3%;
 	margin-right: 3%;
-	/* background-color: #f7eeb1; */
+
 	background-color: rgba(247, 238, 177, 0.9);
 	font-size: 8px;
-	/* background-color: black; */
+
+}
+
+.channel-members-presentation-text {
+	height: 100%;
+	width: 100%;
+
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 2px;
+
+	font-size: 10px;
+	word-wrap: break-word;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
 }
 
 /*1*/
@@ -227,8 +268,11 @@
 .conv-sender-info-chan {
 	font-size: 13px;
 	font-weight: bold;
+
+	margin-top: 10px;
+	margin-bottom: 2px;
 	margin-right: 5px;
-	margin-left: 0px;
+	margin-left: 5px;
 	/* font-size: 10px; */
 	color: #216ec0;
 	/* Blue color for the sender's name */
@@ -237,16 +281,27 @@
 .conv-message-content-chan {
 	background-color: #f1f0f0;
 	font-size: 16px;
+
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 	/* margin-left: 6%; */
+
+	margin-bottom: 3px;
+
 	padding-left: 8%;
+
 	width: 100%;
 	height: 15%;
+
+	font-size: 12px;
+	letter-spacing: 0.5px;
+
+	word-wrap: break-word;
 }
 
 .conv-message-date-chan {
-	font-size: 12px;
+	margin-left: 5px;
+	font-size: 9px;
 	color: #888;
 }
 
@@ -259,12 +314,9 @@
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	padding: 0;
-	overflow-y: auto;
-}
-
-.channel-conversation-messages::-webkit-scrollbar {
-	display: none;
-	cursor: pointer;
+	overflow-y: scroll;
+	scrollbar-color: red orange;
+	scrollbar-width: thin;
 }
 
 .channel-profile-pic-and-member-list {
@@ -272,14 +324,15 @@
 	margin-top: 1%;
 	margin-left: 2%;
 	width: 30%;
-	overflow-x: auto;
+
+	overflow-y: auto;
 	/* background-color: orange; */
 }
 
 #channels-more-options {
-	height: 25px;
-	width: 25px;
-	margin-left: 20%;
+	font-size: 15px;
+	margin-right: 5px;
+	justify-self: flex-end;
 }
 
 #channels-ban-user {
@@ -302,26 +355,41 @@
 	justify-content: center;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 	padding: 10px;
-	z-index: 1000;
+	z-index: 1;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+
 	/* Ensure it's on top of other elements */
 }
 
 .channel-more-option-choose {
 	font-weight: bold;
 	margin-bottom: 10px;
+	font-size: 11px;
 }
 
 .channel-more-option-choose-buttons {
 	list-style-type: none;
 	padding: 0;
+
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 50% 50%; 
+	gap: 1px;
 }
 
 .channel-more-option-choose-buttons button {
-	background-color: #ffffff;
-	border: 1px solid #808080;
-	padding: 5px 10px;
-	margin: 5px;
-	cursor: pointer;
+    border: 1px solid #86898d;
+    background: #FBFBFB;
+    box-shadow: -4px -4px 4px #C0C9E0 inset;
+    width: 50px;
+    height: 29px;
+    border-radius: 5px;
+    font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 9px;
+    color: rgb(160, 160, 160);
+	line-height: 1;
 }
 
 .channel-more-option-choose-buttons button:hover {
@@ -331,33 +399,40 @@
 .channel-group-member-list-ul-li {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	justify-content: center;
 	background-color: #fff;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	padding: 0;
 	margin: 0;
 	/* padding: 10px; */
-	margin: 5px 0;
+	margin-top: 5px;
+
+	justify-content: space-between;
 }
 
 .channel-group-member-list ul img {
-	height: 20px;
+	height: 15px;
 }
 
 .channel-group-member-list-logo-name-pseudo {
-	width: 75%;
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	margin: 0;
 	padding: 0;
-	justify-content: flex-start;
+}
+
+.channel-group-member-list-logo-name-pseudo img {
+	margin-left: 7px;
+	margin-right: 5px;
 }
 
 .channel-group-member-list-nickname {
-	font-size: 12px;
-	margin-right: 5%
+	font-size: 11px;
+
+	word-wrap: break-word;
 }
 
 .channel-group-member-list-ban-bloc {
@@ -383,17 +458,17 @@
 	width: 95%;
 	height: 95%;
 	border-radius: 5px;
-	background-color: #E7E8F3;
+	background-color: #a2acc6;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid black;
 	/* Center vertically */
 }
 
 .channel-pik {
 	width: 75%;
 	height: 75%;
-	background-color: white;
 	border-radius: 5px;
 	border-width: 1px;
 	border-style: solid;
@@ -403,6 +478,8 @@
 .channel-pik img {
 	width: 100%;
 	height: 100%;
+
+	object-fit: cover;
 }
 
 .channel-group-member-list {
@@ -435,8 +512,6 @@
 	padding: 0;
 }
 
-/*channel-group-member-list-logo-name-pseudo*/
-
 .channel-send-messages-part {
 	height: 25%;
 	width: 100%;
@@ -445,12 +520,13 @@
 	padding-right: 2%;
 	padding-bottom: 2%;
 	flex-direction: row;
-	/* background-color: yellow; */
 }
 
 .channel-input-text {
 	width: 66%;
-	padding: 2% 2% 2% 2%;
+	/* padding: 2% 2% 2% 2%; */
+	padding-top: 0.7%;
+	padding-bottom: 4.5%;
 	/* width: 60%; */
 	height: 100%;
 	border-radius: 15px;
@@ -461,20 +537,24 @@
 	/* background-color: red; */
 }
 
+.channel-input-empty {
+	width: 100%;
+	height: 60%;
+	background-color: #fff;
+	opacity: 0.7;
+	order: 3;
+}
 .channel-up {
 	position: relative;
 	height: 90%;
 	width: 100%;
 	border: 1px solid #ccc;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+	border-radius: 5px;
 	border-width: 1px;
 	display: flex;
 	flex-direction: column-reverse;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	background-color: #fff;
-	opacity: 0.7;
-	/* background-color: yellow; */
+	/* background-color: #fff; */
 }
 
 textarea::-webkit-scrollbar {
@@ -483,38 +563,42 @@ textarea::-webkit-scrollbar {
 }
 
 .channel-down {
-	padding: 0;
+	background-color: #fff;
 	width: 100%;
-	height: 5%;
+	/* opacity: 0.7; */
 	display: flex;
 	flex-direction: row-reverse;
-	/* justify-content: flex-end; */
-	/* position: relative; */
-	bottom: 5px;
-	right: 5px;
 }
 
 .channel-down-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	padding: 8px 16px;
-	background-color: #0B3E9D;
-	/* Windows blue */
-	color: #FFFFFF;
-	border: 1px solid #005A9E;
-	border-radius: 4px;
-	font-size: 14px;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	transition: background-color 0.3s ease;
-	cursor: text;
+    border: 1px solid #93989C;
+    background: #FBFBFB;
+    box-shadow: -4px -4px 4px #C0C9E0 inset;
+    width: 58px;
+    height: 37px;
+    border-radius: 5px;
+    font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 11px;
+    color: #969C9A;
+	z-index: 1;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	order: 1;
+}
+
+.channel-down-button#wizz-button {
+    font-size: 20px;
+}
+
+
+.channel-down-button:hover {
+	background-color: #e0e0e0;
 }
 
 span.channel-up-span[contenteditable]:empty::before {
-	content: 'Anything to say ?';
+	content: '   Anything to say ?';
 	display: inline-block;
 	cursor: text;
 	overflow-y: auto;
@@ -525,24 +609,20 @@ span.channel-up-span[contenteditable]:empty::before {
 	width: 100%;
 	min-height: 7%;
 	overflow: auto;
-	resize: none;
+	/* resize: none; */
 	line-height: 20px;
 	max-height: 200px;
 	border: none;
-	/* Remove textarea border */
 	background-color: #fff;
 	font-family: Arial, sans-serif;
 	font-size: 14px;
 	opacity: 0.7;
+	order: 2;
 }
 
 .channel-up-span::-webkit-scrollbar {
 	display: none;
 	cursor: pointer;
-}
-
-.channel-down-button:hover {
-	background-color: #005A9E;
 }
 
 .channel-my-profile-pic-main-container {
@@ -583,4 +663,29 @@ span.channel-up-span[contenteditable]:empty::before {
 .channel-my-profile-pic-group-pic-cadre div img {
 	height: 100%;
 	width: 100%;
+
+	object-fit: cover;
 }
+
+.channel-infos-user {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 80%;
+}
+
+.channel-infos-user-name {
+	font-family: tahoma_xp;
+	font-size: 11px;
+	letter-spacing: 0.5px;
+	font-style: bold;
+	padding-top: 3px;
+}
+
+.channel-info {
+	width: 15px;
+	height: 15px;
+
+	margin-right: 5px;
+}
+

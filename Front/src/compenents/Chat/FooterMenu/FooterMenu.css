@@ -1,14 +1,13 @@
 .menu-footer {
-    position: fixed;
-    height: 3vh;
-    width: 100vw;
-    display:   flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #0256ef;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    background-color: #245EDC;
+    background: linear-gradient(to bottom, #245EDC 0%, #3f8cf3 9%, #245EDC 18%, #245EDC 92%, #1941A5 100%) center/cover no-repeat;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    list-style: none;
+    padding-left: 0;
 }
 
 .menu-footer li {
@@ -16,41 +15,100 @@
 }
 
 .footer-first-element {
-    background: linear-gradient(180deg, rgba(0, 235, 67, 1) 0%, rgba(0, 157, 44, 1) 32%, rgba(0, 185, 53, 1) 100%);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 0.9rem;
-    font-style: italic;
+    height: 100%;
+    float: left;
+    font-size: 22px;
+    line-height: 22px;
     font-weight: bold;
+    font-style: italic;
+    background: radial-gradient(circle, #5eac56 0%, #3c873c 100%) center/cover no-repeat;
+    box-shadow: 0px 5px 10px #79ce71 inset, 4px 0 8px #3f8cf3;
+    padding: 2px 25px 6px 10px;
+    text-shadow: 1px 1px 3px #222;
+    border-radius: 0px 8px 8px 0px;
+    margin-right: 16px;
+    cursor: pointer;
     color: white;
-    display: block;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    align-items: center;
-    padding-right: 10px;
-    width: 6%;
 }
 
 .footer-element {
-    background-color: #0055a4;
-    color: white;
-    text-align: center;
-    padding: 10px;
+    width: 150px;
+    height: 26px;
+    float: left;
+    background-color: #4892F7;
+    background: url('../../../img/chat/btn1.png') no-repeat 0 0;
+    border: 1px solid #306FD9;
+    border-radius: 2px;
+    font-family: calibri, monospace;
+    font-size: 14px;
+    line-height: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    font-size: 15px;
-    justify-content: center; /* Center horizontally */
+    color: white;
+}
+
+.footer-element-1 {
+    width: 150px;
+    height: 26px;
+    float: left;
+    background-color: #4892F7;
+    background: url('../../../img/chat/btn3.png') no-repeat 0 0;
+    border: 1px solid #306FD9;
+    border-radius: 2px;
+    font-family: calibri, monospace;
+    font-size: 14px;
+    line-height: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    cursor: pointer;
+    color: white;
 }
 
 .footer-element:hover {
-    background-color: #003b81;
+    background: url('../../../img/chat/btn2.png') no-repeat 0 0;
+}
+
+.footer-element:active {
+    background: url('../../../img/chat/btn3.png') no-repeat 0 0;
+}
+
+.footer-element:active ~ .footer-element-1 { 
+    background: url('../../../img/chat/btn1.png') no-repeat 0 0;
+}
+
+.footer-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    margin-left: 6px;
+    transform: translateY(4px);
 }
 
 #window {
-    height: 30px;
-    width: 30px;
-    margin-right: 4px;
+    height: 22px;
+    width: 22px;
+    margin-right: 10px;
+    filter: drop-shadow(1px 1px 1px #222);
+    transform: translateY(3px);
+}
+
+.footer-time {
+    height: 100%;
+    float: right;
+    font-family: calibri, monospace;
+    font-size: 14px;
+    line-height: 14px;
+    background: linear-gradient(to bottom, #1290E9 0%, #19B9F3 9%, #1290E9 18%, #1290E9 92%, #1941A5 100%) center/cover no-repeat;
+    box-shadow: 0px 5px 10px #14A5F0 inset, 0px 5px 10px #333333;
+    padding: 9px 15px 9px 25px;
+    border-left: 1px solid #092E51;
+    text-shadow: 1px 1px 2px #222;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: white;
 }

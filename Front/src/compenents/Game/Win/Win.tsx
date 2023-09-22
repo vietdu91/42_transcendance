@@ -72,11 +72,6 @@ export default function Win() {
 	}, []);
 
 	useEffect(() => {
-		if (char === "Butters")
-			setIsButters(true);
-	}, [char]);
-
-	useEffect(() => {
 		const showRandyAgainDelay = 4000;
 		setTimeout(() => {
 			setShowAgainRandy(true);
@@ -93,11 +88,15 @@ export default function Win() {
 
 	useEffect(() => {
 		const showImageDelay = 3000;
+
+		if (char === "Butters")
+			setIsButters(true);
+
 		setTimeout(() => {
 			const bgWin = document.getElementById('bg-win');
 			bgWin?.classList.add('show-image');
 		}, showImageDelay);
-	}, []);
+	}, [char]);
 
 	return (
 		<div id="bg-win">

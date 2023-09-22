@@ -142,7 +142,7 @@ export class ChatGateway {
         name: name,
         ownerId: userDb.id,
         isPrivate: isPrivate,
-        image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1694703850/avatars-ubXQyNB9MhoSHi6Q-2bLbtw-t500x500_tiff9c.jpg',
+        image: 'https://res.cloudinary.com/dsvw15bam/image/upload/v1695365476/qpws7dliiofbiklrrlf4.jpg',
         password: isPrivate ? password : null,
         usersList: {
           connect: [

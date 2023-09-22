@@ -35,7 +35,6 @@ function DropdownChannels({ user, setChannels }) {
 
 	const toggleChannels = () => {
 		setIsOpen(!isOpen);
-		console.log(isOpen);
 	};
 
 	const toggleCreateChannel = () => {

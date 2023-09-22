@@ -2,10 +2,12 @@ import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import './TextComposerContainer.css'; // Import your CSS styles
 // import Wizz from '../../../img/chat/FAcejwHWEAMfcAO.jpeg'
-import Wizz from '../../../img/chat/wizz.png'
+import WizzImage from '../../../img/chat/wizz.png'
 import MessageInput from '../../Messages/messageInput';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
+
+import '../../utils/Wizz/Wizz.css';
 
 
 const TextComposerContainer = ({ name, pfp, send }) => {
@@ -15,11 +17,10 @@ const TextComposerContainer = ({ name, pfp, send }) => {
     }
 
     return (
-        <div className="text-composer-container">
+        <div className="text-composer-container" id="shakeme">
             <div className="container-write-text">
                 <div className="upper-part-write-text">
-                <img src={Wizz} alt="Wizz" />
-
+                <img src={WizzImage} alt="Wizz" />
                     {/* Content for the upper part */}
                 </div>
                 <div className="middle-part-write-text">

@@ -14,10 +14,11 @@ import axios from 'axios';
 import groupConv from '../../../img/chat/group-conv.png';
 import blockUser from '../../../img/chat/block_user.png';
 import banUser from '../../../img/chat/ban_user.png';
-import moreOptions from '../../../img/chat/more-options.png';
+// import moreOptions from '../../../img/chat/more-options.png';
 
 import Virgin from '../../../img/chat/virgin.jpg'
 import Logo from '../../../img/chat/group-conv.png'
+import Info from '../../../img/chat/info.png'
 
 function Channel({ i, max, user, channel, isVisible }) {
 	const socket = useContext(ChatContext);
@@ -97,7 +98,7 @@ function Channel({ i, max, user, channel, isVisible }) {
 	// console.log('Generated position:', newPosition);
 
 	return (
-		<div className="chat-channel-area" >
+		<div className="chat-channel-area">
 			{isVisible && (
 				<div className="channel-main-container">
 					<ul className="channel-bandeau">
@@ -128,7 +129,11 @@ function Channel({ i, max, user, channel, isVisible }) {
 					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
-							<div className="channel-members-presentation"> {/*add le name du channel*/}
+							<div className="channel-members-presentation"> 
+								<div className="channel-members-presentation-text">
+									<img alt="info" src={Info} className="channel-info"></img>
+									...add le name du channel...
+								</div>	
 							</div>
 							<div className="channel-conversation-messages">
 								{messages.map((message, index) => (
@@ -157,8 +162,12 @@ function Channel({ i, max, user, channel, isVisible }) {
 												<div className="channel-group-member-list-logo-name-pseudo">
 													<img src={regularConv} alt="regularConv" />
 													<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(users.name) }}>{users.nickname} ({users.name} )</div>
-												</div> { (user.id === channel.ownerId) &&
-													<img src={moreOptions} alt="channels-more-options" id="channels-more-options" onClick={() => toggleMoreOptions(index)} />
+												</div> 
+												{ (user.id === channel.ownerId) &&
+													(<span id="channels-more-options" onClick={() => toggleMoreOptions(index)}>
+														{!isOpenMoreOptions[index] && "▸"}
+														{isOpenMoreOptions[index] && "▾"}
+													</span>)
 												}
 											</li>
 											<div className="channel-group-member-list-ban-block">
@@ -171,6 +180,7 @@ function Channel({ i, max, user, channel, isVisible }) {
 															<button>KICK</button>
 															<button>BAN</button>
 															<button>SET ADMIN</button>
+															<button>MUTE</button>
 														</ul>
 														{/* Add the content you want to display when isOpenMoreOptions is true */}
 													</div>
@@ -188,9 +198,9 @@ function Channel({ i, max, user, channel, isVisible }) {
 					<div className="channel-send-messages-part">
 						<div className="channel-input-text">
 							<div className="channel-up">
+								<div className="channel-input-empty"></div>
 								<span className="channel-up-span"
 									ref={inputRef}
-									// className="text-area-indiv"
 									role="textbox"
 									contentEditable
 									onInput={handleInputChange}
@@ -198,9 +208,10 @@ function Channel({ i, max, user, channel, isVisible }) {
 									// onKeyDown={handleKeyDown}
 									style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
 								></span>
-							</div>
-							<div className="channel-down">
-								<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
+								<div className="channel-down">
+									<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
+									<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
+								</div>
 							</div>
 						</div>
 						<div className="channel-my-profile-pic-main-container">
@@ -208,7 +219,10 @@ function Channel({ i, max, user, channel, isVisible }) {
 								<div>
 									<img alt="user.pfp" src={user.pfp}></img>
 								</div>
-								{user.name}
+								<span className="channel-infos-user">								
+									<span className="channel-infos-user-name">{user.name}</span>	
+									<span className="channel-infos-user-triangle">▾</span>
+								</span>
 							</div>
 						</div>
 					</div>
