@@ -228,21 +228,19 @@ export default function UserProfile() {
 								<span></span>
 								<span></span>
 								<span></span>
-							</button>}<br />
+							</button>}
 						{friend && !blocked && <button className="user-btn-1" id="user-btn-1-remove" onClick={() => removeFriend()}>
 							Supprimer cet ami 😞
 							<span></span>
 							<span></span>
 							<span></span>
 							<span></span>
-						</button>}<br />
+						</button>}
 						<div className="user-btn-2-container">
 						{!blocked && <><span className="user-text-buttom" id="user-txt-btn-2-bloquer">Bloquer ce gueu 🚫</span>
-							<button className="user-btn-2" id="user-btn-2-bloquer" onClick={() => blockUser()}><span>Bloquer ce gueu 🚫</span></button></>}<br />
-						</div>
-						<div className="user-btn-2-container">
+							<button className="user-btn-2" id="user-btn-2-bloquer" onClick={() => blockUser()}><span>Bloquer ce gueu 🚫</span></button></>}
 						{blocked && <><span className="user-text-buttom" id="user-txt-btn-2-debloquer">Debloquer ce gueu ✅</span>
-							<button className="user-btn-2" id="user-btn-2-debloquer" onClick={() => unblockUser()}><span>Debloquer ce gueu ✅</span></button></>}<br />
+							<button className="user-btn-2" id="user-btn-2-debloquer" onClick={() => unblockUser()}><span>Debloquer ce gueu ✅</span></button></>}
 						</div>
 					</div>
 				</div>

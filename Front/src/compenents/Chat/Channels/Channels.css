@@ -375,7 +375,7 @@
 	display: grid;
 	grid-template-columns: 50% 50%;
 	grid-template-rows: 50% 50%; 
-	gap: 1px;
+	gap: 0.8px;
 }
 
 .channel-more-option-choose-buttons button {
@@ -513,7 +513,7 @@
 }
 
 .channel-send-messages-part {
-	height: 25%;
+	height: 300px;
 	width: 100%;
 	display: flex;
 	padding-left: 2%;
@@ -540,13 +540,14 @@
 .channel-input-empty {
 	width: 100%;
 	height: 60%;
-	background-color: #fff;
+	/* background-color: #fff; */
 	opacity: 0.7;
 	order: 3;
 }
+
 .channel-up {
 	position: relative;
-	height: 90%;
+	height: 169px;
 	width: 100%;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -563,7 +564,7 @@ textarea::-webkit-scrollbar {
 }
 
 .channel-down {
-	background-color: #fff;
+	background-color: #ece8d8ea;
 	width: 100%;
 	/* opacity: 0.7; */
 	display: flex;
@@ -574,8 +575,8 @@ textarea::-webkit-scrollbar {
     border: 1px solid #93989C;
     background: #FBFBFB;
     box-shadow: -4px -4px 4px #C0C9E0 inset;
-    width: 58px;
-    height: 37px;
+    width: 48px;
+    height: 27px;
     border-radius: 5px;
     font-family: montserrat_xp;
     font-weight: bold;
@@ -589,7 +590,7 @@ textarea::-webkit-scrollbar {
 }
 
 .channel-down-button#wizz-button {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 
@@ -602,6 +603,11 @@ span.channel-up-span[contenteditable]:empty::before {
 	display: inline-block;
 	cursor: text;
 	overflow-y: auto;
+	font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 11px;
+    color: rgb(160, 160, 160);
+	padding-left: 5px;
 }
 
 .channel-up-span {

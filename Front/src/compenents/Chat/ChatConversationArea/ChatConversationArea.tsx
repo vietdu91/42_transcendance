@@ -7,7 +7,7 @@ import InviteGame from '../../../img/chat/game-gimp.jpg';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import Logo from '../../../img/chat/group-conv.png';
 
 interface User {
   name: string,
@@ -24,18 +24,9 @@ const initUser: User = {
 function ChatConversationArea({ user, conv, isVisible, blocked }) {
   const token = Cookie.get('accessToken')
   const socket = useContext(ChatContext);
-  const navigate = useNavigate();
-
+  
   const [messages, setMessages] = useState(conv.messages.filter((index) => !(blocked.includes(index.authorId))));
   const [otherUser, getOtherUser] = useState<User>(initUser);
-
-  const inviteToGame = async () => {
-    socket?.emit('sendMessageConv', { value: "Viens jouer ! Clique sur le bouton Games !", convId: conv.id })
-  }
-
-  const goPersonalMatchmaking = () => {
-    navigate(`/champselect?other=${otherUser.name}`);
-  }
 
   const send = async (value: string) => {
     socket?.emit('sendMessageConv', { value, convId: conv.id });
@@ -60,9 +51,9 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
           })
           .catch(error => {
             if (error.response.status === 401) {
-							Cookie.remove('accessToken')
-							window.location.href = "/";
-						}
+              Cookie.remove('accessToken')
+              window.location.href = "/";
+            }
           })
       }));
     }
@@ -75,24 +66,25 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
   if (isVisible === false)
     return null;
   return (
-    <div className='chat-conversation-area'>
-      {isVisible && (
-        <div className="individual-convo-main-container">
-          <div className="navbar-conv"> {/* faire un degrade  */}
-            {/* Content for the navbar */}
-            <ul>
-              <li><img src={Invite} alt="Invite" id="chat_Invite" onClick={inviteToGame} /></li>
-              <li><img src={InviteGame} alt="InviteGame" id="chat_InviteGame" onClick={goPersonalMatchmaking} /></li>
-              {/* <li><img src={RedCross} alt="redcross" id="chat_redcross" /></li> */}
-              {/* <li></li>
-              <li></li> */}
-            </ul>
+      <div className='chat-conversation-area'>
+        {isVisible && (
+          <div className="individual-convo-main-container">
+            <div className="navbar-conv"> 
+              <ul className="top-conversation-list">
+                <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+                <li className="transcendance-messenger">{otherUser.name}</li>
+                <div className="clh-right-icons">
+                  <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+                  <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+                  <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
+                </div>
+              </ul>
+            </div>
+            <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} convId={conv.id}/>
+            <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
           </div>
-          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
-          <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 }
 

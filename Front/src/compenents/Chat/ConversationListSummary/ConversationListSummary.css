@@ -64,13 +64,18 @@
     /* margin-bottom: 1%; */
 } 
 
+.triangle-list {
+    margin-right: 10px;
+}
 .display-list-convo ul {
     margin-top: 2%;
+    font-size: 15px;
 }
 
 .display-list-convo li {
+    margin-top: 5px;
     list-style: none;
-    font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
+    font-family: trebuchet_ms_xp;
 }
 
 #icon-conv {
@@ -83,15 +88,18 @@
 
 .channel-ul-convo {
     list-style: none;
+    margin-left: -10px;
 }
 
 #icon-conv-img {
-    margin-left: 2%;;
-    margin-right: 2%;;
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 15px;
+    height: 15px;
 }
 
 .channel-li-convo{
-    margin-left: 2%;
+    margin-left: 10%;
     list-style: none;
     font-family: "Microsoft Sans Serif", Arial, Helvetica, sans-serif;
 }
@@ -103,6 +111,9 @@
 #icon-channels-img {
     margin-left: 2%;;
     margin-right: 2%;;
+
+    width: 15px;
+    height: 15px;
 }
 
 .channel-li-channels {
@@ -124,6 +135,9 @@
 #icon-friends {
     margin-left: 2%;
     margin-right: 2%;
+
+    width: 15px;
+    height: 15px;
 }
 
 .advertisement-scope {

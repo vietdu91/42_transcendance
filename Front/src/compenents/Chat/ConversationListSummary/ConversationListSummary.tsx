@@ -6,9 +6,10 @@ import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
-import offlineImg from '../../../img/chat/solo-conv.png'
-import onlineImg from '../../../img/chat/groups3d.png'
-import ingameImg from '../../../img/chat/group-conv.png'
+import groups from '../../../img/chat/group-channel-icon.png'
+import offlineImg from '../../../img/chat/msn-offline.png'
+import onlineImg from '../../../img/chat/solo-conv.png'
+import ingameImg from '../../../img/chat/msn-red.png'
 import SearchBar from '../../searchBar/searchBar';
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
@@ -17,6 +18,9 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));
     const [channelsConv, setChannelsConv] = useState(false);
     const [listFriends, setListFriends] = useState(false);
+
+    const [visibleConversations, setVisibleConversations] = useState(false);
+    const [visibleTriangleChannels, setVisibleTriangleChannels] = useState(false);
 
     function goToProfile(name: string) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
@@ -31,6 +35,14 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
         }
     }
 
+    const toggleConverstions = () => {
+        setVisibleConversations(!visibleConversations);
+    }
+
+    const toggleChannels = () => {
+        setVisibleTriangleChannels(!visibleTriangleChannels);
+    }
+    
     const toggleConvSummary = (index: number) => {
         const newVisibleItems = [...visibleItems];
         newVisibleItems[index] = !newVisibleItems[index];
@@ -72,7 +84,6 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
 
     return (
         <div className="conversation-list-summary">
-
             <div className="info-conversation-list">
                 <ul>
                     <li><img src={regularConv} alt="regularConv" className="chat_regularConv2" onClick={handleImageClick} /></li>
@@ -82,37 +93,36 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
             <div className="display-list-convo">
-                {indivConv && (
-                    <ul className="channel-ul-convo"> Conversations :
-                        {convs.map((item, index) => (
+            {indivConv && <ul className="channel-ul-convo">
+                    {visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▾ Conversations :</span>)}
+                    {!visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▸ Conversations :</span>)}
+                    {visibleConversations && (
+                        convs.map((item, index) => (
                             <li className="channel-li-convo" key={index} onClick={() => toggleConvSummary(index)}>
                                 <img src={regularConv} alt={regularConv} id={"icon-conv-img"} />
                                 {name === item.names[0] ? item.names[1] : item.names[0]}
                             </li>
-                        ))}
-                    </ul>
-                )
-                }
-                {channelsConv && (
-                    <ul className="channel-ul-channels"> Channels : 
-                        {channels.map((item, index) => (
-                            <li className="channel-li-channels" key={index} onClick={() => toggleChannelSummary(index)}>
-                            <img src={groupConv} alt="regularConv" id="icon-channels-img" onClick={handleImageClickChannels} />
-                                {item.name}
-                            </li>
-                        ))}
-                        <li>
-                        </li>
-                    </ul>
-                )
-                }
+                        ))
+                        )}
+                 </ul>}
+            {channelsConv && <ul className="channel-ul-convo">
+               {visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▾ Channels:</span>)}
+               {!visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▸ Channels:</span>)}
+               {visibleTriangleChannels && (
+                   channels.map((item, index) => (
+                    <li className="channel-li-convo" key={index} onClick={() => toggleChannelSummary(index)}>
+                    <img src={groupConv} alt="regularConv" id="icon-channels-img" onClick={handleImageClickChannels} />
+                        {item.name}
+                    </li>
+                   ))
+                   )}
+            </ul>}
                 {listFriends && (
-                    <ul className="channel-ul-friend-list"> Your Friends :
+                    <ul className="channel-ul-convo"> Your Friends :
                         {friends.map((item, index) => (
-                            <li className="channel-li-friend-list" key={index} onClick={() => goToProfile(item.name)}>
+                            <li className="channel-li-convo" key={index} onClick={() => goToProfile(item.name)}>
                                 <img src={imageState(item.state)} alt="state_img" id="icon-friends" />
                                 {item.name} ({item.nickname})
-                                <img src={item.pfp_url} alt="pfp_img"/>
                             </li>
                         ))}
                     </ul>

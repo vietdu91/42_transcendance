@@ -1,37 +1,47 @@
-.input-individual-conversation {
-    display: flex; /* Make the content inside the container flex */
-    flex-direction: row;
-	justify-content: space-between; /* Space evenly between the child elements (input and button) */
-    align-items: center; /* Center the content vertically */
-    background-color: #F5F5F5;
-    padding: 10px; /* Add padding around the content */
-    border-radius: 5px;
-    border: 1px solid #E0E0E0;
-	height: 100%;
-	width: 100%;
+.channel-input-text-conv {
+	width: 64%;
+	height: 90%;	
+	
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	margin-left: 10px;
+
+	border: 1px solid black;
 }
 
-.text-area-indiv {
+.message-input-channel-up-span-conv {
 	display: block;
-    height: 100%;
-	width: 95%;
-	/* min-height: 7%; */
+	width: 100%;
+	height: 102px;
+	min-height: 7%;
 	overflow: auto;
-	resize: none;
+	/* resize: none; */
 	line-height: 20px;
-	max-height: 100%;
+	max-height: 200px;
 	border: none;
-	/* Remove textarea border */
 	background-color: #fff;
 	font-family: Arial, sans-serif;
 	font-size: 14px;
 	opacity: 0.7;
+	order: 2;
+	
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
 }
 
-.text-area-indiv[contenteditable]:empty::before {
-    content: 'Anything to say ?';
-    display: inline-block;
+
+.message-input-channel-up-span-conv[contenteditable]:empty::before {
+	content: '   Anything to say ?';
+	display: inline-block;
 	cursor: text;
+	overflow-y: auto;
+	font-family: montserrat_xp;
+    font-weight: bold;
+    font-size: 11px;
+    color: rgb(160, 160, 160);
+	padding-left: 5px;
 }
 
 .text-area-indiv::-webkit-scrollbar {
@@ -39,7 +49,7 @@
 	cursor: pointer;
 }
 
-.input-individual-conversation button {
+.input-individual-conversation-button {
     background-color: #007BFF;
     color: #FFF;
     border: none;
@@ -48,10 +58,23 @@
     cursor: pointer;
 }
 
-.input-individual-conversation button:hover {
+.input-individual-conversation-button:hover {
     background-color: #0056b3;
 }
 
 .textarea {
 	white-space: pre-line;
+}
+
+.channel-down-2 {
+	width: 100%;
+	height: 31.2%;
+	background-color: #ece8d8ea;
+
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	/* justify-content: flex-end; */
 }

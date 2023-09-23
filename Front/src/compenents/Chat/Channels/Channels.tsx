@@ -1,6 +1,7 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
 
+import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
@@ -54,6 +55,20 @@ function Channel({ user, channel, isVisible, blocked }) {
 		}
 	};
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent adding a new line
+            handleSendMessage();
+        }
+    };
+
+	const scrollToBottom = () => {
+		if (divRef.current) {
+			divRef.current.scrollTop = divRef.current.scrollHeight;
+		}
+	};
+	scrollToBottom();
+
 	const kickUser = async (name: string) => {
 		socket?.emit('kickUser', { channName: channel.name, otherName: name });
 	}
@@ -87,6 +102,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 	}
 
 	useEffect(() => {
+		scrollToBottom();
 		const getData = async () => {
 			socket.on('messageSentChann', (res => {
 				axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
@@ -209,19 +225,17 @@ function Channel({ user, channel, isVisible, blocked }) {
 					<div className="channel-send-messages-part">
 						<div className="channel-input-text">
 							<div className="channel-up">
-								<div className="channel-input-empty"></div>
 								<span className="channel-up-span"
 									ref={inputRef}
 									role="textbox"
 									contentEditable
 									onInput={handleInputChange}
 									onBlur={handleInputChange}
-									// onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDown}
 									style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
 								></span>
 								<div className="channel-down">
 									<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
-									<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
 								</div>
 							</div>
 						</div>
@@ -230,9 +244,9 @@ function Channel({ user, channel, isVisible, blocked }) {
 								<div>
 									<img alt="user.pfp" src={user.pfp}></img>
 								</div>
-								<span className="channel-infos-user">
-									<span className="channel-infos-user-name">{user.name}</span>
-									<span className="channel-infos-user-triangle">▾</span>
+								<span className="channel-infos-user">								
+									<span className="channel-infos-user-name">{user.name}</span>	
+									<span className="channel-infos-user-triangle">▸</span>
 								</span>
 							</div>
 						</div>

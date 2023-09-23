@@ -1,15 +1,14 @@
 .chat-conversation-area {
-    position: fixed;
-    top: 0;
-    right: 0;
+    position:absolute;
+    top: 25%;
+    right: 5%;
     width: 50vh;
-    height: 50vh;
+    height: 60vh;
     /* background-color: #f5f5f5; */
     /* Example background color */
     z-index: 1000;
     /* Adjust the z-index value as needed */
-    overflow-y: auto;
-    border-width: 5px;
+    border-width: 1px;
     border-style: solid;
     border-color: blue;
     /* Enable vertical scrolling if content exceeds height */
@@ -30,10 +29,11 @@
 }
 
 .navbar-conv {
-    height: 13%;
+    height: 7%;
     width: 100%;
-    /* background-color: #bfd1ef; */
-    background-color: #f3f8fe;
+    /* background-color: #0831d9; */
+    background-color: #bfd1ef;
+    /* background-color: #f3f8fe; */
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -52,15 +52,4 @@
     /* border-style: solid;
     border-width: 1px;
     border-radius: 5px; */
-}
-
-#chat_Invite {
-    max-width: 90px;
-}
-
-#chat_InviteGame {
-    max-width: 70px;
-    /* Ensure images scale down proportionally */
-    height: auto;
-    /* Maintain aspect ratio */
 }
