@@ -15,14 +15,12 @@ export default function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(nickname);
     await axios
     .patch(
       process.env.REACT_APP_LOCAL_B + '/profile/setNickname',
       { nickname },
       { withCredentials: true, headers: {  'Authorization': `Bearer ${token}`} })
     .then((response) => {
-      console.log(response.data.message);
       setValid(true);
       setInvalid(false);
     })

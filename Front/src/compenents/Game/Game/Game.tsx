@@ -265,7 +265,6 @@ export default function Game(): JSX.Element {
 		})
 
 		socket.on("usedPower", (response) => {
-			console.log(response.message)
 			if (response.id === game.current.idLeft) {
 				powLeft = true;
 				switch (response.char) {

@@ -23,14 +23,10 @@ export default function Import() {
 		}
 		try {
 			if (event.target.files && event.target.files[0]) {
-				console.log(event.target.files[0].type);
 				const formdata = new FormData();
 				formdata.append('file', event.target.files[0]);
 				await axios.post(process.env.REACT_APP_LOCAL_B + '/Southtrans/online', formdata, { headers: { 'Authorization': `Bearer ${token}` } },
 				)
-					.then(response => {
-						console.log("New profile pic setted up");
-					})
 					.catch(error => {
 						throw error;
 					});

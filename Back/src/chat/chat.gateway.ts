@@ -29,7 +29,7 @@ export class ChatGateway {
   async handleJoinChat(client: Socket): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
-    console.log(userToken);
+    console.log("token: ", userToken);
     const userDb = await this.userService.getUserById(userToken.sub);
 
     for (let user of this.users) {
@@ -1010,7 +1010,6 @@ export class ChatGateway {
 
     const isAdmin = chann.adminList.find(admin => admin.id === user.id);
     if (!isAdmin) {
-      console.log("You are not a channel admin");
       client.emit('errorSocket', { message: "You are not a channel admin" });
       return;
     }

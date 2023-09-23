@@ -44,17 +44,14 @@ export default function Range() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(age);
 		await axios
 			.patch(
 				process.env.REACT_APP_LOCAL_B + '/profile/setAge',
 				{ age },
 				{ withCredentials: true, headers: { 'Authorization': `Bearer ${token}` } })
 			.then((response) => {
-				console.log(response.data.message);
 			})
 			.catch((error) => {
-				// Gérer les erreurs de requête
 			});
 	}
 

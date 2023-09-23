@@ -89,8 +89,8 @@ export class AuthController {
       });
       response.status(200).json({ message: 'Déconnexion réussie' });
     }
-    catch {
-      response.status(404);
+    catch (err) {
+      throw err;
     }
   }
 }

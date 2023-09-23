@@ -40,7 +40,6 @@ export default function UserProfile() {
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
 
 	const addFriend = () => {
-		console.log("TRYING TO ADD FRIEND");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/addFriend',
 			{ name },
@@ -59,7 +58,6 @@ export default function UserProfile() {
 	// Si je remove friend, l'autre ne l'a plus en ami non plus
 	// Ajouter la fonction de check ami deja supprime
 	const removeFriend = () => {
-		console.log("TRYING TO REMOVE FRIEND");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/removeFriend',
 			{ name },
@@ -76,7 +74,6 @@ export default function UserProfile() {
 	}
 
 	const blockUser = () => {
-		console.log("TRYING TO BLOCK USER");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/addBlocked',
 			{ name },
@@ -94,7 +91,6 @@ export default function UserProfile() {
 	}
 
 	const unblockUser = () => {
-		console.log("TRYING TO UNBLOCK USER");
 		axios.post(
 			process.env.REACT_APP_LOCAL_B + '/profile/removeBlocked',
 			{ name },
@@ -124,7 +120,6 @@ export default function UserProfile() {
 				const limit = res.data.games.length > 3 ? res.data.games.length - 3 : 0;
 				for (let i = res.data.games.length - 1; i >= limit; i--) {
 					updatedGames.push(res.data.games[i]);
-					console.log(res.data.games[i]);
 				}
 				games.current = updatedGames;
 			})

@@ -62,7 +62,6 @@ export default function Profile() {
 	  };
 
 	const handleEnable = async (e) => {
-		// console.log(code);
 		e.preventDefault();
 		await axios.post(
 			process.env.REACT_APP_LOCAL_B + '/twofa/turn-on',
@@ -160,7 +159,6 @@ export default function Profile() {
 			const limit = res.data.games.length > 3 ? res.data.games.length - 3 : 0;
 			for (let i = res.data.games.length - 1; i >= limit; i--) {
 				updatedGames.push(res.data.games[i]);
-				console.log(res.data.games[i]);
 			}
 			games.current = updatedGames;
 		}).catch(error => {
@@ -173,9 +171,6 @@ export default function Profile() {
 	}, [token])
 	
 	const handleSearch = (username: string) => {
-        // Effectuez votre logique de recherche ici avec la valeur 'username'
-        console.log("Good SB");
-        console.log(`Recherche en cours avec la requête : ${username}`);
     };
 
 	return (

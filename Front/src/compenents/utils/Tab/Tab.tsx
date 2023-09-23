@@ -15,13 +15,9 @@ function Tab({ sound, delay }) {
     setIsTabOpen(!isTabOpen);
   };
 
-  //////////////////////////////////////////////
   const MusicPlayerAutorisation = ({ audioSrc, delay }) => {
 
-    // const [isPlaying, setIsPlaying] = useState(true);
-
     const audio = new Audio(audioSrc);
-    console.log(isPlaying);
     
     const playAudioWithDelay = (delay) => {
       setTimeout(() => {
@@ -62,8 +58,6 @@ function Tab({ sound, delay }) {
   MusicPlayerAutorisation.defaultProps = {
     delay: 0,
   };
-
-  //////////////////////////////////////////
 
   return (
     <div className="tab-container">

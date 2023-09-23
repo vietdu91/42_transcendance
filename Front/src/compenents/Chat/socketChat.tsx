@@ -101,6 +101,7 @@ function Chat() {
     };
     
     useEffect(() => {
+        // socket.on('connect', () => {});
         socket?.emit('joinChat');
         socket.on('errorSocket', (response) => {
             setSnackMessage(response.message);

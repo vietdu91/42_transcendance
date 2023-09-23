@@ -51,6 +51,7 @@ export default function InviteMatch() {
 
 	const leavePage = () => {
 		navigate(`/chat`);
+		window.location.reload();
 	}
 
 	useEffect(() => {
@@ -65,29 +66,29 @@ export default function InviteMatch() {
 					}
 					else {
 						navigate('/chat');
+						window.location.reload();
 					}
 				})
 		}
 		if (location.search && location.search.slice(0, location.search.indexOf('=') + 1) === "?other=")
 			getUser();
-		else
+		else {
 			navigate('/chat');
+			window.location.reload();
+		}
 		socket.on('alreadyJoined', (res) => {
-			console.log(res.message);
 			navigate("/chat");
+			window.location.reload();
 		})
+
 		socket.on('matchFound', (res) => {
 			navigate(`/decompte`, { state: { roomId: res.roomId } });
 		})
-		socket.on('hihihiha !', (res) => {
-			console.log("YAAAAAAAAAA");
-		})
+
 		socket.on('inviteJoined', (res) => {
-			console.log(res.message);
 		})
 
 		socket.on('wrongUser', (response) => {
-			alert(response.message);
 			navigate("/gamemenu");
 		})
 

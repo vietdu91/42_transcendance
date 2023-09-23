@@ -30,8 +30,6 @@ export default function App() {
   const navigate = useNavigate();
   const [show, setShow] = React.useState(true);
 
-  // console.log(process.env.REACT_APP_LOCAL_B);
-  // const apiEndpoint = process.env.REACT_APP_LOCAL_B;
   const handleClickCredits = (path, image) => {
     setHover(image);
     document.getElementById("bg-menu")?.classList.add("zoom-transition-bottom");
@@ -52,23 +50,21 @@ export default function App() {
 
   async function logout() {
     const accessToken = Cookies.get('accessToken');
-    if (accessToken) {
-      try {
-        console.log("AXIOS LOGOUT ON")
-        await axios({
-          url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${accessToken}` },
-        })
+    await axios({
+      url: process.env.REACT_APP_LOCAL_B + "/Auth/logout",
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${accessToken}` },
+    })
+      .then(() => {
         Cookies.remove('accessToken');
         navigate("/connect");
-      }
-      catch (err) {
-        console.log("app-front: error: ", err)
-      }
-    } else {
-      console.error('Access token not found in cookies.');
-    }
+      })
+      .catch(err => {
+        if (err.response.status === 401) {
+          Cookies.remove('accessToken')
+          window.location.href = "/";
+        }
+      })
   }
 
   function toggleThanks() {
@@ -95,7 +91,7 @@ export default function App() {
       </div>
       <div id="navbar">
         {show && <button className="thanks" onClick={() => { handleClick("/thanks", ChefAid); toggleThanks(); }}></button>}
-        {show && <button className="msn" onClick={() => navigate("/chat")} onMouseEnter={() => { setHover(NoFriend); }} onMouseLeave={() => { setHover(Town); }}></button>}
+        {show && <button className="msn" onClick={() => { navigate("/chat"); window.location.reload() }} onMouseEnter={() => { setHover(NoFriend); }} onMouseLeave={() => { setHover(Town); }}></button>}
         {show && <button className="butters" onClick={() => navigate("/quoi")}></button>}
       </div>
     </div>

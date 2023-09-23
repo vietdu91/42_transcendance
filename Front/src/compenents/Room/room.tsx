@@ -22,12 +22,11 @@ const Room: React.FC<RoomProps> = ({ room }) => {
 
   const send = (value: string) => {
     const id = Cookies.get('id');
-    console.log("hihihiha")
     socket?.emit('message', value, id);
   }
 
   const handleDelete = () => {
-    console.log("Deleted room:", channelName);
+
     setChannelName('');
     setIsRoomCreated(false);
     setIsPrivate(false);
@@ -36,7 +35,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
   };
 
   const handleCreate = ()=> {
-    console.log("Created room:", channelName);
+
     setChannelName(channelName);
     setIsRoomCreated(true);
     const id = Cookies.get('id');
@@ -51,7 +50,6 @@ const Room: React.FC<RoomProps> = ({ room }) => {
 
   useEffect(() => {
     socket?.on('channelCreated', (response) => {
-      console.log(response.name);
     });
     return () => {
       socket?.off('channelCreated');

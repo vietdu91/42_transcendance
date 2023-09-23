@@ -70,7 +70,6 @@ function DropdownContact({ user, setConvs, setFriends }) {
       )
         .then(response => {
           setFriends(response.data.friends);
-          console.log(response.data.friends)
         })
         .catch(error => {
           if (error.response.status === 401) {
@@ -85,7 +84,6 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
       setNotFound(false);
       setIsVisible(true);
-      console.log("friendName === " + friendName);
       setFriendName('');
     }
   };
@@ -125,7 +123,6 @@ function DropdownContact({ user, setConvs, setFriends }) {
           setFriends(response.data.friends);
         })
         .catch(error => {
-          console.log(error.response);
           if (error.response.status === 401) {
             Cookie.remove('accessToken')
             window.location.href = "/";
@@ -184,7 +181,6 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
   useEffect(() => {
     socket.on('conversationCreated', (response) => {
-      console.log(response);
       setOtherUser(response.otherUser);
       setConvs(response.conversations);
     })

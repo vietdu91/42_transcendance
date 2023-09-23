@@ -71,8 +71,10 @@ export default function ChampSelect() {
 	const leavePage = () => {
 		if (!location.search)
 			navigate(`/gamemenu`);
-		else
+		else {
 			navigate(`/chat`);
+			window.location.reload();
+		}
 	};
 
 	useEffect(() => {

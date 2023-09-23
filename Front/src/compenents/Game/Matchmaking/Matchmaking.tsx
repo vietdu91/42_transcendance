@@ -59,12 +59,10 @@ export default function Matchmaking() {
 		});
 
 		socket.on('queueJoined', (response) => {
-			console.log(response.message);
 			setInQueue(true);
 		})
 
 		socket.on('alreadyJoined', (response) => {
-			console.log(response.message);
 			setInQueue(false);
 		})
 
