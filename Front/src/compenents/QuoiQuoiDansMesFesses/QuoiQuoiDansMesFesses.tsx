@@ -18,7 +18,7 @@ export default function QuoiQuoiDansMesFesses() {
 				<video autoPlay loop id="bg" src={Butters}></video>
 			</div>
 			<div id="return">
-				<ReturnButtom colorHexa='#ff30ff' path='/' />
+				<ReturnButtom colorHexa='#DD2DEC' path='/' />
 			</div>
 		</>
 	)

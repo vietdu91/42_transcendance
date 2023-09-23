@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import './MessageInput.css'
+import Wizz from '../../img/chat/wizz.png'
 
 export default function MessageInput({ send }: {
     send: (value: string) => void;
@@ -33,18 +35,21 @@ export default function MessageInput({ send }: {
     };
 
     return (
-        <div className="input-individual-conversation">
-            <div
+        <div className="channel-input-text-conv">
+            <span className="message-input-channel-up-span-conv"
                 ref={inputRef}
-                className="text-area-indiv"
+                // className="text-area-indiv"
                 role="textbox"
                 contentEditable
                 onInput={handleInputChange}
                 onBlur={handleInputChange}
-                onKeyDown={handleKeyDown}
+                // onKeyDown={handleKeyDown}
                 style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
-            />
-            <button onClick={handleSendMessage}>Send</button>
+            ></span>
+		    <div className="channel-down-2">
+		    	<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
+		    	<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
+		    </div>
         </div>
     );
 }

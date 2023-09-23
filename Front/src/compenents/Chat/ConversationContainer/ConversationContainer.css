@@ -1,7 +1,7 @@
-
 .conversation-container{ 
-    height: 50%;
+    height: 63%;
     width: 100%;
+    padding-top: 2%;
     /* background-color: #e4f1f8; */
     display: flex;
     flex-direction: row;
@@ -11,76 +11,96 @@
 .display-individual-convo {
     /* width: 60%;
     height: 100%; */
-    height: 95%;
-    margin-top: 2%;
+    height: 100%;
     margin-bottom: 3%;
     width: 64%;
     margin-left: 2%;
     border: solid;
     border-color: grey;
-    border-width: 1px;;
+    border-width: 1px;
     background-color: #fefdff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .profile-pic-reveiver-container {
     border-radius: 5px;
-    height: 66%;
+    height: 150px;
     width: 25%;
     margin-left: 6%;
     margin-right: 3%;
-    margin-bottom: 3%;;
-    margin-top: 2%; 
+    margin-bottom: 3%;
     border: solid;
     border-width: 1px;
 	background-color: #a2acc6;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 
 .profile-pic-receiver {
-    height: 66%;
-    width: 100%;  
+    height: 100px;
+    width: 100px;  
     background-color:white;
     border-radius: 5px;
     border-width: 1px;
-    border: solid;
+    border: 1px solid black;
+    margin-top: 20px;
     display:flex;
-    /* width: 100%;
-    height: 80%; */
 }
 
 .profile-pic-receiver img {
     height: 100%;
     width: 100%;
+
+    object-fit: cover;
 }
 .to-who {
     width: 100%;
-    height: 20%;
+    height: 30px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     background-color: #e8f0fc;
-    font-size:0.8vw;
+    font-size: 0.8em;
+
+    padding-left: 15px;
+    padding-top: 7px;
 }
 
+.gras {
+    font-weight: bold;
+}
+
+.convo-channel-info {
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
+} 
+
 .receiver-status {
-    width: 98%;
-    height: 18%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
     border: solid;
     border-width: 1px;
     border-color: grey;
-    margin-left: 1%;
     margin-top: 1%;
     margin-bottom: 1%;
     overflow-y: auto;
-    font-size: 14px;
+    font-size: 11px;
     background-color: #fffedc;
+
 }
 /*1*/
 .text-already-sent {
-    width: 100;
-    height: 60%;
+    width: 100%;
+    height: 85%;
     background-color: #FCFDFF;
     opacity: 0.7;
     border-bottom-left-radius: 5px;
@@ -89,6 +109,8 @@
 }
 
 .text-already-sent ul {
+    display: flex;
+	flex-direction: column;
     list-style: none;
     margin-left: 0px;
     padding-left: 10px;

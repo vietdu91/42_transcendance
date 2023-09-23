@@ -1,74 +1,32 @@
 .text-composer-container {
-    height: 37%;
+    height: 55%;
     width: 100%;
-    /* background-color: green; */
     display: flex;
     flex-direction: row;
+    padding-bottom: 3%;
+    padding-top: 2%;
+}
+
+#wizz-container-write-text {
+    height: 25px;
+    width: 25px;
 }
 
 .container-write-text {
-    height: 97%;
+    height: 100%;
     width: 64%;
     margin-left: 2%;
     margin-bottom: 3%;
     border-radius: 5px;
     display: flex;
+    justify-content: center;
     flex-direction: column;
-}
-
-.upper-part-write-text {
-    width: 100%;
-    height: 20%;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-	background-color: #a2acc6;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border: solid;
-    border-width: 1px;
-    border-color: black;
-}
-
-.upper-part-write-text img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.upper-part-write-text:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Change background color on hover */
-    position: relative;
+    background-color: antiquewhite;
 }
 
 .upper-part-write-text:hover img {
     opacity: 0.7;
     /* Reduce image opacity on hover */
-}
-
-.middle-part-write-text {
-    width: 100%;
-    height: 60%;
-    background-color: white;
-    opacity: 0.7;
-    border: solid;
-    border-width: 1px;
-    border-color: black;
-}
-
-.bottom-part-write-text {
-    width: 100%;
-    height: 20%;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    /* background-color: #E6EEFB; */
-	background-color: #a2acc6;
-    border: solid;
-    border-width: 1px;
-    border-color: black;
 }
 
 .profile-pic-container-emitter {
