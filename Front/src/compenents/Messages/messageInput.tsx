@@ -43,8 +43,8 @@ export default function MessageInput({ send }: {
                 contentEditable
                 onInput={handleInputChange}
                 onBlur={handleInputChange}
-                // onKeyDown={handleKeyDown}
-                style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
+                onKeyDown={handleKeyDown}
+                style={{ whiteSpace: 'pre-wrap' }}
             ></span>
 		    <div className="channel-down-2">
 		    	<button className="channel-down-button" onClick={handleSendMessage}>Send</button>

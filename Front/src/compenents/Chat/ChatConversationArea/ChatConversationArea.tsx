@@ -30,7 +30,7 @@ const initUser: User = {
 function ChatConversationArea({ user, conv, isVisible, blocked }) {
   const token = Cookie.get('accessToken')
   const socket = useContext(ChatContext);
-
+  
   const [messages, setMessages] = useState(conv.messages.filter((index) => !(blocked.includes(index.authorId))));
   const [otherUser, getOtherUser] = useState<User>(initUser);
 
@@ -86,7 +86,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
                 </div>
               </ul>
             </div>
-            <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
+            <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} convId={conv.id}/>
             <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
           </div>
         )}

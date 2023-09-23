@@ -100,9 +100,8 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
             </div>
             <div className="display-list-convo">
             {indivConv && <ul className="channel-ul-convo">
-                    {visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▾</span>)}
-                    {!visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▸</span>)}
-                    Conversations :
+                    {visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▾ Conversations :</span>)}
+                    {!visibleConversations && (<span className="triangle-list" onClick={toggleConverstions}>▸ Conversations :</span>)}
                     {visibleConversations && (
                         convs.map((item, index) => (
                             <li className="channel-li-convo" key={index} onClick={() => toggleConvSummary(index)}>
@@ -113,9 +112,8 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                         )}
                  </ul>}
             {channelsConv && <ul className="channel-ul-convo">
-               {visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▾</span>)}
-               {!visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▸</span>)}
-               Channels :
+               {visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▾ Channels:</span>)}
+               {!visibleTriangleChannels && (<span className="triangle-list" onClick={toggleChannels}>▸ Channels:</span>)}
                {visibleTriangleChannels && (
                    channels.map((item, index) => (
                     <li className="channel-li-convo" key={index} onClick={() => toggleChannelSummary(index)}>

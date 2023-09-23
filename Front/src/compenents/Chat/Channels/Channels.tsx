@@ -1,9 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
 
-import RedCross from '../../../img/chat/redcross.png'
-import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import Minimize from '../../../img/chat/minimized.jpg'
 import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
@@ -64,6 +61,13 @@ function Channel({ user, channel, isVisible, blocked }) {
 			}
 		}
 	};
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent adding a new line
+            handleSendMessage();
+        }
+    };
 
 	const scrollToBottom = () => {
 		if (divRef.current) {
@@ -201,7 +205,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 									contentEditable
 									onInput={handleInputChange}
 									onBlur={handleInputChange}
-									// onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDown}
 									style={{ whiteSpace: 'pre-wrap' }} // Enable line breaks
 								></span>
 								<div className="channel-down">

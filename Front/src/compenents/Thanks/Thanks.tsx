@@ -68,6 +68,7 @@ function CreatedBy() {
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Masters en Front</div>
 				<div className="purple subtitle">achane-l</div>
+				<div className="green subtitle">aboudjel</div>
 			</div>
 		)
 	}
@@ -76,7 +77,7 @@ function CreatedBy() {
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Genies du Back</div>
 				<div className="subtitle purple">thzeribi</div>
-				<div className="yellow subtitle">esafar</div>
+				<div className="yellow subtitle">bbrassar</div>
 			</div>
 		)
 	}
@@ -85,7 +86,7 @@ function CreatedBy() {
 			<div className="credits" onClick={() => navigate("/")}>
 				<div className="white title">Les Frerots</div>
 				<div className="orange subtitle">lgaducew</div>
-				<div className="purple subtitle">bbrassar</div>
+				<div className="purple subtitle">la team de la night</div>
 			</div>
 		)
 	}

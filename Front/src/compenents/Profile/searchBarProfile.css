@@ -1,3 +1,8 @@
+@font-face {
+	font-family: heavitas_font;
+	src: url(../../fonts/Heavitas.ttf)
+}
+
 :root {
 	--primary-color: #00bcd4;
 	--accent-color: #f50057;
@@ -55,6 +60,8 @@
 		padding-left: 2em;
 		padding-right: 1em;
 		width: 240px;
+		font-family: heavitas_font;
+		font-size: 15px;
 	}
 	.SearchBox-input {
 		width: 0;

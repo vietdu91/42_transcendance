@@ -14,7 +14,7 @@
 .message-input-channel-up-span-conv {
 	display: block;
 	width: 100%;
-	height: 70%;
+	height: 102px;
 	min-height: 7%;
 	overflow: auto;
 	/* resize: none; */

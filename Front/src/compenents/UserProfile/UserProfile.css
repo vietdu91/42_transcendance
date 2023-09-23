@@ -98,7 +98,7 @@
 	width: 10vw;
 
 	position: absolute;
-	top: 0.5%;
+	top: 1.8%;
 	right: 5%;
 }
 
@@ -227,7 +227,7 @@
 	width: 140px;
 
 	position: absolute;
-	top: 43.5%;
+	top: 50.3%;
 	left: 0%;
 }
 
@@ -257,7 +257,7 @@
     justify-content: center;
     flex-direction: column;
 	align-items: center;
-	gap: 8px;
+	gap: 15px;
 }
 
 .user-btn-1, .user-btn-2 {
@@ -288,7 +288,6 @@
 
 .user-text-buttom {
 	position: absolute;
-    /* color: rgb(0, 0, 0); */
 	text-transform: uppercase;
 	text-decoration: none;
 	letter-spacing: 2px;

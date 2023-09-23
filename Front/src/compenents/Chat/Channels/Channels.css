@@ -39,7 +39,7 @@
 }
 
 .channel-bandeau {
-	height: 45px;
+	height: 35px;
 	width: 100%;
 
     background: linear-gradient(
@@ -375,7 +375,7 @@
 	display: grid;
 	grid-template-columns: 50% 50%;
 	grid-template-rows: 50% 50%; 
-	gap: 1px;
+	gap: 0.8px;
 }
 
 .channel-more-option-choose-buttons button {
@@ -544,9 +544,10 @@
 	opacity: 0.7;
 	order: 3;
 }
+
 .channel-up {
 	position: relative;
-	height: 90%;
+	height: 169px;
 	width: 100%;
 	border: 1px solid #ccc;
 	border-radius: 5px;
