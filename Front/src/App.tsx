@@ -36,7 +36,7 @@ import YeahYeah from './sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All 
 import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
 import SearchBar from './compenents/searchBar/searchBar';
 import SetNickname from './compenents/SetNickname/SetNickname';
-import InviteMatch from './compenents/Game/InviteMatch/InviteMatch';
+import InviteMatch from './compenents/Game/Matchmaking/InviteMatch';
 
 
 export default function App() {

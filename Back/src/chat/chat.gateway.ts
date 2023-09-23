@@ -918,8 +918,6 @@ export class ChatGateway {
 
     const otherName = params.otherName;
 
-
-
     if (user.name === otherName) {
       client.emit('errorSocket', { message: "You can't talk to yourself" });
       return;
@@ -966,7 +964,23 @@ export class ChatGateway {
       pfp: otherUser.pfp_url,
       state: otherUser.state,
     }
+    const target = await this.prisma.user.findUnique({
+      where: { name: otherName },
+      include: {
+        conversations: {
+          include: {
+            messages: true,
+          }
+        }
+      }
+    })
+
     client.emit('conversationCreated', { otherUser: shortUser, conversations: newUser.conversations, friends: newUser.friendsList });
+    for (let userChat of this.users) {
+      if (user.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('conversationCreated', { message: "Password changed" });
+      }
+    }
   }
 
   @SubscribeMessage('changePassword')

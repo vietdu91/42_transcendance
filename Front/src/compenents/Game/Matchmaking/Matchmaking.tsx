@@ -30,13 +30,12 @@ const MatchmakingNotInQueue = ({ joinQueue, leavePage }) => (
 );
 
 export default function Matchmaking() {
-
-	const socket = useContext(GameContext);
-	const [inQueue, setInQueue] = useState(false);
-	const navigate = useNavigate();
 	const token = Cookies.get('accessToken');
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
+	const socket = useContext(GameContext);
+	const [inQueue, setInQueue] = useState(false);
+	const navigate = useNavigate();
 
 	const joinQueue = () => {
 		socket?.emit('joinQueue');
@@ -57,7 +56,6 @@ export default function Matchmaking() {
 
 	useEffect(() => {
 		socket.on('connect', () => {
-			console.log('Connection established');
 		});
 
 		socket.on('queueJoined', (response) => {

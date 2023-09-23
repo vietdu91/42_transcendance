@@ -1,12 +1,36 @@
 import React from "react";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 import Cookie from 'js-cookie';
 import { GameContext } from "../../utils/GameContext";
+import "./Matchmaking.css"
+
+import Fire from "../../../img/backgrounds/fire_randy.jpg"
+import RedCross from "../../../img/buttons/red_cross.png"
+import BallsWaiting from "../../../img/balls_waiting.gif"
+
+const MatchmakingQueue = ({ leaveQueue }) => (
+	<div id="bg-black">
+		<div id="waiting-black">
+			<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leaveQueue} />
+			<img id="balls_waiting" src={BallsWaiting} alt="Balls Waiting" />
+			<div id="waiting-text">Waiting</div>
+		</div>
+	</div>
+);
+
+const MatchmakingNotInQueue = ({ joinQueue, leavePage }) => (
+	<div id="bg-game">
+		<img id="bg-game" src={Fire} alt={'Fire'} />
+		<img id="red-cross" src={RedCross} alt="Red Cross" onClick={leavePage} />
+		<div id="waiting">
+			<button id="queue-button" onClick={joinQueue}>Entrer dans la lutte</button>
+		</div>
+	</div>
+);
 
 export default function InviteMatch() {
-
 	const token = Cookie.get('accessToken');
 	if (!token)
 		window.location.href = `${process.env.REACT_APP_LOCAL_F}/connect`;
@@ -14,6 +38,20 @@ export default function InviteMatch() {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const otherName = location.search.slice(location.search.lastIndexOf('=') + 1);
+	const [inQueue, setInQueue] = useState(false);
+
+	const joinQueue = () => {
+		socket?.emit('joinInvite');
+	}
+
+	const leaveQueue = () => {
+		socket?.emit('leaveInvite');
+		setInQueue(false);
+	};
+
+	const leavePage = () => {
+		navigate(`/chat`);
+	}
 
 	useEffect(() => {
 		async function getUser() {
@@ -48,16 +86,19 @@ export default function InviteMatch() {
 			console.log(res.message);
 		})
 
+		socket.on('wrongUser', (response) => {
+			alert(response.message);
+			navigate("/gamemenu");
+		})
+
 		window.addEventListener('beforeunload', () => {
 			socket.emit("leaveInvite");
 		})
-
-		socket?.emit('joinInvite', {name: otherName});
 	})
 
-	return (
-		<div>
-			Waiting...
-		</div>
-	)
+	if (inQueue) {
+		return <MatchmakingQueue leaveQueue={leaveQueue} />;
+	}
+
+	return <MatchmakingNotInQueue joinQueue={joinQueue} leavePage={leavePage} />;
 }
