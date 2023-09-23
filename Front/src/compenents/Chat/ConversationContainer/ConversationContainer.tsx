@@ -28,7 +28,6 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
                 <div className="Navbar-individual-convo">
                     <div className="to-who">To: <span className="gras">{name}</span> AKA "{nickname}"</div>
                     <div className="receiver-status">
-                        {/* <div className="channel-members-presentation-text"> */}
                         <img alt="info" src={Info} className="convo-channel-info"></img>
                         {name} may not reply because he or she doesn't like you.
                     </div>
@@ -48,7 +47,7 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
                     <img src={otherpfp} alt={otherpfp} id={otherpfp} />
                 </div>
                 <div className="channel-infos-user-name">
-                    {name} ▾
+                    {name} ▸
                 </div>
             </div>
         </div>

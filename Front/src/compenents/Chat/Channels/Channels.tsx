@@ -206,7 +206,6 @@ function Channel({ user, channel, isVisible, blocked }) {
 								></span>
 								<div className="channel-down">
 									<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
-									<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
 								</div>
 							</div>
 						</div>
@@ -217,7 +216,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 								</div>
 								<span className="channel-infos-user">								
 									<span className="channel-infos-user-name">{user.name}</span>	
-									<span className="channel-infos-user-triangle">▾</span>
+									<span className="channel-infos-user-triangle">▸</span>
 								</span>
 							</div>
 						</div>

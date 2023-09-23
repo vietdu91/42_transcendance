@@ -57,9 +57,9 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
           })
           .catch(error => {
             if (error.response.status === 401) {
-							Cookie.remove('accessToken')
-							window.location.href = "/";
-						}
+              Cookie.remove('accessToken')
+              window.location.href = "/";
+            }
           })
       }));
     }
@@ -72,25 +72,25 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
   if (isVisible === false)
     return null;
   return (
-    <div className='chat-conversation-area'>
-      {isVisible && (
-        <div className="individual-convo-main-container">
-          <div className="navbar-conv"> {/* faire un degrade  */}
-            <ul className="top-conversation-list">
-              <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
-              <li className="transcendance-messenger">{otherUser.name}</li>
-              <div className="clh-right-icons">
-                <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
-                <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
-                <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
-              </div>
-            </ul>
+      <div className='chat-conversation-area'>
+        {isVisible && (
+          <div className="individual-convo-main-container">
+            <div className="navbar-conv"> 
+              <ul className="top-conversation-list">
+                <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+                <li className="transcendance-messenger">{otherUser.name}</li>
+                <div className="clh-right-icons">
+                  <li><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+                  <li><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+                  <li><button className="chat-icons-messenger" aria-label="Close"></button></li>
+                </div>
+              </ul>
+            </div>
+            <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
+            <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
           </div>
-          <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} />
-          <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 }
 

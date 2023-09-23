@@ -23,7 +23,7 @@ const TextComposerContainer = ({ name, pfp, send }) => {
                     <img className="individual-conv-pfp" src={pfp} alt="individual-conv-pfp"></img>
                 </div>
                 <div className="channel-infos-user-name">
-                    {name} ▾
+                    {name} ▸
                 </div>
             </div>
         </div>
