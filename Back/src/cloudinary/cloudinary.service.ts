@@ -8,18 +8,20 @@ export class CloudinaryService {
     try {
       return new Promise((resolve, reject) => {
         v2.config({
-          cloud_name: 'dsvw15bam',
-          api_key: '127567571788686',
-          api_secret: 'EUCMcmXklShajONHfaCCJC8eSAk',
+          cloud_name: process.env.CLOUD_NAME,
+          api_key: process.env.CLOUD_KEY,
+          api_secret: process.env.CLOUD_SECRET,
         });
+        if (!fileName.mimetype.startsWith("image"))
+          throw new BadRequestException("Bad image type")
         const upload = v2.uploader.upload_stream((error, result) => {
           if (error) return reject(error);
           resolve(result);
         });
         toStream(fileName.buffer).pipe(upload);
       });
-    } catch {
-      throw new BadRequestException();
+    } catch (error) {
+      throw new error;
     }
   }
 }

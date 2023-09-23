@@ -545,6 +545,12 @@ export class ChatGateway {
           },
         }
       });
+
+      if (!room) {
+        client.emit('errorSocket', { message: "You don't have the rights to do that." })
+        return;
+      }
+
       if (room.ownerId == userDb.id) {
         await this.prisma.channel.delete({
           where: { id: room.id },

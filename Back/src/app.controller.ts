@@ -39,10 +39,7 @@ export class AppController {
           });
         })
         .catch((err) => {
-          return {
-            statusCode: 400,
-            message: err.message,
-          };  
+          throw err;
         });
     } catch {
       throw new BadRequestException();
