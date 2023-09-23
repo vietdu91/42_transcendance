@@ -20,7 +20,6 @@ model User {
   email            String         @unique
   name             String         @unique
   twoFactorSecret  String         @unique
-  accessToken      String?        @unique
   twoFactorEnabled Boolean        @default(false)
   nickname         String        @unique
   state            UserState

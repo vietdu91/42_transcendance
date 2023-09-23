@@ -374,7 +374,7 @@
 
 	display: grid;
 	grid-template-columns: 50% 50%;
-	grid-template-rows: 50% 50%; 
+	grid-template-rows: 33% 33% 33%; 
 	gap: 0.8px;
 }
 
@@ -520,6 +520,7 @@
 	padding-right: 2%;
 	padding-bottom: 2%;
 	flex-direction: row;
+	align-items: center;
 }
 
 .channel-input-text {
@@ -633,7 +634,7 @@ span.channel-up-span[contenteditable]:empty::before {
 
 .channel-my-profile-pic-main-container {
 	width: 34%;
-	height: 100%;
+	height: 60%;
 	padding: 3% 2% 2% 2%;
 	border-radius: 15px;
 	display: flex;
@@ -643,8 +644,8 @@ span.channel-up-span[contenteditable]:empty::before {
 
 .channel-my-profile-pic-group-pic-cadre {
 	padding: 2% 2% 2% 2%;
-	width: 100%;
-	height: 90%;
+	width: 135px;
+	height: 135px;
 	background-color: #a2acc6;
 	border-radius: 5px;
 	border-width: 1px;
@@ -654,6 +655,7 @@ span.channel-up-span[contenteditable]:empty::before {
 	justify-content: center;
 	align-items: center;
 	padding: 5px;
+	object-fit: cover;
 }
 
 .channel-my-profile-pic-group-pic-cadre div {
@@ -695,3 +697,73 @@ span.channel-up-span[contenteditable]:empty::before {
 	margin-right: 5px;
 }
 
+/* CHANGE / DELETE PASSWORD */
+
+.change-password-container {
+	border-radius: 5px;
+	position: fixed;
+	display: flex;
+	top: 36%;
+	left: 65%;
+	width: 400px;
+	height: 200px;
+	transform: translate(-50%, -50%);
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	background-color: #E9E8D7;
+	box-shadow: inset -1px -1px #00138c, 
+	inset 1px 1px #0831d9, 
+	inset -2px -2px #001ea0, 
+	inset 2px 2px #166aee, 
+	inset -3px -3px #003bda, 
+	inset 3px 3px #0855dd;
+	z-index: 3;
+}
+
+.change-password-container .channel-join-fieldset {
+	box-shadow: none;
+    background: #fff;
+    border: 1px solid #d0d0bf;
+    border-radius: 4px;
+    padding-top: 10px;
+	width: 92%;
+
+	margin-top: 15px;
+	margin-left: 15px;
+    margin-right: 15px;
+}
+
+.change-password-container .channel-join-legend {
+    background: transparent;
+    color: #0046d5;
+	font-size: 11px;
+}
+
+.change-password-navbar {
+	padding: 0;
+	margin: 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width: 100%;
+	height: 50px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(9, 151, 255, 1) 0%,
+        rgba(0, 83, 238, 1) 8%,
+        rgba(0, 80, 238, 1) 40%,
+        rgba(0, 102, 255, 1) 88%,
+        rgba(0, 102, 255, 1) 93%,
+        rgba(0, 91, 255, 1) 95%,
+        rgba(0, 61, 215, 1) 96%,
+        rgba(0, 61, 215, 1) 100%
+    );
+
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+	border: 1px solid #0831d9;
+}

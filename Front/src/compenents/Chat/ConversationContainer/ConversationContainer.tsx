@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext, useState } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import './ConversationContainer.css'; // Import your CSS styles
 import Info from '../../../img/chat/info.png'
 import { ChatContext } from '../../utils/ChatContext';

@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './ChatConversationArea.css'; // Import your CSS styles
+import '../../utils/Wizz/Wizz.css';
 import ConversationContainer from '../ConversationContainer/ConversationContainer'; // Import the ConversationContainer component
 import TextComposerContainer from '../TextComposerContainer/TextComposerContainer'; // Import the TextComposerContainer component
-import Invite from '../../../img/chat/invite-gimp.jpg';
-import InviteGame from '../../../img/chat/game-gimp.jpg';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 import Logo from '../../../img/chat/group-conv.png';
+import WizzSound from '../../../sounds/MSN WIZZ SOUND.mp3'
 
 interface User {
   name: string,
@@ -27,6 +27,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
   
   const [messages, setMessages] = useState(conv.messages.filter((index) => !(blocked.includes(index.authorId))));
   const [otherUser, getOtherUser] = useState<User>(initUser);
+  const [isWizz, setWizz] = useState(false);
 
   const send = async (value: string) => {
     socket?.emit('sendMessageConv', { value, convId: conv.id });
@@ -44,6 +45,16 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
             window.location.href = "/";
           }
         });
+      socket.on('wizzed', (res => {
+
+        const WizzAudio = new Audio(WizzSound);
+        setWizz(true);
+        WizzAudio.play();
+        const timer = setTimeout(() => {
+          setWizz(false);
+        }, 2000);
+
+      }))
       socket.on('messageSentConv', (res => {
         axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByConv", { params: { id: conv.id }, headers: { 'Authorization': `Bearer ${token}` } })
           .then(response => {
@@ -66,7 +77,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
   if (isVisible === false)
     return null;
   return (
-      <div className='chat-conversation-area'>
+      <div className='chat-conversation-area' id={isWizz ? "shakeme" : undefined} >
         {isVisible && (
           <div className="individual-convo-main-container">
             <div className="navbar-conv"> 
@@ -81,7 +92,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
               </ul>
             </div>
             <ConversationContainer name={otherUser.name} nickname={otherUser.nickname} otherpfp={otherUser.pfp} messages={messages} convId={conv.id}/>
-            <TextComposerContainer name={user.name} pfp={user.pfp} send={send} />
+            <TextComposerContainer name={user.name} pfp={user.pfp} send={send} othername={otherUser.name} />
           </div>
         )}
       </div>

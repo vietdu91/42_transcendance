@@ -85,60 +85,15 @@ function Chat() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
     const navigate = useNavigate();
-
-
     const [indivConv, setIndivConv] = useState(true);
-    const [dragging, setDragging] = useState(false);
-    const [offsetX, setOffsetX] = useState(0);
-    const [offsetY, setOffsetY] = useState(0);
     const ref = useRef<HTMLDivElement>(null);
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => {
-        console.log("handleMouseDown")
-
-        setDragging(true);
-        if (ref.current) {
-            const rect = ref.current.getBoundingClientRect();
-            setOffsetX(e.clientX - rect.left);
-            setOffsetY(e.clientY - rect.top);
-        }
-    };
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (dragging && ref.current) {
-            const rect = ref.current.getBoundingClientRect();
-            const limitX = window.innerWidth - rect.width;
-            const limitY = window.innerHeight - rect.height;
-            
-            const newX = Math.min(Math.max(e.clientX - offsetX, 0), limitX);
-            const newY = Math.min(Math.max(e.clientY - offsetY, 0), limitY);
-            console.log("handleMouseMove")
-
-            ref.current.style.left = `${newX}px`;
-            ref.current.style.top = `${newY}px`;
-        }
-    };
-    const handleMouseUp = (e: React.MouseEvent<HTMLUListElement, MouseEvent>) => {
-        console.log("handleMouseUp");
-        setDragging(false);
-    };
-
-    useEffect(() => {
-        window.addEventListener("mousemove", handleMouseMove as any);
-        window.addEventListener("mouseup", handleMouseUp as any);
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove as any);
-            window.removeEventListener("mouseup", handleMouseUp as any);
-        };
-    }, [dragging]);
 
     const handleIndivConvVisibility = (visibility) => {
         setIndivConv(visibility);
     };
 
     useEffect(() => {
-        // socket.on('connect', () => {});
         socket?.emit('joinChat');
         socket.on('errorSocket', (response) => {
             setSnackMessage(response.message);
@@ -171,17 +126,13 @@ function Chat() {
 
     return (
 
-        <div
-            style={{ width: '100vw', height: '100vh', position: 'relative' }}
-            onMouseMove={handleMouseMove}
-            onMouseUp={() => setDragging(false)}
-        >
+        <div>
             <ChatContext.Provider value={chatSocket}>
-                <img className="img-truc" id="img-truc" src={BackgroundWindows}></img>
+                <img className="img-truc" id="img-truc" alt="img-truc" src={BackgroundWindows}></img>
                 <div className="truc" >
                     <div className="left-part-chat" >
                         <div className="conversations-list" ref={ref}>
-                            <ul className="top-conversation-list" onMouseDown={handleMouseDown}>
+                            <ul className="top-conversation-list">
                                 <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
                                 <li className="transcendance-messenger">Transcendence Messenger</li>
                                 <div className="clh-right-icons">
@@ -200,7 +151,6 @@ function Chat() {
                             />
                             <ConversationListSummary
                                 name={user.name}
-                                pfp={user.pfp}
                                 indivConv={indivConv}
                                 handleVisibility={handleIndivConvVisibility}
                                 user={user}

@@ -1,7 +1,6 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
 
-import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
@@ -20,6 +19,9 @@ function Channel({ user, channel, isVisible, blocked }) {
 	const divRef = useRef<HTMLDivElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenMoreOptions, setIsOpenMoreOptions] = useState<boolean[]>(Array.from({ length: channel.usersList.length }, () => false));
+	const [isOpenForChangePassword, setIsOpenForChangePassword] = useState(false);
+	const [oldPassChann, setOldPassChann] = useState('');
+	const [newPassChann, setNewPassChann] = useState('');
 
 	const toggleAction = () => {
 		setIsOpen(!isOpen);
@@ -41,6 +43,10 @@ function Channel({ user, channel, isVisible, blocked }) {
 		window.open(`` + process.env.REACT_APP_LOCAL_F + `/user/${name}`);
 	}
 
+	const toggleChangePassword = () => {
+		setIsOpenForChangePassword(!isOpenForChangePassword);
+	};
+
 	const handleSendMessage = async () => {
 		if (value.trim() !== '') {
 			const channId = channel.id;
@@ -57,7 +63,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // Prevent adding a new line
+            e.preventDefault();
             handleSendMessage();
         }
     };
@@ -79,6 +85,14 @@ function Channel({ user, channel, isVisible, blocked }) {
 
 	const deleteChannel = async () => {
 		socket?.emit('deleteRoom', { name: channel.name });
+	}
+
+	const unsetPassword = async () => {
+		socket?.emit('unsetPassword', { channName: channel.name });
+	}
+
+	const changePassword = async () => {
+		socket?.emit('changePassword', { channName: channel.name, newPassword: newPassChann, oldPassword: oldPassChann });
 	}
 
 	const banUser = async (name: string) => {
@@ -128,6 +142,46 @@ function Channel({ user, channel, isVisible, blocked }) {
 
 	return (
 		<div className="chat-channel-area">
+			{isOpenForChangePassword && (
+						<div className="change-password-container">
+							<ul className="change-password-navbar">
+								<li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+								<li className="create-channel-title">Change Password</li>
+								<div className="ddc-right-icons">
+									<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+									<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+									<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close" onClick={() => { toggleChangePassword(); }}></button></li>
+								</div>
+							</ul>
+							<fieldset className="channel-join-fieldset">
+								<legend className="channel-join-legend">Which new password would you like to change?</legend>
+								<div className="channel-join-form">
+									<div className="channel-join-input">
+										<h1 className="question">Old Password : </h1>
+										<input className="ze-input"
+											type="text" placeholder="Your old Password"
+											onChange={(e) => setOldPassChann(e.target.value)}
+										/>
+									</div>
+								</div>
+								<br/>
+								<div className="channel-join-form">
+									<div className="channel-join-input">
+										<h1 className="question">New Password : </h1>
+										<input className="ze-input"
+											type="text" placeholder="Your new Password"
+											onChange={(e) => setNewPassChann(e.target.value)}
+										/>
+									</div>
+								</div>
+							</fieldset>
+							<div className="buttons-join-cancel">
+								<button className="button-join-cancel" onClick={() => { toggleChangePassword(); }}>Cancel</button>
+								<button className="button-join-join" onClick={() => { changePassword(); toggleChangePassword(); }}>Validate</button>
+							</div>
+						</div>
+					)
+				}
 			{isVisible && (
 				<div className="channel-main-container">
 					<ul className="channel-bandeau">
@@ -148,8 +202,10 @@ function Channel({ user, channel, isVisible, blocked }) {
 						</ul>
 						{isOpen && (
 							<ul className="channel-dropdown-menu">
-								<li onClick={() => leaveChannel()}>Leave</li>
-								<li onClick={() => deleteChannel()}>Delete</li>
+								<li onClick={() => leaveChannel()}>Leave Channel</li>
+								<li onClick={() => deleteChannel()}>Delete Channel</li>
+								<li onClick={() => toggleChangePassword()}>Change Password</li>
+								<li onClick={() => unsetPassword()}>Unset Password</li>
 							</ul>
 						)}
 					</div>

@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import './MessageInput.css'
-import Wizz from '../../img/chat/wizz.png'
+import { ChatContext } from '../utils/ChatContext';
 
-export default function MessageInput({ send }: {
-    send: (value: string) => void;
-}) {
+export default function MessageInput({ send, othername }) {
     const [value, setValue] = useState('');
     const inputRef = useRef<HTMLDivElement | null>(null);
+    const socket = useContext(ChatContext);
 
     const handleInputChange = () => {
         if (inputRef.current) {
@@ -14,6 +13,11 @@ export default function MessageInput({ send }: {
             setValue(inputRef.current.innerText);
         }
     };
+
+    const handleWizz = async () => {
+        console.log(othername)
+        socket.emit('wizz', { othername: othername });
+    }
 
     const handleSendMessage = () => {
         if (value.trim() !== '') {
@@ -46,10 +50,10 @@ export default function MessageInput({ send }: {
                 onKeyDown={handleKeyDown}
                 style={{ whiteSpace: 'pre-wrap' }}
             ></span>
-		    <div className="channel-down-2">
-		    	<button className="channel-down-button" onClick={handleSendMessage}>Send</button>
-		    	<button className="channel-down-button" id="wizz-button" onClick={handleSendMessage}>🫨</button>
-		    </div>
+            <div className="channel-down-2">
+                <button className="channel-down-button" onClick={handleSendMessage}>Send</button>
+                <button className="channel-down-button" id="wizz-button" onClick={handleWizz}>🫨</button>
+            </div>
         </div>
     );
 }

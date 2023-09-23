@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
 
 import './ConversationListHeader.css';
 
@@ -8,8 +7,6 @@ import DropdownContact from '../DropdownContacts/DropdownContact';
 import MSN_Messenger from '../../../img/chat/logo_msn_messenger.png';
 
 const ConversationListHeader = ({ name, pfp, user, setConvs, setChannels, setFriends }) => {
-
-    const navigate = useNavigate();
 
     function goToProfile() {
         window.open(process.env.REACT_APP_LOCAL_F + "/profile");

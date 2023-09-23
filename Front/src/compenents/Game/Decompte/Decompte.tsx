@@ -19,11 +19,11 @@ export default function Decompte() {
     const { roomId } = location.state;
     const navigate = useNavigate();
 
-    async function beforeUnloadHandler() {
-        socket.emit("giveUp", roomId);
-	}
-
+    
     useEffect(() => {
+        async function beforeUnloadHandler() {
+            socket.emit("giveUp", roomId);
+        }
         socket.on('gaveUp', () => {
             navigate('/errorgame');
         })
@@ -47,7 +47,7 @@ export default function Decompte() {
             window.removeEventListener('beforeunload', beforeUnloadHandler);
             clearInterval(interval);
         }
-    }, [countdown, navigate, roomId]);
+    }, [countdown, navigate, roomId, socket]);
 
     return (
         <div id="decompte_bg">

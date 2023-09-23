@@ -6,13 +6,12 @@ import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
-import groups from '../../../img/chat/group-channel-icon.png'
 import offlineImg from '../../../img/chat/msn-offline.png'
 import onlineImg from '../../../img/chat/solo-conv.png'
 import ingameImg from '../../../img/chat/msn-red.png'
 import SearchBar from '../../searchBar/searchBar';
 
-const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
+const ConversationListSummary = ({ name, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
     
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
     const [visibleChannels, setVisibleChannels] = useState<boolean[]>(Array.from({ length: channels.length }, () => false));

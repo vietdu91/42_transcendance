@@ -38,41 +38,41 @@ export default function Matchmaking() {
 	const [inQueue, setInQueue] = useState(false);
 	const navigate = useNavigate();
 
-	async function beforeUnloadHandler() {
-		socket.emit("leaveQueue");
-		setInQueue(false);
-		window.location.href = "/";
-	}
-
+	
 	const joinQueue = async () => {
 		socket?.emit('joinQueue');
 	}
-
+	
 	const leaveQueue = async () => {
 		socket?.emit('leaveQueue');
 		setInQueue(false);
 	};
-
+	
 	const leavePage = () => {
 		navigate(`/gamemenu`);
 	}
-
-	const handleMatchFound = (roomId: string) => {
-		navigate(`/decompte`, { state: { roomId: roomId } });
-	}
-
+	
+	
 	useEffect(() => {
+		async function beforeUnloadHandler() {
+			socket.emit("leaveQueue");
+			setInQueue(false);
+			window.location.href = "/";
+		}
+		const handleMatchFound = (roomId: string) => {
+			navigate(`/decompte`, { state: { roomId: roomId } });
+		}
 		socket.on('connect', () => {
 		});
-
+		
 		socket.on('queueJoined', (response) => {
 			setInQueue(true);
 		})
-
+		
 		socket.on('alreadyJoined', (response) => {
 			setInQueue(false);
 		})
-
+		
 		socket.on('matchFound', (response) => {
 			handleMatchFound(response.roomId);
 		})
@@ -87,8 +87,6 @@ export default function Matchmaking() {
 
 		return () => {
 			window.removeEventListener('beforeunload', beforeUnloadHandler);
-			if (inQueue)
-				leaveQueue();
 		};
 	}, [inQueue, socket, navigate]);
 

@@ -94,7 +94,7 @@ export default function InviteMatch() {
 		window.addEventListener('beforeunload', () => {
 			socket.emit("leaveInvite");
 		})
-	}, [inQueue, socket, navigate])
+	}, [inQueue, socket, navigate, location, otherName, token])
 
 	if (inQueue) {
 		return <MatchmakingQueue leaveQueue={leaveQueue} />;

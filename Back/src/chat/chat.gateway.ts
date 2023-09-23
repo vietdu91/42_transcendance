@@ -992,6 +992,11 @@ export class ChatGateway {
     const oldPassword = params.oldPassword;
     const channName = params.channName;
 
+    if (!newPassword || !channName) {
+      client.emit('errorSocket', { message: "Arguments error" });
+      return;
+    }
+
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: channName
@@ -1007,10 +1012,8 @@ export class ChatGateway {
       return;
     }
 
-    const isAdmin = chann.adminList.find(admin => admin.id === user.id);
-    if (!isAdmin) {
-      client.emit('errorSocket', { message: "You are not a channel admin" });
-      return;
+    if (user.id !== chann.ownerId) {
+      client.emit('errorSocket', { message: "You are not the owner Dattebayo !!!!!" })
     }
 
     const regexPsswd: RegExp = /^[a-zA-Z0-9@#$%^&+=!\*]{5,30}$/;
@@ -1019,10 +1022,16 @@ export class ChatGateway {
       return;
     }
 
-    const verifyHash = await argon2.verify(chann.password, oldPassword);
-    if (!verifyHash) {
-      client.emit('errorSocket', { message: "Wrong old password" });
-      return;
+    if (chann.password) {
+      if (!oldPassword) {
+        client.emit('errorSocket', { message: "You need to enter your old password !" });
+        return;
+      }
+      const verifyHash = await argon2.verify(chann.password, oldPassword);
+      if (!verifyHash) {
+        client.emit('errorSocket', { message: "Wrong old password" });
+        return;
+      }
     }
 
     const hashPassword = await argon2.hash(newPassword);
@@ -1030,6 +1039,7 @@ export class ChatGateway {
       where: { name: channName },
       data: {
         password: hashPassword,
+        isPrivate: true,
       },
       include: {
         usersList: true,
@@ -1041,7 +1051,7 @@ export class ChatGateway {
     for (let user of newChann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('passwordChanged', { message: "Password changed" });
+          this.server.to(userChat.id).emit('errorSocket', { message: "Password changed on channel " + channName + " (ask your owner)" });
         }
       }
     }
@@ -1049,10 +1059,10 @@ export class ChatGateway {
 
   @SubscribeMessage('unsetPassword')
   async handleUnsetPassword(client: Socket, params: any): Promise<void> {
-    const channName = params.channName;
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
+    const channName = params.channName;
 
     const chann = await this.prisma.channel.findUnique({
       where: {
@@ -1093,7 +1103,8 @@ export class ChatGateway {
     for (let user of newChann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('passwordUnset', { message: "Password unset" });
+          console.log("salut");
+          this.server.to(userChat.id).emit('errorSocket', { message: "Password unset on channel " + channName });
         }
       }
     }
@@ -1281,4 +1292,24 @@ export class ChatGateway {
       }
     }
   }
+
+  @SubscribeMessage('wizz')
+  async handleWizz(client: Socket, params: any): Promise<void> {
+    if (!params.othername) {
+      client.emit('errorSocket', { message: "There is no name" });
+      return;
+    }
+    const user = await this.userService.getUserByName(params.othername);
+    if (!user) {
+      client.emit('errorSocket', { message: "The user " + params.othername + " doesn't exist" });
+      return;
+    }
+    for (let userChat of this.users) {
+      if (user.id === userChat.user.id) { 
+        this.server.to(userChat.id).emit('wizzed', { id: "shakeme" });
+      }
+    }
+    client.emit('wizzed', { id: "shakeme" });
+  }
+
 }

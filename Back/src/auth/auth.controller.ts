@@ -83,7 +83,6 @@ export class AuthController {
       await this.prisma.user.update({
         where: { id: user.id },
         data: {
-          accessToken: null,
           state: 'OFFLINE',
         },
       });

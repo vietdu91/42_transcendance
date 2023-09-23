@@ -7,7 +7,6 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "twoFactorSecret" TEXT NOT NULL,
-    "accessToken" TEXT,
     "twoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
     "nickname" TEXT NOT NULL,
     "state" "UserState" NOT NULL,
@@ -117,9 +116,6 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_twoFactorSecret_key" ON "User"("twoFactorSecret");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_accessToken_key" ON "User"("accessToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_nickname_key" ON "User"("nickname");
