@@ -212,7 +212,7 @@ function History() {
 						<div className="container-eyesUp">
 							<img alt="#" src={EyesHenriettaWin} className="eyesUp-3"></img>
 							{hoverMatch3Square && <div className="scoreUp">5</div>}
-							{hoverMatch3Square && <div className="playerUp">encule</div>}
+							{hoverMatch3Square && <div className="playerUp">dyoula</div>}
 						</div>
 						<div className="container-eyesDown">
 							<img alt="#" src={EyesHenriettaLost} className="eyesDown-3"></img>

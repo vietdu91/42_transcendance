@@ -138,6 +138,11 @@ export class MatchmakingGateway {
 			}
 		}
 
+		if (user.state === "INGAME") {
+			client.emit('alreadyJoined', { message: 'You already joined a game' });
+			return;
+		}
+
 		for (let room of this.invite) {
 			for (let player of room) {
 				if (player.user.id == user.id) {
@@ -363,9 +368,10 @@ export class MatchmakingGateway {
 		}
 
 		actualGame.gaveUp = true;
-		const sendTo: string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
+		// const sendTo: string = winnerId === actualGame.idLeft ? actualGame.sockLeft : actualGame.sockRight;
 
-		this.server.to(sendTo).emit("gaveUp", { message: "The other player gave up ! Boooo !", id: user.id });
+		this.server.to(actualGame.sockLeft).emit("gaveUp", { message: "The other player gave up ! Boooo !", id: user.id });
+		this.server.to(actualGame.sockRight).emit("gaveUp", { message: "The other player gave up ! Boooo !", id: user.id });
 	}
 
 	@SubscribeMessage('movePlayer')
@@ -453,10 +459,14 @@ export class MatchmakingGateway {
 		actualGame.ball.y += actualGame.ball.vy;
 		if (actualGame.ball.y + actualGame.ball.rad >= (9 / 16) * 100 || actualGame.ball.y - actualGame.ball.rad <= 0)
 			actualGame.ball.vy *= -1;
-		if (actualGame.ball.y <= 0)
+		if (actualGame.ball.y <= 0) {
 			actualGame.ball.y = actualGame.ball.rad * 2;
-		if (actualGame.ball.y >= 100)
+			actualGame.ball.vy *= -1;
+		}
+		if (actualGame.ball.y >= 100) {
 			actualGame.ball.y = 100 - actualGame.ball.rad * 2;
+			actualGame.ball.vy *= -1;
+		}
 
 		// MONSIEUR TOC START
 		if (actualGame.tocLeft != null) {

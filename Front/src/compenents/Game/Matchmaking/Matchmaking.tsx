@@ -9,6 +9,7 @@ import BallsWaiting from "../../../img/balls_waiting.gif"
 
 import './Matchmaking.css';
 
+
 const MatchmakingQueue = ({ leaveQueue }) => (
 	<div id="bg-black">
 		<div id="waiting-black">
@@ -16,7 +17,7 @@ const MatchmakingQueue = ({ leaveQueue }) => (
 			<img id="balls_waiting" src={BallsWaiting} alt="Balls Waiting" />
 			<div id="waiting-text">Waiting</div>
 		</div>
-	</div>
+	</div> 	 		 		
 );
 
 const MatchmakingNotInQueue = ({ joinQueue, leavePage }) => (
@@ -37,11 +38,17 @@ export default function Matchmaking() {
 	const [inQueue, setInQueue] = useState(false);
 	const navigate = useNavigate();
 
-	const joinQueue = () => {
+	async function beforeUnloadHandler() {
+		socket.emit("leaveQueue");
+		setInQueue(false);
+		window.location.href = "/";
+	}
+
+	const joinQueue = async () => {
 		socket?.emit('joinQueue');
 	}
 
-	const leaveQueue = () => {
+	const leaveQueue = async () => {
 		socket?.emit('leaveQueue');
 		setInQueue(false);
 	};
@@ -75,11 +82,14 @@ export default function Matchmaking() {
 			navigate("/gamemenu");
 		})
 
+		window.addEventListener('beforeunload', beforeUnloadHandler);
+
+
 		return () => {
+			window.removeEventListener('beforeunload', beforeUnloadHandler);
 			if (inQueue)
 				leaveQueue();
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inQueue, socket, navigate]);
 
 

@@ -89,7 +89,7 @@ export class ChatGateway {
 
     const value = params.value;
     const channId = params.channId;
-    
+
     const chann = await this.prisma.channel.findUnique({
       where: { id: channId },
       include: {
@@ -98,13 +98,13 @@ export class ChatGateway {
         mutedList: true,
       }
     })
-    
+
     if (!chann) {
       client.emit('errorSocket', { message: "This channel doesn't exist" });
       return;
     }
-    
-    
+
+
     const isMuted = chann.mutedList.find(user => user.id === userDb.id);
     if (isMuted) {
       client.emit('errorSocket', { message: "You are muted in this channel" });
@@ -782,7 +782,7 @@ export class ChatGateway {
     })
 
     client.emit('adminSet', { channels: newUser.channels });
-    
+
     const newTarget = await this.prisma.user.findUnique({
       where: { id: target.id },
       include: {
@@ -881,7 +881,7 @@ export class ChatGateway {
     })
 
     client.emit('adminUnset', { channels: newUser.channels });
-    
+
     const newTarget = await this.prisma.user.findUnique({
       where: { id: target.id },
       include: {
@@ -976,8 +976,8 @@ export class ChatGateway {
 
     client.emit('conversationCreated', { otherUser: shortUser, conversations: newUser.conversations, friends: newUser.friendsList });
     for (let userChat of this.users) {
-      if (user.id === userChat.user.id) {
-        this.server.to(userChat.id).emit('conversationCreated', { message: "Password changed" });
+      if (target.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('conversationCreated', { conversations: target.conversations });
       }
     }
   }

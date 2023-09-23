@@ -41,7 +41,7 @@ export default function InviteMatch() {
 	const [inQueue, setInQueue] = useState(false);
 
 	const joinQueue = () => {
-		socket?.emit('joinInvite');
+		socket?.emit('joinInvite', { name: otherName });
 	}
 
 	const leaveQueue = () => {
@@ -77,8 +77,6 @@ export default function InviteMatch() {
 			window.location.reload();
 		}
 		socket.on('alreadyJoined', (res) => {
-			navigate("/chat");
-			window.location.reload();
 		})
 
 		socket.on('matchFound', (res) => {
@@ -86,6 +84,7 @@ export default function InviteMatch() {
 		})
 
 		socket.on('inviteJoined', (res) => {
+			setInQueue(true);
 		})
 
 		socket.on('wrongUser', (response) => {
@@ -95,7 +94,7 @@ export default function InviteMatch() {
 		window.addEventListener('beforeunload', () => {
 			socket.emit("leaveInvite");
 		})
-	})
+	}, [inQueue, socket, navigate])
 
 	if (inQueue) {
 		return <MatchmakingQueue leaveQueue={leaveQueue} />;
