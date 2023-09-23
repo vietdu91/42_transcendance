@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import io , { Socket } from "socket.io-client";
 import MessageInput from '../Messages/messageInput';
 import Cookies from 'js-cookie';
 import { ChatContext } from '../utils/ChatContext';

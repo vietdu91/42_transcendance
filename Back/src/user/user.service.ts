@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User, Game, Prisma } from '@prisma/client';
+import { User } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { HttpException, HttpStatus } from '@nestjs/common';
 

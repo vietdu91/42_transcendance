@@ -1,7 +1,4 @@
 import React from 'react';
-// import { useContext } from 'react';
-// import Cookies from 'js-cookie';
-// import { ChatContext } from '../../utils/ChatContext';
 import { useNavigate } from "react-router-dom";
 
 

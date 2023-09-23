@@ -1,13 +1,11 @@
-import { Injectable, Request, Query, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Response } from 'express';
 import { UserService } from '../user/user.service';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'dotenv';
-import { TwofaController } from 'src/twofa/twofa.controller';
 import { TwofaService } from 'src/twofa/twofa.service';
-import { serialize } from 'cookie'
 config();
 
 

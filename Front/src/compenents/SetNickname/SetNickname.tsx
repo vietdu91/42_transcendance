@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import Cookie from 'js-cookie'
 
 import './SetNickname.css';
 

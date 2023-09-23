@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-// import { GameContext } from '../../utils/GameContext';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 
@@ -14,38 +13,16 @@ import Baleze from '../../../sounds/baleze.mp3'
 /* YEUX - HISTORY */
 import EyesCartmanWin from "../../../img/eyes/cartmanWin.jpg"
 import EyesCartmanLost from "../../../img/eyes/cartmanLost.jpg"
-// import EyesKennyWin from "../../../img/eyes/kennyWin.jpg"
-// import EyesKennyLost from "../../../img/eyes/kennyLost.jpg"
 import EyesTimmyWin from "../../../img/eyes/timmyWin.jpg"
 import EyesTimmyLost from "../../../img/eyes/timmyLost.jpg"
-// import EyesGarrisonWin from "../../../img/eyes/garrisonWin.jpg"
-// import EyesGarrisonLost from "../../../img/eyes/garrisonLost.jpg"
-// import EyesButtersWin from "../../../img/eyes/buttersWin.jpg"
-// import EyesButtersLost from "../../../img/eyes/buttersLost.jpg"
-// import EyesTPLost from "../../../img/eyes/TPLost.jpg"
-// import EyesTPWin from "../../../img/eyes/TPWin.jpg"
 import EyesHenriettaWin from "../../../img/eyes/henriettaWin.jpg"
 import EyesHenriettaLost from "../../../img/eyes/henriettaLost.jpg"
-// import EyesServietskyWin from "../../../img/eyes/servietskyWin.jpg"
-// import EyesServietskyLost from "../../../img/eyes/servietskyLost.jpg"
 
 /* SPECTATE */
-// import CartmanL from "../../../img/en_cours/cartman_left.png"
-// import CartmanR from "../../../img/en_cours/cartman_right.png"
-// import GarrisonL from "../../../img/en_cours/garrison_left.png"
-// import GarrisonR from "../../../img/en_cours/garrison_right.png"
 import KennyL from "../../../img/en_cours/kenny_left.png"
-// import KennyR from "../../../img/en_cours/kenny_right.png"
-// import TimmyL from "../../../img/en_cours/timmy_left.png"
 import TimmyR from "../../../img/en_cours/timmy_right.png"
 import TP_L from "../../../img/en_cours/TP_left.png"
-// import TP_R from "../../../img/en_cours/TP_right.png"
-// import ButtersL from "../../../img/en_cours/butters_left.png"
 import ButtersR from "../../../img/en_cours/butters_right.png"
-// import HenriettaL from "../../../img/en_cours/henrietta_left.png"
-// import HenriettaR from "../../../img/en_cours/henrietta_right.png"
-// import ServietskyL from "../../../img/en_cours/servietsky_left.png"
-// import ServietskyR from "../../../img/en_cours/servietsky_right.png"
 
 import VS from "../../../img/en_cours/VS.png"
 

@@ -30,11 +30,6 @@ import Chat from './compenents/Chat/socketChat';
 import Achievement from './compenents/utils/Achievement/Achievement';
 
 import ChampSelect from './compenents/Game/ChampSelect/ChampSelect';
-import TextComposerContainer from './compenents/Chat/TextComposerContainer/TextComposerContainer';
-
-import YeahYeah from './sounds/win_and_GO/South Park - Bono YEAH YEAH YEAAH(All Of Them).mp3'
-import CulbuterTaMere from './sounds/win_and_GO/La Mort.mp3'
-import SearchBar from './compenents/searchBar/searchBar';
 import SetNickname from './compenents/SetNickname/SetNickname';
 import InviteMatch from './compenents/Game/Matchmaking/InviteMatch';
 

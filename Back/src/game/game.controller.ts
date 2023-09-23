@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, BadRequestException } from '@nestjs/common';
+import { Controller, UseGuards, Req, Res, Query, Get, BadRequestException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GameService } from '../game/game.service';
 import { JwtService } from '@nestjs/jwt';

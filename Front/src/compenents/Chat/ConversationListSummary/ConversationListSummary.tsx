@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
-// import Cookie from 'js-cookie';
-// import axios from 'axios';
-
 import './ConversationListSummary.css';
 import Advertisement1 from './../../../img/chat/thicker.jpg';
 import Advertisement2 from './../../../img/chat/IMG_3240.png';
@@ -10,13 +6,10 @@ import ChatConversationArea from '../ChatConversationArea/ChatConversationArea';
 import Channel from '../Channels/Channels';
 import regularConv from '../../../img/chat/solo-conv.png';
 import groupConv from '../../../img/chat/group-conv.png';
-import groups from '../../../img/chat/group-channel-icon.png'
 import offlineImg from '../../../img/chat/solo-conv.png'
 import onlineImg from '../../../img/chat/groups3d.png'
 import ingameImg from '../../../img/chat/group-conv.png'
 import SearchBar from '../../searchBar/searchBar';
-// import Conversation from "../socketChat"
-// import User from "../socketChat"
 
 const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
     
@@ -31,9 +24,9 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
 
     function imageState(state: string) {
         switch(state) {
-            case 'OFFLINE': return offlineImg;break;
-            case 'ONLINE': return onlineImg;break;
-            case 'INGAME': return ingameImg;break;
+            case 'OFFLINE': return offlineImg;
+            case 'ONLINE': return onlineImg;
+            case 'INGAME': return ingameImg;
             default: return offlineImg;
         }
     }
@@ -117,9 +110,9 @@ const ConversationListSummary = ({ name, pfp, indivConv, handleVisibility, chann
                     <ul className="channel-ul-friend-list"> Your Friends :
                         {friends.map((item, index) => (
                             <li className="channel-li-friend-list" key={index} onClick={() => goToProfile(item.name)}>
-                                <img src={imageState(item.state)} alt={item.altText} id="icon-friends" />
+                                <img src={imageState(item.state)} alt="state_img" id="icon-friends" />
                                 {item.name} ({item.nickname})
-                                <img src={item.pfp_url}/>
+                                <img src={item.pfp_url} alt="pfp_img"/>
                             </li>
                         ))}
                     </ul>

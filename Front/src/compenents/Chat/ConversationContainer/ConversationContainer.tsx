@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import './ConversationContainer.css'; // Import your CSS styles
+import './ConversationContainer.css';
 
 const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
 
@@ -41,7 +41,7 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages }) => {
             <div className="profile-pic-reveiver-container" onClick={() => { goToProfile(name) }}>
                 <div className="profile-pic-receiver">
                     <img src={otherpfp} alt={otherpfp} id={otherpfp} />
-                    {/* You can add content or image for the profile picture here */}
+                    {}
                 </div>
                 {name}
             </div>

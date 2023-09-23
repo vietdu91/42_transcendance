@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './DropdownChannels.css'
 import { useContext } from 'react';
-// import Cookies from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import './DropdownChannels.css'
-import RedCross from "../../../img/chat/redcross.png"
-import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import Minimize from '../../../img/chat/minimized.jpg'
-
 import Logo from '../../../img/chat/group-conv.png'
 
 
 function DropdownChannels({ user, setChannels, setFriends }) {
 	const socket = useContext(ChatContext)
-	const [joined, setJoined] = useState(false);
 	const [channelName, setChannelName] = useState('');
 	const [isPrivate, setIsPrivate] = useState(false)
 	const [isOpen, setIsOpen] = useState(false);
@@ -66,11 +60,9 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 	const handleJoin = () => {
 		if (joinPassword) {
 			socket?.emit('joinChannel', { name: channelName, password: joinPassword });
-			setJoined(true);
 		}
 		else {
 			socket?.emit('joinChannel', { name: channelName, password: null });
-			setJoined(true);
 		}
 		setChannelName('');
 	};

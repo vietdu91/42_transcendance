@@ -2,11 +2,8 @@ import { Controller, Post, UseGuards, Get, Redirect, UploadedFile, UseIntercepto
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma/prisma.service';
 import { GameService } from './game/game.service';
-import { Response,} from 'express';
-import { Request } from 'express';
 import JwtAuthenticationGuard from './jwt-guard/jwt-guard.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { GetUser } from './auth/decorator/get-user.decorator';
 

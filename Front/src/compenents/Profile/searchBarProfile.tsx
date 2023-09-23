@@ -13,7 +13,6 @@ function SearchBar2({ onSearch }: SearchBarProps) {
     const navigate = useNavigate();
     const token = Cookie.get('accessToken')
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [notFound, setNotFound] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
 
@@ -26,7 +25,6 @@ function SearchBar2({ onSearch }: SearchBarProps) {
             process.env.REACT_APP_LOCAL_B + '/profile/getUserByName',
             { params: { username: username }, headers: { "Authorization": `Bearer ${token}` } })
             .then((response) => {
-                setNotFound(false);
                 onSearch(response.data.user.name);
                 navigate(`/user/${response.data.user.name}`)
             }

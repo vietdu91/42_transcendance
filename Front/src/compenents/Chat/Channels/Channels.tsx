@@ -1,19 +1,10 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import './Channels.css';
 
-import RedCross from '../../../img/chat/redcross.png'
-import Maximize from '../../../img/chat/rsz_1maximize_1.png'
-import Minimize from '../../../img/chat/minimized.jpg'
-import scam from '../../../img/chat/scam-advertisement-small.jpg';
 import regularConv from '../../../img/chat/regular-conv-icon.jpg';
-import backgroundImage from '../../../img/chat/channel_wallpaper.png'; // Adjust the image path
-import ChampSelect from '../../Game/ChampSelect/ChampSelect';
 import Cookie from 'js-cookie';
 import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
-import groupConv from '../../../img/chat/group-conv.png';
-import blockUser from '../../../img/chat/block_user.png';
-// import banUser from '../../../img/chat/ban_user.png';
 
 import Virgin from '../../../img/chat/virgin.jpg'
 import Logo from '../../../img/chat/group-conv.png'
@@ -53,7 +44,9 @@ function Channel({ user, channel, isVisible, blocked }) {
 		if (value.trim() !== '') {
 			const channId = channel.id;
 			socket?.emit('sendMessageChann', { value, channId });
-			scrollToBottom();
+			if (divRef.current) {
+				divRef.current.scrollTop = divRef.current.scrollHeight;
+			}
 			setValue('');
 			if (inputRef.current) {
 				inputRef.current.innerText = '';
@@ -93,21 +86,16 @@ function Channel({ user, channel, isVisible, blocked }) {
 		socket?.emit('unsetMute', { channName: channel.name, muteName: name });
 	}
 
-	const scrollToBottom = () => {
-		if (divRef.current) {
-			divRef.current.scrollTop = divRef.current.scrollHeight;
-		}
-	};
-	scrollToBottom();
-
 	useEffect(() => {
-		scrollToBottom();
 		const getData = async () => {
 			socket.on('messageSentChann', (res => {
 				axios.get(process.env.REACT_APP_LOCAL_B + "/chat/getMessagesByChannel", { params: { id: channel.id }, headers: { 'Authorization': `Bearer ${token}` } })
-					.then(response => {
-						setMessages(response.data.messages);
-					})
+				.then(response => {
+					setMessages(response.data.messages);
+					if (divRef.current) {
+						divRef.current.scrollTop = divRef.current.scrollHeight;
+					}
+				})
 					.catch(error => {
 						if (error.response.status === 401) {
 							Cookie.remove('accessToken')
@@ -120,7 +108,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 		return () => {
 			socket.off('messageSentChann');
 		}
-	}, [socket, scrollToBottom])
+	}, [socket, channel.id, token])
 
 	return (
 		<div className="chat-channel-area">

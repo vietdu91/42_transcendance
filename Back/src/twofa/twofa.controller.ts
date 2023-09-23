@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, UseGuards, Req, Res, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Res, HttpCode } from '@nestjs/common';
 import { TwofaService } from './twofa.service';
 import JwtAuthenticationGuard from '../jwt-guard/jwt-guard.guard';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import RequestWithUser from '../interface/requestWithUser.interface';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { BadRequestException } from '@nestjs/common';
 import * as qrcode from 'qrcode';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';

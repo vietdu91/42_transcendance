@@ -7,34 +7,15 @@ import { ChatContext } from '../../utils/ChatContext';
 import Logo from '../../../img/chat/group-conv.png'
 import SnackBarCustom from '../../utils/SnackBarCustom/SnackBarCustom';
 
-interface OtherUser {
-  name: string,
-  nickname: string,
-  pfp: string,
-  state: number,
-}
-
-const initUser: OtherUser = {
-  name: "",
-  nickname: "",
-  pfp: "",
-  state: 0,
-}
-
 function DropdownContact({ user, setConvs, setFriends }) {
   const socket = useContext(ChatContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenFriends, setIsOpenFriends] = useState(false);
   const [isOpenForSendMp, setIsOpenForSendMp] = useState(false);
   const [isOpenForAddFriend, setIsOpenForAddFriend] = useState(false);
   const [isOpenForInvite, setIsOpenForInvite] = useState(false);
   const [isOpenForDelete, setIsOpenForDelete] = useState(false);
   const [isOpenForBlock, setIsOpenForBlock] = useState(false);
   const [friendName, setFriendName] = useState('');
-  const [notFound, setNotFound] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [otherUser, setOtherUser] = useState<OtherUser>(initUser)
-  const [conv, setConv] = useState()
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
 
@@ -42,10 +23,6 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
   const headers = {
     "Authorization": `Bearer ${accessToken}`,
-  };
-
-  const toggleFriendsList = () => {
-    setIsOpenFriends(!isOpenFriends);
   };
 
   const handleInputChange = (event) => {
@@ -76,14 +53,11 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
-          else if (error.response.data.message != "Bad Request") {
+          else if (error.response.data.message !== "Bad Request") {
             setSnackMessage(error.response.data.message);
             setSnackbarOpen(true);
           }
         })
-
-      setNotFound(false);
-      setIsVisible(true);
       setFriendName('');
     }
   };
@@ -103,7 +77,7 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
-          else if (error.response.data.message != "Bad Request") {
+          else if (error.response.data.message !== "Bad Request") {
             setSnackMessage(error.response.data.message);
             setSnackbarOpen(true);
           }
@@ -127,7 +101,7 @@ function DropdownContact({ user, setConvs, setFriends }) {
             Cookie.remove('accessToken')
             window.location.href = "/";
           }
-          else if (error.response.data.message != "Bad Request") {
+          else if (error.response.data.message !== "Bad Request") {
             setSnackMessage(error.response.data.message);
             setSnackbarOpen(true);
           }
@@ -181,10 +155,9 @@ function DropdownContact({ user, setConvs, setFriends }) {
 
   useEffect(() => {
     socket.on('conversationCreated', (response) => {
-      setOtherUser(response.otherUser);
       setConvs(response.conversations);
     })
-  }, []);
+  }, [setConvs, socket]);
 
   return (
     <div className="dropdown-contact">

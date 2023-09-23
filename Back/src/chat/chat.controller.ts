@@ -1,5 +1,5 @@
-import { Controller, Post, UseGuards, Req, Res, Query, Headers, Get, Redirect, Body, BadRequestException } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, UseGuards, Res, Query, Get, BadRequestException } from '@nestjs/common';
+import { Response } from 'express';
 import { ChatService } from '../chat/chat.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';

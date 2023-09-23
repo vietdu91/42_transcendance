@@ -15,12 +15,6 @@ interface User {
   pfp: string,
 }
 
-// interface Message {
-//   content: string,
-//   date: Date,
-//   authorName: number,
-// }
-
 const initUser: User = {
   name: "",
   nickname: "",
@@ -76,7 +70,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
     return () => {
       socket.off('messageSentConv');
     }
-  }, [conv.usersID, socket]);
+  }, [conv.usersID, socket, conv.id, token]);
 
   if (isVisible === false)
     return null;

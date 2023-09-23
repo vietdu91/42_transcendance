@@ -1,12 +1,7 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
 import './TextComposerContainer.css'; // Import your CSS styles
-// import Wizz from '../../../img/chat/FAcejwHWEAMfcAO.jpeg'
 import WizzImage from '../../../img/chat/wizz.png'
 import MessageInput from '../../Messages/messageInput';
-import Cookies from 'js-cookie';
-import { ChatContext } from '../../utils/ChatContext';
-
 import '../../utils/Wizz/Wizz.css';
 
 
