@@ -90,7 +90,27 @@ export class ChatGateway {
 
     const value = params.value;
     const channId = params.channId;
-
+    
+    const chann = await this.prisma.channel.findUnique({
+      where: { id: channId },
+      include: {
+        messages: true,
+        usersList: true,
+        mutedList: true,
+      }
+    })
+    
+    if (!chann) {
+      client.emit('errorSocket', { message: "This channel doesn't exist" });
+      return;
+    }
+    
+    
+    const isMuted = chann.mutedList.find(user => user.id === userDb.id);
+    if (isMuted) {
+      client.emit('errorSocket', { message: "You are muted in this channel" });
+      return;
+    }
 
     const message = await this.prisma.message.create({
       data: {
@@ -101,7 +121,7 @@ export class ChatGateway {
       }
     });
 
-    const chann = await this.prisma.channel.findUnique({
+    const newChann = await this.prisma.channel.findUnique({
       where: { id: channId },
       include: {
         messages: true,
@@ -110,20 +130,7 @@ export class ChatGateway {
       }
     })
 
-    if (!chann) {
-      client.emit('errorSocket', { message: "This channel doesn't exist" });
-      return;
-    }
-
-
-    const isMuted = chann.mutedList.find(user => user.id === userDb.id);
-    if (isMuted) {
-      console.log("You are muted in this channel");
-      client.emit('errorSocket', { message: "You are muted in this channel" });
-      return;
-    }
-
-    for (let user of chann.usersList) {
+    for (let user of newChann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
           let persoMessages = chann.messages.filter((index) => !(user.blockList.includes(index.authorId)));
@@ -155,7 +162,6 @@ export class ChatGateway {
       return;
     }
 
-    console.log("password ++ " + password);
     if (password) {
       const regexPsswd: RegExp = /^[a-zA-Z0-9@#$%^&+=!\*]{5,30}$/;
       if (!regexPsswd.test(password)) {
@@ -164,7 +170,6 @@ export class ChatGateway {
       }
       password = await argon2.hash(password);
     }
-    console.log("hashPassword ++ " + password + " ++ " + isPrivate);
 
     await this.prisma.channel.create({
       data: {
@@ -193,6 +198,8 @@ export class ChatGateway {
           include: {
             messages: true,
             usersList: true,
+            adminList: true,
+            mutedList: true,
           }
         },
       }
@@ -229,8 +236,6 @@ export class ChatGateway {
       return;
     }
 
-    console.log("chann passs " + chann.password + " ++ === param  " + password);
-
     let verifyHash;
     if (chann.password) {
       verifyHash = await argon2.verify(chann.password, password);
@@ -259,7 +264,10 @@ export class ChatGateway {
           include: {
             channels: {
               include: {
+                usersList: true,
                 messages: true,
+                adminList: true,
+                mutedList: true,
               }
             }
           }
@@ -274,8 +282,6 @@ export class ChatGateway {
       }
     }
   }
-
-
 
   @SubscribeMessage('kickUser')
   async handleKickUser(client: Socket, params: any): Promise<void> {
@@ -307,22 +313,24 @@ export class ChatGateway {
       return;
     }
 
+    if (target.name === userDb.name) {
+      client.emit('errorSocket', { message: "You can't kick yourself" });
+      return;
+    }
+
     const isUser = chann.usersList.find(user => user.id === target.id);
     if (!isUser) {
-      console.log("The target " + name + " is not in the channel");
       client.emit('errorSocket', { message: "The target " + otherName + " is not in the channel" });
       return;
     }
     const isAdmin = chann.adminList.find(admin => admin.id === userDb.id);
     if (!isAdmin) {
-      console.log("You are not a channel admin");
       client.emit('errorSocket', { message: "You are not a channel admin" });
       return;
     }
 
     const isAdmin2 = chann.adminList.find(admin => admin.id === target.id);
     if (isAdmin2 && userDb.id != chann.ownerId) {
-      console.log("The target " + otherName + " is a channel admin");
       client.emit('errorSocket', { message: "The target " + otherName + " is a channel admin" });
       return;
     }
@@ -342,38 +350,72 @@ export class ChatGateway {
         }
       },
       include: {
-        usersList: true,
+        usersList: {
+          include: {
+            channels: {
+              include: {
+                messages: true,
+                usersList: true,
+                adminList: true,
+                banList: true,
+                mutedList: true,
+              }
+            },
+          }
+        },
       }
     });
     for (let user of newChann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('userKicked', { otherName });
+          this.server.to(userChat.id).emit('userKicked', { channels: user.channels });
         }
       }
     }
+    const newTarget = await this.prisma.user.findUnique({
+      where: { name: otherName },
+      include: {
+        channels: {
+          include: {
+            messages: true,
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+          }
+        },
+      }
+    });
     for (let userChat of this.users) {
-      if (target.id === userChat.user.id) {
+      if (newTarget.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('userKicked', { channels: newTarget.channels });
         this.server.to(userChat.id).emit('errorSocket', { message: "You have been kicked from " + newChann.name });
       }
     }
-    console.log("User " + otherName + " kicked from " + channName);
   }
 
-  @SubscribeMessage('leaveRoom')
+  @SubscribeMessage('leaveChannel')
   async handleLeaveRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
     const channName = params.name;
-    console.log(channName + "  = channName");
     const chann = await this.prisma.channel.findUnique({
       where: {
         name: channName
       },
       include: {
-        usersList: true,
+        usersList: {
+          include: {
+            channels: {
+              include: {
+                messages: true,
+                usersList: true,
+              }
+            }
+          }
+        },
         banList: true,
         adminList: true,
       }
@@ -397,11 +439,22 @@ export class ChatGateway {
       for (let user of chann.usersList) {
         for (let userChat of this.users) {
           if (user.id === userChat.user.id) {
-            this.server.to(userChat.id).emit('roomDeleted', { name: channName });
+            this.server.to(userChat.id).emit('roomDeleted', { channels: user.channels.filter((index) => index.name !== channName) });
           }
         }
       }
-      client.emit('userLeft', { userId: userDb.id });
+      const newUser = await this.prisma.user.findUnique({
+        where: { id: userDb.id },
+        include: {
+          channels: {
+            include: {
+              messages: true,
+              usersList: true,
+            }
+          }
+        }
+      })
+      client.emit('userLeft', { channels: newUser.channels });
       return;
     }
 
@@ -415,7 +468,18 @@ export class ChatGateway {
         },
       },
       include: {
-        usersList: true,
+        usersList: {
+          include: {
+            channels: {
+              include: {
+                messages: true,
+                usersList: true,
+                adminList: true,
+                mutedList: true,
+              }
+            },
+          }
+        },
       }
     });
 
@@ -435,11 +499,24 @@ export class ChatGateway {
       for (let user of newChann.usersList) {
         for (let userChat of this.users) {
           if (user.id === userChat.user.id) {
-            this.server.to(userChat.id).emit('userLeft', { userId: userDb.id });
+            this.server.to(userChat.id).emit('userLeft', { channels: user.channels });
           }
         }
       }
-      client.emit('userLeft', { userId: userDb.id });
+      const newUser = await this.prisma.user.findUnique({
+        where: { id: userDb.id },
+        include: {
+          channels: {
+            include: {
+              messages: true,
+              usersList: true,
+              adminList: true,
+              mutedList: true,
+            }
+          }
+        }
+      })
+      client.emit('userLeft', { channels: newUser.channels });
     }
   }
 
@@ -454,7 +531,18 @@ export class ChatGateway {
       const room = await this.prisma.channel.findUnique({
         where: { name: name },
         include: {
-          usersList: true,
+          usersList: {
+            include: {
+              channels: {
+                include: {
+                  messages: true,
+                  usersList: true,
+                  adminList: true,
+                  mutedList: true,
+                }
+              }
+            }
+          },
         }
       });
       if (room.ownerId == userDb.id) {
@@ -465,7 +553,7 @@ export class ChatGateway {
         for (let user of room.usersList) {
           for (let userChat of this.users) {
             if (user.id === userChat.user.id) {
-              this.server.to(userChat.id).emit('roomDeleted', { name: name });
+              this.server.to(userChat.id).emit('roomDeleted', { channels: user.channels.filter((index) => index.name !== name) });
             }
           }
         }
@@ -475,7 +563,7 @@ export class ChatGateway {
     }
   }
 
-  @SubscribeMessage('banRoom')
+  @SubscribeMessage('banUser')
   async handleBanRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
     const userToken = await this.jwtService.decode(token);
@@ -490,6 +578,8 @@ export class ChatGateway {
       include: {
         adminList: true,
         usersList: true,
+        mutedList: true,
+        banList: true,
       }
     });
 
@@ -543,23 +633,59 @@ export class ChatGateway {
             id: target.id,
           }
         },
+        mutedList: {
+          disconnect: {
+            id: target.id,
+          }
+        },
+        adminList: {
+          disconnect: {
+            id: target.id,
+          }
+        }
       },
       include: {
-        usersList: true,
+        usersList: {
+          include: {
+            channels: {
+              include: {
+                usersList: true,
+                adminList: true,
+                banList: true,
+                mutedList: true,
+                messages: true,
+              }
+            }
+          }
+        },
       }
     });
 
     for (let user of newChann.usersList) {
       for (let userChat of this.users) {
         if (user.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('userBanned', { userId: userDb.id });
+          this.server.to(userChat.id).emit('userBanned', { channels: user.channels });
         }
       }
     }
+    const newTarget = await this.prisma.user.findUnique({
+      where: { id: target.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
+        }
+      }
+    })
     for (let userChat of this.users) {
-      if (target.id === userChat.user.id) {
-        this.server.to(userChat.id).emit('userBanned', { userId: userDb.id });
+      if (newTarget.id === userChat.user.id) {
         this.server.to(userChat.id).emit('errorSocket', { message: "You have been banned from " + newChann.name });
+        this.server.to(userChat.id).emit('userBanned', { channels: newTarget.channels });
         return;
       }
     }
@@ -586,6 +712,7 @@ export class ChatGateway {
       include: {
         adminList: true,
         usersList: true,
+        mutedList: true,
       }
     });
 
@@ -594,7 +721,7 @@ export class ChatGateway {
       return;
     }
 
-    if (userDb.name != chann.ownerId) {
+    if (userDb.id != chann.ownerId) {
       client.emit('errorSocket', { message: "You are not the channel owner" });
       return;
     }
@@ -634,10 +761,41 @@ export class ChatGateway {
         },
       },
     });
-    client.emit('adminSet', { userId: userDb.id });
+    const newUser = await this.prisma.user.findUnique({
+      where: { id: userDb.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
+        }
+      }
+    })
+
+    client.emit('adminSet', { channels: newUser.channels });
+    
+    const newTarget = await this.prisma.user.findUnique({
+      where: { id: target.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
+        }
+      }
+    })
     for (let userChat of this.users) {
-      if (target.id === userChat.user.id) {
-        this.server.to(userChat.id).emit('adminSet', { userId: userDb.id });
+      if (newTarget.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('errorSocket', { message: "You are now admin on " + channName });
+        this.server.to(userChat.id).emit('adminSet', { channels: newTarget.channels });
         return;
       }
     }
@@ -659,6 +817,7 @@ export class ChatGateway {
       include: {
         adminList: true,
         usersList: true,
+        mutedList: true,
       }
     });
 
@@ -701,10 +860,41 @@ export class ChatGateway {
       },
     });
 
-    client.emit('adminUnset', { userId: userDb.id });
+    const newUser = await this.prisma.user.findUnique({
+      where: { id: userDb.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
+        }
+      }
+    })
+
+    client.emit('adminUnset', { channels: newUser.channels });
+    
+    const newTarget = await this.prisma.user.findUnique({
+      where: { id: target.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
+        }
+      }
+    })
     for (let userChat of this.users) {
-      if (target.id === userChat.user.id) {
-        this.server.to(userChat.id).emit('adminUnset', { userId: userDb.id });
+      if (newTarget.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('errorSocket', { message: "You are not admin anymore on " + channName });
+        this.server.to(userChat.id).emit('adminUnset', { channels: newTarget.channels });
         return;
       }
     }
@@ -825,6 +1015,8 @@ export class ChatGateway {
       },
       include: {
         usersList: true,
+        adminList: true,
+        mutedList: true,
       }
     });
 
@@ -851,6 +1043,7 @@ export class ChatGateway {
       include: {
         adminList: true,
         usersList: true,
+        mutedList: true,
       }
     });
 
@@ -869,7 +1062,7 @@ export class ChatGateway {
       return;
     }
 
-   const newChann = await this.prisma.channel.update({
+    const newChann = await this.prisma.channel.update({
       where: { name: channName },
       data: {
         password: null,
@@ -924,18 +1117,31 @@ export class ChatGateway {
       client.emit('errorSocket', { message: "The target " + muteName + " doesn't exist" });
       return;
     }
-    
+
+    if (target.name === user.name) {
+      client.emit('errorSocket', { message: "You can't mute yourself" });
+      return;
+    }
+
     const isUser = chann.usersList.find(user => user.id === target.id);
     if (!isUser) {
       client.emit('errorSocket', { message: "The target " + muteName + " is not in the channel" });
       return;
     }
 
+    const isUserAdmin = chann.adminList.find(admin => admin.id === user.id);
+    if (!isUserAdmin) {
+      client.emit('errorSocket', { message: "You are not a channel admin" });
+      return;
+    }
+
     const isAdmin = chann.adminList.find(admin => admin.id === target.id);
+
     if (isAdmin && user.id != chann.ownerId) {
       client.emit('errorSocket', { message: "The target " + muteName + " is a channel admin" });
       return;
     }
+
 
     const isMuted = chann.mutedList.find(user => user.id === target.id);
     if (isMuted) {
@@ -943,7 +1149,7 @@ export class ChatGateway {
       return;
     }
 
-    const newChann = await this.prisma.channel.update({
+    await this.prisma.channel.update({
       where: { name: channName },
       data: {
         mutedList: {
@@ -957,11 +1163,23 @@ export class ChatGateway {
       }
     });
 
-    for (let users of newChann.usersList) {
-      for (let userChat of this.users) {
-        if (users.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('muteSet', { message: "Mute set" });
+    const newTarget = await this.prisma.user.findUnique({
+      where: { id: target.id },
+      include: {
+        channels: {
+          include: {
+            usersList: true,
+            adminList: true,
+            banList: true,
+            mutedList: true,
+            messages: true,
+          }
         }
+      }
+    })
+    for (let userChat of this.users) {
+      if (target.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('errorSocket', { message: "You are now muted on " + channName });
       }
     }
   }
@@ -1002,6 +1220,12 @@ export class ChatGateway {
       return;
     }
 
+    const isUserAdmin = chann.adminList.find(admin => admin.id === user.id);
+    if (!isUserAdmin) {
+      client.emit('errorSocket', { message: "You are not a channel admin" });
+      return;
+    }
+
     const isAdmin = chann.adminList.find(admin => admin.id === target.id);
     if (isAdmin && user.id != chann.ownerId) {
       client.emit('errorSocket', { message: "The target " + muteName + " is a channel admin" });
@@ -1033,11 +1257,9 @@ export class ChatGateway {
         usersList: true,
       }
     });
-    for (let users of newChann.usersList) {
-      for (let userChat of this.users) {
-        if (users.id === userChat.user.id) {
-          this.server.to(userChat.id).emit('muteUnset', { message: "Mute unset" });
-        }
+    for (let userChat of this.users) {
+      if (target.id === userChat.user.id) {
+        this.server.to(userChat.id).emit('errorSocket', { message: "You are not muted anymore on " + channName });
       }
     }
   }

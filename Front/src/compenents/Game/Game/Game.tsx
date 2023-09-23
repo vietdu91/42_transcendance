@@ -180,6 +180,10 @@ export default function Game(): JSX.Element {
 		let fart: boolean = false;
 		let toc: boolean = false;
 
+		function beforeUnloadHandler() {
+			socket.emit("giveUp", roomId);
+		}
+
 		socket.on('roundStarted', (response) => {
 			const updatedGame: IGame = {
 				...game.current,
@@ -309,13 +313,13 @@ export default function Game(): JSX.Element {
 				const char: string = (response.id === game.current.idLeft ? game.current.charLeft : game.current.charRight);
 				navigate('/gameover', { state: { char: char } });
 			}
-			socket.disconnect();
+			// socket.disconnect();
 			p5SketchRef.current?.remove();
 		})
 
 		socket.on("gaveUp", (response) => {
 			navigate('/errorgame');
-			socket.disconnect();
+			// socket.disconnect();
 			p5SketchRef.current?.remove();
 		})
 
@@ -323,9 +327,9 @@ export default function Game(): JSX.Element {
 			navigate("/gamemenu")
 		})
 
-		window.addEventListener('beforeunload', () => {
-			socket.emit("giveUp", roomId);
-		})
+		
+
+		window.addEventListener('beforeunload', beforeUnloadHandler);
 
 		socket?.emit("roundStart", roomId);
 
@@ -427,6 +431,10 @@ export default function Game(): JSX.Element {
 					game.current = updatedGame;
 				};
 			});
+		}
+
+		return () => {
+			window.removeEventListener('beforeunload', beforeUnloadHandler);
 		}
 
 	}, [sketchRef, navigate, roomId, socket, userId]);

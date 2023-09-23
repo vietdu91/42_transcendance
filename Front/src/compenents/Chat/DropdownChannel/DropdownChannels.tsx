@@ -75,33 +75,6 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 		setChannelName('');
 	};
 
-	const handleDelete = () => {
-		setChannelName('');
-		setIsPrivate(false);
-		setJoined(false);
-		socket?.emit('deleteRoom', { name: channelName });
-	}
-
-
-	const handleLeave = () => {
-		setChannelName('');
-		setIsPrivate(false);
-		setJoined(false);
-		socket?.emit('leaveRoom', { name: channelName });
-	}
-
-	const handleBan = () => {
-		socket?.emit('banRoom', { name: channelName });
-	}
-
-	const handleKik = () => {
-		socket?.emit('kickUser', { name: channelName });
-	}
-
-	const handleSetAdmin = () => {
-		socket?.emit('setAdmin', { name: channelName });
-	}
-
 	useEffect(() => {
 		socket.on('channelCreated', (response) => {
 			setChannels(response.channels);
@@ -111,6 +84,36 @@ function DropdownChannels({ user, setChannels, setFriends }) {
 		socket.on('channelJoined', (response) => {
 			setChannels(response.channels);
 			setFriends(response.friends);
+		})
+		socket.on('userKicked', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('adminSet', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('adminUnset', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('userBanned', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('muteSet', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('muteUnset', (response) => {
+			setChannels(response.channels);
+		})
+
+		socket.on('roomDeleted', (response) => {
+			setChannels(response.channels);
+		})
+		socket.on('userLeft', (response) => {
+			setChannels(response.channels);
 		})
 	})
 

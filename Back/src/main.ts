@@ -10,7 +10,6 @@ config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  console.log(process.env.URL_LOCAL_F)
   app.enableCors({ origin: process.env.URL_LOCAL_F, credentials: true });
   app.use(cookieParser());
   app.use(passport.initialize());

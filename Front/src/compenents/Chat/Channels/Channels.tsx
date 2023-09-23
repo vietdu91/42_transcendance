@@ -13,7 +13,7 @@ import { ChatContext } from '../../utils/ChatContext';
 import axios from 'axios';
 import groupConv from '../../../img/chat/group-conv.png';
 import blockUser from '../../../img/chat/block_user.png';
-import banUser from '../../../img/chat/ban_user.png';
+// import banUser from '../../../img/chat/ban_user.png';
 
 import Virgin from '../../../img/chat/virgin.jpg'
 import Logo from '../../../img/chat/group-conv.png'
@@ -29,10 +29,6 @@ function Channel({ user, channel, isVisible, blocked }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenMoreOptions, setIsOpenMoreOptions] = useState<boolean[]>(Array.from({ length: channel.usersList.length }, () => false));
 
-	// type CSSProperties = React.CSSProperties & {
-	// 	[key: string]: string;
-	// };
-
 	const toggleAction = () => {
 		setIsOpen(!isOpen);
 	}
@@ -45,7 +41,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 
 	const toggleMoreOptions = (index: number) => {
 		const newOptions = [...isOpenMoreOptions];
-        newOptions[index] = !newOptions[index];
+		newOptions[index] = !newOptions[index];
 		setIsOpenMoreOptions(newOptions);
 	}
 
@@ -64,6 +60,38 @@ function Channel({ user, channel, isVisible, blocked }) {
 			}
 		}
 	};
+
+	const kickUser = async (name: string) => {
+		socket?.emit('kickUser', { channName: channel.name, otherName: name });
+	}
+
+	const leaveChannel = async () => {
+		socket?.emit('leaveChannel', { name: channel.name });
+	}
+
+	const deleteChannel = async () => {
+		socket?.emit('deleteRoom', { name: channel.name });
+	}
+
+	const banUser = async (name: string) => {
+		socket?.emit('banUser', { channName: channel.name, name: name });
+	}
+
+	const setAdmin = async (name: string) => {
+		socket?.emit('setAdmin', { channName: channel.name, name: name });
+	}
+
+	const unsetAdmin = async (name: string) => {
+		socket?.emit('unsetAdmin', { channName: channel.name, name: name });
+	}
+
+	const muteUser = async (name: string) => {
+		socket?.emit('setMute', { channName: channel.name, muteName: name });
+	}
+
+	const unmuteUser = async (name: string) => {
+		socket?.emit('unsetMute', { channName: channel.name, muteName: name });
+	}
 
 	const scrollToBottom = () => {
 		if (divRef.current) {
@@ -99,14 +127,14 @@ function Channel({ user, channel, isVisible, blocked }) {
 			{isVisible && (
 				<div className="channel-main-container">
 					<ul className="channel-bandeau">
-            		  <li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
-            		  <li className="invite-contact-title">{channel.name}</li>
-            		  <div className="ddc-right-icons">
-            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
-            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
-            		    <li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close"></button></li>
-            		  </div>
-            		</ul>
+						<li className="icon-messenger"><img src={Logo} alt="logo" id="logo" /></li>
+						<li className="invite-contact-title">{channel.name}</li>
+						<div className="ddc-right-icons">
+							<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Minimize"></button></li>
+							<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Maximize"></button></li>
+							<li className="ddc-li-topbar"><button className="chat-icons-messenger" aria-label="Close"></button></li>
+						</div>
+					</ul>
 					<div className="channel-actions">
 						<ul className="channel-actions-menu">
 							<li>File</li>
@@ -116,21 +144,19 @@ function Channel({ user, channel, isVisible, blocked }) {
 						</ul>
 						{isOpen && (
 							<ul className="channel-dropdown-menu">
-								<li>Ban User</li>
-								<li>Kick User</li>
-								<li>Leave</li>
-								<li>Invite</li>
+								<li onClick={() => leaveChannel()}>Leave</li>
+								<li onClick={() => deleteChannel()}>Delete</li>
 							</ul>
 						)}
 					</div>
 					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" /></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
-							<div className="channel-members-presentation"> 
+							<div className="channel-members-presentation">
 								<div className="channel-members-presentation-text">
 									<img alt="info" src={Info} className="channel-info"></img>
 									...add le name du channel...
-								</div>	
+								</div>
 							</div>
 							<div className="channel-conversation-messages" ref={divRef}>
 								{messages.map((message, index) => (
@@ -158,26 +184,26 @@ function Channel({ user, channel, isVisible, blocked }) {
 											<li className="channel-group-member-list-ul-li">
 												<div className="channel-group-member-list-logo-name-pseudo">
 													<img src={regularConv} alt="regularConv" />
-													<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(users.name) }}>{users.nickname} ({users.name} )</div>
-												</div> 
-												{ (user.id === channel.ownerId) &&
-													(<span id="channels-more-options" onClick={() => toggleMoreOptions(index)}>
-														{!isOpenMoreOptions[index] && "▸"}
-														{isOpenMoreOptions[index] && "▾"}
-													</span>)
-												}
+													<div className="channel-group-member-list-nickname" onClick={() => { goToProfile(users.name) }}>{users.nickname} ({users.name})</div>
+												</div>
+												<span id="channels-more-options" onClick={() => toggleMoreOptions(index)}>
+													{!isOpenMoreOptions[index] && "▸"}
+													{isOpenMoreOptions[index] && "▾"}
+												</span>
 											</li>
 											<div className="channel-group-member-list-ban-block">
 												{isOpenMoreOptions[index] && (
 													<div className="channels-more-options-dropdown">
 														<div className="channel-more-option-choose">
-															What do we do with (insert name) ?
+															What do we do with {users.name} ?
 														</div>
 														<ul className="channel-more-option-choose-buttons">
-															<button>KICK</button>
-															<button>BAN</button>
-															<button>SET ADMIN</button>
-															<button>MUTE</button>
+															<button onClick={() => kickUser(users.name)}>KICK</button>
+															<button onClick={() => banUser(users.name)}>BAN</button>
+															<button onClick={() => setAdmin(users.name)}>SET ADMIN</button>
+															<button onClick={() => unsetAdmin(users.name)}>UNSET ADMIN</button>
+															<button onClick={() => muteUser(users.name)}>SET MUTE</button>
+															<button onClick={() => unmuteUser(users.name)}>UNSET MUTE</button>
 														</ul>
 														{/* Add the content you want to display when isOpenMoreOptions is true */}
 													</div>
@@ -216,8 +242,8 @@ function Channel({ user, channel, isVisible, blocked }) {
 								<div>
 									<img alt="user.pfp" src={user.pfp}></img>
 								</div>
-								<span className="channel-infos-user">								
-									<span className="channel-infos-user-name">{user.name}</span>	
+								<span className="channel-infos-user">
+									<span className="channel-infos-user-name">{user.name}</span>
 									<span className="channel-infos-user-triangle">▾</span>
 								</span>
 							</div>

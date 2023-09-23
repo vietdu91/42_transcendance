@@ -25,7 +25,7 @@ export class ChatController {
 				}
 			})
 			let persoMessages = conv.messages.filter((index) => !(user.blockList.includes(index.authorId)));
-			response.json({messages: persoMessages});
+			response.json({ messages: persoMessages });
 		} catch {
 			throw new BadRequestException();
 		}
@@ -42,7 +42,7 @@ export class ChatController {
 				}
 			})
 			let persoMessages = channel.messages.filter((index) => !(user.blockList.includes(index.authorId)));
-			response.json({messages: persoMessages});
+			response.json({ messages: persoMessages });
 		} catch {
 			throw new BadRequestException();
 		}

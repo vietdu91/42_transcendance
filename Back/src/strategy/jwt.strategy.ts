@@ -28,6 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                     usersList: true,
                     banList: true,
                     adminList: true,
+                    mutedList: true,
                     messages: true,
                   },
                 },
