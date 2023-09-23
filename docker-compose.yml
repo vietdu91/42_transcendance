@@ -8,7 +8,7 @@ networks:
 
 services:
   postgres:
-    image: postgres
+    image: postgres:16
     container_name: postgres
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
     image: nestjs-app
     build:
       context: ./Back
-      dockerfile: Dockerfile
+      target: production
     env_file:
       - .env
     ports:
@@ -36,23 +36,17 @@ services:
       - net-app
     depends_on:
       - postgres
-    volumes:
-      - ./Back:/usr/src/app
-      - /usr/src/app/node_modules
     restart: unless-stopped
 
   frontend:
     container_name: frontend
     build:
       context: ./Front
-      dockerfile: Dockerfile
+      target: production
     env_file:
       - .env
     ports:
       - "3000:3000"
-    volumes:
-      - ./Front:/usr/src/app
-      - /usr/src/app/node_modules
     networks:
        - net-app
     restart: unless-stopped

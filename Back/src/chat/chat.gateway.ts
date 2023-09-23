@@ -27,8 +27,10 @@ export class ChatGateway {
   @SubscribeMessage('joinChat')
   async handleJoinChat(client: Socket): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
-    console.log("token: ", userToken);
     const userDb = await this.userService.getUserById(userToken.sub);
 
     for (let user of this.users) {
@@ -49,6 +51,9 @@ export class ChatGateway {
   @SubscribeMessage('sendMessageConv')
   async handleMessageConv(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -84,6 +89,9 @@ export class ChatGateway {
   @SubscribeMessage('sendMessageChann')
   async handleMessageChann(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -142,6 +150,9 @@ export class ChatGateway {
   @SubscribeMessage('createChannel')
   async handleCreateChannel(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -210,6 +221,9 @@ export class ChatGateway {
   @SubscribeMessage('joinChannel')
   async handleJoinRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
     const name = params.name;
@@ -285,6 +299,9 @@ export class ChatGateway {
   @SubscribeMessage('kickUser')
   async handleKickUser(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -396,6 +413,9 @@ export class ChatGateway {
   @SubscribeMessage('leaveChannel')
   async handleLeaveRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -523,6 +543,9 @@ export class ChatGateway {
   async handleDeleteRoom(client: Socket, params: any): Promise<void> {
     {
       const token: string = client.handshake.query.token as string;
+      if (!token) {
+        return ;
+      }
       const userToken = await this.jwtService.decode(token);
       const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -571,6 +594,9 @@ export class ChatGateway {
   @SubscribeMessage('banUser')
   async handleBanRoom(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -699,6 +725,9 @@ export class ChatGateway {
   @SubscribeMessage('setAdmin')
   async handleSetAdmin(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
@@ -809,11 +838,20 @@ export class ChatGateway {
   @SubscribeMessage('unsetAdmin')
   async handleUnsetAdmin(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const userDb = await this.userService.getUserById(userToken.sub);
 
+    
     const channName = params.channName;
     const deleteAdmin = params.name;
+    
+    if (userDb === deleteAdmin) {
+      client.emit('errorSocket', { message: "You can't unset yourself" });
+      return;
+    }
 
     const chann = await this.prisma.channel.findUnique({
       where: {
@@ -830,6 +868,7 @@ export class ChatGateway {
       client.emit('errorSocket', { message: "This channel doesn't exist" });
       return;
     }
+
 
     if (userDb.id != chann.ownerId) {
       client.emit('errorSocket', { message: "You are not the channel owner" });
@@ -908,6 +947,9 @@ export class ChatGateway {
   @SubscribeMessage('createConversation')
   async handleCreateConversation(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
     if (!user) {
@@ -985,6 +1027,9 @@ export class ChatGateway {
   @SubscribeMessage('changePassword')
   async handleChangePassword(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
 
@@ -1014,6 +1059,7 @@ export class ChatGateway {
 
     if (user.id !== chann.ownerId) {
       client.emit('errorSocket', { message: "You are not the owner Dattebayo !!!!!" })
+      return;
     }
 
     const regexPsswd: RegExp = /^[a-zA-Z0-9@#$%^&+=!\*]{5,30}$/;
@@ -1060,6 +1106,9 @@ export class ChatGateway {
   @SubscribeMessage('unsetPassword')
   async handleUnsetPassword(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
     const channName = params.channName;
@@ -1113,6 +1162,9 @@ export class ChatGateway {
   @SubscribeMessage('setMute')
   async handleSetMute(client: Socket, params: any): Promise<void> {
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
 
@@ -1218,6 +1270,9 @@ export class ChatGateway {
     const channName = params.channName;
     const muteName = params.muteName;
     const token: string = client.handshake.query.token as string;
+    if (!token) {
+      return ;
+    }
     const userToken = await this.jwtService.decode(token);
     const user = await this.userService.getUserById(userToken.sub);
 
@@ -1246,6 +1301,11 @@ export class ChatGateway {
 
     if (!target) {
       client.emit('errorSocket', { message: "The target " + muteName + " doesn't exist" });
+      return;
+    }
+
+    if (target.name === user.name) {
+      client.emit('errorSocket', { message: "You can't unmute yourself" });
       return;
     }
 

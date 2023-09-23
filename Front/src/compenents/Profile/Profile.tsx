@@ -9,6 +9,9 @@ import SearchBar2 from './searchBarProfile';
 
 import Missing from "../../img/backgrounds/missing_profile.jpg"
 import Jimbo from "../../img/characters/shoot-jimbo.gif"
+import Panda from "../../img/Sexual-harassment-panda.png"
+import Jefferson from "../../img/jefferson.png"
+import Brothers from "../../img/Hardly-boys.png"
 
 interface Game {
 	names: string[],
@@ -39,6 +42,7 @@ export default function Profile() {
 	const [showFa, setShowFa] = useState(false);
 	const [twoFa, setTwoFa] = useState(false);
 	const [code, setCode] = useState("");
+
 	let games = useRef<Game[]>([]);
 	
 	async function generateTwoFa() {
@@ -178,9 +182,13 @@ export default function Profile() {
 			<img id="profile-bg-menu" src={Missing} alt={'Missing'}></img>
 			<div className="box2">
 				<div id="profile-text">
-					<div id="profile-hardly-brothers"></div>
+					{user.age >= 18 && <img id="profile-hardly-brothers" src={Brothers} alt="jefferson"></img>}
+					{user.age < 18 && <img id="profile-hardly-brothers" src={Jefferson} alt="jimbo"></img>}
 					<div className="profile-title">
-						<h1>PR<LetterChanger />FIL<span className="barre">Moi j'ai un indice colossal</span></h1></div>
+						<h1>PR<LetterChanger />FIL
+							{user.age >= 18 && <span className="barre">Moi j'ai un indice colossal</span>}
+							{user.age < 18 && <span className="barre">C'est de l'ignorance... !</span>}
+						</h1></div>
 					<div className="profile-infos">	
 						<div id="profile-info-1">
 							<span className="profile-titre-infos">Pseudo </span>
@@ -203,9 +211,12 @@ export default function Profile() {
 							<span className="profile-info">: {user.age} ans</span><br/><br/> 
 						</div>
 					</div>
-					<img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>
+					{user.age >= 18 && <img id="profile-jimbo" src={Jimbo} alt="jimbo"></img>}
+					{user.age < 18 && <img id="profile-jimbo" src={Panda} alt="jimbo"></img>}
 					<div className="profile-title"><h1>HIST<LetterChanger2 />RIQUE
-					<span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span></h1></div>
+					{user.age >= 18 && <span className="barre">Oh mon Dieu ! Il fonce droit sur nous !</span>}
+					{user.age < 18 && <span className="barre">Cela me rend tres triste...</span>}
+					</h1></div>
 					<div id="profile-historique">
 						{games.current.map((game, i) => (
 							<div className="profile-match" key={i}><div>

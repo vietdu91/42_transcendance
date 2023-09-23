@@ -98,13 +98,13 @@
 }
 
 #profile-hardly-brothers {
-	background-image: url("../../img/Hardly-boys.png");
-	background-size: cover;
-	height: 11vh;
+	object-fit: cover;
+	object-position: top;
+	height: 13vh;
 	width: 10vw;
 
 	position: absolute;
-	top: 1.8%;
+	top: -0.6%;
 	right: 5%;
 }
 
@@ -233,8 +233,10 @@
 	width: 140px;
 
 	position: absolute;
-	top: 50.3%;
+	top: 50.9%;
 	left: 0%;
+	object-fit: cover;
+	object-position: top;
 }
 
 #profile-historique {

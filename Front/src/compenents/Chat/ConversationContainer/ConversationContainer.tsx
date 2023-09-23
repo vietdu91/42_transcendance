@@ -4,6 +4,15 @@ import Info from '../../../img/chat/info.png'
 import { ChatContext } from '../../utils/ChatContext';
 import { useNavigate } from 'react-router-dom'
 
+const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+};
+
 const ConversationContainer = ({ name, nickname, otherpfp, messages, convId }) => {
 
     const divRef = useRef<HTMLDivElement | null>(null);
@@ -13,16 +22,16 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages, convId }) =
     const inviteToGame = async () => {
         socket?.emit('sendMessageConv', { value: "Viens jouer ! Clique sur le bouton Games !", convId })
     }
-    
+
     const goPersonalMatchmaking = () => {
         navigate(`/champselect?other=${name}`);
     }
 
-	function ActiveChiottes() {
+    function ActiveChiottes() {
 
         const videoUrl = 'https://www.youtube.com/watch?v=ZnDQwmy1dX4';
         window.open(videoUrl, 'Video Window', 'width=800,height=600');
-	}
+    }
 
 
     function goToProfile(name: string) {
@@ -51,13 +60,15 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages, convId }) =
                         {name} may not reply because he or she doesn't like you.
                     </div>
                     <div className="text-already-sent" ref={divRef}>
-                        {messages.map((message, index) => (
-                            <ul key={index}>
-                                <li className="conv-sender-info-chan">{message.authorName}</li>
-                                <li className="conv-message-content-chan">{message.content}</li>
-                                <li className="conv-message-date-chan">{message.createdAt}</li>
-                            </ul>
-                        ))}
+                        {messages.map((message, index) => {
+                            const date = new Date(message.createdAt);
+                            return (
+                                <ul key={index}>
+                                    <li className="conv-sender-info-chan">{message.authorName}</li>
+                                    <li className="conv-message-content-chan">{message.content}</li>
+                                    <li className="conv-message-date-chan">{date.toLocaleDateString('fr-FR', options)}</li>
+                                </ul>)
+                        })}
                     </div>
                 </div>
             </div>
@@ -70,7 +81,7 @@ const ConversationContainer = ({ name, nickname, otherpfp, messages, convId }) =
                 </div>
                 <div className="channel-down-buttons-3">
                     <button className="channel-down-button-3" onClick={inviteToGame}>Invite 💌</button>
-                    <button className="channel-down-button-3" onClick={goPersonalMatchmaking}>Invite Game 🎲</button>
+                    <button className="channel-down-button-3" onClick={goPersonalMatchmaking}>Game 🎲</button>
                     <button className="channel-down-button-3" onClick={ActiveChiottes}>Surprise 🚽</button>
                 </div>
             </div>

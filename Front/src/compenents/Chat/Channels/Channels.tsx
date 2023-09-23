@@ -10,6 +10,20 @@ import Virgin from '../../../img/chat/virgin.jpg'
 import Logo from '../../../img/chat/group-conv.png'
 import Info from '../../../img/chat/info.png'
 
+const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+};
+
+function handleHalal() {
+	const url = 'https://www.muslimmatrimony.com/';
+	window.open(url, '_blank', 'fullscreen=yes,popup');
+}
+
 function Channel({ user, channel, isVisible, blocked }) {
 	const socket = useContext(ChatContext);
 	const token = Cookie.get('accessToken');
@@ -209,7 +223,7 @@ function Channel({ user, channel, isVisible, blocked }) {
 							</ul>
 						)}
 					</div>
-					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" /></div>
+					<div className="channel-modo-mode"><img src={Virgin} alt="scam" id="chat_scam" onClick={handleHalal}/></div>
 					<div className="channel-conversation">
 						<div className="channel-group-convo">
 							<div className="channel-members-presentation">
@@ -219,13 +233,15 @@ function Channel({ user, channel, isVisible, blocked }) {
 								</div>
 							</div>
 							<div className="channel-conversation-messages" ref={divRef}>
-								{messages.map((message, index) => (
+								{messages.map((message, index) => {
+									const date = new Date(message.createdAt);
+									return (
 									<ul key={index}>
 										<li className="conv-sender-info-chan">{message.authorName}</li>
 										<li className="conv-message-content-chan">{message.content}</li>
-										<li className="conv-message-date-chan">{message.createdAt}</li>
-									</ul>
-								))}
+										<li className="conv-message-date-chan">{date.toLocaleDateString('fr-FR', options)}</li>
+									</ul> )
+								})}
 							</div>
 						</div>
 						<div className="channel-profile-pic-and-member-list">

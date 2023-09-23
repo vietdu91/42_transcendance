@@ -11,6 +11,16 @@ import onlineImg from '../../../img/chat/solo-conv.png'
 import ingameImg from '../../../img/chat/msn-red.png'
 import SearchBar from '../../searchBar/searchBar';
 
+function handleSize() {
+	const url = 'https://order-pharmacy.com/search?q=viagra&trackid=p14_1238_3htr9dl13cc31';
+	window.open(url, '_blank', 'fullscreen=yes,popup');
+}
+
+function handleGranny() {
+	const url = 'https://viagimmo.fr/quels-sont-les-avantages-du-viager-pour-lacquereur/';
+	window.open(url, '_blank', 'fullscreen=yes,popup');
+}
+
 const ConversationListSummary = ({ name, indivConv, handleVisibility, channels, convs, friends, user, blocked }) => {
     
     const [visibleItems, setVisibleItems] = useState<boolean[]>(Array.from({ length: convs.length }, () => false));
@@ -130,10 +140,10 @@ const ConversationListSummary = ({ name, indivConv, handleVisibility, channels, 
             </div>
             <div className="advertisement-scope">
                 <div className="advertisement">
-                    <img src={Advertisement1} alt="advertisement" id="chat_advertisement" />
+                    <img src={Advertisement1} alt="advertisement" id="chat_advertisement" onClick={handleSize}/>
                 </div>
                 <div className="advertisement">
-                    <img src={Advertisement2} alt="advertisement" id="chat_advertisement" />
+                    <img src={Advertisement2} alt="advertisement" id="chat_advertisement" onClick={handleGranny}/>
                 </div>
             </div>
             {visibleItems.map((isVisible, index) => (

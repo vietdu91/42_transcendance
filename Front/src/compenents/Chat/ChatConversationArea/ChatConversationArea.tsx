@@ -50,7 +50,7 @@ function ChatConversationArea({ user, conv, isVisible, blocked }) {
         const WizzAudio = new Audio(WizzSound);
         setWizz(true);
         WizzAudio.play();
-        const timer = setTimeout(() => {
+        setTimeout(() => {
           setWizz(false);
         }, 2000);
 
